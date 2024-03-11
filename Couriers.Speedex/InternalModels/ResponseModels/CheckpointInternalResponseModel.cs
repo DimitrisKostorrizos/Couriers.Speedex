@@ -1,0 +1,125 @@
+﻿using System;
+using System.ComponentModel;
+using System.Xml.Serialization;
+
+namespace Couriers.Speedex
+{
+    /// <summary>
+    /// The internal response model for the consignment checkpoint
+    /// </summary>
+    [XmlRoot("checkpoint", Namespace = XmlNamespaces.DefaultNamespace)]
+    [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
+    public class CheckpointInternalResponseModel : ISOAPResponseModel<CheckpointResponseModel>
+    {
+        #region Public Properties
+
+        /// <summary>
+        /// The name of the depot responsible for the event
+        /// </summary>
+        [XmlElement("Branch")]
+        public string BranchDepot { get; set; } = string.Empty;
+
+        /// <summary>
+        /// The unique branch depot id
+        /// </summary>
+        [XmlElement("BranchID")]
+        public string BranchId { get; set; } = string.Empty;
+
+        /// <summary>
+        /// The date-time of the event
+        /// </summary>
+        [XmlElement("CheckpointDate")]
+        public DateTime CheckpointDate { get; set; }
+
+        /// <summary>
+        /// The customer's comments of the consignment
+        /// </summary>
+        [XmlElement("ClientComments1")]
+        public string CustomerComments { get; set; } = string.Empty;
+
+        /// <summary>
+        /// The first customer reference of the consignment
+        /// </summary>
+        [XmlElement("ClientRef1")]
+        public string FirstCustomerReference { get; set; } = string.Empty;
+
+        /// <summary>
+        /// The second customer reference of the consignment
+        /// </summary>
+        [XmlElement("ClientRef2")]
+        public string SecondCustomerReference { get; set; } = string.Empty;
+
+        /// <summary>
+        /// The third customer reference of the consignment
+        /// </summary>
+        [XmlElement("ClientRef3")]
+        public string ThirdCustomerReference { get; set; } = string.Empty;
+
+        /// <summary>
+        /// The recipient name
+        /// </summary>
+        [XmlElement("SpeedexComments1")]
+        public string RecipientName { get; set; } = string.Empty;
+
+        /// <summary>
+        /// The code of the event
+        /// </summary>
+        [XmlElement("StatusCode")]
+        public string StatusCode { get; set; } = string.Empty;
+
+        /// <summary>
+        /// The description of the event
+        /// </summary>
+        [XmlElement("StatusDesc")]
+        public string StatusDescription { get; set; } = string.Empty;
+
+        /// <summary>
+        /// The unique voucher id
+        /// </summary>
+        [XmlElement("VoucherID")]
+        public string VoucherId { get; set; } = string.Empty;
+
+        #endregion
+
+        #region Constructors
+
+        /// <summary>
+        /// Default constructor
+        /// </summary>
+        public CheckpointInternalResponseModel() : base()
+        {
+
+        }
+
+        #endregion
+
+        #region Public Methods
+
+        /// <summary>
+        /// Returns a string that represents the current object.
+        /// </summary>
+        /// <returns></returns>
+        public override string ToString() => VoucherId;
+
+        /// <summary>
+        /// Creates and return the <see cref="CheckpointResponseModel"/> from the current object
+        /// </summary>
+        /// <returns></returns>
+        public CheckpointResponseModel ToResponseModel() => new CheckpointResponseModel()
+        {
+            BranchDepot = BranchDepot,
+            BranchId = BranchId,
+            CheckpointDate = CheckpointDate,
+            CustomerComments = CustomerComments,
+            FirstCustomerReference = FirstCustomerReference,
+            RecipientName = RecipientName,
+            SecondCustomerReference = SecondCustomerReference,
+            StatusCode = StatusCode,
+            StatusDescription = StatusDescription,
+            ThirdCustomerReference = ThirdCustomerReference,
+            VoucherId = VoucherId
+        };
+
+        #endregion
+    }
+}

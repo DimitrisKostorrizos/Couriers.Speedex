@@ -1,0 +1,60 @@
+﻿using System.ComponentModel;
+using System.Xml.Serialization;
+
+namespace Couriers.Speedex
+{
+    /// <summary>
+    /// The internal response model for the return message
+    /// </summary>
+    [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
+    public class ReturnMessageInternalResponseModel : ISOAPReturnMessageModel
+    {
+        #region Public Properties
+
+        /// <summary>
+        /// The return message
+        /// </summary>
+        [XmlElement("returnMessage")]
+        public string ReturnMessage { get; set; } = string.Empty;
+
+        /// <summary>
+        /// The return code
+        /// </summary>
+        [XmlElement("returnCode")]
+        public uint ReturnCode { get; set; }
+
+        /// <summary>
+        /// The return message
+        /// </summary>
+        string ISOAPReturnMessageModel.Message { get => ReturnMessage; set => ReturnMessage = value; }
+
+        /// <summary>
+        /// The return code
+        /// </summary>
+        uint ISOAPReturnMessageModel.Code { get => ReturnCode; set => ReturnCode = value; }
+
+        #endregion
+
+        #region Constructors
+
+        /// <summary>
+        /// Default constructor
+        /// </summary>
+        public ReturnMessageInternalResponseModel() : base()
+        {
+
+        }
+
+        #endregion
+
+        #region Public Methods
+
+        /// <summary>
+        /// Returns a string that represents the current object.
+        /// </summary>
+        /// <returns></returns>
+        public override string ToString() => ReturnMessage;
+
+        #endregion
+    }
+}
