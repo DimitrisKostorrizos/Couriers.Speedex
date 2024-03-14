@@ -6,7 +6,7 @@ namespace Couriers.Speedex
     /// <summary>
     /// The internal request model for getting the specified pickup
     /// </summary>
-    [XmlRoot("GetPickup", Namespace = XmlNamespaces.DefaultNamespace)]
+    [XmlRoot("GetPickup", Namespace = SpeedexXmlNamespaces.DefaultNamespace)]
     [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
     public class GetPickupByIdInternalRequestModel : SessionIdInternalRequestModel
     {
@@ -16,7 +16,7 @@ namespace Couriers.Speedex
         /// The unique pickup id
         /// </summary>
         [XmlElement("pickupNumber")]
-        public string? PickupNumber { get; set; }
+        public string PickupNumber { get; set; } = string.Empty;
 
         #endregion
 

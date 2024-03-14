@@ -8,7 +8,7 @@ namespace Couriers.Speedex
     /// <summary>
     /// The internal request model for creating consignments
     /// </summary>
-    [XmlRoot("CreateBOL", Namespace = XmlNamespaces.DefaultNamespace)]
+    [XmlRoot("CreateBOL", Namespace = SpeedexXmlNamespaces.DefaultNamespace)]
     [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
     public class CreateConsignmentsInternalRequestModel : SessionIdInternalRequestModel
     {

@@ -3,13 +3,14 @@ using System.Text;
 using System.Xml.Serialization;
 using System.Xml;
 using System;
+using System.Xml.Linq;
 
 namespace Couriers.Speedex
 {
     /// <summary>
     /// Helper methods associated with the XML model
     /// </summary>
-    internal static class XMLHelpers
+    public static class XMLHelpers
     {
         #region Constants
 
@@ -28,6 +29,70 @@ namespace Couriers.Speedex
         #endregion
 
         #region Public Methods
+
+        /// <summary>
+        /// Deserializes the <paramref name="element"/> to the specified <typeparamref name="T"/>
+        /// </summary>
+        /// <typeparam name="T">The type of the element</typeparam>
+        /// <param name="element">The element</param>
+        /// <returns></returns>
+        public static T Deserialize<T>(this XContainer element)
+            where T : class
+        {
+            // Use a temporary reader for the Xml element
+            using var reader = element.CreateReader();
+
+            // Initialize the serializer
+            var serializer = new XmlSerializer(typeof(T));
+
+            // Deserialize the reader
+            var result = serializer.Deserialize(reader);
+
+            // If the cast failed...
+            if (result is not T value)
+                throw new InvalidOperationException("Invalid XML");
+
+            // Return the value
+            return value;
+        }
+
+        /// <summary>
+        /// Serializes the <paramref name="obj"/> to the specified <typeparamref name="T"/>
+        /// </summary>
+        /// <typeparam name="T">The type of the object</typeparam>
+        /// <param name="obj">The object</param>
+        /// <returns></returns>
+        public static XElement SerializeToXElement<T>(this T obj)
+        {
+            // Declare a document
+            var document = new XDocument();
+
+            // Use a temporary reader for the Xml element
+            using (var writer = document.CreateWriter())
+            {
+                // Declare the namespaces
+                var namespaces = new XmlSerializerNamespaces();
+
+                // Add the default namespace
+                namespaces.Add(SpeedexXmlNamespaces.DefaultPrefix, SpeedexXmlNamespaces.DefaultNamespace);
+
+                // Declare a new serializer for the object
+                var serializer = new XmlSerializer(typeof(T));
+
+                // Serialize the object
+                serializer.Serialize(writer, obj, namespaces);
+            }
+
+            // Get the root element
+            var element = document.Root
+                ?? throw new InvalidOperationException("Invalid XML");
+
+            // Remove the root element
+            element.Remove();
+
+            // Return the element
+            return element;
+        }
 
         /// <summary>
         /// Serializes the specified <paramref name="obj"/> to an XML string, using the specified <paramref name="namespaces"/>
@@ -92,7 +157,9 @@ namespace Couriers.Speedex
 
             var xmlSerializer = new XmlSerializer(type);
 
-            return xmlSerializer.Deserialize(stringReader);
+            using var xmlReader = XmlReader.Create(stringReader);
+
+            return xmlSerializer.Deserialize(xmlReader);
         }
 
         #endregion

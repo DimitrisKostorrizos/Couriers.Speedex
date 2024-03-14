@@ -8,7 +8,7 @@ namespace Couriers.Speedex
     /// <summary>
     /// The internal response model for getting all the deposited consignments created on the specified date range
     /// </summary>
-    [XmlRoot("GetDepositedConsignmentsByDateResponse", Namespace = XmlNamespaces.DefaultNamespace)]
+    [XmlRoot("GetDepositedConsignmentsByDateResponse", Namespace = SpeedexXmlNamespaces.DefaultNamespace)]
     [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
     public class GetDepositedConsignmentsByDateInternalResponseModel : ISOAPReturnMessageModel, ISOAPResponseModel<IEnumerable<DepositedConsignmentResponseModel>>
     {
@@ -64,7 +64,7 @@ namespace Couriers.Speedex
     /// <summary>
     /// The internal response model for deposited consignments result
     /// </summary>
-    [XmlRoot(Namespace = XmlNamespaces.DefaultNamespace)]
+    [XmlRoot(Namespace = SpeedexXmlNamespaces.DefaultNamespace)]
     [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
     public class GetDepositedConsignmentsByDateResult : ISOAPResponseModel<IEnumerable<DepositedConsignmentResponseModel>>
     {
@@ -81,7 +81,7 @@ namespace Couriers.Speedex
         /// </summary>
         [XmlArray("Result")]
         [XmlArrayItem("GetDepositedConsignmentsByDateResult")]
-        public List<DepositedConsignmentInternalResponseModel> Results { get; set; } = new();
+        public List<DepositedConsignmentInternalResponseModel> Results { get; set; } = [];
 
         /// <summary>
         /// The return code

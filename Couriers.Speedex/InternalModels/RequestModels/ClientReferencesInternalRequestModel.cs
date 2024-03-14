@@ -6,7 +6,7 @@ namespace Couriers.Speedex
     /// <summary>
     /// The internal request model for the client references
     /// </summary>
-    [XmlRoot("GetTraceByClientKey", Namespace = XmlNamespaces.DefaultNamespace)]
+    [XmlRoot("GetTraceByClientKey", Namespace = SpeedexXmlNamespaces.DefaultNamespace)]
     [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
     public class ClientReferencesInternalRequestModel : SessionIdInternalRequestModel
     {
@@ -51,12 +51,13 @@ namespace Couriers.Speedex
         /// </summary>
         /// <param name="value">The request model</param>
         /// <returns></returns>
-        public static ClientReferencesInternalRequestModel FromRequestModel(ClientReferencesRequestModel value) => new ClientReferencesInternalRequestModel()
-        {
-            FirstClientReference = value.FirstClientReference,
-            SecondClientReference = value.SecondClientReference,
-            ThirdClientReference = value.ThirdClientReference
-        };
+        public static ClientReferencesInternalRequestModel FromRequestModel(ClientReferencesRequestModel value) 
+            => new()
+            {
+                FirstClientReference = value.FirstClientReference,
+                SecondClientReference = value.SecondClientReference,
+                ThirdClientReference = value.ThirdClientReference
+            };
 
         #endregion
     }

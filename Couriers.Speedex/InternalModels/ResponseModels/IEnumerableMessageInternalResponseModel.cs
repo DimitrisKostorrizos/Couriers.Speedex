@@ -23,7 +23,7 @@ namespace Couriers.Speedex
         /// The result
         /// </summary>
         [XmlArray("Result")]
-        public List<TArrayResult> Result { get; set; } = new();
+        public List<TArrayResult> Result { get; set; } = [];
 
         /// <summary>
         /// The return code

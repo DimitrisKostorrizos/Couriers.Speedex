@@ -7,7 +7,7 @@ namespace Couriers.Speedex
     /// <summary>
     /// The internal response model for the consignment checkpoint
     /// </summary>
-    [XmlRoot("checkpoint", Namespace = XmlNamespaces.DefaultNamespace)]
+    [XmlRoot("checkpoint", Namespace = SpeedexXmlNamespaces.DefaultNamespace)]
     [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
     public class CheckpointInternalResponseModel : ISOAPResponseModel<CheckpointResponseModel>
     {

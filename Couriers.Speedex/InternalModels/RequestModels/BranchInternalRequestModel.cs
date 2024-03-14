@@ -6,7 +6,7 @@ namespace Couriers.Speedex
     /// <summary>
     /// The internal request model for the branch depot
     /// </summary>
-    [XmlRoot("GetBranches", Namespace = XmlNamespaces.DefaultNamespace)]
+    [XmlRoot("GetBranches", Namespace = SpeedexXmlNamespaces.DefaultNamespace)]
     [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
     public class BranchInternalRequestModel : SessionIdInternalRequestModel
     {

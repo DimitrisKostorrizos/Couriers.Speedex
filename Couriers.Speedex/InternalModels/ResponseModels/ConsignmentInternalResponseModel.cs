@@ -6,7 +6,7 @@ namespace Couriers.Speedex
     /// <summary>
     /// The internal response model for the consignment
     /// </summary>
-    [XmlRoot("BOL", Namespace = XmlNamespaces.DefaultNamespace)]
+    [XmlRoot("BOL", Namespace = SpeedexXmlNamespaces.DefaultNamespace)]
     [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
     public class ConsignmentInternalResponseModel : ISOAPResponseModel<ConsignmentResponseModel>
     {

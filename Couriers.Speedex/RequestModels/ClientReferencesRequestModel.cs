@@ -3,7 +3,7 @@
     /// <summary>
     /// The request model for the client references
     /// </summary>
-    public class ClientReferencesRequestModel
+    public record ClientReferencesRequestModel
     {
         #region Public Properties
 

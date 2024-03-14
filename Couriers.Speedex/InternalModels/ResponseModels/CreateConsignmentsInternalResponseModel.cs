@@ -8,7 +8,7 @@ namespace Couriers.Speedex
     /// <summary>
     /// The internal request model for creating consignments
     /// </summary>
-    [XmlRoot("CreateBOLResponse", Namespace = XmlNamespaces.DefaultNamespace)]
+    [XmlRoot("CreateBOLResponse", Namespace = SpeedexXmlNamespaces.DefaultNamespace)]
     [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
     public class CreateConsignmentsInternalResponseModel : ReturnMessageInternalResponseModel, ISOAPResponseModel<CreateConsignmentsResponseModel>
     {
@@ -19,14 +19,14 @@ namespace Couriers.Speedex
         /// </summary>
         [XmlArray("outListPod")]
         [XmlArrayItem("BOL")]
-        public List<ConsignmentInternalResponseModel> Consignments { get; set; } = new List<ConsignmentInternalResponseModel>();
+        public List<ConsignmentInternalResponseModel> Consignments { get; set; } = [];
 
         /// <summary>
         /// The consignments
         /// </summary>
         [XmlArray("statusList")]
         [XmlArrayItem("string")]
-        public List<string> Statuses { get; set; } = new List<string>();
+        public List<string> Statuses { get; set; } = [];
 
         #endregion
 

@@ -6,7 +6,7 @@ namespace Couriers.Speedex
     /// <summary>
     /// The internal request model for canceling a consignment with the specified the unique voucher id
     /// </summary>
-    [XmlRoot("CancelBOL", Namespace = XmlNamespaces.DefaultNamespace)]
+    [XmlRoot("CancelBOL", Namespace = SpeedexXmlNamespaces.DefaultNamespace)]
     [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
     public class CancelConsignmentByVoucherIdInternalRequestModel : SessionIdInternalRequestModel
     {

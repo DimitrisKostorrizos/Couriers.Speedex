@@ -9,7 +9,7 @@ namespace Couriers.Speedex
     /// The data model for the SOAP envelope body
     /// </summary>
     [XmlRoot("Envelope")]
-    [EditorBrowsable(EditorBrowsableState.Never)]
+    [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
     public class SoapEnvelopeBodyDataModel<TBody>
         where TBody : class, new()
     {
@@ -27,14 +27,8 @@ namespace Couriers.Speedex
         [XmlAnyElement, Browsable(false), EditorBrowsable(EditorBrowsableState.Never), DebuggerBrowsable(DebuggerBrowsableState.Never)]
         public XElement XmlEntity
         {
-            get
-            {
-                return XObjectExtensions.SerializeToXElement(Model);
-            }
-            set
-            {
-                Model = XObjectExtensions.Deserialize<TBody>(value);
-            }
+            get => XMLHelpers.SerializeToXElement(Model);
+            set => Model = XMLHelpers.Deserialize<TBody>(value);
         }
 
         #endregion

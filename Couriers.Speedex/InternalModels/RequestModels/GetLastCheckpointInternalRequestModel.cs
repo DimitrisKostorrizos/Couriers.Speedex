@@ -6,7 +6,7 @@ namespace Couriers.Speedex
     /// <summary>
     /// The internal request model for the last checkpoint of a consignment
     /// </summary>
-    [XmlRoot("GetLastCheckpoint", Namespace = XmlNamespaces.DefaultNamespace)]
+    [XmlRoot("GetLastCheckpoint", Namespace = SpeedexXmlNamespaces.DefaultNamespace)]
     [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
     public class GetLastCheckpointInternalRequestModel : SessionIdInternalRequestModel
     {

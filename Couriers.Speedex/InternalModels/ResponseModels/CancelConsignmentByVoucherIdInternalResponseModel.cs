@@ -6,7 +6,7 @@ namespace Couriers.Speedex
     /// <summary>
     /// The internal response model for canceling a consignment
     /// </summary>
-    [XmlRoot("CancelBOLResponse", Namespace = XmlNamespaces.DefaultNamespace)]
+    [XmlRoot("CancelBOLResponse", Namespace = SpeedexXmlNamespaces.DefaultNamespace)]
     [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
     public class CancelConsignmentByVoucherIdInternalResponseModel : ReturnMessageInternalResponseModel
     {

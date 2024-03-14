@@ -6,7 +6,7 @@ namespace Couriers.Speedex
     /// <summary>
     /// The internal response model for the branch depot
     /// </summary>
-    [XmlRoot("Voucher", Namespace = XmlNamespaces.DefaultNamespace)]
+    [XmlRoot("Voucher", Namespace = SpeedexXmlNamespaces.DefaultNamespace)]
     [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
     public class BranchInternalResponseModel : ISOAPResponseModel<BranchResponseModel>
     {

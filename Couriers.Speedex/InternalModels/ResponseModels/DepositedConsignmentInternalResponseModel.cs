@@ -7,7 +7,7 @@ namespace Couriers.Speedex
     /// <summary>
     /// The internal response model for the deposited consignment
     /// </summary>
-    [XmlRoot(Namespace = XmlNamespaces.DefaultNamespace)]
+    [XmlRoot(Namespace = SpeedexXmlNamespaces.DefaultNamespace)]
     [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
     public class DepositedConsignmentInternalResponseModel : ISOAPResponseModel<DepositedConsignmentResponseModel>
     {
@@ -57,12 +57,13 @@ namespace Couriers.Speedex
         /// Creates and return the <see cref="DepositedConsignmentResponseModel"/> from the current object
         /// </summary>
         /// <returns></returns>
-        public DepositedConsignmentResponseModel ToResponseModel() => new DepositedConsignmentResponseModel()
-        {
-            Amount = Amount,
-            Id = Id,
-            DateDeposited = DateTime.Parse(DateDeposited)
-        };
+        public DepositedConsignmentResponseModel ToResponseModel() 
+            => new()
+            {
+                Amount = Amount,
+                Id = Id,
+                DateDeposited = DateTime.Parse(DateDeposited)
+            };
 
         #endregion
     }

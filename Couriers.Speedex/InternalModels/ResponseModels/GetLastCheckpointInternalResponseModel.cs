@@ -6,7 +6,7 @@ namespace Couriers.Speedex
     /// <summary>
     /// The internal response model for getting the last event of a consignment
     /// </summary>
-    [XmlRoot("GetLastCheckpointResponse", Namespace = XmlNamespaces.DefaultNamespace)]
+    [XmlRoot("GetLastCheckpointResponse", Namespace = SpeedexXmlNamespaces.DefaultNamespace)]
     [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
     public class GetLastCheckpointInternalResponseModel : ReturnMessageInternalResponseModel, ISOAPResponseModel<CheckpointResponseModel>
     {

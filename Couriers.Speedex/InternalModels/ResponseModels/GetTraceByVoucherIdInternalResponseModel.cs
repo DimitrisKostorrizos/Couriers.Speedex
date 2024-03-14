@@ -8,7 +8,7 @@ namespace Couriers.Speedex
     /// <summary>
     /// The internal response model for all the new checkpoints of the consignment
     /// </summary>
-    [XmlRoot("GetTraceByVoucherResponse", Namespace = XmlNamespaces.DefaultNamespace)]
+    [XmlRoot("GetTraceByVoucherResponse", Namespace = SpeedexXmlNamespaces.DefaultNamespace)]
     [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
     public class GetTraceByVoucherIdInternalResponseModel : ReturnMessageInternalResponseModel, ISOAPResponseModel<IEnumerable<CheckpointResponseModel>>
     {
@@ -19,7 +19,7 @@ namespace Couriers.Speedex
         /// </summary>
         [XmlArray("checkpoints")]
         [XmlArrayItem("Checkpoint")]
-        public List<CheckpointInternalResponseModel> Checkpoints { get; set; } = new();
+        public List<CheckpointInternalResponseModel> Checkpoints { get; set; } = [];
 
         #endregion
 

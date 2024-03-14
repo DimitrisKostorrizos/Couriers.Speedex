@@ -8,7 +8,7 @@ namespace Couriers.Speedex
     /// <summary>
     /// The internal response model for the pickup
     /// </summary>
-    [XmlRoot("Result", Namespace = XmlNamespaces.DefaultNamespace)]
+    [XmlRoot("Result", Namespace = SpeedexXmlNamespaces.DefaultNamespace)]
     [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
     public class PickupInternalResponseModel : ISOAPResponseModel<PickupResponseModel>
     {
@@ -25,7 +25,7 @@ namespace Couriers.Speedex
         /// </summary>
         [XmlArray("ConsignmentNumbers")]
         [XmlArrayItem("string")]
-        public List<string> ConsignmentIds { get; set; } = new();
+        public List<string> ConsignmentIds { get; set; } = [];
 
         /// <summary>
         /// The checkpoint code

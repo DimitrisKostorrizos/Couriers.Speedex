@@ -6,7 +6,7 @@ namespace Couriers.Speedex
     /// <summary>
     /// The internal response model for the credentials
     /// </summary>
-    [XmlRoot("CreateSession", Namespace = XmlNamespaces.DefaultNamespace)]
+    [XmlRoot("CreateSession", Namespace = SpeedexXmlNamespaces.DefaultNamespace)]
     [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
     public class CredentialsInternalRequestModel
     {

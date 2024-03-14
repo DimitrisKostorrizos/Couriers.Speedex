@@ -7,30 +7,39 @@ namespace Couriers.Speedex
     /// <summary>
     /// The request model for the pickup
     /// </summary>
-    public class PickupRequestModel
+    public record PickupRequestModel
     {
+        #region Constants
+
+        /// <summary>
+        /// The maximum number of consignment numbers
+        /// </summary>
+        public const int MaximumNumberOfConsignments = 5;
+
+        #endregion
+
         #region Public Properties
 
         /// <summary>
         /// The ids for the connected master consignments
         /// NOTE: The maximum count is 5 master consignment numbers
         /// </summary>
-        public IEnumerable<string> ConsignmentIds { get; set; } = Enumerable.Empty<string>();
+        public IEnumerable<string> ConsignmentIds { get; }
+
+        /// <summary>
+        /// The requested date of the pickup
+        /// </summary>
+        public DateTime PickupDate { get; }
+
+        /// <summary>
+        /// The delivery time
+        /// </summary>
+        public DeliveryTimeLimit DeliveryTime { get; }
 
         /// <summary>
         /// The comments
         /// </summary>
         public string? Comments { get; set; }
-
-        /// <summary>
-        /// The requested date of the pickup
-        /// </summary>
-        public DateTime PickupDate { get; set; }
-
-        /// <summary>
-        /// The delivery time
-        /// </summary>
-        public DeliveryTimeLimit DeliveryTime { get; set; }
 
         #endregion
 
@@ -39,10 +48,39 @@ namespace Couriers.Speedex
         /// <summary>
         /// Default constructor
         /// </summary>
-        public PickupRequestModel() : base()
+        /// <param name="consignmentIds">The ids for the connected master consignments</param>
+        /// <param name="pickupDate">The date for the pickup</param>
+        /// <param name="deliveryTime">The delivery time frame</param>
+        public PickupRequestModel(IEnumerable<string> consignmentIds, DateTime pickupDate, DeliveryTimeLimit deliveryTime) : base()
         {
+            ArgumentNullException.ThrowIfNull(consignmentIds, nameof(consignmentIds));
 
+            var consignmentCount = consignmentIds.Count();
+
+            if(consignmentCount == 0)
+                throw new ArgumentOutOfRangeException(nameof(consignmentIds), "At least consignment id has to be specified.");
+
+            if (consignmentCount > MaximumNumberOfConsignments)
+                throw new ArgumentOutOfRangeException(nameof(consignmentIds), $"The maximum number of consignments is {MaximumNumberOfConsignments}.");
+
+            ArgumentOutOfRangeException.ThrowIfLessThanOrEqual(pickupDate, DateTime.Now, nameof(pickupDate));
+
+            ConsignmentIds = consignmentIds;
+
+            PickupDate = pickupDate;
+
+            DeliveryTime = deliveryTime;
         }
+
+        #endregion
+
+        #region Public Methods
+
+        /// <summary>
+        /// <inheritdoc/>
+        /// </summary>
+        /// <returns></returns>
+        public override string ToString() => $"Number of Consignments: {ConsignmentIds.Count()}";
 
         #endregion
     }

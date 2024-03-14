@@ -6,7 +6,7 @@ namespace Couriers.Speedex
     /// <summary>
     /// The internal response model for rescheduling a pickup
     /// </summary>
-    [XmlRoot("ReschedulePickupResponse", Namespace = XmlNamespaces.DefaultNamespace)]
+    [XmlRoot("ReschedulePickupResponse", Namespace = SpeedexXmlNamespaces.DefaultNamespace)]
     [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
     public class ReschedulePickupInternalResponseModel : INewWebMethodSOAPReturnMessageModel<bool>
     {

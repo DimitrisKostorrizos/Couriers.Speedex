@@ -6,7 +6,7 @@ namespace Couriers.Speedex
     /// <summary>
     /// The internal request model for getting the tracing for the consignment that is related to the specified voucher
     /// </summary>
-    [XmlRoot("GetTraceByVoucher", Namespace = XmlNamespaces.DefaultNamespace)]
+    [XmlRoot("GetTraceByVoucher", Namespace = SpeedexXmlNamespaces.DefaultNamespace)]
     [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
     public class GetTraceByVoucherIdInternalRequestModel : SessionIdInternalRequestModel
     {

@@ -142,31 +142,30 @@ namespace Couriers.Speedex
 
             if (value == DeliveryTimeLimit.NoLimit)
                 return;
-            else
+
+            var timeFrom = new DateTime();
+
+            var timeTo = new DateTime();
+
+            if (value == DeliveryTimeLimit.TenAMToOnePM)
             {
-                var timeFrom = new DateTime();
+                deliveryTimeFrom = timeFrom.AddHours(10);
 
-                var timeTo = new DateTime();
-
-                if (value == DeliveryTimeLimit.TenAMToOnePM)
-                {
-                    deliveryTimeFrom = timeFrom.AddHours(10);
-
-                    deliveryTimeTo = timeTo.AddHours(13);
-                }
-                else if (value == DeliveryTimeLimit.OnePMMToFourPM)
-                {
-                    deliveryTimeFrom = timeFrom.AddHours(13);
-
-                    deliveryTimeTo = timeTo.AddHours(16);
-                }
-                else if (value == DeliveryTimeLimit.FourPMToSevenPM)
-                {
-                    deliveryTimeFrom = timeFrom.AddHours(16);
-
-                    deliveryTimeTo = timeTo.AddHours(19);
-                }
+                deliveryTimeTo = timeTo.AddHours(13);
             }
+            else if (value == DeliveryTimeLimit.OnePMMToFourPM)
+            {
+                deliveryTimeFrom = timeFrom.AddHours(13);
+
+                deliveryTimeTo = timeTo.AddHours(16);
+            }
+            else if (value == DeliveryTimeLimit.FourPMToSevenPM)
+            {
+                deliveryTimeFrom = timeFrom.AddHours(16);
+
+                deliveryTimeTo = timeTo.AddHours(19);
+            }
+
             return;
         }
 

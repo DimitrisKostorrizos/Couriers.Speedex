@@ -8,7 +8,7 @@ namespace Couriers.Speedex
     /// <summary>
     /// The internal request model for the consignment PDF
     /// </summary>
-    [XmlRoot("GetBOLPdf", Namespace = XmlNamespaces.DefaultNamespace)]
+    [XmlRoot("GetBOLPdf", Namespace = SpeedexXmlNamespaces.DefaultNamespace)]
     [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
     public class ConsignmentPDFInternalRequestModel : SessionIdInternalRequestModel
     {
@@ -32,7 +32,7 @@ namespace Couriers.Speedex
         /// </summary>
         [XmlArray("voucherIDs")]
         [XmlArrayItem("string")]
-        public List<string> VoucherIds { get; set; } = new();
+        public List<string> VoucherIds { get; set; } = [];
 
         #endregion
 
@@ -55,12 +55,13 @@ namespace Couriers.Speedex
         /// </summary>
         /// <param name="model">The request model</param>
         /// <returns></returns>
-        public static ConsignmentPDFInternalRequestModel FromRequestModel(ConsignmentPDFRequestModel model) => new ConsignmentPDFInternalRequestModel()
-        {
-            PaperSize = CouriersSpeedexDataModelHelpers.FromPaperType(model.PaperSize),
-            ReturnMultipleVouchers = model.ReturnMultipleVouchers,
-            VoucherIds = model.VoucherIds.ToList()
-        };
+        public static ConsignmentPDFInternalRequestModel FromRequestModel(ConsignmentPDFRequestModel model) 
+            => new()
+            {
+                PaperSize = CouriersSpeedexDataModelHelpers.FromPaperType(model.PaperSize),
+                ReturnMultipleVouchers = model.ReturnMultipleVouchers,
+                VoucherIds = model.VoucherIds.ToList()
+            };
 
         #endregion
     }

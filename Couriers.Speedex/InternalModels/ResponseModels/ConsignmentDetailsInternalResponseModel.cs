@@ -7,7 +7,7 @@ namespace Couriers.Speedex
     /// <summary>
     /// The internal response model for the consignment details
     /// </summary>
-    [XmlType("Consignment", IncludeInSchema = false, Namespace = XmlNamespaces.DefaultNamespace)]
+    [XmlType("Consignment", IncludeInSchema = false, Namespace = SpeedexXmlNamespaces.DefaultNamespace)]
     [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
     public class ConsignmentDetailsInternalResponseModel : ISOAPResponseModel<ConsignmentDetailsResponseModel>
     {

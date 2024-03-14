@@ -6,7 +6,7 @@ namespace Couriers.Speedex
     /// <summary>
     /// The internal request model for canceling a pickup
     /// </summary>
-    [XmlRoot("CancelPickupResponse", Namespace = XmlNamespaces.DefaultNamespace)]
+    [XmlRoot("CancelPickupResponse", Namespace = SpeedexXmlNamespaces.DefaultNamespace)]
     [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
     public class CancelPickupInternalResponseModel : INewWebMethodSOAPReturnMessageModel<bool>
     {

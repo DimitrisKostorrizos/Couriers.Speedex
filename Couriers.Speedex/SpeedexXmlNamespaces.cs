@@ -5,7 +5,7 @@ namespace Couriers.Speedex
     /// <summary>
     /// The Xml namespaces used for the accessing the Speedex web service
     /// </summary>
-    internal static class XmlNamespaces
+    public static class SpeedexXmlNamespaces
     {
         /// <summary>
         /// The Xml namespaces

@@ -5,9 +5,19 @@ namespace Couriers.Speedex
     /// <summary>
     /// The request model for rescheduling a pickup
     /// </summary>
-    public class ReschedulePickupRequestModel
+    public record ReschedulePickupRequestModel
     {
         #region Public Properties
+
+        /// <summary>
+        /// The date for the pickup
+        /// </summary>
+        public DateTime PickupDate { get; }
+
+        /// <summary>
+        /// The delivery time frame
+        /// </summary>
+        public DeliveryTimeLimit DeliveryTime { get; }
 
         /// <summary>
         /// The comments for the pickup
@@ -15,19 +25,9 @@ namespace Couriers.Speedex
         public string? Comments { get; set; }
 
         /// <summary>
-        /// The date for the pickup
-        /// </summary>
-        public DateTime PickupDate { get; set; }
-
-        /// <summary>
         /// The unique pickup id
         /// </summary>
         public string? PickupId { get; set; }
-
-        /// <summary>
-        /// The delivery time frame
-        /// </summary>
-        public DeliveryTimeLimit DeliveryTime { get; set; }
 
         #endregion
 
@@ -36,10 +36,26 @@ namespace Couriers.Speedex
         /// <summary>
         /// Default constructor
         /// </summary>
-        public ReschedulePickupRequestModel() : base()
+        /// <param name="pickupDate">The date for the pickup</param>
+        /// <param name="deliveryTime">The delivery time frame</param>
+        public ReschedulePickupRequestModel(DateTime pickupDate, DeliveryTimeLimit deliveryTime) : base()
         {
+            ArgumentOutOfRangeException.ThrowIfLessThanOrEqual(pickupDate, DateTime.Now, nameof(pickupDate));
 
+            PickupDate = pickupDate;
+
+            DeliveryTime = deliveryTime;
         }
+
+        #endregion
+
+        #region Public Methods
+
+        /// <summary>
+        /// <inheritdoc/>
+        /// </summary>
+        /// <returns></returns>
+        public override string ToString() => $"Pickup Date: {PickupDate}";
 
         #endregion
     }

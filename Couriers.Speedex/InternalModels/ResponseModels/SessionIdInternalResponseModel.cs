@@ -6,8 +6,9 @@ namespace Couriers.Speedex
     /// <summary>
     /// The internal response model for the unique session id
     /// </summary>
-    [XmlRoot("CreateSessionResponse", Namespace = XmlNamespaces.DefaultNamespace)]
+    [XmlRoot("CreateSessionResponse", Namespace = SpeedexXmlNamespaces.DefaultNamespace)]
     [EditorBrowsable(EditorBrowsableState.Never)]
+    [XmlInclude(typeof(SessionIdInternalResponseModel))]
     public class SessionIdInternalResponseModel : ReturnMessageInternalResponseModel, ISOAPResponseModel<string>
     {
         #region Public Properties

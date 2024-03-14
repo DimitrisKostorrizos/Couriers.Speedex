@@ -8,7 +8,7 @@ namespace Couriers.Speedex
     /// <summary>
     /// The internal response model for getting the consignment PDF
     /// </summary>
-    [XmlRoot("GetBOLPdfResponse", Namespace = XmlNamespaces.DefaultNamespace)]
+    [XmlRoot("GetBOLPdfResponse", Namespace = SpeedexXmlNamespaces.DefaultNamespace)]
     [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
     public class GetConsignmentPDFInternalResponseModel : ReturnMessageInternalResponseModel, ISOAPResponseModel<IEnumerable<ConsignmentPDFResponseModel>>
     {
@@ -19,7 +19,7 @@ namespace Couriers.Speedex
         /// </summary>
         [XmlArray("GetBOLPdfResult")]
         [XmlArrayItem("Voucher")]
-        public List<ConsignmentPDFInternalResponseModel> Vouchers { get; set; } = new();
+        public List<ConsignmentPDFInternalResponseModel> Vouchers { get; set; } = [];
 
         #endregion
 

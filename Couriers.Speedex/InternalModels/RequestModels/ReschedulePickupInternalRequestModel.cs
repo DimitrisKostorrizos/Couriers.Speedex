@@ -7,7 +7,7 @@ namespace Couriers.Speedex
     /// <summary>
     /// The internal request model for rescheduling a pickup
     /// </summary>
-    [XmlRoot("ReschedulePickup", Namespace = XmlNamespaces.DefaultNamespace)]
+    [XmlRoot("ReschedulePickup", Namespace = SpeedexXmlNamespaces.DefaultNamespace)]
     [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
     public class ReschedulePickupInternalRequestModel : SessionIdInternalRequestModel
     {

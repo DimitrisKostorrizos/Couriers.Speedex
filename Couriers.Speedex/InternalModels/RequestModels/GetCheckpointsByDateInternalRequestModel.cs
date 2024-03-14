@@ -7,7 +7,7 @@ namespace Couriers.Speedex
     /// <summary>
     /// The internal request model for getting the checkpoints for all the new checkpoints of the consignments, in a specific time frame 
     /// </summary>
-    [XmlRoot("GetTraceByDate", Namespace = XmlNamespaces.DefaultNamespace)]
+    [XmlRoot("GetTraceByDate", Namespace = SpeedexXmlNamespaces.DefaultNamespace)]
     [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
     public class GetCheckpointsByTimeFrameInternalRequestModel : SessionIdInternalRequestModel
     {

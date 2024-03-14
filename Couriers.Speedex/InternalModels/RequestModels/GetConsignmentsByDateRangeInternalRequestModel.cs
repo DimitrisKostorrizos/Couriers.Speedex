@@ -7,7 +7,7 @@ namespace Couriers.Speedex
     /// <summary>
     /// The internal request model for getting all the consignments created on the specified date range
     /// </summary>
-    [XmlRoot("GetConsignmentsByDate", Namespace = XmlNamespaces.DefaultNamespace)]
+    [XmlRoot("GetConsignmentsByDate", Namespace = SpeedexXmlNamespaces.DefaultNamespace)]
     [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
     public class GetConsignmentsByDateRangeInternalRequestModel : SessionIdInternalRequestModel
     {

@@ -8,7 +8,7 @@ namespace Couriers.Speedex
     /// <summary>
     /// The internal response model for getting the branch depots
     /// </summary>
-    [XmlRoot("GetBranchesResponse", Namespace = XmlNamespaces.DefaultNamespace)]
+    [XmlRoot("GetBranchesResponse", Namespace = SpeedexXmlNamespaces.DefaultNamespace)]
     [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
     public class GetBranchesInternalResponseModel : ReturnMessageInternalResponseModel, ISOAPResponseModel<IEnumerable<BranchResponseModel>>
     {
@@ -19,7 +19,7 @@ namespace Couriers.Speedex
         /// </summary>
         [XmlArray("Branches")]
         [XmlArrayItem("Branch")]
-        public List<BranchInternalResponseModel> BranchDepots { get; set; } = new();
+        public BranchInternalResponseModel[] BranchDepots { get; set; } = [];
 
         #endregion
 
@@ -41,7 +41,7 @@ namespace Couriers.Speedex
         /// Returns a string that represents the current object.
         /// </summary>
         /// <returns></returns>
-        public override string ToString() => BranchDepots.Count.ToString();
+        public override string ToString() => BranchDepots.Length.ToString();
 
         /// <summary>
         /// Creates and return the <see cref="IEnumerable{BranchResponseModel}"/> from the current object
