@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel;
+using System.Globalization;
 using System.Xml.Serialization;
 
 namespace Couriers.Speedex
@@ -57,12 +58,12 @@ namespace Couriers.Speedex
         /// Creates and return the <see cref="DepositedConsignmentResponseModel"/> from the current object
         /// </summary>
         /// <returns></returns>
-        public DepositedConsignmentResponseModel ToResponseModel() 
+        public DepositedConsignmentResponseModel ToResponseModel()
             => new()
             {
                 Amount = Amount,
                 Id = Id,
-                DateDeposited = DateTime.Parse(DateDeposited)
+                DateDeposited = DateTime.Parse(DateDeposited, CultureInfo.InvariantCulture)
             };
 
         #endregion

@@ -63,7 +63,7 @@ namespace Couriers.Speedex
         /// Creates and return the <see cref="PickupCheckpointResponseModel"/> from the current object
         /// </summary>
         /// <returns></returns>
-        public PickupCheckpointResponseModel ToResponseModel() => new PickupCheckpointResponseModel()
+        public PickupCheckpointResponseModel ToResponseModel() => new()
         {
             BranchDepot = BranchDepot,
             CheckpointDate = CheckpointDate,

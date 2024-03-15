@@ -1,5 +1,7 @@
 ﻿using System;
 using System.ComponentModel;
+using System.Diagnostics.CodeAnalysis;
+using System.Reflection;
 using System.Xml.Serialization;
 
 namespace Couriers.Speedex
@@ -60,22 +62,24 @@ namespace Couriers.Speedex
         #region Public Methods
 
         /// <summary>
-        /// Creates and return the <see cref="ReschedulePickupInternalRequestModel"/> from the <paramref name="value"/>
+        /// Creates and return the <see cref="ReschedulePickupInternalRequestModel"/> from the <paramref name="model"/>
         /// </summary>
-        /// <param name="value">The request model</param>
+        /// <param name="model">The request model</param>
         /// <returns></returns>
-        public static ReschedulePickupInternalRequestModel FromRequestModel(ReschedulePickupRequestModel value)
+        public static ReschedulePickupInternalRequestModel FromRequestModel([NotNull] ReschedulePickupRequestModel model)
         {
+            ArgumentNullException.ThrowIfNull(model, nameof(model));
+
             // Initialize the internal model
             var internalModel = new ReschedulePickupInternalRequestModel()
             {
-                Comments = value.Comments,
-                PickupDate = value.PickupDate,
-                PickupId = value.PickupId
+                Comments = model.Comments,
+                PickupDate = model.PickupDate,
+                PickupId = model.PickupId
             };
 
             // Get the delivery times
-            CouriersSpeedexDataModelHelpers.ToTimeLimit(value.DeliveryTime, out var deliveryTimeFrom, out var deliveryTimeTo);
+            CouriersSpeedexDataModelHelpers.ToTimeLimit(model.DeliveryTime, out var deliveryTimeFrom, out var deliveryTimeTo);
 
             // Set the starting delivery time
             internalModel.PickupHourFrom = deliveryTimeFrom;

@@ -57,7 +57,7 @@ namespace Couriers.Speedex
 
             var consignmentCount = consignmentIds.Count();
 
-            if(consignmentCount == 0)
+            if (consignmentCount == 0)
                 throw new ArgumentOutOfRangeException(nameof(consignmentIds), "At least consignment id has to be specified.");
 
             if (consignmentCount > MaximumNumberOfConsignments)

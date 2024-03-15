@@ -74,7 +74,7 @@ namespace Couriers.Speedex
         /// </summary>
         /// <returns></returns>
         public override string ToString() => $"Voucher Count: {VoucherIds.Count()}";
-        
+
         #endregion
     }
 }

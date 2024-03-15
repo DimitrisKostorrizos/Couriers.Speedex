@@ -86,8 +86,8 @@ namespace Couriers.Speedex
         /// <typeparam name="T">the type of the result</typeparam>
         /// <param name="result">The result</param>
         /// <returns></returns>
-        public static OperationResult<T> FromResult<T>(T result) 
-            => new (result);
+        public static OperationResult<T> FromResult<T>(T result)
+            => new(result);
 
         /// <summary>
         /// <inheritdoc/>

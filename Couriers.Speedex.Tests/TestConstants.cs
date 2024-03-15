@@ -14,8 +14,8 @@ namespace Couriers.Speedex.Tests
         /// </summary>
         public static readonly IReadOnlyDictionary<Type, object> ResponseObjects = new Dictionary<Type, object>()
         {
-            { 
-                typeof(SessionIdInternalResponseModel), 
+            {
+                typeof(SessionIdInternalResponseModel),
                 new SoapEnvelopeDataModel<SessionIdInternalResponseModel>()
                 {
                     Body = new SoapEnvelopeBodyDataModel<SessionIdInternalResponseModel>()

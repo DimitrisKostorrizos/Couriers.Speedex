@@ -19,7 +19,7 @@ namespace Couriers.Speedex
         /// The embedded model
         /// </summary>
         [XmlIgnore]
-        public TBody Model { get; set; } = new TBody();
+        public TBody Model { get; set; } = null!;
 
         /// <summary>
         /// The serializable XML entity

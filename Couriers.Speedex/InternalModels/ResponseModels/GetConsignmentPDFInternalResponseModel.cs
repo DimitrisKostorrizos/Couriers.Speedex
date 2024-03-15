@@ -41,7 +41,7 @@ namespace Couriers.Speedex
         /// Returns a string that represents the current object.
         /// </summary>
         /// <returns></returns>
-        public override string ToString() => Vouchers.Count.ToString();
+        public override string ToString() => $"Vouchers: {Vouchers.Count}";
 
         /// <summary>
         /// Creates and return the <see cref="IEnumerable{ConsignmentPDFResponseModel}"/> from the current object

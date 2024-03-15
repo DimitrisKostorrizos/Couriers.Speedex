@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel;
+using System.Diagnostics.CodeAnalysis;
 using System.Xml.Serialization;
 
 namespace Couriers.Speedex
@@ -179,8 +180,10 @@ namespace Couriers.Speedex
         /// </summary>
         /// <param name="model">The request model</param>
         /// <returns></returns>
-        public static ConsignmentInternalRequestModel FromRequestModel(ConsignmentRequestModel model)
+        public static ConsignmentInternalRequestModel FromRequestModel([NotNull] ConsignmentRequestModel model)
         {
+            ArgumentNullException.ThrowIfNull(model, nameof(model));
+
             var internalModel = new ConsignmentInternalRequestModel()
             {
                 Address = model.Address,

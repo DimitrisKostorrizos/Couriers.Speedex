@@ -48,13 +48,13 @@ namespace Couriers.Speedex
         /// Returns a string that represents the current object.
         /// </summary>
         /// <returns></returns>
-        public override string ToString() => Consignments.Count.ToString();
+        public override string ToString() => $"Consignments: {Consignments.Count}";
 
         /// <summary>
         /// Creates and return the <see cref="CreateConsignmentsResponseModel"/> from the current object
         /// </summary>
         /// <returns></returns>
-        public CreateConsignmentsResponseModel ToResponseModel() => new CreateConsignmentsResponseModel()
+        public CreateConsignmentsResponseModel ToResponseModel() => new()
         {
             Consignments = Consignments.Select(x => x.ToResponseModel()).ToList(),
             Statuses = Statuses

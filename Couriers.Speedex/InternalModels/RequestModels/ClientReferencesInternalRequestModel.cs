@@ -1,4 +1,7 @@
-﻿using System.ComponentModel;
+﻿using System;
+using System.ComponentModel;
+using System.Diagnostics.CodeAnalysis;
+using System.Reflection;
 using System.Xml.Serialization;
 
 namespace Couriers.Speedex
@@ -47,17 +50,21 @@ namespace Couriers.Speedex
         #region Public Methods
 
         /// <summary>
-        /// Creates and return the <see cref="ClientReferencesInternalRequestModel"/> from the <paramref name="value"/>
+        /// Creates and return the <see cref="ClientReferencesInternalRequestModel"/> from the <paramref name="model"/>
         /// </summary>
-        /// <param name="value">The request model</param>
+        /// <param name="model">The request model</param>
         /// <returns></returns>
-        public static ClientReferencesInternalRequestModel FromRequestModel(ClientReferencesRequestModel value) 
-            => new()
+        public static ClientReferencesInternalRequestModel FromRequestModel([NotNull] ClientReferencesRequestModel model)
+        {
+            ArgumentNullException.ThrowIfNull(model, nameof(model));
+
+            return new()
             {
-                FirstClientReference = value.FirstClientReference,
-                SecondClientReference = value.SecondClientReference,
-                ThirdClientReference = value.ThirdClientReference
+                FirstClientReference = model.FirstClientReference,
+                SecondClientReference = model.SecondClientReference,
+                ThirdClientReference = model.ThirdClientReference
             };
+        }
 
         #endregion
     }

@@ -1,5 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Xml.Serialization;
 
@@ -55,13 +57,17 @@ namespace Couriers.Speedex
         /// </summary>
         /// <param name="model">The request model</param>
         /// <returns></returns>
-        public static ConsignmentPDFInternalRequestModel FromRequestModel(ConsignmentPDFRequestModel model) 
-            => new()
+        public static ConsignmentPDFInternalRequestModel FromRequestModel([NotNull] ConsignmentPDFRequestModel model)
+        {
+            ArgumentNullException.ThrowIfNull(model, nameof(model));
+
+            return new()
             {
                 PaperSize = CouriersSpeedexDataModelHelpers.FromPaperType(model.PaperSize),
                 ReturnMultipleVouchers = model.ReturnMultipleVouchers,
                 VoucherIds = model.VoucherIds.ToList()
             };
+        }
 
         #endregion
     }

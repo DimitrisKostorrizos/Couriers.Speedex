@@ -13,12 +13,12 @@ namespace Couriers.Speedex
         /// <summary>
         /// The consignments
         /// </summary>
-        public IEnumerable<ConsignmentResponseModel> Consignments { get; set; } = Enumerable.Empty<ConsignmentResponseModel>();
+        public IEnumerable<ConsignmentResponseModel> Consignments { get; set; } = [];
 
         /// <summary>
         /// The consignments
         /// </summary>
-        public IEnumerable<string> Statuses { get; set; } = Enumerable.Empty<string>();
+        public IEnumerable<string> Statuses { get; set; } = [];
 
         #endregion
 
@@ -40,7 +40,7 @@ namespace Couriers.Speedex
         /// Returns a string that represents the current object.
         /// </summary>
         /// <returns></returns>
-        public override string ToString() => Consignments.Count().ToString();
+        public override string ToString() => $"Consignments: {Consignments.Count()}";
 
         #endregion
     }

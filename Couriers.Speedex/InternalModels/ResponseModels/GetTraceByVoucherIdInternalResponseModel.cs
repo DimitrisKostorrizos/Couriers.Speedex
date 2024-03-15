@@ -41,13 +41,13 @@ namespace Couriers.Speedex
         /// Returns a string that represents the current object.
         /// </summary>
         /// <returns></returns>
-        public override string ToString() => Checkpoints.Count.ToString();
+        public override string ToString() => $"Checkpoints: {Checkpoints.Count}";
 
         /// <summary>
         /// Creates and return the <see cref="IEnumerable{CheckpointResponseModel}"/> from the current object
         /// </summary>
         /// <returns></returns>
-        public IEnumerable<CheckpointResponseModel> ToResponseModel() => Checkpoints.Select(x => x.ToResponseModel()).ToList();
+        public IEnumerable<CheckpointResponseModel> ToResponseModel() => Checkpoints.Select(x => x.ToResponseModel()).ToArray();
 
         #endregion
     }

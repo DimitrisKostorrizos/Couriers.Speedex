@@ -86,7 +86,7 @@ namespace Couriers.Speedex
         /// Creates and return the <see cref="BranchResponseModel"/> from the current object
         /// </summary>
         /// <returns></returns>
-        public BranchResponseModel ToResponseModel() => new BranchResponseModel()
+        public BranchResponseModel ToResponseModel() => new()
         {
             Address = Address,
             City = City,

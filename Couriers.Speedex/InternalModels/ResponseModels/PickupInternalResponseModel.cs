@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Globalization;
 using System.Xml.Serialization;
 
 namespace Couriers.Speedex
@@ -139,14 +140,14 @@ namespace Couriers.Speedex
                 Id = Id,
                 Name = Name,
                 PhoneNumber = PhoneNumber,
-                PickupDate = DateTime.Parse(PickupDate),
+                PickupDate = DateTime.Parse(PickupDate, CultureInfo.InvariantCulture),
                 PostCode = PostCode
             };
 
-            if (DateTime.TryParse(PickupTimeTo, out var result))
+            if (DateTime.TryParse(PickupTimeTo, CultureInfo.InvariantCulture, out var result))
                 model.PickupTimeTo = result;
 
-            if (DateTime.TryParse(PickupTimeFrom, out result))
+            if (DateTime.TryParse(PickupTimeFrom, CultureInfo.InvariantCulture, out result))
                 model.PickupTimeFrom = result;
 
             return model;

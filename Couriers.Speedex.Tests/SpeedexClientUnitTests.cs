@@ -14,7 +14,7 @@ namespace Couriers.Speedex.Tests
         /// <summary>
         /// The test credentials
         /// </summary>
-        private static readonly SpeedexCredentials _speedexCredentials = new("demoapi", "GOOD-GO-HOME-GUYS", "001", "DEMO");
+        private static readonly SpeedexCredentials _speedexCredentials = new("demoapi", "GOOD-GO-HOME-GUYS", "002", "DEMO");
 
         /// <summary>
         /// The client
@@ -33,6 +33,8 @@ namespace Couriers.Speedex.Tests
             var httpHandler = new SimulationHttpHandler();
 
             var httpClient = new HttpClient(httpHandler);
+
+            //var httpClient = new HttpClient();
 
             _speedexClient = new(_speedexCredentials, httpClient, true);
         }
@@ -75,7 +77,7 @@ namespace Couriers.Speedex.Tests
 
             AssertHttpRequest(response);
 
-            Assert.True(!string.IsNullOrWhiteSpace(response.Result));
+            Assert.False(string.IsNullOrWhiteSpace(response.Result));
         }
 
         /// <summary>
@@ -107,9 +109,9 @@ namespace Couriers.Speedex.Tests
 
             Assert.True(httpRequestResult.IsSuccessful);
 
-            Assert.True(!string.IsNullOrWhiteSpace(httpRequestResult.RequestPayload));
+            Assert.False(string.IsNullOrWhiteSpace(httpRequestResult.RequestPayload));
 
-            Assert.True(!string.IsNullOrWhiteSpace(httpRequestResult.ResponsePayload));
+            Assert.False(string.IsNullOrWhiteSpace(httpRequestResult.ResponsePayload));
         }
 
         #endregion

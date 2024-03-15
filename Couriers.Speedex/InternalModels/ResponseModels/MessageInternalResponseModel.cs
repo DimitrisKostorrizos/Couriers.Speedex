@@ -22,7 +22,7 @@ namespace Couriers.Speedex
         /// The result
         /// </summary>
         [XmlElement("Result")]
-        public TResult? Result { get; set; }
+        public TResult Result { get; set; } = default!;
 
         /// <summary>
         /// The return code

@@ -50,7 +50,7 @@ namespace Couriers.Speedex
         /// Creates and return the <see cref="ConsignmentPDFResponseModel"/> from the current object
         /// </summary>
         /// <returns></returns>
-        public ConsignmentPDFResponseModel ToResponseModel() => new ConsignmentPDFResponseModel()
+        public ConsignmentPDFResponseModel ToResponseModel() => new()
         {
             Base64String = Voucher,
             VoucherId = VoucherId
