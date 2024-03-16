@@ -6,7 +6,6 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading;
 using System.Threading.Tasks;
-using System.Xml;
 
 namespace Couriers.Speedex
 {
@@ -21,6 +20,11 @@ namespace Couriers.Speedex
         /// The media type header value
         /// </summary>
         public const string MediaHeader = "application/soap+xml";
+
+        /// <summary>
+        /// The maximum number of consignments
+        /// </summary>
+        public const int MaximumNumberOfConsignments = 10;
 
         /// <summary>
         /// The media type header
@@ -171,14 +175,12 @@ namespace Couriers.Speedex
         {
             ArgumentNullException.ThrowIfNull(values, nameof(values));
 
-            const int maximumNumberOfConsignments = 10;
-
             // If more than 10 values are specified...
-            if (values.Count() > maximumNumberOfConsignments)
-                throw new InvalidOperationException($"The maximum number of consignments is {maximumNumberOfConsignments}.");
+            if (values.Count() > MaximumNumberOfConsignments)
+                throw new InvalidOperationException($"The maximum number of consignments is {MaximumNumberOfConsignments}.");
 
             // Get the response
-            var response = await BaseValidatedSOAPEnvelopeRequest<CreateConsignmentsInternalResponseModel, CreateConsignmentsInternalRequestModel>(CreateConsignmentsInternalRequestModel.FromRequestModel(values), cancellationToken).ConfigureAwait(false);
+            var response = await BaseValidatedSOAPEnvelopeRequest<CreateConsignmentsInternalResponseModel, CreateConsignmentsInternalRequestModel>(CreateConsignmentsInternalRequestModel.FromRequestModel(values, Credentials.AgreementCode, Credentials.CustomerCode), cancellationToken).ConfigureAwait(false);
 
             // If not successful...
             if (!response.IsSuccessful)
@@ -197,12 +199,6 @@ namespace Couriers.Speedex
         public Task<HttpRequestResult<CreateConsignmentsResponseModel>> CreateConsignmentAsync([NotNull] ConsignmentRequestModel model, CancellationToken cancellationToken = default)
         {
             ArgumentNullException.ThrowIfNull(model, nameof(model));
-
-            // Set the agreement code
-            model.AgreementCode = Credentials.AgreementCode;
-
-            // Set the customer code
-            model.CustomerCode = Credentials.CustomerCode;
 
             // Return the response
             return CreateConsignmentsAsync([model], cancellationToken);

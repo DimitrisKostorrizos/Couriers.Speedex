@@ -1,5 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Xml.Serialization;
 
@@ -41,11 +43,19 @@ namespace Couriers.Speedex
         /// Creates and return the <see cref="CreateConsignmentsInternalRequestModel"/> from the <paramref name="values"/>
         /// </summary>
         /// <param name="values">The request models</param>
+        /// <param name="agreementCode">The agreement code</param>
+        /// <param name="customerCode">The customer code</param>
         /// <returns></returns>
-        public static CreateConsignmentsInternalRequestModel FromRequestModel(IEnumerable<ConsignmentRequestModel> values)
+        public static CreateConsignmentsInternalRequestModel FromRequestModel([NotNull] IEnumerable<ConsignmentRequestModel> values, [NotNull] string agreementCode, [NotNull] string customerCode)
         {
+            ArgumentNullException.ThrowIfNull(values, nameof(values));
+
+            ArgumentException.ThrowIfNullOrWhiteSpace(agreementCode, nameof(agreementCode));
+
+            ArgumentException.ThrowIfNullOrWhiteSpace(customerCode, nameof(customerCode));
+
             // Transform the values
-            var internalValues = values.Select(ConsignmentInternalRequestModel.FromRequestModel).ToArray();
+            var internalValues = values.Select(x => ConsignmentInternalRequestModel.FromRequestModel(x, agreementCode, customerCode)).ToArray();
 
             // Return the internal model
             return new CreateConsignmentsInternalRequestModel() { Consignments = internalValues };

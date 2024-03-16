@@ -8,9 +8,14 @@
         #region Constants
 
         /// <summary>
-        /// The max length for the comments
+        /// The maximum length for the comments
         /// </summary>
         public const int MaxCommentLength = 40;
+
+        /// <summary>
+        /// The maximum length for the customer reference
+        /// </summary>
+        public const int MaxCustomerReferenceLength = 50;
 
         #endregion
 
@@ -40,6 +45,7 @@
         /// The member of the <see cref="ThirdCommentsPart"/>
         /// </summary>
         private string? mThirdCommentsPart;
+        private string? firstCustomerReference;
 
         #endregion
 
@@ -61,7 +67,14 @@
         /// <summary>
         /// The first customer reference of the consignment
         /// </summary>
-        public string? FirstCustomerReference { get; set; }
+        public string? FirstCustomerReference
+        {
+            get => firstCustomerReference;
+            set
+            {
+                firstCustomerReference = value;
+            }
+        }
 
         /// <summary>
         /// The second customer reference of the consignment
@@ -177,16 +190,6 @@
         public uint InsuranceAmount { get; set; }
 
         /// <summary>
-        /// The agreement code provided by Speedex
-        /// </summary>
-        public string? AgreementCode { get; set; }
-
-        /// <summary>
-        /// The customer code provided by Speedex
-        /// </summary>
-        public string? CustomerCode { get; set; }
-
-        /// <summary>
         /// The delivery time window
         /// NOTE: Cannot be combined with the field <see cref="ShouldBeDeliveredOnSaturday"/>.
         /// </summary>
@@ -218,9 +221,9 @@
         /// <summary>
         /// Default constructor
         /// </summary>
-        public ConsignmentRequestModel() : base()
+        public ConsignmentRequestModel(uint customerFlag) : base()
         {
-
+            CustomerFlag = customerFlag;
         }
 
         #endregion

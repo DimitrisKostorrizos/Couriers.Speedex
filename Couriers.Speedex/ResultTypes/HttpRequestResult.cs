@@ -4,10 +4,19 @@ using System.Diagnostics.CodeAnalysis;
 namespace Couriers.Speedex
 {
     /// <summary>
-    /// The <see cref="OperationResult"/> implementation for a HTTP request operation
+    /// The result type for a HTTP request operation
     /// </summary>
-    public class HttpRequestResult : OperationResult
+    public class HttpRequestResult
     {
+        #region Constants
+
+        /// <summary>
+        /// The message used when the result is successful
+        /// </summary>
+        public const string SuccessfulMessage = "Success";
+
+        #endregion
+
         #region Public Properties
 
         /// <summary>
@@ -20,6 +29,17 @@ namespace Couriers.Speedex
         /// </summary>
         public string? ResponsePayload { get; }
 
+        /// <summary>
+        /// <inheritdoc/>
+        /// </summary>
+        [MemberNotNullWhen(false, nameof(ErrorMessage))]
+        public bool IsSuccessful => string.IsNullOrWhiteSpace(ErrorMessage);
+
+        /// <summary>
+        /// <inheritdoc/>
+        /// </summary>
+        public string? ErrorMessage { get; }
+
         #endregion
 
         #region Constructors
@@ -30,11 +50,9 @@ namespace Couriers.Speedex
         /// <param name="exception">The exception</param>
         /// <param name="requestPayload">The request payload</param>
         /// <param name="responsePayload">The response payload</param>
-        public HttpRequestResult([NotNull] Exception exception, string? requestPayload, string? responsePayload) : base(exception)
+        public HttpRequestResult([NotNull] Exception exception, string? requestPayload, string? responsePayload) : this(exception.Message, requestPayload, responsePayload)
         {
-            RequestPayload = requestPayload;
-
-            ResponsePayload = responsePayload;
+            ArgumentNullException.ThrowIfNull(exception, nameof(exception));
         }
 
         /// <summary>
@@ -43,8 +61,12 @@ namespace Couriers.Speedex
         /// <param name="errorMessage">The error message</param>
         /// <param name="requestPayload">The request payload</param>
         /// <param name="responsePayload">The response payload</param>
-        public HttpRequestResult([NotNull] string errorMessage, string? requestPayload, string? responsePayload) : base(errorMessage)
+        public HttpRequestResult([NotNull] string errorMessage, string? requestPayload, string? responsePayload) : base()
         {
+            ArgumentException.ThrowIfNullOrWhiteSpace(errorMessage, nameof(errorMessage));
+
+            ErrorMessage = errorMessage;
+
             RequestPayload = requestPayload;
 
             ResponsePayload = responsePayload;
@@ -55,7 +77,7 @@ namespace Couriers.Speedex
         /// </summary>
         /// <param name="requestPayload">The request payload</param>
         /// <param name="responsePayload">The response payload</param>
-        internal HttpRequestResult(string? requestPayload, string? responsePayload) : base()
+        protected HttpRequestResult(string? requestPayload, string? responsePayload) : base()
         {
             RequestPayload = requestPayload;
 
@@ -67,7 +89,7 @@ namespace Couriers.Speedex
         #region Public Methods
 
         /// <summary>
-        /// Creates and returns a <see cref="OperationResult{T}"/> for the specified <paramref name="result"/>
+        /// Creates and returns a <see cref="HttpRequestResult{T}"/> for the specified <paramref name="result"/>
         /// </summary>
         /// <typeparam name="T">the type of the result</typeparam>
         /// <param name="result">The result</param>
@@ -81,7 +103,7 @@ namespace Couriers.Speedex
         /// <inheritdoc/>
         /// </summary>
         /// <returns></returns>
-        public override string ToString() => base.ToString();
+        public override string ToString() => IsSuccessful ? SuccessfulMessage : ErrorMessage;
 
         #endregion
     }
@@ -89,7 +111,7 @@ namespace Couriers.Speedex
     /// <summary>
     /// Describes the result for an operation that can fail
     /// </summary>
-    public class HttpRequestResult<T> : HttpRequestResult, IResult<T>
+    public class HttpRequestResult<T> : HttpRequestResult
     {
         #region Private Members
 
@@ -99,7 +121,7 @@ namespace Couriers.Speedex
         private readonly T _result;
 
         /// <summary>
-        /// The exception thrown when the <see cref="Result"/> property is accessed, when the 
+        /// The exception thrown when the <see cref="Result"/> property is accessed, when the <see cref="HttpRequestResult.IsSuccessful"/> is <see langword="false"/>
         /// </summary>
         private static readonly InvalidOperationException _resultException = new($"The '{nameof(Result)}' property can only be accessed if the '{nameof(IsSuccessful)}' is true");
 

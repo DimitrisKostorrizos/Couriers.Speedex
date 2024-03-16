@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
 
@@ -30,11 +31,11 @@ namespace Couriers.Speedex.Tests
         /// </summary>
         public SpeedexClientUnitTests() : base()
         {
-            var httpHandler = new SimulationHttpHandler();
+            //var httpHandler = new SimulationHttpHandler();
 
-            var httpClient = new HttpClient(httpHandler);
+            //var httpClient = new HttpClient(httpHandler);
 
-            //var httpClient = new HttpClient();
+            var httpClient = new HttpClient();
 
             _speedexClient = new(_speedexCredentials, httpClient, true);
         }
@@ -71,6 +72,27 @@ namespace Couriers.Speedex.Tests
         /// </summary>
         /// <returns></returns>
         [Fact]
+        public async Task FullTest()
+        {
+            using var newSpeedexClient = new SpeedexClient(_speedexCredentials, true);
+
+            var response = await newSpeedexClient.CreateSessionAsync();
+
+            var createVoucher = await newSpeedexClient.CreateConsignmentAsync(new ConsignmentRequestModel()
+            {
+                CustomerFlag = 0,
+                BranchBankCode = null,
+                Address = "test",
+                FirstCommentsPart = null
+            });
+        }
+
+        /// <summary>
+        /// Validates that when <see cref="SpeedexClient.CreateSessionAsync"/> is called, 
+        /// it successfully returns a session id
+        /// </summary>
+        /// <returns></returns>
+        [Fact]
         public async Task WhenTheCreateSessionMethodIsCalled_ItSuccessfullyReturns()
         {
             var response = await _speedexClient.CreateSessionAsync();
@@ -88,7 +110,9 @@ namespace Couriers.Speedex.Tests
         [Fact]
         public async Task WhenTheCancelConsignmentByVoucherMethodIsCalled_ItSuccessfullyReturns()
         {
-            var response = await _speedexClient.CancelConsignmentByVoucherIdAsync(Guid.NewGuid().ToString("N"));
+            var voucher = TestHelpers.GenerateTestVoucher();
+
+            var response = await _speedexClient.CancelConsignmentByVoucherIdAsync(voucher);
 
             AssertHttpRequest(response);
         }

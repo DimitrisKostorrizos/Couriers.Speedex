@@ -21,15 +21,14 @@ namespace Couriers.Speedex.Tests
                     Body = new SoapEnvelopeBodyDataModel<SessionIdInternalResponseModel>()
                     {
                         Model = new SessionIdInternalResponseModel()
-                                {
-                                    ReturnCode = 1,
-                                    ReturnMessage = string.Empty,
-                                    SessionId = Guid.NewGuid().ToString("N")
-                                }
+                        {
+                            ReturnCode = 1,
+                            ReturnMessage = string.Empty,
+                            SessionId = Guid.NewGuid().ToString("N")
+                        }
                     }
                 }
             },
-
             {
                 typeof(CancelConsignmentByVoucherIdInternalResponseModel),
                 new SoapEnvelopeDataModel<CancelConsignmentByVoucherIdInternalResponseModel>()
@@ -37,10 +36,10 @@ namespace Couriers.Speedex.Tests
                     Body = new SoapEnvelopeBodyDataModel<CancelConsignmentByVoucherIdInternalResponseModel>()
                     {
                         Model = new CancelConsignmentByVoucherIdInternalResponseModel()
-                                {
-                                    ReturnCode = 1,
-                                    ReturnMessage = string.Empty
-                                }
+                        {
+                            ReturnCode = 1,
+                            ReturnMessage = string.Empty
+                        }
                     }
                 }
             },

@@ -179,19 +179,25 @@ namespace Couriers.Speedex
         /// Creates and return the <see cref="ConsignmentInternalRequestModel"/> from the <see cref="ConsignmentRequestModel"/>
         /// </summary>
         /// <param name="model">The request model</param>
+        /// <param name="agreementCode">The agreement code</param>
+        /// <param name="customerCode">The customer code</param>
         /// <returns></returns>
-        public static ConsignmentInternalRequestModel FromRequestModel([NotNull] ConsignmentRequestModel model)
+        public static ConsignmentInternalRequestModel FromRequestModel([NotNull] ConsignmentRequestModel model, [NotNull] string agreementCode, [NotNull] string customerCode)
         {
             ArgumentNullException.ThrowIfNull(model, nameof(model));
+
+            ArgumentException.ThrowIfNullOrWhiteSpace(agreementCode, nameof(agreementCode));
+
+            ArgumentException.ThrowIfNullOrWhiteSpace(customerCode, nameof(customerCode));
 
             var internalModel = new ConsignmentInternalRequestModel()
             {
                 Address = model.Address,
-                AgreementCode = model.AgreementCode,
+                AgreementCode = agreementCode,
                 BranchBankCode = model.BranchBankCode,
                 ChargeType = CouriersSpeedexDataModelHelpers.FromChargeType(model.ChargeType),
                 Cost = model.Cost,
-                CustomerCode = model.CustomerCode,
+                CustomerCode = customerCode,
                 CustomerFlag = model.CustomerFlag,
                 DeliveryTime = CouriersSpeedexDataModelHelpers.FromDeliveryTimeLimit(model.DeliveryTime),
                 FirstCustomerReference = model.FirstCustomerReference,
