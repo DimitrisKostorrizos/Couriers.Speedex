@@ -5,24 +5,24 @@ namespace Couriers.Speedex
     /// <summary>
     /// The response model for the deposited consignment
     /// </summary>
-    public class DepositedConsignmentResponseModel
+    public sealed record DepositedConsignmentResponseModel
     {
         #region Public Properties
 
         /// <summary>
         /// The unique consignment id
         /// </summary>
-        public string Id { get; set; } = string.Empty;
+        public string Id { get; }
 
         /// <summary>
         /// The deposited amount
         /// </summary>
-        public decimal Amount { get; set; }
+        public decimal Amount { get; }
 
         /// <summary>
-        /// The date-time of the deposit
+        /// The date-time of that the consignment was deposited
         /// </summary>
-        public DateTime DateDeposited { get; set; }
+        public DateTime DateDeposited { get; }
 
         #endregion
 
@@ -31,9 +31,18 @@ namespace Couriers.Speedex
         /// <summary>
         /// Default constructor
         /// </summary>
-        public DepositedConsignmentResponseModel() : base()
+        /// <param name="id">The unique consignment id</param>
+        /// <param name="amount">The deposited amount</param>
+        /// <param name="dateDeposited">The date-time of that the consignment was deposited</param>
+        public DepositedConsignmentResponseModel(string id, decimal amount, DateTime dateDeposited) : base()
         {
+            ArgumentException.ThrowIfNullOrWhiteSpace(id, nameof(id));
 
+            Id = id;
+
+            Amount = amount;
+
+            DateDeposited = dateDeposited;
         }
 
         #endregion
@@ -41,7 +50,7 @@ namespace Couriers.Speedex
         #region Public Methods
 
         /// <summary>
-        /// Returns a string that represents the current object.
+        /// <inheritdoc/>
         /// </summary>
         /// <returns></returns>
         public override string ToString() => Id;

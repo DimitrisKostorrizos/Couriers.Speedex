@@ -177,7 +177,7 @@ namespace Couriers.Speedex
         #region Public Methods
 
         /// <summary>
-        /// Returns a string that represents the current object.
+        /// <inheritdoc/>
         /// </summary>
         /// <returns></returns>
         public override string ToString() => VoucherId;
@@ -193,11 +193,11 @@ namespace Couriers.Speedex
                 Address = Address,
                 AgreementCode = AgreementCode,
                 BranchBankCode = BranchBankCode,
-                ChargeType = CouriersSpeedexDataModelHelpers.ToChargeType(ChargeType),
+                ChargeType = SpeedexHelpers.ToChargeType(ChargeType),
                 Cost = Cost,
                 CustomerCode = CustomerCode,
                 CustomerFlag = CustomerFlag,
-                DeliveryTime = CouriersSpeedexDataModelHelpers.ToDeliveryTimeLimit(DeliveryTime),
+                DeliveryTime = SpeedexHelpers.ToDeliveryTimeLimit(DeliveryTime),
                 FirstCustomerReference = FirstCustomerReference,
                 FirstCommentsPart = FirstCustomerReference,
                 InsuranceAmount = InsuranceAmount,
@@ -215,7 +215,7 @@ namespace Couriers.Speedex
             };
 
             if (PaymentType is not null)
-                responseModel.PaymentType = CouriersSpeedexDataModelHelpers.ToPaymentType(PaymentType);
+                responseModel.PaymentType = SpeedexHelpers.ToPaymentType(PaymentType);
 
             return responseModel;
         }

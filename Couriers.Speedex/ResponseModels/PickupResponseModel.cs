@@ -1,13 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace Couriers.Speedex
 {
     /// <summary>
     /// The response model for the pickup
     /// </summary>
-    public class PickupResponseModel
+    public sealed record PickupResponseModel
     {
         #region Public Properties
 
@@ -19,7 +18,7 @@ namespace Couriers.Speedex
         /// <summary>
         /// The related consignment ids
         /// </summary>
-        public IEnumerable<string> ConsignmentIds { get; set; } = Enumerable.Empty<string>();
+        public IEnumerable<string> ConsignmentIds { get; set; } = [];
 
         /// <summary>
         /// The checkpoint code
@@ -98,7 +97,7 @@ namespace Couriers.Speedex
         #region Public Methods
 
         /// <summary>
-        /// Returns a string that represents the current object.
+        /// <inheritdoc/>
         /// </summary>
         /// <returns></returns>
         public override string ToString() => Id;

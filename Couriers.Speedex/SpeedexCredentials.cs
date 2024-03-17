@@ -51,6 +51,12 @@ namespace Couriers.Speedex
 
             ArgumentException.ThrowIfNullOrWhiteSpace(customerCode, nameof(customerCode));
 
+            if (agreementCode.Length > SpeedexConstants.MaximumAgreementCodeLength)
+                throw new InvalidOperationException($"The '{nameof(agreementCode)}' is not a valid agreement code. The maximum length for a agreement code field is {SpeedexConstants.MaximumAgreementCodeLength}.");
+
+            if (customerCode.Length > SpeedexConstants.MaximumCustomerCodeLength)
+                throw new InvalidOperationException($"The '{nameof(customerCode)}' is not a valid customer code. The maximum length for a customer code field is {SpeedexConstants.MaximumCustomerCodeLength}.");
+
             Username = username;
 
             Password = password;

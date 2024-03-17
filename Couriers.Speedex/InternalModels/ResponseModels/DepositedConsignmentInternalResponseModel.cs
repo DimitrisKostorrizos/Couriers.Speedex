@@ -49,7 +49,7 @@ namespace Couriers.Speedex
         #region Public Methods
 
         /// <summary>
-        /// Returns a string that represents the current object.
+        /// <inheritdoc/>
         /// </summary>
         /// <returns></returns>
         public override string ToString() => Id;
@@ -59,12 +59,7 @@ namespace Couriers.Speedex
         /// </summary>
         /// <returns></returns>
         public DepositedConsignmentResponseModel ToResponseModel()
-            => new()
-            {
-                Amount = Amount,
-                Id = Id,
-                DateDeposited = DateTime.Parse(DateDeposited, CultureInfo.InvariantCulture)
-            };
+            => new(Id, Amount, DateTime.Parse(DateDeposited, CultureInfo.InvariantCulture));
 
         #endregion
     }

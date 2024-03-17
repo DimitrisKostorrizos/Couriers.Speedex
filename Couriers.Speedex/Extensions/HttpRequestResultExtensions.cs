@@ -15,16 +15,19 @@ namespace Couriers.Speedex
         /// </summary>
         /// <typeparam name="TResult">The type of the new result</typeparam>
         /// <param name="result">The result</param>
+        /// <param name="errorMessage">The error message</param>
         /// <returns></returns>
         /// <exception cref="InvalidOperationException">An exception is thrown if the <paramref name="result"/> is successful</exception>
-        public static HttpRequestResult<TResult> ToUnsuccessfulHttpRequestResult<TResult>([NotNull] this HttpRequestResult result)
+        public static HttpRequestResult<TResult> ToUnsuccessfulHttpRequestResult<TResult>([NotNull] this HttpRequestResult result, string? errorMessage = null)
         {
             ArgumentNullException.ThrowIfNull(result, nameof(result));
 
             if (result.IsSuccessful)
                 throw new InvalidOperationException($"The specified '{nameof(result)}' is successful.");
 
-            return new HttpRequestResult<TResult>(result.ErrorMessage, result.RequestPayload, result.ResponsePayload);
+            var resultErrorMessage = string.IsNullOrWhiteSpace(errorMessage) ? result.ErrorMessage : errorMessage;
+
+            return new HttpRequestResult<TResult>(resultErrorMessage, result.RequestPayload, result.ResponsePayload);
         }
 
         #endregion

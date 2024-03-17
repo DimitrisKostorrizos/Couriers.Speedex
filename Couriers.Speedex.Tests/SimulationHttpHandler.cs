@@ -48,7 +48,7 @@ namespace Couriers.Speedex.Tests
 
             var responseModel = TestConstants.ResponseObjects[responseType];
 
-            var responsePayload = XMLHelpers.ToXml(responseModel, SpeedexXmlNamespaces.Namespaces);
+            var responsePayload = XMLHelpers.ToXml(responseModel, SpeedexXmlNamespaces.SpeedexNamespaces);
 
             return new HttpResponseMessage(HttpStatusCode.OK)
             {

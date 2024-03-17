@@ -41,7 +41,7 @@ namespace Couriers.Speedex
         #region Public Methods
 
         /// <summary>
-        /// Returns a string that represents the current object.
+        /// <inheritdoc/>
         /// </summary>
         /// <returns></returns>
         public override string ToString() => VoucherId;
@@ -50,11 +50,7 @@ namespace Couriers.Speedex
         /// Creates and return the <see cref="ConsignmentPDFResponseModel"/> from the current object
         /// </summary>
         /// <returns></returns>
-        public ConsignmentPDFResponseModel ToResponseModel() => new()
-        {
-            Base64String = Voucher,
-            VoucherId = VoucherId
-        };
+        public ConsignmentPDFResponseModel ToResponseModel() => new(VoucherId, Voucher);
 
         #endregion
     }

@@ -19,7 +19,7 @@ namespace Couriers.Speedex
         /// </summary>
         [XmlArray("GetBOLPdfResult")]
         [XmlArrayItem("Voucher")]
-        public List<ConsignmentPDFInternalResponseModel> Vouchers { get; set; } = [];
+        public ConsignmentPDFInternalResponseModel[] Vouchers { get; set; } = [];
 
         #endregion
 
@@ -38,13 +38,13 @@ namespace Couriers.Speedex
         #region Public Methods
 
         /// <summary>
-        /// Returns a string that represents the current object.
+        /// <inheritdoc/>
         /// </summary>
         /// <returns></returns>
-        public override string ToString() => $"Vouchers: {Vouchers.Count}";
+        public override string ToString() => $"Vouchers: {Vouchers.Length}";
 
         /// <summary>
-        /// Creates and return the <see cref="IEnumerable{ConsignmentPDFResponseModel}"/> from the current object
+        /// Creates and return the <see cref="IEnumerable{T}"/> from the current object
         /// </summary>
         /// <returns></returns>
         public IEnumerable<ConsignmentPDFResponseModel> ToResponseModel() => Vouchers.Select(x => x.ToResponseModel()).ToArray();

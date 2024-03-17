@@ -1,51 +1,43 @@
-﻿namespace Couriers.Speedex
+﻿using System;
+
+namespace Couriers.Speedex
 {
     /// <summary>
     /// The request model for the consignment
     /// </summary>
-    public class ConsignmentRequestModel
+    public sealed record ConsignmentRequestModel
     {
-        #region Constants
-
-        /// <summary>
-        /// The maximum length for the comments
-        /// </summary>
-        public const int MaxCommentLength = 40;
-
-        /// <summary>
-        /// The maximum length for the customer reference
-        /// </summary>
-        public const int MaxCustomerReferenceLength = 50;
-
-        #endregion
-
         #region Private Members
 
         /// <summary>
-        /// The member of the <see cref="NumberOfVouchers"/>
+        /// The field of the <see cref="FirstCommentsPart"/>
         /// </summary>
-        private uint mItemCount;
+        private string? _firstCommentsPart;
 
         /// <summary>
-        /// The member of the <see cref="Weight"/>
+        /// The field of the <see cref="SecondCommentsPart"/>
         /// </summary>
-        private double mWeight;
+        private string? _secondCommentsPart;
 
         /// <summary>
-        /// The member of the <see cref="FirstCommentsPart"/>
+        /// The field of the <see cref="ThirdCommentsPart"/>
         /// </summary>
-        private string? mFirstCommentsPart;
+        private string? _thirdCommentsPart;
 
         /// <summary>
-        /// The member of the <see cref="SecondCommentsPart"/>
+        /// The field of the <see cref="FirstCustomerReference"/>
         /// </summary>
-        private string? mSecondCommentsPart;
+        private string? _firstCustomerReference;
 
         /// <summary>
-        /// The member of the <see cref="ThirdCommentsPart"/>
+        /// The field of the <see cref="SecondCustomerReference"/>
         /// </summary>
-        private string? mThirdCommentsPart;
-        private string? firstCustomerReference;
+        private string? _secondCustomerReference;
+
+        /// <summary>
+        /// The field of the <see cref="ThirdCustomerReference"/>
+        /// </summary>
+        private string? _thirdCustomerReference;
 
         #endregion
 
@@ -57,7 +49,7 @@
         /// The value 0 indicates that the default data from the customer agreement will be used as the sender’s data. 
         /// The value 100 indicates that the related fields will be used as the sender’s data.
         /// </summary>
-        public uint CustomerFlag { get; set; }
+        public int CustomerFlag { get; }
 
         /// <summary>
         /// The cost center of the customer agreement
@@ -69,47 +61,59 @@
         /// </summary>
         public string? FirstCustomerReference
         {
-            get => firstCustomerReference;
-            set
+            get => _firstCustomerReference;
+            init
             {
-                firstCustomerReference = value;
+                SpeedexHelpers.ThrowIfInvalidCustomerReference(value);
+
+                _firstCustomerReference = value;
             }
         }
 
         /// <summary>
         /// The second customer reference of the consignment
         /// </summary>
-        public string? SecondCustomerReference { get; set; }
+        public string? SecondCustomerReference
+        {
+            get => _secondCustomerReference;
+            set
+            {
+                SpeedexHelpers.ThrowIfInvalidCustomerReference(value);
+
+                _secondCustomerReference = value;
+            }
+        }
 
         /// <summary>
         /// The third customer reference of the consignment
         /// </summary>
-        public string? ThirdCustomerReference { get; set; }
-
-        /// <summary>
-        /// The number of items of the consignment
-        /// </summary>
-        public uint NumberOfVouchers
+        public string? ThirdCustomerReference
         {
-            get => mItemCount;
+            get => _thirdCustomerReference;
             set
             {
-                mItemCount = value > 20 ? 20 : value;
+                SpeedexHelpers.ThrowIfInvalidCustomerReference(value);
+
+                _thirdCustomerReference = value;
             }
         }
+
+        /// <summary>
+        /// The number of vouchers
+        /// </summary>
+        public int NumberOfVouchers { get; }
 
         /// <summary>
         /// The first part of the comments
         /// </summary>
         public string? FirstCommentsPart
         {
-            get => mFirstCommentsPart;
-            set
+            get => _firstCommentsPart;
+            init
             {
-                if (!string.IsNullOrWhiteSpace(value) && value.Length > 40)
-                    value = value[..MaxCommentLength];
+                SpeedexHelpers.ThrowIfInvalidComments(value);
 
-                mFirstCommentsPart = value;
+                _firstCommentsPart = value;
             }
         }
 
@@ -118,13 +122,12 @@
         /// </summary>
         public string? SecondCommentsPart
         {
-            get => mSecondCommentsPart;
-            set
+            get => _secondCommentsPart;
+            init
             {
-                if (!string.IsNullOrWhiteSpace(value) && value.Length > 40)
-                    value = value[..MaxCommentLength];
+                SpeedexHelpers.ThrowIfInvalidComments(value);
 
-                mSecondCommentsPart = value;
+                _secondCommentsPart = value;
             }
         }
 
@@ -133,86 +136,73 @@
         /// </summary>
         public string? ThirdCommentsPart
         {
-            get => mThirdCommentsPart;
-            set
+            get => _thirdCommentsPart;
+            init
             {
-                if (!string.IsNullOrWhiteSpace(value) && value.Length > 40)
-                    value = value[..MaxCommentLength];
+                SpeedexHelpers.ThrowIfInvalidComments(value);
 
-                mThirdCommentsPart = value;
+                _thirdCommentsPart = value;
             }
         }
 
         /// <summary>
         /// The charge type of the consignment
         /// </summary>
-        public ChargeType ChargeType { get; set; }
+        public ChargeType ChargeType { get; }
 
         /// <summary>
         /// The payment type
         /// </summary>
-        public PaymentType? PaymentType { get; set; }
+        public PaymentType? PaymentType { get; }
 
         /// <summary>
         /// The cost
         /// </summary>
-        public double Cost { get; set; }
+        public double Cost { get; }
 
         /// <summary>
         /// The address for the delivery
         /// </summary>
-        public string? Address { get; set; }
+        public string Address { get; }
 
         /// <summary>
         /// The name of the recipient
         /// </summary>
-        public string? RecipientName { get; set; }
+        public string RecipientName { get; }
 
         /// <summary>
         /// The phone number of the recipient
         /// </summary>
-        public string? RecipientPhoneNumber { get; set; }
+        public string RecipientPhoneNumber { get; }
 
         /// <summary>
         /// The zip code for the delivery
         /// </summary>
-        public string? ZipCode { get; set; }
+        public string ZipCode { get; }
+
+        /// <summary>
+        /// The insurance amount of the consignment
+        /// </summary>
+        public int InsuranceAmount { get; }
 
         /// <summary>
         /// The flag indicating whether the consignment is going to be delivered on Saturday
         /// NOTE: Cannot be combined with the field <see cref="DeliveryTime"/>.
         /// </summary>
-        public bool ShouldBeDeliveredOnSaturday { get; set; }
-
-        /// <summary>
-        /// The insurance amount of the consignment
-        /// </summary>
-        public uint InsuranceAmount { get; set; }
+        public bool ShouldBeDeliveredOnSaturday { get; }
 
         /// <summary>
         /// The delivery time window
         /// NOTE: Cannot be combined with the field <see cref="ShouldBeDeliveredOnSaturday"/>.
         /// </summary>
-        public DeliveryTimeLimit DeliveryTime { get; set; }
+        public DeliveryTimeLimit DeliveryTime { get; }
 
         /// <summary>
         /// The weight of the consignment
         /// NOTE: The minimum value is 0.5 per item. 
         /// It is possible to change after the weighting from Speedex
         /// </summary>
-        public double Weight
-        {
-            get => mWeight;
-            set
-            {
-                var minimumWeight = NumberOfVouchers * 0.5;
-
-                if (value < minimumWeight)
-                    mWeight = minimumWeight;
-                else
-                    mWeight = value;
-            }
-        }
+        public double Weight { get; }
 
         #endregion
 
@@ -221,10 +211,94 @@
         /// <summary>
         /// Default constructor
         /// </summary>
-        public ConsignmentRequestModel(uint customerFlag) : base()
+        /// <param name="customerFlag">The customer flag</param>
+        /// <param name="numberOfVouchers">The number of vouchers</param>
+        /// <param name="chargeType">The charge type of the consignment</param>
+        /// <param name="paymentType">The payment type</param>
+        /// <param name="cost">The cost</param>
+        /// <param name="address">The address for the delivery</param>
+        /// <param name="recipientName">The name of the recipient</param>
+        /// <param name="recipientPhoneNumber">The phone number of the recipient</param>
+        /// <param name="zipCode">The zip code for the delivery</param>
+        /// <param name="insuranceAmount">The insurance amount of the consignment</param>
+        /// <param name="weight">The weight of the consignment</param>
+        /// <param name="shouldBeDeliveredOnSaturday">The flag indicating whether the consignment is going to be delivered on Saturday</param>
+        /// <param name="deliveryTime">The delivery time window</param>
+        public ConsignmentRequestModel(int customerFlag, int numberOfVouchers, ChargeType chargeType, PaymentType? paymentType,
+            double cost, string address, string recipientName, string recipientPhoneNumber, string zipCode, double weight,
+            int insuranceAmount = 0, bool shouldBeDeliveredOnSaturday = false, DeliveryTimeLimit deliveryTime = DeliveryTimeLimit.NoLimit) : base()
         {
+            ArgumentOutOfRangeException.ThrowIfNegativeOrZero(numberOfVouchers, nameof(numberOfVouchers));
+
+            ArgumentOutOfRangeException.ThrowIfNegative(cost, nameof(cost));
+
+            ArgumentOutOfRangeException.ThrowIfNegative(insuranceAmount, nameof(insuranceAmount));
+
+            ArgumentException.ThrowIfNullOrWhiteSpace(address, nameof(address));
+
+            ArgumentException.ThrowIfNullOrWhiteSpace(recipientName, nameof(recipientName));
+
+            ArgumentException.ThrowIfNullOrWhiteSpace(zipCode, nameof(zipCode));
+
+            ArgumentException.ThrowIfNullOrWhiteSpace(recipientPhoneNumber, nameof(recipientPhoneNumber));
+
+            ArgumentOutOfRangeException.ThrowIfGreaterThan(numberOfVouchers, SpeedexConstants.MaximumNumberOfVouchers, nameof(numberOfVouchers));
+
+            if (cost > 0 && !paymentType.HasValue)
+                throw new InvalidOperationException($"The '{nameof(paymentType)}' is required when the '{nameof(cost)}' is greater then 0.");
+
+            if (address.Length > SpeedexConstants.MaximumAddressLength)
+                throw new InvalidOperationException($"The '{nameof(address)}' is not a valid address. The maximum length for an address field is {SpeedexConstants.MaximumAddressLength}.");
+
+            if (recipientPhoneNumber.Length > SpeedexConstants.MaximumPhoneNumberLength)
+                throw new InvalidOperationException($"The '{nameof(recipientPhoneNumber)}' is not a valid phone number. The maximum length for a phone number field is {SpeedexConstants.MaximumPhoneNumberLength}.");
+
+            SpeedexHelpers.ThrowIfInvalidZipCode(zipCode);
+
+            var minimumWeight = NumberOfVouchers * SpeedexConstants.MinimumWeightPerVoucher;
+
+            if (weight < minimumWeight)
+                throw new InvalidOperationException($"The '{nameof(weight)}' is not a weight. The minimum weight for a voucher is {SpeedexConstants.MinimumWeightPerVoucher} kilos.");
+
+            if (shouldBeDeliveredOnSaturday && deliveryTime != DeliveryTimeLimit.NoLimit)
+                throw new InvalidOperationException("A Saturday delivery cannot be combined with a delivery time limit.");
+
             CustomerFlag = customerFlag;
+
+            NumberOfVouchers = numberOfVouchers;
+
+            ChargeType = chargeType;
+
+            PaymentType = paymentType;
+
+            Cost = cost;
+
+            Address = address;
+
+            RecipientName = recipientName;
+
+            RecipientPhoneNumber = recipientPhoneNumber;
+
+            ZipCode = zipCode;
+
+            InsuranceAmount = insuranceAmount;
+
+            Weight = weight;
+
+            ShouldBeDeliveredOnSaturday = shouldBeDeliveredOnSaturday;
+
+            DeliveryTime = deliveryTime;
         }
+
+        #endregion
+
+        #region Public Methods
+
+        /// <summary>
+        /// <inheritdoc/>
+        /// </summary>
+        /// <returns></returns>
+        public override string ToString() => $"Address: {Address}, Zip Code: {ZipCode}";
 
         #endregion
     }

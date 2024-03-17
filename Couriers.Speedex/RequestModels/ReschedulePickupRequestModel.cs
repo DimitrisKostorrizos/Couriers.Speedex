@@ -5,8 +5,17 @@ namespace Couriers.Speedex
     /// <summary>
     /// The request model for rescheduling a pickup
     /// </summary>
-    public record ReschedulePickupRequestModel
+    public sealed record ReschedulePickupRequestModel
     {
+        #region Private Fields
+
+        /// <summary>
+        /// The field of the <see cref="Comments"/>
+        /// </summary>
+        private string? comments;
+
+        #endregion
+
         #region Public Properties
 
         /// <summary>
@@ -22,7 +31,16 @@ namespace Couriers.Speedex
         /// <summary>
         /// The comments for the pickup
         /// </summary>
-        public string? Comments { get; set; }
+        public string? Comments
+        {
+            get => comments;
+            set
+            {
+                SpeedexHelpers.ThrowIfInvalidComments(value);
+
+                comments = value;
+            }
+        }
 
         /// <summary>
         /// The unique pickup id

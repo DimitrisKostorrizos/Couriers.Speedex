@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.Globalization;
 using System.Xml.Serialization;
@@ -26,7 +25,7 @@ namespace Couriers.Speedex
         /// </summary>
         [XmlArray("ConsignmentNumbers")]
         [XmlArrayItem("string")]
-        public List<string> ConsignmentIds { get; set; } = [];
+        public string[] ConsignmentIds { get; set; } = [];
 
         /// <summary>
         /// The checkpoint code
@@ -117,7 +116,7 @@ namespace Couriers.Speedex
         #region Public Methods
 
         /// <summary>
-        /// Returns a string that represents the current object.
+        /// <inheritdoc/>
         /// </summary>
         /// <returns></returns>
         public override string ToString() => Id;

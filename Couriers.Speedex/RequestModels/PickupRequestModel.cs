@@ -7,14 +7,14 @@ namespace Couriers.Speedex
     /// <summary>
     /// The request model for the pickup
     /// </summary>
-    public record PickupRequestModel
+    public sealed record PickupRequestModel
     {
-        #region Constants
+        #region Private Fields
 
         /// <summary>
-        /// The maximum number of consignment numbers
+        /// The field of the <see cref="Comments"/>
         /// </summary>
-        public const int MaximumNumberOfConsignments = 5;
+        private string? comments;
 
         #endregion
 
@@ -39,7 +39,16 @@ namespace Couriers.Speedex
         /// <summary>
         /// The comments
         /// </summary>
-        public string? Comments { get; set; }
+        public string? Comments
+        {
+            get => comments;
+            init
+            {
+                SpeedexHelpers.ThrowIfInvalidComments(value);
+
+                comments = value;
+            }
+        }
 
         #endregion
 
@@ -60,8 +69,8 @@ namespace Couriers.Speedex
             if (consignmentCount == 0)
                 throw new ArgumentOutOfRangeException(nameof(consignmentIds), "At least consignment id has to be specified.");
 
-            if (consignmentCount > MaximumNumberOfConsignments)
-                throw new ArgumentOutOfRangeException(nameof(consignmentIds), $"The maximum number of consignments is {MaximumNumberOfConsignments}.");
+            if (consignmentCount > SpeedexConstants.MaximumNumberOfConsignments)
+                throw new ArgumentOutOfRangeException(nameof(consignmentIds), $"The maximum number of consignments is {SpeedexConstants.MaximumNumberOfConsignments}.");
 
             ArgumentOutOfRangeException.ThrowIfLessThanOrEqual(pickupDate, DateTime.Now, nameof(pickupDate));
 

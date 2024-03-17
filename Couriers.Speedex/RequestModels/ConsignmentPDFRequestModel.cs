@@ -7,17 +7,8 @@ namespace Couriers.Speedex
     /// <summary>
     /// The request model for the consignment PDF
     /// </summary>
-    public record ConsignmentPDFRequestModel
+    public sealed record ConsignmentPDFRequestModel
     {
-        #region Constants
-
-        /// <summary>
-        /// The maximum
-        /// </summary>
-        public const int MaximumNumberOfVouchers = 20;
-
-        #endregion
-
         #region Public Properties
 
         /// <summary>
@@ -50,13 +41,13 @@ namespace Couriers.Speedex
         {
             ArgumentNullException.ThrowIfNull(voucherIds, nameof(voucherIds));
 
-            var voucher = voucherIds.Count();
+            var voucherCount = voucherIds.Count();
 
-            if (voucher == 0)
+            if (voucherCount == 0)
                 throw new ArgumentOutOfRangeException(nameof(voucherIds), "At least voucher id has to be specified.");
 
-            if (voucher > MaximumNumberOfVouchers)
-                throw new ArgumentOutOfRangeException(nameof(voucherIds), $"The maximum number of vouchers is {MaximumNumberOfVouchers}.");
+            if (voucherCount > SpeedexConstants.MaximumNumberOfVouchers)
+                throw new ArgumentOutOfRangeException(nameof(voucherIds), $"The maximum number of vouchers is {SpeedexConstants.MaximumNumberOfVouchers}.");
 
             PaperSize = paperSize;
 

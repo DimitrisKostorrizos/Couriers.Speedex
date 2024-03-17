@@ -222,7 +222,7 @@ namespace Couriers.Speedex
         #region Public Methods
 
         /// <summary>
-        /// Returns a string that represents the current object.
+        /// <inheritdoc/>
         /// </summary>
         /// <returns></returns>
         public override string ToString() => MasterConsignmentId;
@@ -238,7 +238,7 @@ namespace Couriers.Speedex
                 Address = Address,
                 AgreementCode = AgreementCode,
                 CashAmount = CashAmount,
-                ChargeType = CouriersSpeedexDataModelHelpers.ToChargeType(ChargeType),
+                ChargeType = SpeedexHelpers.ToChargeType(ChargeType),
                 CheckAmount = CheckAmount,
                 CheckpointCode = CheckpointCode,
                 CheckpointGroupCode = CheckpointGroupCode,

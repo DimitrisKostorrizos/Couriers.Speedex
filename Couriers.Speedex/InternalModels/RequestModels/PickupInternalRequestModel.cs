@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
@@ -22,7 +21,7 @@ namespace Couriers.Speedex
         /// </summary>
         [XmlArray("consignmentNumbers")]
         [XmlArrayItem("string")]
-        public List<string>? ConsignmentIds { get; set; }
+        public string[] ConsignmentIds { get; set; } = [];
 
         /// <summary>
         /// The comments
@@ -76,12 +75,12 @@ namespace Couriers.Speedex
             var internalModel = new PickupInternalRequestModel()
             {
                 Comments = model.Comments,
-                ConsignmentIds = model.ConsignmentIds.ToList(),
+                ConsignmentIds = model.ConsignmentIds.ToArray(),
                 PickupDate = model.PickupDate
             };
 
             // Get the delivery times
-            CouriersSpeedexDataModelHelpers.ToTimeLimit(model.DeliveryTime, out var deliveryTimeFrom, out var deliveryTimeTo);
+            SpeedexHelpers.ToTimeLimit(model.DeliveryTime, out var deliveryTimeFrom, out var deliveryTimeTo);
 
             // Set the starting delivery time
             internalModel.PickupHourFrom = deliveryTimeFrom;

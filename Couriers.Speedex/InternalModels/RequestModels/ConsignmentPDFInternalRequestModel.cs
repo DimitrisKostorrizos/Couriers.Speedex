@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
@@ -34,7 +33,7 @@ namespace Couriers.Speedex
         /// </summary>
         [XmlArray("voucherIDs")]
         [XmlArrayItem("string")]
-        public List<string> VoucherIds { get; set; } = [];
+        public string[] VoucherIds { get; set; } = [];
 
         #endregion
 
@@ -63,9 +62,9 @@ namespace Couriers.Speedex
 
             return new()
             {
-                PaperSize = CouriersSpeedexDataModelHelpers.FromPaperType(model.PaperSize),
+                PaperSize = SpeedexHelpers.FromPaperType(model.PaperSize),
                 ReturnMultipleVouchers = model.ReturnMultipleVouchers,
-                VoucherIds = model.VoucherIds.ToList()
+                VoucherIds = model.VoucherIds.ToArray()
             };
         }
 

@@ -19,7 +19,7 @@ namespace Couriers.Speedex
         /// </summary>
         [XmlArray("checkpoints")]
         [XmlArrayItem("Checkpoint")]
-        public List<CheckpointInternalResponseModel> Checkpoints { get; set; } = [];
+        public CheckpointInternalResponseModel[] Checkpoints { get; set; } = [];
 
         #endregion
 
@@ -38,13 +38,13 @@ namespace Couriers.Speedex
         #region Public Methods
 
         /// <summary>
-        /// Returns a string that represents the current object.
+        /// <inheritdoc/>
         /// </summary>
         /// <returns></returns>
-        public override string ToString() => $"Checkpoints: {Checkpoints.Count}";
+        public override string ToString() => $"Checkpoints: {Checkpoints.Length}";
 
         /// <summary>
-        /// Creates and return the <see cref="IEnumerable{CheckpointResponseModel}"/> from the current object
+        /// Creates and return the <see cref="IEnumerable{T}"/> from the current object
         /// </summary>
         /// <returns></returns>
         public IEnumerable<CheckpointResponseModel> ToResponseModel() => Checkpoints.Select(x => x.ToResponseModel()).ToArray();

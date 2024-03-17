@@ -96,7 +96,7 @@ namespace Couriers.Speedex
         #region Public Methods
 
         /// <summary>
-        /// Returns a string that represents the current object.
+        /// <inheritdoc/>
         /// </summary>
         /// <returns></returns>
         public override string ToString() => VoucherId;
@@ -105,20 +105,8 @@ namespace Couriers.Speedex
         /// Creates and return the <see cref="CheckpointResponseModel"/> from the current object
         /// </summary>
         /// <returns></returns>
-        public CheckpointResponseModel ToResponseModel() => new()
-        {
-            BranchDepot = BranchDepot,
-            BranchId = BranchId,
-            CheckpointDate = CheckpointDate,
-            CustomerComments = CustomerComments,
-            FirstCustomerReference = FirstCustomerReference,
-            RecipientName = RecipientName,
-            SecondCustomerReference = SecondCustomerReference,
-            StatusCode = StatusCode,
-            StatusDescription = StatusDescription,
-            ThirdCustomerReference = ThirdCustomerReference,
-            VoucherId = VoucherId
-        };
+        public CheckpointResponseModel ToResponseModel() => new(BranchDepot, BranchId, CheckpointDate, CustomerComments, FirstCustomerReference,
+            SecondCustomerReference, ThirdCustomerReference, RecipientName, StatusCode, StatusDescription, VoucherId);
 
         #endregion
     }

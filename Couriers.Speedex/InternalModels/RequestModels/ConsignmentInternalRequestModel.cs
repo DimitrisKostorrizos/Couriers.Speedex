@@ -21,7 +21,7 @@ namespace Couriers.Speedex
         /// The value 100 indicates that the related fields will be used as the sender’s data.
         /// </summary>
         [XmlElement("_cust_Flag")]
-        public uint CustomerFlag { get; set; }
+        public int CustomerFlag { get; set; }
 
         /// <summary>
         /// The cost center of the customer agreement
@@ -51,7 +51,7 @@ namespace Couriers.Speedex
         /// The number of items of the consignment
         /// </summary>
         [XmlElement("Items")]
-        public uint ItemCount { get; set; }
+        public int ItemCount { get; set; }
 
         /// <summary>
         /// The first part of the comments
@@ -130,7 +130,7 @@ namespace Couriers.Speedex
         /// The insurance amount of the consignment
         /// </summary>
         [XmlElement("Security_Value")]
-        public uint InsuranceAmount { get; set; }
+        public int InsuranceAmount { get; set; }
 
         /// <summary>
         /// The agreement code provided by Speedex
@@ -195,11 +195,11 @@ namespace Couriers.Speedex
                 Address = model.Address,
                 AgreementCode = agreementCode,
                 BranchBankCode = model.BranchBankCode,
-                ChargeType = CouriersSpeedexDataModelHelpers.FromChargeType(model.ChargeType),
+                ChargeType = SpeedexHelpers.FromChargeType(model.ChargeType),
                 Cost = model.Cost,
                 CustomerCode = customerCode,
                 CustomerFlag = model.CustomerFlag,
-                DeliveryTime = CouriersSpeedexDataModelHelpers.FromDeliveryTimeLimit(model.DeliveryTime),
+                DeliveryTime = SpeedexHelpers.FromDeliveryTimeLimit(model.DeliveryTime),
                 FirstCustomerReference = model.FirstCustomerReference,
                 FirstCommentsPart = model.FirstCommentsPart,
                 InsuranceAmount = model.InsuranceAmount,
@@ -216,7 +216,7 @@ namespace Couriers.Speedex
             };
 
             if (model.PaymentType.HasValue)
-                internalModel.PaymentType = CouriersSpeedexDataModelHelpers.FromPaymentType(model.PaymentType.Value);
+                internalModel.PaymentType = SpeedexHelpers.FromPaymentType(model.PaymentType.Value);
 
             return internalModel;
         }

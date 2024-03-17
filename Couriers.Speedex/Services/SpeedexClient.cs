@@ -19,12 +19,7 @@ namespace Couriers.Speedex
         /// <summary>
         /// The media type header value
         /// </summary>
-        public const string MediaHeader = "application/soap+xml";
-
-        /// <summary>
-        /// The maximum number of consignments
-        /// </summary>
-        public const int MaximumNumberOfConsignments = 10;
+        public const string MediaHeader = "text/xml; charset=utf-8.";
 
         /// <summary>
         /// The media type header
@@ -171,21 +166,29 @@ namespace Couriers.Speedex
         /// <param name="values">The consignments</param>
         /// <param name="cancellationToken">The cancellation token</param>
         /// <returns></returns>
-        public async Task<HttpRequestResult<CreateConsignmentsResponseModel>> CreateConsignmentsAsync([NotNull] IEnumerable<ConsignmentRequestModel> values, CancellationToken cancellationToken = default)
+        public async Task<HttpRequestResult<IEnumerable<ConsignmentResponseModel>>> CreateConsignmentsAsync([NotNull] IEnumerable<ConsignmentRequestModel> values, CancellationToken cancellationToken = default)
         {
             ArgumentNullException.ThrowIfNull(values, nameof(values));
 
             // If more than 10 values are specified...
-            if (values.Count() > MaximumNumberOfConsignments)
-                throw new InvalidOperationException($"The maximum number of consignments is {MaximumNumberOfConsignments}.");
+            if (values.Count() > SpeedexConstants.MaximumNumberOfConsignments)
+                throw new InvalidOperationException($"The maximum number of consignments is {SpeedexConstants.MaximumNumberOfConsignments}.");
 
             // Get the response
             var response = await BaseValidatedSOAPEnvelopeRequest<CreateConsignmentsInternalResponseModel, CreateConsignmentsInternalRequestModel>(CreateConsignmentsInternalRequestModel.FromRequestModel(values, Credentials.AgreementCode, Credentials.CustomerCode), cancellationToken).ConfigureAwait(false);
 
             // If not successful...
             if (!response.IsSuccessful)
+            {
+                var statusPerVoucher = response.Result
+                    .Statuses
+                    .Select((element, index) => $"Voucher {index}: {element}");
+
+                var resultMessage = string.Join(", ", statusPerVoucher);
+
                 // Return the unsuccessful result
-                return response.ToUnsuccessfulHttpRequestResult<CreateConsignmentsResponseModel>();
+                return response.ToUnsuccessfulHttpRequestResult<IEnumerable<ConsignmentResponseModel>>(resultMessage);
+            }
 
             return HttpRequestResult.FromResult(response.Result.ToResponseModel(), response.RequestPayload, response.ResponsePayload);
         }
@@ -196,12 +199,19 @@ namespace Couriers.Speedex
         /// <param name="model">The consignment</param>
         /// <param name="cancellationToken">The cancellation token</param>
         /// <returns></returns>
-        public Task<HttpRequestResult<CreateConsignmentsResponseModel>> CreateConsignmentAsync([NotNull] ConsignmentRequestModel model, CancellationToken cancellationToken = default)
+        public async Task<HttpRequestResult<ConsignmentResponseModel>> CreateConsignmentAsync([NotNull] ConsignmentRequestModel model, CancellationToken cancellationToken = default)
         {
             ArgumentNullException.ThrowIfNull(model, nameof(model));
 
+            // Get the response
+            var response = await CreateConsignmentsAsync([model], cancellationToken).ConfigureAwait(false);
+
+            // If not successful...
+            if (!response.IsSuccessful)
+                return response.ToUnsuccessfulHttpRequestResult<ConsignmentResponseModel>();
+
             // Return the response
-            return CreateConsignmentsAsync([model], cancellationToken);
+            return HttpRequestResult.FromResult(response.Result.First(), response.RequestPayload, response.ResponsePayload);
         }
 
         /// <summary>
@@ -235,7 +245,7 @@ namespace Couriers.Speedex
         /// <param name="returnMultipleVouchers">The flag indicating whether a single merged PDF file will be returned or one PDF file per consignment will be returned</param>
         /// <param name="cancellationToken">The cancellation token</param>
         /// <returns></returns>
-        public async Task<HttpRequestResult<ConsignmentPDFResponseModel>> GetConsignmentPDFAsync([NotNull] string voucherId, PaperSize paperSize = PaperSize.A4, bool returnMultipleVouchers = false, CancellationToken cancellationToken = default)
+        public async Task<HttpRequestResult<string>> GetConsignmentPDFAsync([NotNull] string voucherId, PaperSize paperSize, bool returnMultipleVouchers = false, CancellationToken cancellationToken = default)
         {
             ArgumentException.ThrowIfNullOrWhiteSpace(voucherId, nameof(voucherId));
 
@@ -248,10 +258,10 @@ namespace Couriers.Speedex
             // If not successful...
             if (!response.IsSuccessful)
                 // Return the unsuccessful result
-                return response.ToUnsuccessfulHttpRequestResult<ConsignmentPDFResponseModel>();
+                return response.ToUnsuccessfulHttpRequestResult<string>();
 
             // Return the successful result
-            return HttpRequestResult.FromResult(response.Result.First(), response.RequestPayload, response.ResponsePayload);
+            return HttpRequestResult.FromResult(response.Result.First().Base64String, response.RequestPayload, response.ResponsePayload);
         }
 
         /// <summary>
@@ -264,6 +274,8 @@ namespace Couriers.Speedex
         public async Task<HttpRequestResult<IEnumerable<BranchResponseModel>>> GetBranchesAsync([NotNull] string zipCode, SupportedLanguage language = SupportedLanguage.Greek, CancellationToken cancellationToken = default)
         {
             ArgumentException.ThrowIfNullOrWhiteSpace(zipCode, nameof(zipCode));
+
+            SpeedexHelpers.ThrowIfInvalidZipCode(zipCode);
 
             // Get the selected language
             var selectedLanguage = language == SupportedLanguage.Greek ? 1u : 2u;
@@ -632,7 +644,7 @@ namespace Couriers.Speedex
                     }
                 };
 
-                serializedRequestPayload = XMLHelpers.ToXml(model, SpeedexXmlNamespaces.Namespaces);
+                serializedRequestPayload = XMLHelpers.ToXml(model, SpeedexXmlNamespaces.SpeedexNamespaces);
 
                 using var httpRequest = new TypedStringContent<TRequest, TResponse>(serializedRequestPayload, _mediaTypeHeaderValue);
 

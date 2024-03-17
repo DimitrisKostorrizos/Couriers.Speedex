@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.ComponentModel;
+﻿using System.ComponentModel;
 using System.Xml.Serialization;
 
 namespace Couriers.Speedex
@@ -23,7 +22,7 @@ namespace Couriers.Speedex
         /// The result
         /// </summary>
         [XmlArray("Result")]
-        public List<TArrayResult> Result { get; set; } = [];
+        public TArrayResult[] Result { get; set; } = [];
 
         /// <summary>
         /// The return code
@@ -48,7 +47,7 @@ namespace Couriers.Speedex
         #region Public Methods
 
         /// <summary>
-        /// Returns a string that represents the current object.
+        /// <inheritdoc/>
         /// </summary>
         /// <returns></returns>
         public override string ToString() => Message;

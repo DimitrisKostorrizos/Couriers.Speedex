@@ -38,13 +38,13 @@ namespace Couriers.Speedex
         #region Public Methods
 
         /// <summary>
-        /// Returns a string that represents the current object.
+        /// <inheritdoc/>
         /// </summary>
         /// <returns></returns>
         public override string ToString() => $"Branch Depots: {BranchDepots.Length}";
 
         /// <summary>
-        /// Creates and return the <see cref="IEnumerable{BranchResponseModel}"/> from the current object
+        /// Creates and return the <see cref="IEnumerable{T}"/> from the current object
         /// </summary>
         /// <returns></returns>
         public IEnumerable<BranchResponseModel> ToResponseModel() => BranchDepots.Select(x => x.ToResponseModel()).ToArray();

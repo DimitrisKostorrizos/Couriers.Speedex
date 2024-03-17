@@ -77,7 +77,7 @@ namespace Couriers.Speedex
         #region Public Methods
 
         /// <summary>
-        /// Returns a string that represents the current object.
+        /// <inheritdoc/>
         /// </summary>
         /// <returns></returns>
         public override string ToString() => Id;
@@ -86,17 +86,7 @@ namespace Couriers.Speedex
         /// Creates and return the <see cref="BranchResponseModel"/> from the current object
         /// </summary>
         /// <returns></returns>
-        public BranchResponseModel ToResponseModel() => new()
-        {
-            Address = Address,
-            City = City,
-            Id = Id,
-            Latitude = Latitude,
-            Longitude = Longitude,
-            Name = Name,
-            TelephoneNumber = TelephoneNumber,
-            ZipCode = ZipCode
-        };
+        public BranchResponseModel ToResponseModel() => new(Address, City, Id, Name, TelephoneNumber, ZipCode, Latitude, Longitude);
 
         #endregion
     }

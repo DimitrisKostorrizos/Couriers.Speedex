@@ -1,7 +1,6 @@
 ﻿using System;
 using System.ComponentModel;
 using System.Diagnostics.CodeAnalysis;
-using System.Reflection;
 using System.Xml.Serialization;
 
 namespace Couriers.Speedex
@@ -79,7 +78,7 @@ namespace Couriers.Speedex
             };
 
             // Get the delivery times
-            CouriersSpeedexDataModelHelpers.ToTimeLimit(model.DeliveryTime, out var deliveryTimeFrom, out var deliveryTimeTo);
+            SpeedexHelpers.ToTimeLimit(model.DeliveryTime, out var deliveryTimeFrom, out var deliveryTimeTo);
 
             // Set the starting delivery time
             internalModel.PickupHourFrom = deliveryTimeFrom;

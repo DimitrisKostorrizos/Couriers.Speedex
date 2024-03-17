@@ -10,7 +10,7 @@ namespace Couriers.Speedex
     /// </summary>
     [XmlRoot("CreateBOLResponse", Namespace = SpeedexXmlNamespaces.DefaultNamespace)]
     [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
-    public class CreateConsignmentsInternalResponseModel : ReturnMessageInternalResponseModel, ISOAPResponseModel<CreateConsignmentsResponseModel>
+    public class CreateConsignmentsInternalResponseModel : ReturnMessageInternalResponseModel, ISOAPResponseModel<IEnumerable<ConsignmentResponseModel>>
     {
         #region Public Properties
 
@@ -19,14 +19,14 @@ namespace Couriers.Speedex
         /// </summary>
         [XmlArray("outListPod")]
         [XmlArrayItem("BOL")]
-        public List<ConsignmentInternalResponseModel> Consignments { get; set; } = [];
+        public ConsignmentInternalResponseModel[] Consignments { get; set; } = [];
 
         /// <summary>
         /// The consignments
         /// </summary>
         [XmlArray("statusList")]
         [XmlArrayItem("string")]
-        public List<string> Statuses { get; set; } = [];
+        public string[] Statuses { get; set; } = [];
 
         #endregion
 
@@ -45,20 +45,16 @@ namespace Couriers.Speedex
         #region Public Methods
 
         /// <summary>
-        /// Returns a string that represents the current object.
+        /// <inheritdoc/>
         /// </summary>
         /// <returns></returns>
-        public override string ToString() => $"Consignments: {Consignments.Count}";
+        public override string ToString() => $"Consignments: {Consignments.Length}";
 
         /// <summary>
-        /// Creates and return the <see cref="CreateConsignmentsResponseModel"/> from the current object
+        /// Creates and return the <see cref="IEnumerable{T}"/> from the current object
         /// </summary>
         /// <returns></returns>
-        public CreateConsignmentsResponseModel ToResponseModel() => new()
-        {
-            Consignments = Consignments.Select(x => x.ToResponseModel()).ToList(),
-            Statuses = Statuses
-        };
+        public IEnumerable<ConsignmentResponseModel> ToResponseModel() => Consignments.Select(x => x.ToResponseModel()).ToArray();
 
         #endregion
     }

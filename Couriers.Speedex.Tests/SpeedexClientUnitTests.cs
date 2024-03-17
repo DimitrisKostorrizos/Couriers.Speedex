@@ -1,5 +1,3 @@
-using System;
-using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
 
@@ -31,11 +29,9 @@ namespace Couriers.Speedex.Tests
         /// </summary>
         public SpeedexClientUnitTests() : base()
         {
-            //var httpHandler = new SimulationHttpHandler();
+            var httpHandler = new SimulationHttpHandler();
 
-            //var httpClient = new HttpClient(httpHandler);
-
-            var httpClient = new HttpClient();
+            var httpClient = new HttpClient(httpHandler);
 
             _speedexClient = new(_speedexCredentials, httpClient, true);
         }
@@ -76,15 +72,35 @@ namespace Couriers.Speedex.Tests
         {
             using var newSpeedexClient = new SpeedexClient(_speedexCredentials, true);
 
-            var response = await newSpeedexClient.CreateSessionAsync();
+            var sessionResponse = await newSpeedexClient.CreateSessionAsync();
 
-            var createVoucher = await newSpeedexClient.CreateConsignmentAsync(new ConsignmentRequestModel()
-            {
-                CustomerFlag = 0,
-                BranchBankCode = null,
-                Address = "test",
-                FirstCommentsPart = null
-            });
+            AssertHttpRequest(sessionResponse);
+
+            var createVoucherResponse = await newSpeedexClient.CreateConsignmentAsync(new ConsignmentRequestModel(0, 2, ChargeType.Recipient, PaymentType.Cash, 2, "Test", "Test", "1234567890", "12345", 4));
+
+            AssertHttpRequest(createVoucherResponse);
+
+            var voucher = createVoucherResponse.Result.VoucherId;
+
+            var pdfResponse = await newSpeedexClient.GetConsignmentPDFAsync(voucher, PaperSize.A4);
+
+            AssertHttpRequest(pdfResponse);
+
+            var lastCheckpointResponse = await newSpeedexClient.GetLastCheckPointAsync(voucher);
+
+            AssertHttpRequest(lastCheckpointResponse);
+
+            var checkpointsResponse = await newSpeedexClient.GetTraceByVoucherIdAsync(voucher);
+
+            AssertHttpRequest(checkpointsResponse);
+
+            var cancelVoucherResponse = await newSpeedexClient.CancelConsignmentByVoucherIdAsync(voucher);
+
+            AssertHttpRequest(cancelVoucherResponse);
+
+            var branchesResponse = await newSpeedexClient.GetBranchesAsync("36100");
+
+            AssertHttpRequest(branchesResponse);
         }
 
         /// <summary>
@@ -122,6 +138,17 @@ namespace Couriers.Speedex.Tests
         #endregion
 
         #region Private Methods
+
+        /// <summary>
+        /// Asserts the <paramref name="httpRequestResult"/>
+        /// </summary>
+        /// <param name="httpRequestResult">The HTTP request result</param>
+        private static void AssertHttpRequest<T>(HttpRequestResult<T> httpRequestResult)
+        {
+            AssertHttpRequest((HttpRequestResult)httpRequestResult);
+
+            Assert.NotNull(httpRequestResult.Result);
+        }
 
         /// <summary>
         /// Asserts the <paramref name="httpRequestResult"/>

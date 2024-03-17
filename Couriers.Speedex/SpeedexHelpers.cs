@@ -5,7 +5,7 @@ namespace Couriers.Speedex
     /// <summary>
     /// The helper methods for enums
     /// </summary>
-    internal static class CouriersSpeedexDataModelHelpers
+    internal static class SpeedexHelpers
     {
         #region Charge Type
 
@@ -15,15 +15,13 @@ namespace Couriers.Speedex
         /// <param name="value">The value</param>
         /// <returns></returns>
         public static ChargeType ToChargeType(uint value)
-        {
-            return value switch
+            => value switch
             {
                 1 => ChargeType.Sender,
                 2 => ChargeType.Recipient,
                 3 => ChargeType.ThirdParty,
                 _ => throw new InvalidOperationException($"The {value} is not a valid charge type.")
             };
-        }
 
         /// <summary>
         /// Return the <see cref="ChargeType"/> that corresponds to the specified <paramref name="value"/>
@@ -31,30 +29,27 @@ namespace Couriers.Speedex
         /// <param name="value">The value</param>
         /// <returns></returns>
         public static ChargeType ToChargeType(string value)
-        {
-            return value switch
+            => value switch
             {
                 "Sender" => ChargeType.Sender,
                 "Recipient" => ChargeType.Recipient,
                 "ThirdParty" => ChargeType.ThirdParty,
                 _ => throw new InvalidOperationException($"The {value} is not a valid charge type.")
             };
-        }
+
         /// <summary>
         /// Return the <see cref="uint"/> that corresponds to the specified <paramref name="value"/>
         /// </summary>
         /// <param name="value">The value</param>
         /// <returns></returns>
         public static uint FromChargeType(ChargeType value)
-        {
-            return value switch
+            => value switch
             {
                 ChargeType.Sender => 1,
                 ChargeType.Recipient => 2,
                 ChargeType.ThirdParty => 3,
                 _ => throw new InvalidOperationException($"The {value} is not a valid charge type.")
             };
-        }
 
         #endregion
 
@@ -66,14 +61,12 @@ namespace Couriers.Speedex
         /// <param name="value">The value</param>
         /// <returns></returns>
         public static PaymentType ToPaymentType(string value)
-        {
-            return value switch
+            => value switch
             {
                 "M" => PaymentType.Cash,
                 "E" => PaymentType.Check,
                 _ => throw new InvalidOperationException($"The {value} is not a valid payment type.")
             };
-        }
 
         /// <summary>
         /// Return the <see cref="char"/> that corresponds to the specified <paramref name="value"/>
@@ -81,18 +74,51 @@ namespace Couriers.Speedex
         /// <param name="value">The value</param>
         /// <returns></returns>
         public static string FromPaymentType(PaymentType value)
-        {
-            return value switch
+            => value switch
             {
                 PaymentType.Cash => "M",
                 PaymentType.Check => "E",
                 _ => throw new InvalidOperationException($"The {value} is not a valid payment type.")
             };
-        }
 
         #endregion
 
         #region Delivery Time Limit
+
+        /// <summary>
+        /// Throws a <see cref="InvalidOperationException"/> if the <paramref name="value"/>
+        /// is not valid a customer reference
+        /// </summary>
+        /// <param name="value">The value</param>
+        public static void ThrowIfInvalidCustomerReference(string? value)
+        {
+            if (!string.IsNullOrWhiteSpace(value) && value.Length > SpeedexConstants.MaximumCustomerReferenceLength)
+                throw new InvalidOperationException($"The '{nameof(value)}' is not a valid customer reference. The maximum length for a customer reference field is {SpeedexConstants.MaximumCustomerReferenceLength}.");
+        }
+
+        /// <summary>
+        /// Throws a <see cref="InvalidOperationException"/> if the <paramref name="value"/>
+        /// is not valid a comment
+        /// </summary>
+        /// <param name="value">The value</param>
+        public static void ThrowIfInvalidComments(string? value)
+        {
+            if (!string.IsNullOrWhiteSpace(value) && value.Length > SpeedexConstants.MaximumCommentLength)
+                throw new InvalidOperationException($"The '{nameof(value)}' is not a valid comment. The maximum length for a comment field is {SpeedexConstants.MaximumCommentLength}.");
+        }
+
+        /// <summary>
+        /// Throws a <see cref="InvalidOperationException"/> if the <paramref name="value"/>
+        /// is not valid zip code
+        /// </summary>
+        /// <param name="value">The value</param>
+        public static void ThrowIfInvalidZipCode(string value)
+        {
+            ArgumentException.ThrowIfNullOrWhiteSpace(value, nameof(value));
+
+            if (value.Length > SpeedexConstants.MaximumZipCodeLength)
+                throw new InvalidOperationException($"The '{nameof(value)}' is not a valid zip code. The maximum length for a zip code field is {SpeedexConstants.MaximumZipCodeLength}.");
+        }
 
         /// <summary>
         /// Return the <see cref="DeliveryTimeLimit"/> that corresponds to the specified <paramref name="value"/>
@@ -100,8 +126,7 @@ namespace Couriers.Speedex
         /// <param name="value">The value</param>
         /// <returns></returns>
         public static DeliveryTimeLimit ToDeliveryTimeLimit(string value)
-        {
-            return value switch
+            => value switch
             {
                 "0" => DeliveryTimeLimit.NoLimit,
                 "2" => DeliveryTimeLimit.TenAMToOnePM,
@@ -109,7 +134,6 @@ namespace Couriers.Speedex
                 "4" => DeliveryTimeLimit.FourPMToSevenPM,
                 _ => throw new InvalidOperationException($"The {value} is not a valid delivery time limit.")
             };
-        }
 
         /// <summary>
         /// Return the <see cref="char"/> that corresponds to the specified <paramref name="value"/>
@@ -117,8 +141,7 @@ namespace Couriers.Speedex
         /// <param name="value">The value</param>
         /// <returns></returns>
         public static string FromDeliveryTimeLimit(DeliveryTimeLimit value)
-        {
-            return value switch
+            => value switch
             {
                 DeliveryTimeLimit.NoLimit => "0",
                 DeliveryTimeLimit.TenAMToOnePM => "2",
@@ -126,7 +149,6 @@ namespace Couriers.Speedex
                 DeliveryTimeLimit.FourPMToSevenPM => "4",
                 _ => throw new InvalidOperationException($"The {value} is not a valid delivery time limit.")
             };
-        }
 
         /// <summary>
         /// Returns the <paramref name="deliveryTimeFrom"/> and the <paramref name="deliveryTimeTo"/> based on the specified <paramref name="value"/>
@@ -179,8 +201,7 @@ namespace Couriers.Speedex
         /// <param name="value">The value</param>
         /// <returns></returns>
         public static PaperSize ToPaperType(uint value)
-        {
-            return value switch
+            => value switch
             {
                 1 => PaperSize.A4,
                 2 => PaperSize.A5,
@@ -188,7 +209,6 @@ namespace Couriers.Speedex
                 4 => PaperSize.A6,
                 _ => throw new InvalidOperationException($"The {value} is not a valid paper size.")
             };
-        }
 
         /// <summary>
         /// Return the <see cref="uint"/> that corresponds to the specified <paramref name="value"/>
@@ -196,8 +216,7 @@ namespace Couriers.Speedex
         /// <param name="value">The value</param>
         /// <returns></returns>
         public static uint FromPaperType(PaperSize value)
-        {
-            return value switch
+            => value switch
             {
                 PaperSize.A4 => 1,
                 PaperSize.A5 => 2,
@@ -205,7 +224,6 @@ namespace Couriers.Speedex
                 PaperSize.A6 => 4,
                 _ => throw new InvalidOperationException($"The {value} is not a valid paper size.")
             };
-        }
 
         #endregion
     }

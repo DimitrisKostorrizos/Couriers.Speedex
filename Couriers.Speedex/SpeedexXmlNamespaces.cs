@@ -10,7 +10,7 @@ namespace Couriers.Speedex
         /// <summary>
         /// The Xml namespaces
         /// </summary>
-        public static XmlSerializerNamespaces Namespaces = new(
+        public static readonly XmlSerializerNamespaces SpeedexNamespaces = new(
         [
             new(DefaultPrefix, DefaultNamespace),
             new(SoapPrefix, SoapNamespace),
