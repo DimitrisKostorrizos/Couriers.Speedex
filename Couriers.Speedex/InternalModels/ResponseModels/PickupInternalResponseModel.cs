@@ -10,7 +10,7 @@ namespace Couriers.Speedex
     /// </summary>
     [XmlRoot("Result", Namespace = SpeedexXmlNamespaces.DefaultNamespace)]
     [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
-    public class PickupInternalResponseModel : ISOAPResponseModel<PickupResponseModel>
+    public class PickupInternalResponseModel : ISoapResponseModel<PickupResponseModel>
     {
         #region Public Properties
 

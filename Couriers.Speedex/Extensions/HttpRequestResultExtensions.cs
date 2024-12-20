@@ -20,7 +20,7 @@ namespace Couriers.Speedex
         /// <exception cref="InvalidOperationException">An exception is thrown if the <paramref name="result"/> is successful</exception>
         public static HttpRequestResult<TResult> ToUnsuccessfulHttpRequestResult<TResult>([NotNull] this HttpRequestResult result, string? errorMessage = null)
         {
-            ArgumentNullException.ThrowIfNull(result, nameof(result));
+            ArgumentNullException.ThrowIfNull(result);
 
             if (result.IsSuccessful)
                 throw new InvalidOperationException($"The specified '{nameof(result)}' is successful.");

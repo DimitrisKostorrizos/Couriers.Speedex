@@ -8,7 +8,7 @@ namespace Couriers.Speedex
     /// </summary>
     /// <typeparam name="TResult">The type of result</typeparam>
     [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
-    public class MessageInternalResponseModel<TResult> : ISOAPReturnMessageModel
+    public class MessageInternalResponseModel<TResult> : ISoapReturnMessageModel
     {
         #region Public Properties
 

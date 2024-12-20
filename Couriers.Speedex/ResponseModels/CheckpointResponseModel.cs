@@ -85,15 +85,15 @@ namespace Couriers.Speedex
         public CheckpointResponseModel(string branchDepot, string branchId, DateTime checkpointDate, string? customerComments, string? firstCustomerReference,
             string? secondCustomerReference, string? thirdCustomerReference, string recipientName, string statusCode, string statusDescription, string voucherId) : base()
         {
-            ArgumentException.ThrowIfNullOrWhiteSpace(branchDepot, nameof(branchDepot));
+            ArgumentException.ThrowIfNullOrWhiteSpace(branchDepot);
 
-            ArgumentException.ThrowIfNullOrWhiteSpace(branchId, nameof(branchId));
+            ArgumentException.ThrowIfNullOrWhiteSpace(branchId);
 
-            ArgumentException.ThrowIfNullOrWhiteSpace(statusCode, nameof(statusCode));
+            ArgumentException.ThrowIfNullOrWhiteSpace(statusCode);
 
-            ArgumentException.ThrowIfNullOrWhiteSpace(statusDescription, nameof(statusDescription));
+            ArgumentException.ThrowIfNullOrWhiteSpace(statusDescription);
 
-            ArgumentException.ThrowIfNullOrWhiteSpace(voucherId, nameof(voucherId));
+            ArgumentException.ThrowIfNullOrWhiteSpace(voucherId);
 
             BranchDepot = branchDepot;
 

@@ -10,7 +10,7 @@ namespace Couriers.Speedex
     /// </summary>
     [XmlRoot("GetTraceByVoucherResponse", Namespace = SpeedexXmlNamespaces.DefaultNamespace)]
     [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
-    public class GetTraceByVoucherIdInternalResponseModel : ReturnMessageInternalResponseModel, ISOAPResponseModel<IEnumerable<CheckpointResponseModel>>
+    public class GetTraceByVoucherIdInternalResponseModel : ReturnMessageInternalResponseModel, ISoapResponseModel<IEnumerable<CheckpointResponseModel>>
     {
         #region Public Properties
 

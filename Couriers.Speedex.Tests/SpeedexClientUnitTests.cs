@@ -1,3 +1,4 @@
+using System;
 using System.Net.Http;
 using System.Threading.Tasks;
 
@@ -9,11 +10,6 @@ namespace Couriers.Speedex.Tests
     public class SpeedexClientUnitTests : IAsyncLifetime
     {
         #region Private Fields
-
-        /// <summary>
-        /// The test credentials
-        /// </summary>
-        private static readonly SpeedexCredentials _speedexCredentials = new("demoapi", "GOOD-GO-HOME-GUYS", "002", "DEMO");
 
         /// <summary>
         /// The client
@@ -33,7 +29,7 @@ namespace Couriers.Speedex.Tests
 
             var httpClient = new HttpClient(httpHandler);
 
-            _speedexClient = new(_speedexCredentials, httpClient, true);
+            _speedexClient = new(TestConstants.SpeedexCredentials, httpClient, true);
         }
 
         #endregion
@@ -70,13 +66,13 @@ namespace Couriers.Speedex.Tests
         [Fact]
         public async Task FullTest()
         {
-            using var newSpeedexClient = new SpeedexClient(_speedexCredentials, true);
+            using var newSpeedexClient = new SpeedexClient(TestConstants.SpeedexCredentials, true);
 
             var sessionResponse = await newSpeedexClient.CreateSessionAsync();
 
             AssertHttpRequest(sessionResponse);
 
-            var createVoucherResponse = await newSpeedexClient.CreateConsignmentAsync(new ConsignmentRequestModel(0, 2, ChargeType.Recipient, PaymentType.Cash, 2, "Test", "Test", "1234567890", "12345", 4));
+            var createVoucherResponse = await newSpeedexClient.CreateConsignmentAsync(TestConstants.TestConsignment);
 
             AssertHttpRequest(createVoucherResponse);
 
@@ -129,6 +125,237 @@ namespace Couriers.Speedex.Tests
             var voucher = TestHelpers.GenerateTestVoucher();
 
             var response = await _speedexClient.CancelConsignmentByVoucherIdAsync(voucher);
+
+            AssertHttpRequest(response);
+        }
+
+        /// <summary>
+        /// Validates that when <see cref="SpeedexClient.CreateConsignmentsAsync"/> is called, 
+        /// it successfully returns
+        /// </summary>
+        /// <returns></returns>
+        [Fact]
+        public async Task WhenTheCreateConsignmentsMethodIsCalled_ItSuccessfullyReturns()
+        {
+            var response = await _speedexClient.CreateConsignmentsAsync([ TestConstants.TestConsignment ]);
+
+            AssertHttpRequest(response);
+        }
+
+        /// <summary>
+        /// Validates that when <see cref="SpeedexClient.CreateConsignmentAsync"/> is called, 
+        /// it successfully returns
+        /// </summary>
+        /// <returns></returns>
+        [Fact]
+        public async Task WhenTheCreateConsignmentMethodIsCalled_ItSuccessfullyReturns()
+        {
+            var response = await _speedexClient.CreateConsignmentAsync(TestConstants.TestConsignment);
+
+            AssertHttpRequest(response);
+        }
+
+        /// <summary>
+        /// Validates that when <see cref="SpeedexClient.GetConsignmentPDFsAsync"/> is called, 
+        /// it successfully returns
+        /// </summary>
+        /// <returns></returns>
+        [Fact]
+        public async Task WhenTheGetConsignmentPDFsIsCalled_ItSuccessfullyReturns()
+        {
+            var request = new ConsignmentPdfRequestModel([TestHelpers.GenerateTestVoucher()], PaperSize.A4, true);
+
+            var response = await _speedexClient.GetConsignmentPDFsAsync(request);
+
+            AssertHttpRequest(response);
+        }
+
+        /// <summary>
+        /// Validates that when <see cref="SpeedexClient.GetConsignmentPDFAsync"/> is called, 
+        /// it successfully returns
+        /// </summary>
+        /// <returns></returns>
+        [Fact]
+        public async Task WhenTheGetConsignmentPDFIsCalled_ItSuccessfullyReturns()
+        {
+            var response = await _speedexClient.GetConsignmentPDFAsync(TestHelpers.GenerateTestVoucher(), PaperSize.A4, true);
+
+            AssertHttpRequest(response);
+        }
+
+        /// <summary>
+        /// Validates that when <see cref="SpeedexClient.GetBranchesAsync"/> is called, 
+        /// it successfully returns
+        /// </summary>
+        /// <returns></returns>
+        [Fact]
+        public async Task WhenTheGetBranchesIsCalled_ItSuccessfullyReturns()
+        {
+            var response = await _speedexClient.GetBranchesAsync("26441");
+
+            AssertHttpRequest(response);
+        }
+
+        /// <summary>
+        /// Validates that when <see cref="SpeedexClient.GetLastCheckPointAsync"/> is called, 
+        /// it successfully returns
+        /// </summary>
+        /// <returns></returns>
+        [Fact]
+        public async Task WhenTheGetLastCheckPointIsCalled_ItSuccessfullyReturns()
+        {
+            var response = await _speedexClient.GetLastCheckPointAsync(TestHelpers.GenerateTestVoucher());
+
+            AssertHttpRequest(response);
+        }
+
+        /// <summary>
+        /// Validates that when <see cref="SpeedexClient.GetLastPickupCheckPointAsync"/> is called, 
+        /// it successfully returns
+        /// </summary>
+        /// <returns></returns>
+        [Fact]
+        public async Task WhenTheGetLastPickupCheckPointIsCalled_ItSuccessfullyReturns()
+        {
+            var response = await _speedexClient.GetLastPickupCheckPointAsync(TestHelpers.GenerateTestVoucher());
+
+            AssertHttpRequest(response);
+        }
+
+        /// <summary>
+        /// Validates that when <see cref="SpeedexClient.GetTraceByClientReferencesAsync"/> is called, 
+        /// it successfully returns
+        /// </summary>
+        /// <returns></returns>
+        [Fact]
+        public async Task WhenTheGetTraceByClientReferencesIsCalled_ItSuccessfullyReturns()
+        {
+            var request = new ClientReferencesRequestModel()
+            {
+                FirstClientReference = "Test"  
+            };
+
+            var response = await _speedexClient.GetTraceByClientReferencesAsync(request);
+
+            AssertHttpRequest(response);
+        }
+
+        /// <summary>
+        /// Validates that when <see cref="SpeedexClient.GetTraceByTimeFrameAsync"/> is called, 
+        /// it successfully returns
+        /// </summary>
+        /// <returns></returns>
+        [Fact]
+        public async Task WhenTheGetTraceByTimeFrameIsCalled_ItSuccessfullyReturns()
+        {
+            var dateto = DateTime.Now;
+
+            var dateFrom = dateto.AddDays(-5);
+
+            var response = await _speedexClient.GetTraceByTimeFrameAsync(dateFrom, dateto);
+
+            AssertHttpRequest(response);
+        }
+
+        /// <summary>
+        /// Validates that when <see cref="SpeedexClient.GetTraceByVoucherIdAsync"/> is called, 
+        /// it successfully returns
+        /// </summary>
+        /// <returns></returns>
+        [Fact]
+        public async Task WhenTheGetTraceByVoucherIdIsCalled_ItSuccessfullyReturns()
+        {
+            var response = await _speedexClient.GetTraceByVoucherIdAsync(TestHelpers.GenerateTestVoucher());
+
+            AssertHttpRequest(response);
+        }
+
+        /// <summary>
+        /// Validates that when <see cref="SpeedexClient.CancelPickupByIdAsync"/> is called, 
+        /// it successfully returns
+        /// </summary>
+        /// <returns></returns>
+        [Fact]
+        public async Task WhenTheCancelPickupByIdIsCalled_ItSuccessfullyReturns()
+        {
+            var response = await _speedexClient.CancelPickupByIdAsync(TestHelpers.GenerateTestVoucher());
+
+            AssertHttpRequest(response);
+        }
+
+        /// <summary>
+        /// Validates that when <see cref="SpeedexClient.CreatePickupAsync"/> is called, 
+        /// it successfully returns
+        /// </summary>
+        /// <returns></returns>
+        [Fact]
+        public async Task WhenTheCreatePickupIsCalled_ItSuccessfullyReturns()
+        {
+            var request = new PickupRequestModel([ TestHelpers.GenerateTestVoucher() ], DateTime.Now.AddDays(3), DeliveryTimeLimit.NoLimit);
+
+            var response = await _speedexClient.CreatePickupAsync(request);
+
+            AssertHttpRequest(response);
+        }
+
+        /// <summary>
+        /// Validates that when <see cref="SpeedexClient.GetConsignmentsByDateRangeAsync"/> is called, 
+        /// it successfully returns
+        /// </summary>
+        /// <returns></returns>
+        [Fact]
+        public async Task WhenTheGetConsignmentsByDateRangeIsCalled_ItSuccessfullyReturns()
+        {
+            var dateto = DateTime.Now;
+
+            var dateFrom = dateto.AddDays(-5);
+
+            var response = await _speedexClient.GetConsignmentsByDateRangeAsync(dateFrom, dateto);
+
+            AssertHttpRequest(response);
+        }
+
+        /// <summary>
+        /// Validates that when <see cref="SpeedexClient.GetDepositedConsignmentsByDateRangeAsync"/> is called, 
+        /// it successfully returns
+        /// </summary>
+        /// <returns></returns>
+        [Fact]
+        public async Task WhenTheGetDepositedConsignmentsByDateRangeIsCalled_ItSuccessfullyReturns()
+        {
+            var dateto = DateTime.Now;
+
+            var dateFrom = dateto.AddDays(-5);
+
+            var response = await _speedexClient.GetDepositedConsignmentsByDateRangeAsync(dateFrom, dateto);
+
+            AssertHttpRequest(response);
+        }
+
+        /// <summary>
+        /// Validates that when <see cref="SpeedexClient.GetPickupByIdAsync"/> is called, 
+        /// it successfully returns
+        /// </summary>
+        /// <returns></returns>
+        [Fact]
+        public async Task WhenTheGetPickupByIdIsCalled_ItSuccessfullyReturns()
+        {
+            var response = await _speedexClient.GetPickupByIdAsync(TestHelpers.GenerateTestVoucher());
+
+            AssertHttpRequest(response);
+        }
+
+        /// <summary>
+        /// Validates that when <see cref="SpeedexClient.ReschedulePickupAsync"/> is called, 
+        /// it successfully returns
+        /// </summary>
+        /// <returns></returns>
+        [Fact]
+        public async Task WhenTheReschedulePickupIsCalled_ItSuccessfullyReturns()
+        {
+            var request = new ReschedulePickupRequestModel(DateTime.Now.AddDays(3), DeliveryTimeLimit.TenAMToOnePM);
+
+            var response = await _speedexClient.ReschedulePickupAsync(request);
 
             AssertHttpRequest(response);
         }

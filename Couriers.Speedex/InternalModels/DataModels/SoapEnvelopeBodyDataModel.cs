@@ -27,8 +27,8 @@ namespace Couriers.Speedex
         [XmlAnyElement, Browsable(false), EditorBrowsable(EditorBrowsableState.Never), DebuggerBrowsable(DebuggerBrowsableState.Never)]
         public XElement XmlEntity
         {
-            get => XMLHelpers.SerializeToXElement(Model);
-            set => Model = XMLHelpers.Deserialize<TBody>(value);
+            get => XmlHelpers.SerializeToXElement(Model);
+            set => Model = XmlHelpers.Deserialize<TBody>(value);
         }
 
         #endregion

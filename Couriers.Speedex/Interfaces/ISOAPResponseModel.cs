@@ -4,7 +4,7 @@
     /// Provides abstractions for a SOAP internal response model
     /// </summary>
     /// <typeparam name="TResponse">The type of the response model</typeparam>
-    internal interface ISOAPResponseModel<TResponse>
+    internal interface ISoapResponseModel<out TResponse>
     {
         #region Methods
 

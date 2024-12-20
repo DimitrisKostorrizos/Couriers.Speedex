@@ -7,7 +7,7 @@ namespace Couriers.Speedex
     /// The internal response model for the return message
     /// </summary>
     [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
-    public class ReturnMessageInternalResponseModel : ISOAPReturnMessageModel
+    public class ReturnMessageInternalResponseModel : ISoapReturnMessageModel
     {
         #region Public Properties
 
@@ -26,12 +26,12 @@ namespace Couriers.Speedex
         /// <summary>
         /// The return message
         /// </summary>
-        string ISOAPReturnMessageModel.Message { get => ReturnMessage; set => ReturnMessage = value; }
+        string ISoapReturnMessageModel.Message { get => ReturnMessage; set => ReturnMessage = value; }
 
         /// <summary>
         /// The return code
         /// </summary>
-        uint ISOAPReturnMessageModel.Code { get => ReturnCode; set => ReturnCode = value; }
+        uint ISoapReturnMessageModel.Code { get => ReturnCode; set => ReturnCode = value; }
 
         #endregion
 

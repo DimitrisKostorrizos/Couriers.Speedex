@@ -9,7 +9,7 @@ namespace Couriers.Speedex
     [XmlRoot("CreateSessionResponse", Namespace = SpeedexXmlNamespaces.DefaultNamespace)]
     [EditorBrowsable(EditorBrowsableState.Never)]
     [XmlInclude(typeof(SessionIdInternalResponseModel))]
-    public class SessionIdInternalResponseModel : ReturnMessageInternalResponseModel, ISOAPResponseModel<string>
+    public class SessionIdInternalResponseModel : ReturnMessageInternalResponseModel, ISoapResponseModel<string>
     {
         #region Public Properties
 

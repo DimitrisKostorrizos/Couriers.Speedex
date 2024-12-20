@@ -2,6 +2,9 @@
 
 namespace Couriers.Speedex.Tests
 {
+    /// <summary>
+    /// The helper methods related to the tests
+    /// </summary>
     public static class TestHelpers
     {
         #region Private Fields

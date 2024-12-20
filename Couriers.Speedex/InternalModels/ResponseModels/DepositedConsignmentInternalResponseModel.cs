@@ -10,7 +10,7 @@ namespace Couriers.Speedex
     /// </summary>
     [XmlRoot(Namespace = SpeedexXmlNamespaces.DefaultNamespace)]
     [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
-    public class DepositedConsignmentInternalResponseModel : ISOAPResponseModel<DepositedConsignmentResponseModel>
+    public class DepositedConsignmentInternalResponseModel : ISoapResponseModel<DepositedConsignmentResponseModel>
     {
         #region Public Properties
 

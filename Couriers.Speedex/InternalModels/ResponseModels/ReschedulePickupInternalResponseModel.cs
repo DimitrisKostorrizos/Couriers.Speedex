@@ -8,7 +8,7 @@ namespace Couriers.Speedex
     /// </summary>
     [XmlRoot("ReschedulePickupResponse", Namespace = SpeedexXmlNamespaces.DefaultNamespace)]
     [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
-    public class ReschedulePickupInternalResponseModel : INewWebMethodSOAPReturnMessageModel<bool>
+    public class ReschedulePickupInternalResponseModel : INewWebMethodSoapReturnMessageModel<bool>
     {
         #region Public Properties
 

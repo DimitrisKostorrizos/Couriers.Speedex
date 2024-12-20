@@ -10,7 +10,7 @@ namespace Couriers.Speedex
     /// </summary>
     [XmlRoot("GetBOLPdfResponse", Namespace = SpeedexXmlNamespaces.DefaultNamespace)]
     [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
-    public class GetConsignmentPDFInternalResponseModel : ReturnMessageInternalResponseModel, ISOAPResponseModel<IEnumerable<ConsignmentPDFResponseModel>>
+    public class GetConsignmentPdfInternalResponseModel : ReturnMessageInternalResponseModel, ISoapResponseModel<IEnumerable<ConsignmentPdfResponseModel>>
     {
         #region Public Properties
 
@@ -19,7 +19,7 @@ namespace Couriers.Speedex
         /// </summary>
         [XmlArray("GetBOLPdfResult")]
         [XmlArrayItem("Voucher")]
-        public ConsignmentPDFInternalResponseModel[] Vouchers { get; set; } = [];
+        public ConsignmentPdfInternalResponseModel[] Vouchers { get; set; } = [];
 
         #endregion
 
@@ -28,7 +28,7 @@ namespace Couriers.Speedex
         /// <summary>
         /// Default constructor
         /// </summary>
-        public GetConsignmentPDFInternalResponseModel() : base()
+        public GetConsignmentPdfInternalResponseModel() : base()
         {
 
         }
@@ -47,7 +47,7 @@ namespace Couriers.Speedex
         /// Creates and return the <see cref="IEnumerable{T}"/> from the current object
         /// </summary>
         /// <returns></returns>
-        public IEnumerable<ConsignmentPDFResponseModel> ToResponseModel() => Vouchers.Select(x => x.ToResponseModel()).ToArray();
+        public IEnumerable<ConsignmentPdfResponseModel> ToResponseModel() => Vouchers.Select(x => x.ToResponseModel()).ToArray();
 
         #endregion
     }

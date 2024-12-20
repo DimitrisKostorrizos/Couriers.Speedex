@@ -62,7 +62,7 @@ namespace Couriers.Speedex
         /// <param name="deliveryTime">The delivery time frame</param>
         public PickupRequestModel(IEnumerable<string> consignmentIds, DateTime pickupDate, DeliveryTimeLimit deliveryTime) : base()
         {
-            ArgumentNullException.ThrowIfNull(consignmentIds, nameof(consignmentIds));
+            ArgumentNullException.ThrowIfNull(consignmentIds);
 
             var consignmentCount = consignmentIds.Count();
 
@@ -72,7 +72,7 @@ namespace Couriers.Speedex
             if (consignmentCount > SpeedexConstants.MaximumNumberOfConsignments)
                 throw new ArgumentOutOfRangeException(nameof(consignmentIds), $"The maximum number of consignments is {SpeedexConstants.MaximumNumberOfConsignments}.");
 
-            ArgumentOutOfRangeException.ThrowIfLessThanOrEqual(pickupDate, DateTime.Now, nameof(pickupDate));
+            ArgumentOutOfRangeException.ThrowIfLessThanOrEqual(pickupDate, DateTime.Now);
 
             ConsignmentIds = consignmentIds;
 

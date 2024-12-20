@@ -5,7 +5,7 @@ namespace Couriers.Speedex
     /// <summary>
     /// The helper methods for enums
     /// </summary>
-    internal static class SpeedexHelpers
+    public static class SpeedexHelpers
     {
         #region Charge Type
 
@@ -114,7 +114,7 @@ namespace Couriers.Speedex
         /// <param name="value">The value</param>
         public static void ThrowIfInvalidZipCode(string value)
         {
-            ArgumentException.ThrowIfNullOrWhiteSpace(value, nameof(value));
+            ArgumentException.ThrowIfNullOrWhiteSpace(value);
 
             if (value.Length > SpeedexConstants.MaximumZipCodeLength)
                 throw new InvalidOperationException($"The '{nameof(value)}' is not a valid zip code. The maximum length for a zip code field is {SpeedexConstants.MaximumZipCodeLength}.");
@@ -151,44 +151,21 @@ namespace Couriers.Speedex
             };
 
         /// <summary>
-        /// Returns the <paramref name="deliveryTimeFrom"/> and the <paramref name="deliveryTimeTo"/> based on the specified <paramref name="value"/>
+        /// Returns the delivery time window based on the specified <paramref name="value"/>
         /// </summary>
         /// <param name="value">The delivery time limit</param>
-        /// <param name="deliveryTimeFrom">The starting delivery time</param>
-        /// <param name="deliveryTimeTo">The ending delivery time</param>
-        public static void ToTimeLimit(DeliveryTimeLimit value, out DateTime? deliveryTimeFrom, out DateTime? deliveryTimeTo)
+        public static DeliveryTimeWindow ToDeliveryTimeWindow(DeliveryTimeLimit value)
         {
-            deliveryTimeFrom = null;
-
-            deliveryTimeTo = null;
-
-            if (value == DeliveryTimeLimit.NoLimit)
-                return;
-
-            var timeFrom = new DateTime();
-
-            var timeTo = new DateTime();
-
             if (value == DeliveryTimeLimit.TenAMToOnePM)
-            {
-                deliveryTimeFrom = timeFrom.AddHours(10);
+                return new DeliveryTimeWindow(new TimeOnly(10, 0), new TimeOnly(13, 0));
 
-                deliveryTimeTo = timeTo.AddHours(13);
-            }
-            else if (value == DeliveryTimeLimit.OnePMMToFourPM)
-            {
-                deliveryTimeFrom = timeFrom.AddHours(13);
+            if (value == DeliveryTimeLimit.OnePMMToFourPM)
+                return new DeliveryTimeWindow(new TimeOnly(13, 0), new TimeOnly(16, 0));
 
-                deliveryTimeTo = timeTo.AddHours(16);
-            }
-            else if (value == DeliveryTimeLimit.FourPMToSevenPM)
-            {
-                deliveryTimeFrom = timeFrom.AddHours(16);
+            if (value == DeliveryTimeLimit.OnePMMToFourPM)
+                return new DeliveryTimeWindow(new TimeOnly(16, 0), new TimeOnly(19, 0));
 
-                deliveryTimeTo = timeTo.AddHours(19);
-            }
-
-            return;
+            return new();
         }
 
         #endregion
@@ -225,6 +202,35 @@ namespace Couriers.Speedex
                 _ => throw new InvalidOperationException($"The {value} is not a valid paper size.")
             };
 
+        #endregion
+
+        #region Supported Language
+
+        /// <summary>
+        /// Return the <see cref="ChargeType"/> that corresponds to the specified <paramref name="value"/>
+        /// </summary>
+        /// <param name="value">The value</param>
+        /// <returns></returns>
+        public static SupportedLanguage ToSupportedLanguage(uint value)
+            => value switch
+            {
+                1 => SupportedLanguage.Greek,
+                2 => SupportedLanguage.English,
+                _ => throw new InvalidOperationException($"The {value} is not a valid supported language.")
+            };
+
+        /// <summary>
+        /// Return the <see cref="SupportedLanguage"/> that corresponds to the specified <paramref name="value"/>
+        /// </summary>
+        /// <param name="value">The value</param>
+        /// <returns></returns>
+        public static uint FromSupportedLanguage(SupportedLanguage value)
+            => value switch
+            {
+                SupportedLanguage.Greek => 1,
+                SupportedLanguage.English => 2,
+                _ => throw new InvalidOperationException($"The {value} is not a valid supported language.")
+            };
         #endregion
     }
 }

@@ -8,7 +8,7 @@ namespace Couriers.Speedex
     /// </summary>
     [XmlRoot("CancelPickupResponse", Namespace = SpeedexXmlNamespaces.DefaultNamespace)]
     [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
-    public class CancelPickupInternalResponseModel : INewWebMethodSOAPReturnMessageModel<bool>
+    public class CancelPickupInternalResponseModel : INewWebMethodSoapReturnMessageModel<bool>
     {
         #region Public Properties
 

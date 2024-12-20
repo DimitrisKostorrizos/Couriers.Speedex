@@ -49,7 +49,7 @@ namespace Couriers.Speedex
         /// <returns></returns>
         public static CredentialsInternalRequestModel FromRequestModel([NotNull] SpeedexCredentials model)
         {
-            ArgumentNullException.ThrowIfNull(model, nameof(model));
+            ArgumentNullException.ThrowIfNull(model);
 
             return new()
             {

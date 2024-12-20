@@ -5,7 +5,7 @@ namespace Couriers.Speedex
     /// <summary>
     /// The response model for the consignment PDF
     /// </summary>
-    public sealed record ConsignmentPDFResponseModel
+    public sealed record ConsignmentPdfResponseModel
     {
         #region Public Properties
 
@@ -28,11 +28,11 @@ namespace Couriers.Speedex
         /// </summary>
         /// <param name="voucherId">The unique voucher id</param>
         /// <param name="base64String">The base64 representation of the PDF voucher</param>
-        public ConsignmentPDFResponseModel(string voucherId, string base64String) : base()
+        public ConsignmentPdfResponseModel(string voucherId, string base64String) : base()
         {
-            ArgumentException.ThrowIfNullOrWhiteSpace(voucherId, nameof(voucherId));
+            ArgumentException.ThrowIfNullOrWhiteSpace(voucherId);
 
-            ArgumentException.ThrowIfNullOrWhiteSpace(base64String, nameof(base64String));
+            ArgumentException.ThrowIfNullOrWhiteSpace(base64String);
 
             VoucherId = voucherId;
 

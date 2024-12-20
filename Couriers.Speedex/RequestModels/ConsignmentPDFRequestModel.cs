@@ -7,7 +7,7 @@ namespace Couriers.Speedex
     /// <summary>
     /// The request model for the consignment PDF
     /// </summary>
-    public sealed record ConsignmentPDFRequestModel
+    public sealed record ConsignmentPdfRequestModel
     {
         #region Public Properties
 
@@ -37,9 +37,9 @@ namespace Couriers.Speedex
         /// <param name="voucherIds">The voucher ids</param>
         /// <param name="paperSize">The paper size</param>
         /// <param name="returnMultipleVouchers">The flag indicating whether a single merged PDF file will be returned or one PDF file per consignment will be returned</param>
-        public ConsignmentPDFRequestModel(IEnumerable<string> voucherIds, PaperSize paperSize, bool returnMultipleVouchers) : base()
+        public ConsignmentPdfRequestModel(IEnumerable<string> voucherIds, PaperSize paperSize, bool returnMultipleVouchers) : base()
         {
-            ArgumentNullException.ThrowIfNull(voucherIds, nameof(voucherIds));
+            ArgumentNullException.ThrowIfNull(voucherIds);
 
             var voucherCount = voucherIds.Count();
 

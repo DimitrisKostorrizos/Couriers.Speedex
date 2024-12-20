@@ -228,21 +228,21 @@ namespace Couriers.Speedex
             double cost, string address, string recipientName, string recipientPhoneNumber, string zipCode, double weight,
             int insuranceAmount = 0, bool shouldBeDeliveredOnSaturday = false, DeliveryTimeLimit deliveryTime = DeliveryTimeLimit.NoLimit) : base()
         {
-            ArgumentOutOfRangeException.ThrowIfNegativeOrZero(numberOfVouchers, nameof(numberOfVouchers));
+            ArgumentOutOfRangeException.ThrowIfNegativeOrZero(numberOfVouchers);
 
-            ArgumentOutOfRangeException.ThrowIfNegative(cost, nameof(cost));
+            ArgumentOutOfRangeException.ThrowIfNegative(cost);
 
-            ArgumentOutOfRangeException.ThrowIfNegative(insuranceAmount, nameof(insuranceAmount));
+            ArgumentOutOfRangeException.ThrowIfNegative(insuranceAmount);
 
-            ArgumentException.ThrowIfNullOrWhiteSpace(address, nameof(address));
+            ArgumentException.ThrowIfNullOrWhiteSpace(address);
 
-            ArgumentException.ThrowIfNullOrWhiteSpace(recipientName, nameof(recipientName));
+            ArgumentException.ThrowIfNullOrWhiteSpace(recipientName);
 
-            ArgumentException.ThrowIfNullOrWhiteSpace(zipCode, nameof(zipCode));
+            ArgumentException.ThrowIfNullOrWhiteSpace(zipCode);
 
-            ArgumentException.ThrowIfNullOrWhiteSpace(recipientPhoneNumber, nameof(recipientPhoneNumber));
+            ArgumentException.ThrowIfNullOrWhiteSpace(recipientPhoneNumber);
 
-            ArgumentOutOfRangeException.ThrowIfGreaterThan(numberOfVouchers, SpeedexConstants.MaximumNumberOfVouchers, nameof(numberOfVouchers));
+            ArgumentOutOfRangeException.ThrowIfGreaterThan(numberOfVouchers, SpeedexConstants.MaximumNumberOfVouchers);
 
             if (cost > 0 && !paymentType.HasValue)
                 throw new InvalidOperationException($"The '{nameof(paymentType)}' is required when the '{nameof(cost)}' is greater then 0.");

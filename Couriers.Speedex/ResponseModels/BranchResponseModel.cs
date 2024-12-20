@@ -66,21 +66,21 @@ namespace Couriers.Speedex
         /// <param name="longitude">The longitude of the depot</param>
         public BranchResponseModel(string address, string city, string id, string name, string telephoneNumber, string zipCode, string latitude, string longitude) : base()
         {
-            ArgumentException.ThrowIfNullOrWhiteSpace(address, nameof(address));
+            ArgumentException.ThrowIfNullOrWhiteSpace(address);
 
-            ArgumentException.ThrowIfNullOrWhiteSpace(city, nameof(city));
+            ArgumentException.ThrowIfNullOrWhiteSpace(city);
 
-            ArgumentException.ThrowIfNullOrWhiteSpace(id, nameof(id));
+            ArgumentException.ThrowIfNullOrWhiteSpace(id);
 
-            ArgumentException.ThrowIfNullOrWhiteSpace(name, nameof(name));
+            ArgumentException.ThrowIfNullOrWhiteSpace(name);
 
-            ArgumentException.ThrowIfNullOrWhiteSpace(telephoneNumber, nameof(telephoneNumber));
+            ArgumentException.ThrowIfNullOrWhiteSpace(telephoneNumber);
 
-            ArgumentException.ThrowIfNullOrWhiteSpace(zipCode, nameof(zipCode));
+            ArgumentException.ThrowIfNullOrWhiteSpace(zipCode);
 
-            ArgumentException.ThrowIfNullOrWhiteSpace(latitude, nameof(latitude));
+            ArgumentException.ThrowIfNullOrWhiteSpace(latitude);
 
-            ArgumentException.ThrowIfNullOrWhiteSpace(longitude, nameof(longitude));
+            ArgumentException.ThrowIfNullOrWhiteSpace(longitude);
 
             Address = address;
 

@@ -8,7 +8,7 @@ namespace Couriers.Speedex
     /// </summary>
     [XmlRoot("BOL", Namespace = SpeedexXmlNamespaces.DefaultNamespace)]
     [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
-    public class ConsignmentInternalResponseModel : ISOAPResponseModel<ConsignmentResponseModel>
+    public class ConsignmentInternalResponseModel : ISoapResponseModel<ConsignmentResponseModel>
     {
         #region Public Properties
 

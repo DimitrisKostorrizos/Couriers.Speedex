@@ -8,7 +8,7 @@ namespace Couriers.Speedex
     /// </summary>
     [XmlRoot("Voucher", Namespace = SpeedexXmlNamespaces.DefaultNamespace)]
     [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
-    public class BranchInternalResponseModel : ISOAPResponseModel<BranchResponseModel>
+    public class BranchInternalResponseModel : ISoapResponseModel<BranchResponseModel>
     {
         #region Public Properties
 

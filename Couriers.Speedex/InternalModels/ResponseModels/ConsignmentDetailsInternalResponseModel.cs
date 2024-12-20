@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel;
+using System.Globalization;
 using System.Xml.Serialization;
 
 namespace Couriers.Speedex
@@ -9,7 +10,7 @@ namespace Couriers.Speedex
     /// </summary>
     [XmlType("Consignment", IncludeInSchema = false, Namespace = SpeedexXmlNamespaces.DefaultNamespace)]
     [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
-    public class ConsignmentDetailsInternalResponseModel : ISOAPResponseModel<ConsignmentDetailsResponseModel>
+    public class ConsignmentDetailsInternalResponseModel : ISoapResponseModel<ConsignmentDetailsResponseModel>
     {
         #region Public Properties
 
@@ -267,10 +268,10 @@ namespace Couriers.Speedex
                 Weight = Weight
             };
 
-            if (DateTime.TryParse(DeliveryTimeFrom, out var result))
+            if (DateTime.TryParse(DeliveryTimeFrom, CultureInfo.InvariantCulture, out var result))
                 model.DeliveryTimeFrom = result;
 
-            if (DateTime.TryParse(DeliveryTimeTo, out result))
+            if (DateTime.TryParse(DeliveryTimeTo, CultureInfo.InvariantCulture, out result))
                 model.DeliveryTimeTo = result;
 
             return model;

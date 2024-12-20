@@ -8,7 +8,7 @@ namespace Couriers.Speedex
     /// </summary>
     [XmlRoot("Voucher", Namespace = SpeedexXmlNamespaces.DefaultNamespace)]
     [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
-    public class ConsignmentPDFInternalResponseModel : ISOAPResponseModel<ConsignmentPDFResponseModel>
+    public class ConsignmentPdfInternalResponseModel : ISoapResponseModel<ConsignmentPdfResponseModel>
     {
         #region Public Properties
 
@@ -31,7 +31,7 @@ namespace Couriers.Speedex
         /// <summary>
         /// Default constructor
         /// </summary>
-        public ConsignmentPDFInternalResponseModel() : base()
+        public ConsignmentPdfInternalResponseModel() : base()
         {
 
         }
@@ -47,10 +47,10 @@ namespace Couriers.Speedex
         public override string ToString() => VoucherId;
 
         /// <summary>
-        /// Creates and return the <see cref="ConsignmentPDFResponseModel"/> from the current object
+        /// Creates and return the <see cref="ConsignmentPdfResponseModel"/> from the current object
         /// </summary>
         /// <returns></returns>
-        public ConsignmentPDFResponseModel ToResponseModel() => new(VoucherId, Voucher);
+        public ConsignmentPdfResponseModel ToResponseModel() => new(VoucherId, Voucher);
 
         #endregion
     }

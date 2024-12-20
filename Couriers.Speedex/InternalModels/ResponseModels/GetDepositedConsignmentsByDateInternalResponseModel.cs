@@ -10,7 +10,7 @@ namespace Couriers.Speedex
     /// </summary>
     [XmlRoot("GetDepositedConsignmentsByDateResponse", Namespace = SpeedexXmlNamespaces.DefaultNamespace)]
     [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
-    public class GetDepositedConsignmentsByDateInternalResponseModel : ISOAPReturnMessageModel, ISOAPResponseModel<IEnumerable<DepositedConsignmentResponseModel>>
+    public class GetDepositedConsignmentsByDateInternalResponseModel : ISoapReturnMessageModel, ISoapResponseModel<IEnumerable<DepositedConsignmentResponseModel>>
     {
         #region Public Properties
 
@@ -23,12 +23,12 @@ namespace Couriers.Speedex
         /// <summary>
         /// The return message
         /// </summary>
-        string ISOAPReturnMessageModel.Message { get => Result.Message; set { Result.Message = value; } }
+        string ISoapReturnMessageModel.Message { get => Result.Message; set { Result.Message = value; } }
 
         /// <summary>
         /// The return code
         /// </summary>
-        uint ISOAPReturnMessageModel.Code { get => Result.Code; set { Result.Code = value; } }
+        uint ISoapReturnMessageModel.Code { get => Result.Code; set { Result.Code = value; } }
 
         #endregion
 
@@ -66,7 +66,7 @@ namespace Couriers.Speedex
     /// </summary>
     [XmlRoot(Namespace = SpeedexXmlNamespaces.DefaultNamespace)]
     [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
-    public class GetDepositedConsignmentsByDateResult : ISOAPResponseModel<IEnumerable<DepositedConsignmentResponseModel>>
+    public class GetDepositedConsignmentsByDateResult : ISoapResponseModel<IEnumerable<DepositedConsignmentResponseModel>>
     {
         #region Public Properties
 

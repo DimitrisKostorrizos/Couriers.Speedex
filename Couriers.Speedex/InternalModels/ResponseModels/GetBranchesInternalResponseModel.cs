@@ -10,7 +10,7 @@ namespace Couriers.Speedex
     /// </summary>
     [XmlRoot("GetBranchesResponse", Namespace = SpeedexXmlNamespaces.DefaultNamespace)]
     [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
-    public class GetBranchesInternalResponseModel : ReturnMessageInternalResponseModel, ISOAPResponseModel<IEnumerable<BranchResponseModel>>
+    public class GetBranchesInternalResponseModel : ReturnMessageInternalResponseModel, ISoapResponseModel<IEnumerable<BranchResponseModel>>
     {
         #region Public Properties
 

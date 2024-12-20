@@ -184,11 +184,11 @@ namespace Couriers.Speedex
         /// <returns></returns>
         public static ConsignmentInternalRequestModel FromRequestModel([NotNull] ConsignmentRequestModel model, [NotNull] string agreementCode, [NotNull] string customerCode)
         {
-            ArgumentNullException.ThrowIfNull(model, nameof(model));
+            ArgumentNullException.ThrowIfNull(model);
 
-            ArgumentException.ThrowIfNullOrWhiteSpace(agreementCode, nameof(agreementCode));
+            ArgumentException.ThrowIfNullOrWhiteSpace(agreementCode);
 
-            ArgumentException.ThrowIfNullOrWhiteSpace(customerCode, nameof(customerCode));
+            ArgumentException.ThrowIfNullOrWhiteSpace(customerCode);
 
             var internalModel = new ConsignmentInternalRequestModel()
             {

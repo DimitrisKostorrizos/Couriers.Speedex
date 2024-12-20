@@ -52,9 +52,9 @@ namespace Couriers.Speedex
         /// <param name="responsePayload">The response payload</param>
         public HttpRequestResult([NotNull] Exception exception, string? requestPayload, string? responsePayload) : this(exception.Message, requestPayload, responsePayload)
         {
-            ArgumentNullException.ThrowIfNull(exception, nameof(exception));
+            ArgumentNullException.ThrowIfNull(exception);
         }
-
+         
         /// <summary>
         /// <inheritdoc/>
         /// </summary>
@@ -63,7 +63,7 @@ namespace Couriers.Speedex
         /// <param name="responsePayload">The response payload</param>
         public HttpRequestResult([NotNull] string errorMessage, string? requestPayload, string? responsePayload) : base()
         {
-            ArgumentException.ThrowIfNullOrWhiteSpace(errorMessage, nameof(errorMessage));
+            ArgumentException.ThrowIfNullOrWhiteSpace(errorMessage);
 
             ErrorMessage = errorMessage;
 
@@ -120,11 +120,6 @@ namespace Couriers.Speedex
         /// </summary>
         private readonly T _result;
 
-        /// <summary>
-        /// The exception thrown when the <see cref="Result"/> property is accessed, when the <see cref="HttpRequestResult.IsSuccessful"/> is <see langword="false"/>
-        /// </summary>
-        private static readonly InvalidOperationException _resultException = new($"The '{nameof(Result)}' property can only be accessed if the '{nameof(IsSuccessful)}' is true");
-
         #endregion
 
         #region Public Properties
@@ -132,7 +127,7 @@ namespace Couriers.Speedex
         /// <summary>
         /// <inheritdoc/>
         /// </summary>
-        public T Result => IsSuccessful ? _result : throw _resultException;
+        public T Result => IsSuccessful ? _result : throw new InvalidOperationException ($"The '{nameof(Result)}' property can only be accessed if the '{nameof(IsSuccessful)}' is true");
 
         #endregion
 

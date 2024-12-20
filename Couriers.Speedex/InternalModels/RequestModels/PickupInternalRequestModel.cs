@@ -70,7 +70,7 @@ namespace Couriers.Speedex
         /// <returns></returns>
         public static PickupInternalRequestModel FromRequestModel([NotNull] PickupRequestModel model)
         {
-            ArgumentNullException.ThrowIfNull(model, nameof(model));
+            ArgumentNullException.ThrowIfNull(model);
 
             var internalModel = new PickupInternalRequestModel()
             {
@@ -80,13 +80,23 @@ namespace Couriers.Speedex
             };
 
             // Get the delivery times
-            SpeedexHelpers.ToTimeLimit(model.DeliveryTime, out var deliveryTimeFrom, out var deliveryTimeTo);
+            var deliveryTimeWindow = SpeedexHelpers.ToDeliveryTimeWindow(model.DeliveryTime);
+
+            var startingPickupTime = default(DateTime?);
+
+            if (deliveryTimeWindow.StartingTime.HasValue)
+                startingPickupTime = model.PickupDate.AddTicks(deliveryTimeWindow.StartingTime.Value.Ticks);
+
+            var endingPickupTime = default(DateTime?);
+
+            if (deliveryTimeWindow.EndingTime.HasValue)
+                endingPickupTime = model.PickupDate.AddTicks(deliveryTimeWindow.EndingTime.Value.Ticks);
 
             // Set the starting delivery time
-            internalModel.PickupHourFrom = deliveryTimeFrom;
+            internalModel.PickupHourFrom = startingPickupTime;
 
             // Set the ending delivery time
-            internalModel.PickupHourTo = deliveryTimeTo;
+            internalModel.PickupHourTo = endingPickupTime;
 
             return internalModel;
         }

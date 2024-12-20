@@ -8,7 +8,7 @@ namespace Couriers.Speedex
     /// </summary>
     [XmlRoot("GetOrderLastCheckpointResponse", Namespace = SpeedexXmlNamespaces.DefaultNamespace)]
     [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
-    public class GetLastPickupCheckpointInternalResponseModel : ReturnMessageInternalResponseModel, ISOAPResponseModel<PickupCheckpointResponseModel>
+    public class GetLastPickupCheckpointInternalResponseModel : ReturnMessageInternalResponseModel, ISoapResponseModel<PickupCheckpointResponseModel>
     {
         #region Public Properties
 

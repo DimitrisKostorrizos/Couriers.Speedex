@@ -8,7 +8,7 @@ namespace Couriers.Speedex
     /// </summary>
     /// <typeparam name="TArrayResult">The type of the array result</typeparam>
     [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
-    public class IEnumerableMessageInternalResponseModel<TArrayResult> : ISOAPReturnMessageModel
+    public class EnumerableMessageInternalResponseModel<TArrayResult> : ISoapReturnMessageModel
     {
         #region Public Properties
 
@@ -37,7 +37,7 @@ namespace Couriers.Speedex
         /// <summary>
         /// Default constructor
         /// </summary>
-        public IEnumerableMessageInternalResponseModel() : base()
+        public EnumerableMessageInternalResponseModel() : base()
         {
 
         }

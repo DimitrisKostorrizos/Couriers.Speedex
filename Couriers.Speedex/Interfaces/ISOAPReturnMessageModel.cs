@@ -3,7 +3,7 @@
     /// <summary>
     /// Provides abstractions for a SOAP internal response model
     /// </summary>
-    internal interface ISOAPReturnMessageModel
+    internal interface ISoapReturnMessageModel
     {
         #region Properties
 

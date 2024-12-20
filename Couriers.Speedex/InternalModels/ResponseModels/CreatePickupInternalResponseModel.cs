@@ -8,7 +8,7 @@ namespace Couriers.Speedex
     /// </summary>
     [XmlRoot("CreatePickupResponse", Namespace = SpeedexXmlNamespaces.DefaultNamespace)]
     [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
-    public class CreatePickupInternalResponseModel : INewWebMethodSOAPReturnMessageModel<string>
+    public class CreatePickupInternalResponseModel : INewWebMethodSoapReturnMessageModel<string>
     {
         #region Public Properties
 
