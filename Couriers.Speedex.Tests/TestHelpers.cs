@@ -2,6 +2,9 @@
 
 namespace Couriers.Speedex.Tests
 {
+    /// <summary>
+    /// The helper methods for the tests
+    /// </summary>
     public static class TestHelpers
     {
         #region Private Fields
@@ -24,7 +27,11 @@ namespace Couriers.Speedex.Tests
         /// <returns></returns>
         public static string GenerateTestVoucher()
         {
+#pragma warning disable CA5394 // Do not use insecure randomness
+
             var selectedDigits = Random.Shared.GetItems(_digits, 12);
+
+#pragma warning restore CA5394 // Do not use insecure randomness
 
             return string.Join(string.Empty, selectedDigits);
         }

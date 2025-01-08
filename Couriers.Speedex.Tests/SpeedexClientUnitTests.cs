@@ -1,3 +1,4 @@
+using System;
 using System.Net.Http;
 using System.Threading.Tasks;
 
@@ -6,9 +7,14 @@ namespace Couriers.Speedex.Tests
     /// <summary>
     /// The unit tests for the <see cref="SpeedexClient"/>
     /// </summary>
-    public class SpeedexClientUnitTests : IAsyncLifetime
+    public sealed class SpeedexClientUnitTests : IAsyncLifetime, IDisposable
     {
         #region Private Fields
+
+        /// <summary>
+        /// A flag indicating whether the object is already disposed
+        /// </summary>
+        private bool _isAlreadyDisposed;
 
         /// <summary>
         /// The test credentials
@@ -18,7 +24,7 @@ namespace Couriers.Speedex.Tests
         /// <summary>
         /// The client
         /// </summary>
-        private SpeedexClient _speedexClient;
+        private SpeedexClient _speedexClient = new (_speedexCredentials, new HttpClient(new SimulationHttpHandler()), true);
 
         #endregion
 
@@ -29,11 +35,7 @@ namespace Couriers.Speedex.Tests
         /// </summary>
         public SpeedexClientUnitTests() : base()
         {
-            var httpHandler = new SimulationHttpHandler();
 
-            var httpClient = new HttpClient(httpHandler);
-
-            _speedexClient = new(_speedexCredentials, httpClient, true);
         }
 
         #endregion
@@ -43,12 +45,20 @@ namespace Couriers.Speedex.Tests
         /// <summary>
         /// <inheritdoc/>
         /// </summary>
+        public void Dispose()
+        {
+            Dispose(true);
+
+            GC.SuppressFinalize(this);
+        }
+
+        /// <summary>
+        /// <inheritdoc/>
+        /// </summary>
         /// <returns></returns>
         public Task DisposeAsync()
         {
-            _speedexClient.Dispose();
-
-            _speedexClient = null!;
+            Dispose(true);
 
             return Task.CompletedTask;
         }
@@ -70,35 +80,42 @@ namespace Couriers.Speedex.Tests
         [Fact]
         public async Task FullTest()
         {
-            using var newSpeedexClient = new SpeedexClient(_speedexCredentials, true);
+            using var speedexClient = new SpeedexClient(_speedexCredentials, true);
 
-            var sessionResponse = await newSpeedexClient.CreateSessionAsync();
+            var sessionResponse = await speedexClient.CreateSessionAsync()
+                .ConfigureAwait(true);
 
             AssertHttpRequest(sessionResponse);
 
-            var createVoucherResponse = await newSpeedexClient.CreateConsignmentAsync(new ConsignmentRequestModel(0, 2, ChargeType.Recipient, PaymentType.Cash, 2, "Test", "Test", "1234567890", "12345", 4));
+            var createVoucherResponse = await speedexClient.CreateConsignmentAsync(new ConsignmentRequestModel(0, 2, ChargeType.Recipient, PaymentType.Cash, 2, "Test", "Test", "1234567890", "12345", 4))
+                .ConfigureAwait(true);
 
             AssertHttpRequest(createVoucherResponse);
 
             var voucher = createVoucherResponse.Result.VoucherId;
 
-            var pdfResponse = await newSpeedexClient.GetConsignmentPDFAsync(voucher, PaperSize.A4);
+            var pdfResponse = await speedexClient.GetConsignmentPDFAsync(voucher, PaperSize.A4)
+                .ConfigureAwait(true);
 
             AssertHttpRequest(pdfResponse);
 
-            var lastCheckpointResponse = await newSpeedexClient.GetLastCheckPointAsync(voucher);
+            var lastCheckpointResponse = await speedexClient.GetLastCheckPointAsync(voucher)
+                .ConfigureAwait(true);
 
             AssertHttpRequest(lastCheckpointResponse);
 
-            var checkpointsResponse = await newSpeedexClient.GetTraceByVoucherIdAsync(voucher);
+            var checkpointsResponse = await speedexClient.GetTraceByVoucherIdAsync(voucher)
+                .ConfigureAwait(true);
 
             AssertHttpRequest(checkpointsResponse);
 
-            var cancelVoucherResponse = await newSpeedexClient.CancelConsignmentByVoucherIdAsync(voucher);
+            var cancelVoucherResponse = await speedexClient.CancelConsignmentByVoucherIdAsync(voucher)
+                .ConfigureAwait(true);
 
             AssertHttpRequest(cancelVoucherResponse);
 
-            var branchesResponse = await newSpeedexClient.GetBranchesAsync("36100");
+            var branchesResponse = await speedexClient.GetBranchesAsync("36100")
+                .ConfigureAwait(true);
 
             AssertHttpRequest(branchesResponse);
         }
@@ -109,9 +126,10 @@ namespace Couriers.Speedex.Tests
         /// </summary>
         /// <returns></returns>
         [Fact]
-        public async Task WhenTheCreateSessionMethodIsCalled_ItSuccessfullyReturns()
+        public async Task WhenTheCreateSessionMethodIsCalledItSuccessfullyReturns()
         {
-            var response = await _speedexClient.CreateSessionAsync();
+            var response = await _speedexClient.CreateSessionAsync()
+                .ConfigureAwait(true);
 
             AssertHttpRequest(response);
 
@@ -124,11 +142,11 @@ namespace Couriers.Speedex.Tests
         /// </summary>
         /// <returns></returns>
         [Fact]
-        public async Task WhenTheCancelConsignmentByVoucherMethodIsCalled_ItSuccessfullyReturns()
+        public async Task WhenTheCancelConsignmentByVoucherMethodIsCalledItSuccessfullyReturns()
         {
             var voucher = TestHelpers.GenerateTestVoucher();
 
-            var response = await _speedexClient.CancelConsignmentByVoucherIdAsync(voucher);
+            var response = await _speedexClient.CancelConsignmentByVoucherIdAsync(voucher).ConfigureAwait(true);
 
             AssertHttpRequest(response);
         }
@@ -138,6 +156,25 @@ namespace Couriers.Speedex.Tests
         #endregion
 
         #region Private Methods
+
+        /// <summary>
+        /// Disposes the managed and unmanaged resources that this objects uses
+        /// </summary>
+        /// <param name="disposing">A flag indicating whether the current object should be disposed</param>
+        private void Dispose(bool disposing)
+        {
+            if (_isAlreadyDisposed)
+                return;
+
+            if (disposing)
+            {
+                _speedexClient.Dispose();
+
+                _speedexClient = null!;
+            }
+
+            _isAlreadyDisposed = true;
+        }
 
         /// <summary>
         /// Asserts the <paramref name="httpRequestResult"/>

@@ -82,7 +82,6 @@ namespace Couriers.Speedex
         #endregion
     }
 
-
     /// <summary>
     /// A <see cref="StringContent"/> that contains the expected type of the request and response payload
     /// </summary>

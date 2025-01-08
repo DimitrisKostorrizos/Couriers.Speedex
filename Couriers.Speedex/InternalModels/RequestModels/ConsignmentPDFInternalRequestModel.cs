@@ -11,7 +11,7 @@ namespace Couriers.Speedex
     /// </summary>
     [XmlRoot("GetBOLPdf", Namespace = SpeedexXmlNamespaces.DefaultNamespace)]
     [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
-    public class ConsignmentPDFInternalRequestModel : SessionIdInternalRequestModel
+    public class ConsignmentPdfInternalRequestModel : SessionIdInternalRequestModel
     {
         #region Public Properties
 
@@ -42,7 +42,7 @@ namespace Couriers.Speedex
         /// <summary>
         /// Default constructor
         /// </summary>
-        public ConsignmentPDFInternalRequestModel() : base()
+        public ConsignmentPdfInternalRequestModel() : base()
         {
 
         }
@@ -52,13 +52,13 @@ namespace Couriers.Speedex
         #region Public Methods
 
         /// <summary>
-        /// Creates and return the <see cref="ConsignmentPDFInternalRequestModel"/> from the <see cref="ConsignmentPDFRequestModel"/>
+        /// Creates and return the <see cref="ConsignmentPdfInternalRequestModel"/> from the <see cref="ConsignmentPDFRequestModel"/>
         /// </summary>
         /// <param name="model">The request model</param>
         /// <returns></returns>
-        public static ConsignmentPDFInternalRequestModel FromRequestModel([NotNull] ConsignmentPDFRequestModel model)
+        public static ConsignmentPdfInternalRequestModel FromRequestModel([NotNull] ConsignmentPDFRequestModel model)
         {
-            ArgumentNullException.ThrowIfNull(model, nameof(model));
+            ArgumentNullException.ThrowIfNull(model);
 
             return new()
             {

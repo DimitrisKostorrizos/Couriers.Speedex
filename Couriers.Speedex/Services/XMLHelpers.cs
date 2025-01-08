@@ -11,7 +11,7 @@ namespace Couriers.Speedex
     /// <summary>
     /// Helper methods associated with the XML model
     /// </summary>
-    public static class XMLHelpers
+    public static class XmlHelpers
     {
         #region Constants
 
@@ -40,7 +40,7 @@ namespace Couriers.Speedex
         public static T Deserialize<T>([NotNull] this XContainer element)
             where T : class
         {
-            ArgumentNullException.ThrowIfNull(element, nameof(element));
+            ArgumentNullException.ThrowIfNull(element);
 
             // Use a temporary reader for the Xml element
             using var reader = element.CreateReader();
@@ -67,7 +67,7 @@ namespace Couriers.Speedex
         /// <returns></returns>
         public static XElement SerializeToXElement<T>([NotNull] this T obj)
         {
-            ArgumentNullException.ThrowIfNull(obj, nameof(obj));
+            ArgumentNullException.ThrowIfNull(obj);
 
             // Declare a document
             var document = new XDocument();
@@ -106,9 +106,9 @@ namespace Couriers.Speedex
         /// <param name="namespaces">The name spaces</param>
         public static string ToXml([NotNull] object obj, [NotNull] XmlSerializerNamespaces namespaces)
         {
-            ArgumentNullException.ThrowIfNull(obj, nameof(obj));
+            ArgumentNullException.ThrowIfNull(obj);
 
-            ArgumentNullException.ThrowIfNull(namespaces, nameof(namespaces));
+            ArgumentNullException.ThrowIfNull(namespaces);
 
             var objectType = obj.GetType();
 
@@ -132,11 +132,11 @@ namespace Couriers.Speedex
         /// <param name="settings">The settings</param>
         public static string ToXml([NotNull] object obj, [NotNull] XmlSerializerNamespaces namespaces, [NotNull] XmlWriterSettings settings)
         {
-            ArgumentNullException.ThrowIfNull(obj, nameof(obj));
+            ArgumentNullException.ThrowIfNull(obj);
 
-            ArgumentNullException.ThrowIfNull(namespaces, nameof(namespaces));
+            ArgumentNullException.ThrowIfNull(namespaces);
 
-            ArgumentNullException.ThrowIfNull(settings, nameof(settings));
+            ArgumentNullException.ThrowIfNull(settings);
 
             var T = obj.GetType();
 
@@ -157,7 +157,8 @@ namespace Couriers.Speedex
         /// specified type
         /// </summary>
         /// <param name="xml">The XML</param>
-        public static T? FromXml<T>([NotNull] string xml) => (T?)FromXml(xml, typeof(T));
+        public static T? FromXml<T>([NotNull] string xml) 
+            => (T?)FromXml(xml, typeof(T));
 
         /// <summary>
         /// Deserializes the specified <paramref name="xml"/> to an object
@@ -165,12 +166,12 @@ namespace Couriers.Speedex
         /// </summary>
         public static object? FromXml([NotNull] string xml, [NotNull] Type type)
         {
-            ArgumentException.ThrowIfNullOrWhiteSpace(xml, nameof(xml));
-
-            ArgumentNullException.ThrowIfNull(type, nameof(type));
+            ArgumentNullException.ThrowIfNull(type);
 
             if (type == typeof(string))
                 return xml;
+
+            ArgumentException.ThrowIfNullOrWhiteSpace(xml);
 
             using var stringReader = new StringReader(xml);
 

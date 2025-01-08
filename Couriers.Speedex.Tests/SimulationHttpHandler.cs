@@ -8,7 +8,7 @@ namespace Couriers.Speedex.Tests
     /// <summary>
     /// The <see cref="DelegatingHandler"/> implementation that simulates the HTTP requests 
     /// </summary>
-    internal class SimulationHttpHandler : DelegatingHandler
+    internal sealed class SimulationHttpHandler : DelegatingHandler
     {
         #region Constructors
 
@@ -39,7 +39,7 @@ namespace Couriers.Speedex.Tests
         /// <param name="request">The request</param>
         /// <param name="cancellationToken">The cancellation token</param>
         /// <returns></returns>
-        protected override async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken = default)
+        protected override async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken )
         {
             if (request.Content is not TypedStringContent requestContent)
                 return await base.SendAsync(request, cancellationToken).ConfigureAwait(false);
@@ -48,7 +48,7 @@ namespace Couriers.Speedex.Tests
 
             var responseModel = TestConstants.ResponseObjects[responseType];
 
-            var responsePayload = XMLHelpers.ToXml(responseModel, SpeedexXmlNamespaces.SpeedexNamespaces);
+            var responsePayload = XmlHelpers.ToXml(responseModel, SpeedexXmlNamespaces.SpeedexNamespaces);
 
             return new HttpResponseMessage(HttpStatusCode.OK)
             {

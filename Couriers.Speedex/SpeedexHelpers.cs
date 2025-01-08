@@ -114,7 +114,7 @@ namespace Couriers.Speedex
         /// <param name="value">The value</param>
         public static void ThrowIfInvalidZipCode(string value)
         {
-            ArgumentException.ThrowIfNullOrWhiteSpace(value, nameof(value));
+            ArgumentException.ThrowIfNullOrWhiteSpace(value);
 
             if (value.Length > SpeedexConstants.MaximumZipCodeLength)
                 throw new InvalidOperationException($"The '{nameof(value)}' is not a valid zip code. The maximum length for a zip code field is {SpeedexConstants.MaximumZipCodeLength}.");
@@ -187,8 +187,6 @@ namespace Couriers.Speedex
 
                 deliveryTimeTo = timeTo.AddHours(19);
             }
-
-            return;
         }
 
         #endregion
