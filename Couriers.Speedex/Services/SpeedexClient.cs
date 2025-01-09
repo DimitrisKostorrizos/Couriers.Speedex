@@ -36,7 +36,7 @@ namespace Couriers.Speedex
         #region Private Fields
 
         /// <summary>
-        /// Th HTTP client
+        /// The HTTP client
         /// </summary>
         private HttpClient _httpClient;
 
@@ -221,7 +221,7 @@ namespace Couriers.Speedex
         /// <param name="value">The consignments</param>
         /// <param name="cancellationToken">The cancellation token</param>
         /// <returns></returns>
-        public async Task<HttpRequestResult<IEnumerable<ConsignmentPdfResponseModel>>> GetConsignmentPDFsAsync([NotNull] ConsignmentPdfRequestModel value, CancellationToken cancellationToken = default)
+        public async Task<HttpRequestResult<IEnumerable<ConsignmentPdfResponseModel>>> GetConsignmentPdfsAsync([NotNull] ConsignmentPdfRequestModel value, CancellationToken cancellationToken = default)
         {
             ArgumentNullException.ThrowIfNull(value);
 
@@ -245,7 +245,7 @@ namespace Couriers.Speedex
         /// <param name="returnMultipleVouchers">The flag indicating whether a single merged PDF file will be returned or one PDF file per consignment will be returned</param>
         /// <param name="cancellationToken">The cancellation token</param>
         /// <returns></returns>
-        public async Task<HttpRequestResult<string>> GetConsignmentPDFAsync([NotNull] string voucherId, PaperSize paperSize, bool returnMultipleVouchers = false, CancellationToken cancellationToken = default)
+        public async Task<HttpRequestResult<string>> GetConsignmentPdfAsync([NotNull] string voucherId, PaperSize paperSize, bool returnMultipleVouchers = false, CancellationToken cancellationToken = default)
         {
             ArgumentException.ThrowIfNullOrWhiteSpace(voucherId);
 
@@ -253,7 +253,7 @@ namespace Couriers.Speedex
             var value = new ConsignmentPdfRequestModel([voucherId], paperSize, returnMultipleVouchers);
 
             // Get the response
-            var response = await GetConsignmentPDFsAsync(value, cancellationToken).ConfigureAwait(false);
+            var response = await GetConsignmentPdfsAsync(value, cancellationToken).ConfigureAwait(false);
 
             // If not successful...
             if (!response.IsSuccessful)
@@ -633,6 +633,7 @@ namespace Couriers.Speedex
 
             var serializedResponsePayload = string.Empty;
 
+#pragma warning disable CA1031 // Do not catch general exception types
             try
             {
                 // Embed the request model
@@ -680,6 +681,7 @@ namespace Couriers.Speedex
             {
                 return new HttpRequestResult<TResponse>(ex, serializedRequestPayload, serializedResponsePayload);
             }
+#pragma warning restore CA1031 // Do not catch general exception types
         }
 
         #endregion

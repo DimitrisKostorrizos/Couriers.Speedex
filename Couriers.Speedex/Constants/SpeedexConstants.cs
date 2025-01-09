@@ -1,4 +1,8 @@
-﻿namespace Couriers.Speedex
+﻿using System.ComponentModel.DataAnnotations;
+using System.Diagnostics.CodeAnalysis;
+using System.Globalization;
+
+namespace Couriers.Speedex
 {
     /// <summary>
     /// The constants used across the <see cref="SpeedexClient"/>
@@ -64,5 +68,30 @@
         /// The minimum weight in kilos for a voucher
         /// </summary>
         public const double MinimumWeightPerVoucher = 0.5;
+
+        /// <summary>
+        /// The date format that Speedex uses
+        /// </summary>
+        public const string DateFormat = "yyyy-MM-dd";
+
+        /// <summary>
+        /// The time format that Speedex uses
+        /// </summary>
+        public const string TimeFormat = "HH:mm:ss.fff";
+
+        /// <summary>
+        /// The delivery time window format that Speedex uses
+        /// </summary>
+        public const string DeliveryTimeWindowFormat = "HH:mm";
+
+        /// <summary>
+        /// The date-time format that Speedex uses
+        /// </summary>
+        public const string DateTimeFormat = $"{DateFormat}T{TimeFormat}";
+
+        /// <summary>
+        /// The culture info that Speedex uses
+        /// </summary>
+        public static readonly CultureInfo SpeedexCultureInfo = CultureInfo.GetCultureInfo("el-GR");
     }
 }

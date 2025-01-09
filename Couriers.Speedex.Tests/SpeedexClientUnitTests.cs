@@ -7,14 +7,29 @@ namespace Couriers.Speedex.Tests
     /// <summary>
     /// The unit tests for the <see cref="SpeedexClient"/>
     /// </summary>
-    public class SpeedexClientUnitTests : IAsyncLifetime
+    public sealed class SpeedexClientUnitTests : IAsyncLifetime, IDisposable
     {
         #region Private Fields
 
         /// <summary>
         /// The client
         /// </summary>
-        private SpeedexClient _speedexClient;
+        private SpeedexClient _simulatedSpeedexClient;
+
+        /// <summary>
+        /// The HTTP handler that simulates the request
+        /// </summary>
+        private SimulationHttpHandler _simulatedHttpHandler;
+
+        /// <summary>
+        /// The HTTP client that simulates the request
+        /// </summary>
+        private HttpClient _simulatedHttpClient;
+
+        /// <summary>
+        /// A flag indicating whether the object is already disposed
+        /// </summary>
+        private bool _isAlreadyDisposed;
 
         #endregion
 
@@ -25,11 +40,11 @@ namespace Couriers.Speedex.Tests
         /// </summary>
         public SpeedexClientUnitTests() : base()
         {
-            var httpHandler = new SimulationHttpHandler();
+            _simulatedHttpHandler = new SimulationHttpHandler();
 
-            var httpClient = new HttpClient(httpHandler);
+            _simulatedHttpClient = new HttpClient(_simulatedHttpHandler);
 
-            _speedexClient = new(TestConstants.SpeedexCredentials, httpClient, true);
+            _simulatedSpeedexClient = new(TestConstants.SpeedexCredentials, _simulatedHttpClient, true);
         }
 
         #endregion
@@ -39,12 +54,20 @@ namespace Couriers.Speedex.Tests
         /// <summary>
         /// <inheritdoc/>
         /// </summary>
+        public void Dispose()
+        {
+            Dispose(true);
+
+            GC.SuppressFinalize(this);
+        }
+
+        /// <summary>
+        /// <inheritdoc/>
+        /// </summary>
         /// <returns></returns>
         public Task DisposeAsync()
         {
-            _speedexClient.Dispose();
-
-            _speedexClient = null!;
+            Dispose(true);
 
             return Task.CompletedTask;
         }
@@ -66,35 +89,46 @@ namespace Couriers.Speedex.Tests
         [Fact]
         public async Task FullTest()
         {
-            using var newSpeedexClient = new SpeedexClient(TestConstants.SpeedexCredentials, true);
+            using var speedexClient = new SpeedexClient(TestConstants.SpeedexCredentials, true);
 
-            var sessionResponse = await newSpeedexClient.CreateSessionAsync();
+            var sessionResponse = await speedexClient.CreateSessionAsync()
+                .ConfigureAwait(true);
 
             AssertHttpRequest(sessionResponse);
 
-            var createVoucherResponse = await newSpeedexClient.CreateConsignmentAsync(TestConstants.TestConsignment);
+            var createVoucherResponse = await speedexClient.CreateConsignmentAsync(TestConstants.TestConsignment);
 
             AssertHttpRequest(createVoucherResponse);
 
             var voucher = createVoucherResponse.Result.VoucherId;
 
-            var pdfResponse = await newSpeedexClient.GetConsignmentPDFAsync(voucher, PaperSize.A4);
+            var pickupResponse = await speedexClient.CreatePickupAsync(new PickupRequestModel(voucher, DateOnly.FromDateTime(DateTime.Now.AddDays(2)), DeliveryTimeLimit.TenAMToOnePM))
+                .ConfigureAwait(true);
+
+            AssertHttpRequest(pickupResponse);
+
+            var pdfResponse = await speedexClient.GetConsignmentPdfAsync(voucher, PaperSize.A4)
+                .ConfigureAwait(true);
 
             AssertHttpRequest(pdfResponse);
 
-            var lastCheckpointResponse = await newSpeedexClient.GetLastCheckPointAsync(voucher);
+            var lastCheckpointResponse = await speedexClient.GetLastCheckPointAsync(voucher)
+                .ConfigureAwait(true);
 
             AssertHttpRequest(lastCheckpointResponse);
 
-            var checkpointsResponse = await newSpeedexClient.GetTraceByVoucherIdAsync(voucher);
+            var checkpointsResponse = await speedexClient.GetTraceByVoucherIdAsync(voucher)
+                .ConfigureAwait(true);
 
             AssertHttpRequest(checkpointsResponse);
 
-            var cancelVoucherResponse = await newSpeedexClient.CancelConsignmentByVoucherIdAsync(voucher);
+            var cancelVoucherResponse = await speedexClient.CancelConsignmentByVoucherIdAsync(voucher)
+                .ConfigureAwait(true);
 
             AssertHttpRequest(cancelVoucherResponse);
 
-            var branchesResponse = await newSpeedexClient.GetBranchesAsync("36100");
+            var branchesResponse = await speedexClient.GetBranchesAsync("36100")
+                .ConfigureAwait(true);
 
             AssertHttpRequest(branchesResponse);
         }
@@ -105,9 +139,10 @@ namespace Couriers.Speedex.Tests
         /// </summary>
         /// <returns></returns>
         [Fact]
-        public async Task WhenTheCreateSessionMethodIsCalled_ItSuccessfullyReturns()
+        public async Task WhenTheCreateSessionMethodIsCalledItSuccessfullyReturns()
         {
-            var response = await _speedexClient.CreateSessionAsync();
+            var response = await _simulatedSpeedexClient.CreateSessionAsync()
+                .ConfigureAwait(true);
 
             AssertHttpRequest(response);
 
@@ -120,11 +155,11 @@ namespace Couriers.Speedex.Tests
         /// </summary>
         /// <returns></returns>
         [Fact]
-        public async Task WhenTheCancelConsignmentByVoucherMethodIsCalled_ItSuccessfullyReturns()
+        public async Task WhenTheCancelConsignmentByVoucherMethodIsCalledItSuccessfullyReturns()
         {
             var voucher = TestHelpers.GenerateTestVoucher();
 
-            var response = await _speedexClient.CancelConsignmentByVoucherIdAsync(voucher);
+            var response = await _simulatedSpeedexClient.CancelConsignmentByVoucherIdAsync(voucher).ConfigureAwait(true);
 
             AssertHttpRequest(response);
         }
@@ -135,9 +170,9 @@ namespace Couriers.Speedex.Tests
         /// </summary>
         /// <returns></returns>
         [Fact]
-        public async Task WhenTheCreateConsignmentsMethodIsCalled_ItSuccessfullyReturns()
+        public async Task WhenTheCreateConsignmentsMethodIsCalledItSuccessfullyReturns()
         {
-            var response = await _speedexClient.CreateConsignmentsAsync([ TestConstants.TestConsignment ]);
+            var response = await _simulatedSpeedexClient.CreateConsignmentsAsync([ TestConstants.TestConsignment ]);
 
             AssertHttpRequest(response);
         }
@@ -148,37 +183,37 @@ namespace Couriers.Speedex.Tests
         /// </summary>
         /// <returns></returns>
         [Fact]
-        public async Task WhenTheCreateConsignmentMethodIsCalled_ItSuccessfullyReturns()
+        public async Task WhenTheCreateConsignmentMethodIsCalledItSuccessfullyReturns()
         {
-            var response = await _speedexClient.CreateConsignmentAsync(TestConstants.TestConsignment);
+            var response = await _simulatedSpeedexClient.CreateConsignmentAsync(TestConstants.TestConsignment);
 
             AssertHttpRequest(response);
         }
 
         /// <summary>
-        /// Validates that when <see cref="SpeedexClient.GetConsignmentPDFsAsync"/> is called, 
+        /// Validates that when <see cref="SpeedexClient.GetConsignmentPdfsAsync"/> is called, 
         /// it successfully returns
         /// </summary>
         /// <returns></returns>
         [Fact]
-        public async Task WhenTheGetConsignmentPDFsIsCalled_ItSuccessfullyReturns()
+        public async Task WhenTheGetConsignmentPdfsIsCalledItSuccessfullyReturns()
         {
             var request = new ConsignmentPdfRequestModel([TestHelpers.GenerateTestVoucher()], PaperSize.A4, true);
 
-            var response = await _speedexClient.GetConsignmentPDFsAsync(request);
+            var response = await _simulatedSpeedexClient.GetConsignmentPdfsAsync(request);
 
             AssertHttpRequest(response);
         }
 
         /// <summary>
-        /// Validates that when <see cref="SpeedexClient.GetConsignmentPDFAsync"/> is called, 
+        /// Validates that when <see cref="SpeedexClient.GetConsignmentPdfAsync"/> is called, 
         /// it successfully returns
         /// </summary>
         /// <returns></returns>
         [Fact]
-        public async Task WhenTheGetConsignmentPDFIsCalled_ItSuccessfullyReturns()
+        public async Task WhenTheGetConsignmentPdfIsCalledItSuccessfullyReturns()
         {
-            var response = await _speedexClient.GetConsignmentPDFAsync(TestHelpers.GenerateTestVoucher(), PaperSize.A4, true);
+            var response = await _simulatedSpeedexClient.GetConsignmentPdfAsync(TestHelpers.GenerateTestVoucher(), PaperSize.A4, true);
 
             AssertHttpRequest(response);
         }
@@ -189,9 +224,9 @@ namespace Couriers.Speedex.Tests
         /// </summary>
         /// <returns></returns>
         [Fact]
-        public async Task WhenTheGetBranchesIsCalled_ItSuccessfullyReturns()
+        public async Task WhenTheGetBranchesIsCalledItSuccessfullyReturns()
         {
-            var response = await _speedexClient.GetBranchesAsync("26441");
+            var response = await _simulatedSpeedexClient.GetBranchesAsync("26441");
 
             AssertHttpRequest(response);
         }
@@ -202,9 +237,9 @@ namespace Couriers.Speedex.Tests
         /// </summary>
         /// <returns></returns>
         [Fact]
-        public async Task WhenTheGetLastCheckPointIsCalled_ItSuccessfullyReturns()
+        public async Task WhenTheGetLastCheckPointIsCalledItSuccessfullyReturns()
         {
-            var response = await _speedexClient.GetLastCheckPointAsync(TestHelpers.GenerateTestVoucher());
+            var response = await _simulatedSpeedexClient.GetLastCheckPointAsync(TestHelpers.GenerateTestVoucher());
 
             AssertHttpRequest(response);
         }
@@ -215,9 +250,9 @@ namespace Couriers.Speedex.Tests
         /// </summary>
         /// <returns></returns>
         [Fact]
-        public async Task WhenTheGetLastPickupCheckPointIsCalled_ItSuccessfullyReturns()
+        public async Task WhenTheGetLastPickupCheckPointIsCalledItSuccessfullyReturns()
         {
-            var response = await _speedexClient.GetLastPickupCheckPointAsync(TestHelpers.GenerateTestVoucher());
+            var response = await _simulatedSpeedexClient.GetLastPickupCheckPointAsync(TestHelpers.GenerateTestVoucher());
 
             AssertHttpRequest(response);
         }
@@ -228,14 +263,14 @@ namespace Couriers.Speedex.Tests
         /// </summary>
         /// <returns></returns>
         [Fact]
-        public async Task WhenTheGetTraceByClientReferencesIsCalled_ItSuccessfullyReturns()
+        public async Task WhenTheGetTraceByClientReferencesIsCalledItSuccessfullyReturns()
         {
             var request = new ClientReferencesRequestModel()
             {
                 FirstClientReference = "Test"  
             };
 
-            var response = await _speedexClient.GetTraceByClientReferencesAsync(request);
+            var response = await _simulatedSpeedexClient.GetTraceByClientReferencesAsync(request);
 
             AssertHttpRequest(response);
         }
@@ -246,13 +281,13 @@ namespace Couriers.Speedex.Tests
         /// </summary>
         /// <returns></returns>
         [Fact]
-        public async Task WhenTheGetTraceByTimeFrameIsCalled_ItSuccessfullyReturns()
+        public async Task WhenTheGetTraceByTimeFrameIsCalledItSuccessfullyReturns()
         {
             var dateto = DateTime.Now;
 
             var dateFrom = dateto.AddDays(-5);
 
-            var response = await _speedexClient.GetTraceByTimeFrameAsync(dateFrom, dateto);
+            var response = await _simulatedSpeedexClient.GetTraceByTimeFrameAsync(dateFrom, dateto);
 
             AssertHttpRequest(response);
         }
@@ -263,9 +298,9 @@ namespace Couriers.Speedex.Tests
         /// </summary>
         /// <returns></returns>
         [Fact]
-        public async Task WhenTheGetTraceByVoucherIdIsCalled_ItSuccessfullyReturns()
+        public async Task WhenTheGetTraceByVoucherIdIsCalledItSuccessfullyReturns()
         {
-            var response = await _speedexClient.GetTraceByVoucherIdAsync(TestHelpers.GenerateTestVoucher());
+            var response = await _simulatedSpeedexClient.GetTraceByVoucherIdAsync(TestHelpers.GenerateTestVoucher());
 
             AssertHttpRequest(response);
         }
@@ -276,9 +311,9 @@ namespace Couriers.Speedex.Tests
         /// </summary>
         /// <returns></returns>
         [Fact]
-        public async Task WhenTheCancelPickupByIdIsCalled_ItSuccessfullyReturns()
+        public async Task WhenTheCancelPickupByIdIsCalledItSuccessfullyReturns()
         {
-            var response = await _speedexClient.CancelPickupByIdAsync(TestHelpers.GenerateTestVoucher());
+            var response = await _simulatedSpeedexClient.CancelPickupByIdAsync(TestHelpers.GenerateTestVoucher());
 
             AssertHttpRequest(response);
         }
@@ -289,11 +324,11 @@ namespace Couriers.Speedex.Tests
         /// </summary>
         /// <returns></returns>
         [Fact]
-        public async Task WhenTheCreatePickupIsCalled_ItSuccessfullyReturns()
+        public async Task WhenTheCreatePickupIsCalledItSuccessfullyReturns()
         {
-            var request = new PickupRequestModel([ TestHelpers.GenerateTestVoucher() ], DateTime.Now.AddDays(3), DeliveryTimeLimit.NoLimit);
+            var request = new PickupRequestModel(TestHelpers.GenerateTestVoucher(), DateOnly.FromDateTime(DateTime.Now.AddDays(3)), DeliveryTimeLimit.NoLimit);
 
-            var response = await _speedexClient.CreatePickupAsync(request);
+            var response = await _simulatedSpeedexClient.CreatePickupAsync(request);
 
             AssertHttpRequest(response);
         }
@@ -304,13 +339,13 @@ namespace Couriers.Speedex.Tests
         /// </summary>
         /// <returns></returns>
         [Fact]
-        public async Task WhenTheGetConsignmentsByDateRangeIsCalled_ItSuccessfullyReturns()
+        public async Task WhenTheGetConsignmentsByDateRangeIsCalledItSuccessfullyReturns()
         {
             var dateto = DateTime.Now;
 
             var dateFrom = dateto.AddDays(-5);
 
-            var response = await _speedexClient.GetConsignmentsByDateRangeAsync(dateFrom, dateto);
+            var response = await _simulatedSpeedexClient.GetConsignmentsByDateRangeAsync(dateFrom, dateto);
 
             AssertHttpRequest(response);
         }
@@ -321,13 +356,13 @@ namespace Couriers.Speedex.Tests
         /// </summary>
         /// <returns></returns>
         [Fact]
-        public async Task WhenTheGetDepositedConsignmentsByDateRangeIsCalled_ItSuccessfullyReturns()
+        public async Task WhenTheGetDepositedConsignmentsByDateRangeIsCalledItSuccessfullyReturns()
         {
             var dateto = DateTime.Now;
 
             var dateFrom = dateto.AddDays(-5);
 
-            var response = await _speedexClient.GetDepositedConsignmentsByDateRangeAsync(dateFrom, dateto);
+            var response = await _simulatedSpeedexClient.GetDepositedConsignmentsByDateRangeAsync(dateFrom, dateto);
 
             AssertHttpRequest(response);
         }
@@ -338,9 +373,9 @@ namespace Couriers.Speedex.Tests
         /// </summary>
         /// <returns></returns>
         [Fact]
-        public async Task WhenTheGetPickupByIdIsCalled_ItSuccessfullyReturns()
+        public async Task WhenTheGetPickupByIdIsCalledItSuccessfullyReturns()
         {
-            var response = await _speedexClient.GetPickupByIdAsync(TestHelpers.GenerateTestVoucher());
+            var response = await _simulatedSpeedexClient.GetPickupByIdAsync(TestHelpers.GenerateTestVoucher());
 
             AssertHttpRequest(response);
         }
@@ -351,11 +386,11 @@ namespace Couriers.Speedex.Tests
         /// </summary>
         /// <returns></returns>
         [Fact]
-        public async Task WhenTheReschedulePickupIsCalled_ItSuccessfullyReturns()
+        public async Task WhenTheReschedulePickupIsCalledItSuccessfullyReturns()
         {
             var request = new ReschedulePickupRequestModel(DateTime.Now.AddDays(3), DeliveryTimeLimit.TenAMToOnePM);
 
-            var response = await _speedexClient.ReschedulePickupAsync(request);
+            var response = await _simulatedSpeedexClient.ReschedulePickupAsync(request);
 
             AssertHttpRequest(response);
         }
@@ -365,6 +400,33 @@ namespace Couriers.Speedex.Tests
         #endregion
 
         #region Private Methods
+
+        /// <summary>
+        /// Disposes the managed and unmanaged resources that this objects uses
+        /// </summary>
+        /// <param name="disposing">A flag indicating whether the current object should be disposed</param>
+        private void Dispose(bool disposing)
+        {
+            if (_isAlreadyDisposed)
+                return;
+
+            if (disposing)
+            {
+                _simulatedSpeedexClient.Dispose();
+
+                _simulatedSpeedexClient = null!;
+
+                _simulatedHttpClient.Dispose();
+
+                _simulatedHttpClient = null!;
+
+                _simulatedHttpHandler.Dispose();
+
+                _simulatedHttpHandler = null!;
+            }
+
+            _isAlreadyDisposed = true;
+        }
 
         /// <summary>
         /// Asserts the <paramref name="httpRequestResult"/>

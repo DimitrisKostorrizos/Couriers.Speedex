@@ -29,7 +29,7 @@ namespace Couriers.Speedex
         /// <summary>
         /// The requested date of the pickup
         /// </summary>
-        public DateTime PickupDate { get; }
+        public DateOnly PickupDate { get; }
 
         /// <summary>
         /// The delivery time
@@ -60,7 +60,7 @@ namespace Couriers.Speedex
         /// <param name="consignmentIds">The ids for the connected master consignments</param>
         /// <param name="pickupDate">The date for the pickup</param>
         /// <param name="deliveryTime">The delivery time frame</param>
-        public PickupRequestModel(IEnumerable<string> consignmentIds, DateTime pickupDate, DeliveryTimeLimit deliveryTime) : base()
+        public PickupRequestModel(IEnumerable<string> consignmentIds, DateOnly pickupDate, DeliveryTimeLimit deliveryTime) : base()
         {
             ArgumentNullException.ThrowIfNull(consignmentIds);
 
@@ -72,13 +72,24 @@ namespace Couriers.Speedex
             if (consignmentCount > SpeedexConstants.MaximumNumberOfConsignments)
                 throw new ArgumentOutOfRangeException(nameof(consignmentIds), $"The maximum number of consignments is {SpeedexConstants.MaximumNumberOfConsignments}.");
 
-            ArgumentOutOfRangeException.ThrowIfLessThanOrEqual(pickupDate, DateTime.Now);
+            ArgumentOutOfRangeException.ThrowIfLessThanOrEqual(pickupDate, DateOnly.FromDateTime(DateTime.Now));
 
             ConsignmentIds = consignmentIds;
 
             PickupDate = pickupDate;
 
             DeliveryTime = deliveryTime;
+        }
+
+        /// <summary>
+        /// Default constructor
+        /// </summary>
+        /// <param name="consignmentId">The id for the connected master consignment</param>
+        /// <param name="pickupDate">The date for the pickup</param>
+        /// <param name="deliveryTime">The delivery time frame</param>
+        public PickupRequestModel(string consignmentId, DateOnly pickupDate, DeliveryTimeLimit deliveryTime) : this([consignmentId], pickupDate, deliveryTime)
+        {
+            ArgumentException.ThrowIfNullOrWhiteSpace(consignmentId);
         }
 
         #endregion

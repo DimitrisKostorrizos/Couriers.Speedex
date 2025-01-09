@@ -8,7 +8,7 @@ namespace Couriers.Speedex.Tests
     /// <summary>
     /// The <see cref="DelegatingHandler"/> implementation that simulates the HTTP requests 
     /// </summary>
-    internal class SimulationHttpHandler : DelegatingHandler
+    internal sealed class SimulationHttpHandler : DelegatingHandler
     {
         #region Constructors
 

@@ -12,12 +12,12 @@ namespace Couriers.Speedex
         /// <summary>
         /// The name of the depot responsible for the event
         /// </summary>
-        public string BranchDepot { get; }
+        public string? BranchDepot { get; }
 
         /// <summary>
         /// The unique branch depot id
         /// </summary>
-        public string BranchId { get; }
+        public string? BranchId { get; }
 
         /// <summary>
         /// The date-time of the event
@@ -85,10 +85,6 @@ namespace Couriers.Speedex
         public CheckpointResponseModel(string branchDepot, string branchId, DateTime checkpointDate, string? customerComments, string? firstCustomerReference,
             string? secondCustomerReference, string? thirdCustomerReference, string recipientName, string statusCode, string statusDescription, string voucherId) : base()
         {
-            ArgumentException.ThrowIfNullOrWhiteSpace(branchDepot);
-
-            ArgumentException.ThrowIfNullOrWhiteSpace(branchId);
-
             ArgumentException.ThrowIfNullOrWhiteSpace(statusCode);
 
             ArgumentException.ThrowIfNullOrWhiteSpace(statusDescription);
