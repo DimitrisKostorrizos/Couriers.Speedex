@@ -72,8 +72,6 @@ namespace Couriers.Speedex
             if (consignmentCount > SpeedexConstants.MaximumNumberOfConsignments)
                 throw new ArgumentOutOfRangeException(nameof(consignmentIds), $"The maximum number of consignments is {SpeedexConstants.MaximumNumberOfConsignments}.");
 
-            ArgumentOutOfRangeException.ThrowIfLessThanOrEqual(pickupDate, DateOnly.FromDateTime(DateTime.Now));
-
             ConsignmentIds = consignmentIds;
 
             PickupDate = pickupDate;

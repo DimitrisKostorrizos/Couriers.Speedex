@@ -27,7 +27,7 @@ namespace Couriers.Speedex
         private static readonly MediaTypeHeaderValue _mediaTypeHeaderValue = MediaTypeHeaderValue.Parse(MediaHeader);
 
         /// <summary>
-        /// The maximum expiration time of the 
+        /// The maximum expiration time for the <see cref="_sessionId"/>
         /// </summary>
         private static readonly TimeSpan _maximumExpirationTime = new(1, 0, 0);
 
@@ -82,8 +82,8 @@ namespace Couriers.Speedex
         /// Default constructor
         /// </summary>
         /// <param name="credentials">The credentials</param>
-        /// <param name="useTestAPI">The flag indicating whether to use the test API</param>
         /// <param name="httpClient">The HTTP client</param>
+        /// <param name="useTestAPI">The flag indicating whether to use the test API</param>
         /// <param name="shouldDispose">A flag indicating whether the current instance should be disposed</param>
         public SpeedexClient([NotNull] SpeedexCredentials credentials, [NotNull] HttpClient httpClient, bool useTestAPI = false, bool shouldDispose = true) : base()
         {
@@ -133,7 +133,7 @@ namespace Couriers.Speedex
                 return response.ToUnsuccessfulHttpRequestResult<string>();
 
             // Return the successful result
-            return HttpRequestResult.FromResult(_sessionId, response.RequestPayload, response.ResponsePayload);
+            return HttpRequestResult.FromResult(response.Result.SessionId, response.RequestPayload, response.ResponsePayload);
         }
 
         /// <summary>

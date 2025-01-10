@@ -58,8 +58,6 @@ namespace Couriers.Speedex
         /// <param name="deliveryTime">The delivery time frame</param>
         public ReschedulePickupRequestModel(DateTime pickupDate, DeliveryTimeLimit deliveryTime) : base()
         {
-            ArgumentOutOfRangeException.ThrowIfLessThanOrEqual(pickupDate, DateTime.Now.Date);
-
             PickupDate = pickupDate;
 
             DeliveryTime = deliveryTime;

@@ -17,6 +17,11 @@ namespace Couriers.Speedex.Tests
             0, 1, 2, 3, 4, 5, 6, 7, 8, 9
         ];
 
+        /// <summary>
+        /// The number of days per week
+        /// </summary>
+        private static readonly int NumberOfDays = Enum.GetValues<DayOfWeek>().Length;
+
         #endregion
 
         #region Public Methods
@@ -37,12 +42,34 @@ namespace Couriers.Speedex.Tests
         }
 
         /// <summary>
+        /// Returns the day in the next week based on the specified <paramref name="dayOfWeek"/>
+        /// </summary>
+        /// <param name="dayOfWeek">The day of week</param>
+        /// <returns></returns>
+        public static DateTimeOffset GetNextDayOfWeek(DayOfWeek dayOfWeek)
+        {
+            var currentDay = DateTimeOffset.Now;
+
+            var currentDayOfWeek = (int)currentDay.DayOfWeek;
+
+            var nextDayOfWeek = (int)dayOfWeek;
+
+            var dayDifference = nextDayOfWeek - currentDayOfWeek;
+
+            if (dayDifference <= 0)
+                dayDifference = NumberOfDays + dayDifference;
+
+            return currentDay.AddDays(dayDifference);
+        }
+
+        /// <summary>
         /// Generates a new random pickup id
         /// </summary>
         /// <returns></returns>
         public static string GenerateTestPickupId() 
             => Guid.NewGuid()
                 .ToString("N");
+
         #endregion
     }
 }

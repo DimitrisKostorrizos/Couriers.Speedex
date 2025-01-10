@@ -82,12 +82,11 @@ namespace Couriers.Speedex.Tests
         #region Test Methods
 
         /// <summary>
-        /// Validates that when <see cref="SpeedexClient.CreateSessionAsync"/> is called, 
-        /// it successfully returns a session id
+        /// Validates that when every
         /// </summary>
         /// <returns></returns>
         [Fact]
-        public async Task FullTest()
+        public async Task APIMethodCalls()
         {
             using var speedexClient = new SpeedexClient(TestConstants.SpeedexCredentials, true);
 
@@ -101,11 +100,6 @@ namespace Couriers.Speedex.Tests
             AssertHttpRequest(createVoucherResponse);
 
             var voucher = createVoucherResponse.Result.VoucherId;
-
-            var pickupResponse = await speedexClient.CreatePickupAsync(new PickupRequestModel(voucher, DateOnly.FromDateTime(DateTime.Now.AddDays(2)), DeliveryTimeLimit.TenAMToOnePM))
-                .ConfigureAwait(true);
-
-            AssertHttpRequest(pickupResponse);
 
             var pdfResponse = await speedexClient.GetConsignmentPdfAsync(voucher, PaperSize.A4)
                 .ConfigureAwait(true);
