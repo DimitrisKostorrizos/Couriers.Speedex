@@ -173,8 +173,6 @@ namespace Couriers.Speedex
             if (type == typeof(string))
                 return xml;
 
-            ArgumentException.ThrowIfNullOrWhiteSpace(xml);
-
             using var stringReader = new StringReader(xml);
 
             var xmlSerializer = new XmlSerializer(type);

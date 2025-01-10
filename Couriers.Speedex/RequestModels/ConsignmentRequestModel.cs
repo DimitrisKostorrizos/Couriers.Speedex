@@ -258,7 +258,7 @@ namespace Couriers.Speedex
             var minimumWeight = NumberOfVouchers * SpeedexConstants.MinimumWeightPerVoucher;
 
             if (weight < minimumWeight)
-                throw new InvalidOperationException($"The '{nameof(weight)}' is not a weight. The minimum weight for a voucher is {SpeedexConstants.MinimumWeightPerVoucher} kilos.");
+                throw new InvalidOperationException($"The '{nameof(weight)}' is invalid. The minimum weight for a voucher is {SpeedexConstants.MinimumWeightPerVoucher} kilos.");
 
             if (shouldBeDeliveredOnSaturday && deliveryTime != DeliveryTimeLimit.NoLimit)
                 throw new InvalidOperationException("A Saturday delivery cannot be combined with a delivery time limit.");
