@@ -17,9 +17,9 @@ namespace Couriers.Speedex.Tests
         /// </summary>
         private static readonly Lazy<IReadOnlyDictionary<Type, object>> _instance = new(() =>
         {
-            var primaryVoucherId = TestHelpers.GenerateTestVoucher();
+            var primaryVoucherId = TestHelpers.GenerateTestVoucherNumber();
 
-            var secondaryVoucherId = TestHelpers.GenerateTestVoucher();
+            var secondaryVoucherId = TestHelpers.GenerateTestVoucherNumber();
 
             var primaryConsignment = new ConsignmentInternalResponseModel()
             {
@@ -77,7 +77,7 @@ namespace Couriers.Speedex.Tests
                             {
                                 ReturnCode = 1,
                                 ReturnMessage = string.Empty,
-                                SessionId = Guid.NewGuid().ToString("N")
+                                SessionId = TestHelpers.GenerateTestPickupId()
                             }
                         }
                     }
@@ -202,7 +202,7 @@ namespace Couriers.Speedex.Tests
                                 ReturnMessage = string.Empty,
                                 LastCheckpoint = new PickupCheckpointInternalResponseModel()
                                 {
-                                    PickupId = Guid.NewGuid().ToString("N"),
+                                    PickupId = TestHelpers.GenerateTestPickupId(),
                                     BranchDepot = "Test",
                                     CheckpointDate = DateTime.Now.AddDays(-2),
                                     StatusCode = "Test"
@@ -300,7 +300,7 @@ namespace Couriers.Speedex.Tests
                         {
                             Model = new CancelPickupInternalResponseModel()
                             {
-                                Result =  new MessageInternalResponseModel<bool>
+                                Result = new MessageInternalResponseModel<bool>
                                 {
                                     Code = 1,
                                     Message = string.Empty,
@@ -322,7 +322,7 @@ namespace Couriers.Speedex.Tests
                                 {
                                     Code = 1,
                                     Message = string.Empty,
-                                    Result = Guid.NewGuid().ToString("N")
+                                    Result = TestHelpers.GenerateTestPickupId()
                                 }
                             }
                         }
@@ -382,7 +382,7 @@ namespace Couriers.Speedex.Tests
                             {
                                 Result = new GetDepositedConsignmentsByDateResult()
                                 {
-                                    Code= 1,
+                                    Code = 1,
                                     Message = string.Empty,
                                     Results =
                                     [
@@ -390,7 +390,7 @@ namespace Couriers.Speedex.Tests
                                         {
                                             Amount = 6,
                                             DateDeposited = DateTime.Now.AddDays(-4).ToString(CultureInfo.InvariantCulture),
-                                            Id = Guid.NewGuid().ToString("N")
+                                            Id = TestHelpers.GenerateTestPickupId()
                                         }
                                     ]
                                 }
@@ -413,7 +413,7 @@ namespace Couriers.Speedex.Tests
                                     Result = new PickupInternalResponseModel()
                                     {
                                         Address = "Test",
-                                        Id = Guid.NewGuid().ToString("N"),
+                                        Id = TestHelpers.GenerateTestPickupId(),
                                         CheckpointCode = "Test",
                                         CheckpointGroupCode = "Test",
                                         City = "Test",

@@ -25,7 +25,7 @@ namespace Couriers.Speedex.Tests
         /// Generates a new random voucher number
         /// </summary>
         /// <returns></returns>
-        public static string GenerateTestVoucher()
+        public static string GenerateTestVoucherNumber()
         {
 #pragma warning disable CA5394 // Do not use insecure randomness
 
@@ -36,6 +36,13 @@ namespace Couriers.Speedex.Tests
             return string.Join(string.Empty, selectedDigits);
         }
 
+        /// <summary>
+        /// Generates a new random pickup id
+        /// </summary>
+        /// <returns></returns>
+        public static string GenerateTestPickupId() 
+            => Guid.NewGuid()
+                .ToString("N");
         #endregion
     }
 }

@@ -8,7 +8,7 @@ namespace Couriers.Speedex
     /// </summary>
     /// <typeparam name="TBody">The body</typeparam>
     [XmlRoot("Envelope", Namespace = SpeedexXmlNamespaces.SoapNamespace)]
-    [EditorBrowsable(EditorBrowsableState.Never)]
+    [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
     public class SoapEnvelopeDataModel<TBody>
         where TBody : class, new()
     {

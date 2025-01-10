@@ -157,7 +157,7 @@ namespace Couriers.Speedex.Tests
         [Fact]
         public async Task WhenTheCancelConsignmentByVoucherMethodIsCalledItSuccessfullyReturns()
         {
-            var voucher = TestHelpers.GenerateTestVoucher();
+            var voucher = TestHelpers.GenerateTestVoucherNumber();
 
             var response = await _simulatedSpeedexClient.CancelConsignmentByVoucherIdAsync(voucher).ConfigureAwait(true);
 
@@ -198,7 +198,7 @@ namespace Couriers.Speedex.Tests
         [Fact]
         public async Task WhenTheGetConsignmentPdfsIsCalledItSuccessfullyReturns()
         {
-            var request = new ConsignmentPdfRequestModel([TestHelpers.GenerateTestVoucher()], PaperSize.A4, true);
+            var request = new ConsignmentPdfRequestModel([TestHelpers.GenerateTestVoucherNumber()], PaperSize.A4, true);
 
             var response = await _simulatedSpeedexClient.GetConsignmentPdfsAsync(request);
 
@@ -213,7 +213,7 @@ namespace Couriers.Speedex.Tests
         [Fact]
         public async Task WhenTheGetConsignmentPdfIsCalledItSuccessfullyReturns()
         {
-            var response = await _simulatedSpeedexClient.GetConsignmentPdfAsync(TestHelpers.GenerateTestVoucher(), PaperSize.A4, true);
+            var response = await _simulatedSpeedexClient.GetConsignmentPdfAsync(TestHelpers.GenerateTestVoucherNumber(), PaperSize.A4, true);
 
             AssertHttpRequest(response);
         }
@@ -239,7 +239,7 @@ namespace Couriers.Speedex.Tests
         [Fact]
         public async Task WhenTheGetLastCheckPointIsCalledItSuccessfullyReturns()
         {
-            var response = await _simulatedSpeedexClient.GetLastCheckPointAsync(TestHelpers.GenerateTestVoucher());
+            var response = await _simulatedSpeedexClient.GetLastCheckPointAsync(TestHelpers.GenerateTestVoucherNumber());
 
             AssertHttpRequest(response);
         }
@@ -252,7 +252,7 @@ namespace Couriers.Speedex.Tests
         [Fact]
         public async Task WhenTheGetLastPickupCheckPointIsCalledItSuccessfullyReturns()
         {
-            var response = await _simulatedSpeedexClient.GetLastPickupCheckPointAsync(TestHelpers.GenerateTestVoucher());
+            var response = await _simulatedSpeedexClient.GetLastPickupCheckPointAsync(TestHelpers.GenerateTestVoucherNumber());
 
             AssertHttpRequest(response);
         }
@@ -300,7 +300,7 @@ namespace Couriers.Speedex.Tests
         [Fact]
         public async Task WhenTheGetTraceByVoucherIdIsCalledItSuccessfullyReturns()
         {
-            var response = await _simulatedSpeedexClient.GetTraceByVoucherIdAsync(TestHelpers.GenerateTestVoucher());
+            var response = await _simulatedSpeedexClient.GetTraceByVoucherIdAsync(TestHelpers.GenerateTestVoucherNumber());
 
             AssertHttpRequest(response);
         }
@@ -313,7 +313,7 @@ namespace Couriers.Speedex.Tests
         [Fact]
         public async Task WhenTheCancelPickupByIdIsCalledItSuccessfullyReturns()
         {
-            var response = await _simulatedSpeedexClient.CancelPickupByIdAsync(TestHelpers.GenerateTestVoucher());
+            var response = await _simulatedSpeedexClient.CancelPickupByIdAsync(TestHelpers.GenerateTestVoucherNumber());
 
             AssertHttpRequest(response);
         }
@@ -326,7 +326,9 @@ namespace Couriers.Speedex.Tests
         [Fact]
         public async Task WhenTheCreatePickupIsCalledItSuccessfullyReturns()
         {
-            var request = new PickupRequestModel(TestHelpers.GenerateTestVoucher(), DateOnly.FromDateTime(DateTime.Now.AddDays(3)), DeliveryTimeLimit.NoLimit);
+            var pickup = DateOnly.FromDateTime(DateTime.Now.AddDays(3));
+
+            var request = new PickupRequestModel(TestHelpers.GenerateTestVoucherNumber(), pickup, DeliveryTimeLimit.NoLimit);
 
             var response = await _simulatedSpeedexClient.CreatePickupAsync(request);
 
@@ -341,11 +343,11 @@ namespace Couriers.Speedex.Tests
         [Fact]
         public async Task WhenTheGetConsignmentsByDateRangeIsCalledItSuccessfullyReturns()
         {
-            var dateto = DateTime.Now;
+            var dateTo = DateTime.Now;
 
-            var dateFrom = dateto.AddDays(-5);
+            var dateFrom = dateTo.AddDays(-5);
 
-            var response = await _simulatedSpeedexClient.GetConsignmentsByDateRangeAsync(dateFrom, dateto);
+            var response = await _simulatedSpeedexClient.GetConsignmentsByDateRangeAsync(dateFrom, dateTo);
 
             AssertHttpRequest(response);
         }
@@ -358,11 +360,11 @@ namespace Couriers.Speedex.Tests
         [Fact]
         public async Task WhenTheGetDepositedConsignmentsByDateRangeIsCalledItSuccessfullyReturns()
         {
-            var dateto = DateTime.Now;
+            var dateTo = DateTime.Now;
 
-            var dateFrom = dateto.AddDays(-5);
+            var dateFrom = dateTo.AddDays(-5);
 
-            var response = await _simulatedSpeedexClient.GetDepositedConsignmentsByDateRangeAsync(dateFrom, dateto);
+            var response = await _simulatedSpeedexClient.GetDepositedConsignmentsByDateRangeAsync(dateFrom, dateTo);
 
             AssertHttpRequest(response);
         }
@@ -375,7 +377,7 @@ namespace Couriers.Speedex.Tests
         [Fact]
         public async Task WhenTheGetPickupByIdIsCalledItSuccessfullyReturns()
         {
-            var response = await _simulatedSpeedexClient.GetPickupByIdAsync(TestHelpers.GenerateTestVoucher());
+            var response = await _simulatedSpeedexClient.GetPickupByIdAsync(TestHelpers.GenerateTestVoucherNumber());
 
             AssertHttpRequest(response);
         }
@@ -388,7 +390,9 @@ namespace Couriers.Speedex.Tests
         [Fact]
         public async Task WhenTheReschedulePickupIsCalledItSuccessfullyReturns()
         {
-            var request = new ReschedulePickupRequestModel(DateTime.Now.AddDays(3), DeliveryTimeLimit.TenAMToOnePM);
+            var pickupDate = DateTime.Now.AddDays(3);
+
+            var request = new ReschedulePickupRequestModel(pickupDate, DeliveryTimeLimit.TenAMToOnePM);
 
             var response = await _simulatedSpeedexClient.ReschedulePickupAsync(request);
 

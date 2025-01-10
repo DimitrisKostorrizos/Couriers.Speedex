@@ -116,25 +116,21 @@ namespace Couriers.Speedex
         #region Public Methods
 
         /// <summary>
-        /// Validates the <see cref="Credentials"/> and returns a valid session id that expires in 1 hour
+        /// Creates a new session
         /// </summary>
         /// <param name="cancellationToken">The cancellation token</param>
         /// <returns></returns>
         public async Task<HttpRequestResult<string>> CreateSessionAsync(CancellationToken cancellationToken = default)
         {
+            var requestModel = CredentialsInternalRequestModel.FromRequestModel(Credentials);
+
             // Get the response
-            var response = await BaseSOAPEnvelopeRequest<SessionIdInternalResponseModel, CredentialsInternalRequestModel>(CredentialsInternalRequestModel.FromRequestModel(Credentials), cancellationToken).ConfigureAwait(false);
+            var response = await BaseSoapEnvelopeRequest<SessionIdInternalResponseModel, CredentialsInternalRequestModel>(requestModel, cancellationToken).ConfigureAwait(false);
 
             // If not successful...
             if (!response.IsSuccessful)
                 // Return the unsuccessful result
                 return response.ToUnsuccessfulHttpRequestResult<string>();
-
-            // Set the session id
-            _sessionId = response.Result.ToResponseModel();
-
-            // Set the date-time the session id was last refreshed
-            _lastSessionIdRefreshDate = DateTimeOffset.Now;
 
             // Return the successful result
             return HttpRequestResult.FromResult(_sessionId, response.RequestPayload, response.ResponsePayload);
@@ -170,8 +166,13 @@ namespace Couriers.Speedex
         {
             ArgumentNullException.ThrowIfNull(values);
 
+            var numberOfItems = values.Count();
+
+            if(numberOfItems == 0)
+                throw new ArgumentOutOfRangeException(nameof(values), "At least one consignment must be specified");
+
             // If more than 10 values are specified...
-            if (values.Count() > SpeedexConstants.MaximumNumberOfConsignments)
+            if (numberOfItems > SpeedexConstants.MaximumNumberOfConsignments)
                 throw new InvalidOperationException($"The maximum number of consignments is {SpeedexConstants.MaximumNumberOfConsignments}.");
 
             // Get the response
@@ -180,11 +181,11 @@ namespace Couriers.Speedex
             // If not successful...
             if (!response.IsSuccessful)
             {
-                var statusPerVoucher = response.Result
+                var statusPerConsignment = response.Result
                     .Statuses
-                    .Select((element, index) => $"Voucher {index}: {element}");
+                    .Select((element, index) => $"Consignment {index}: {element}");
 
-                var resultMessage = string.Join(", ", statusPerVoucher);
+                var resultMessage = string.Join(", ", statusPerConsignment);
 
                 // Return the unsuccessful result
                 return response.ToUnsuccessfulHttpRequestResult<IEnumerable<ConsignmentResponseModel>>(resultMessage);
@@ -225,8 +226,10 @@ namespace Couriers.Speedex
         {
             ArgumentNullException.ThrowIfNull(value);
 
+            var requestModel = ConsignmentPdfInternalRequestModel.FromRequestModel(value);
+
             // Get the response
-            var response = await BaseValidatedSOAPEnvelopeRequest<GetConsignmentPdfInternalResponseModel, ConsignmentPdfInternalRequestModel>(ConsignmentPdfInternalRequestModel.FromRequestModel(value), cancellationToken).ConfigureAwait(false);
+            var response = await BaseValidatedSOAPEnvelopeRequest<GetConsignmentPdfInternalResponseModel, ConsignmentPdfInternalRequestModel>(requestModel, cancellationToken).ConfigureAwait(false);
 
             // If not successful...
             if (!response.IsSuccessful)
@@ -353,8 +356,10 @@ namespace Couriers.Speedex
         {
             ArgumentNullException.ThrowIfNull(model);
 
+            var requestModel = ClientReferencesInternalRequestModel.FromRequestModel(model);
+
             // Get the response
-            var response = await BaseValidatedSOAPEnvelopeRequest<GetTraceByClientReferencesInternalResponseModel, ClientReferencesInternalRequestModel>(ClientReferencesInternalRequestModel.FromRequestModel(model), cancellationToken).ConfigureAwait(false);
+            var response = await BaseValidatedSOAPEnvelopeRequest<GetTraceByClientReferencesInternalResponseModel, ClientReferencesInternalRequestModel>(requestModel, cancellationToken).ConfigureAwait(false);
 
             // If not successful...
             if (!response.IsSuccessful)
@@ -443,8 +448,10 @@ namespace Couriers.Speedex
         {
             ArgumentNullException.ThrowIfNull(model);
 
+            var requestModel = PickupInternalRequestModel.FromRequestModel(model);
+
             // Get the response
-            var response = await BaseValidatedSOAPEnvelopeRequest<CreatePickupInternalResponseModel, PickupInternalRequestModel>(PickupInternalRequestModel.FromRequestModel(model), cancellationToken).ConfigureAwait(false);
+            var response = await BaseValidatedSOAPEnvelopeRequest<CreatePickupInternalResponseModel, PickupInternalRequestModel>(requestModel, cancellationToken).ConfigureAwait(false);
 
             // If not successful...
             if (!response.IsSuccessful)
@@ -543,7 +550,11 @@ namespace Couriers.Speedex
         /// <param name="cancellationToken">The cancellation token</param>
         /// <returns></returns>
         public async Task<HttpRequestResult> ReschedulePickupAsync(ReschedulePickupRequestModel model, CancellationToken cancellationToken = default)
-            => await BaseValidatedSOAPEnvelopeRequest<ReschedulePickupInternalResponseModel, ReschedulePickupInternalRequestModel>(ReschedulePickupInternalRequestModel.FromRequestModel(model), cancellationToken).ConfigureAwait(false);
+        {
+            var requestModel = ReschedulePickupInternalRequestModel.FromRequestModel(model);
+
+            return await BaseValidatedSOAPEnvelopeRequest<ReschedulePickupInternalResponseModel, ReschedulePickupInternalRequestModel>(requestModel, cancellationToken).ConfigureAwait(false);
+        }
 
         /// <summary>
         /// <inheritdoc/>
@@ -593,6 +604,31 @@ namespace Couriers.Speedex
             => DateTimeOffset.Now.Subtract(_lastSessionIdRefreshDate) >= _maximumExpirationTime;
 
         /// <summary>
+        /// Validates the <see cref="Credentials"/> and returns a valid session id that expires in 1 hour
+        /// </summary>
+        /// <param name="cancellationToken">The cancellation token</param>
+        /// <returns></returns>
+        private async Task<HttpRequestResult> EnsureValidSessionAsync(CancellationToken cancellationToken = default)
+        {
+            // Get the response
+            var response = await CreateSessionAsync(cancellationToken).ConfigureAwait(false);
+
+            // If not successful...
+            if (!response.IsSuccessful)
+                // Return the unsuccessful result
+                return response;
+
+            // Set the session id
+            _sessionId = response.Result;
+
+            // Set the date-time the session id was last refreshed
+            _lastSessionIdRefreshDate = DateTimeOffset.Now;
+
+            // Return the successful result
+            return response;
+        }
+
+        /// <summary>
         /// Checks whether the <see cref="_sessionId"/> needs refresh, if a refresh is needed, the session id is refreshed and the specified call is made
         /// </summary>
         /// <typeparam name="TResponse">The type of the response model</typeparam>
@@ -607,13 +643,27 @@ namespace Couriers.Speedex
             // If the session id requires refresh...
             if (RequiresSessionIdRefresh())
                 // Refresh the token
-                await CreateSessionAsync(cancellationToken).ConfigureAwait(false);
+                await EnsureValidSessionAsync(cancellationToken).ConfigureAwait(false);
 
             // Set the session id
             requestModel.SessionId = _sessionId;
 
-            // Return the response
-            return await BaseSOAPEnvelopeRequest<TResponse, TRequest>(requestModel, cancellationToken).ConfigureAwait(false);
+            // Get the response
+            var response = await BaseSoapEnvelopeRequest<TResponse, TRequest>(requestModel, cancellationToken).ConfigureAwait(false);
+
+            // If the request has failed, due to an expired session...
+            if (response.IsUnauthorizedRequest)
+            {
+                // Refresh the token
+                await EnsureValidSessionAsync(cancellationToken).ConfigureAwait(false);
+
+                // Set the session id
+                requestModel.SessionId = _sessionId;
+
+                response = await BaseSoapEnvelopeRequest<TResponse, TRequest>(requestModel, cancellationToken).ConfigureAwait(false);
+            }
+
+            return response;
         }
 
         /// <summary>
@@ -625,7 +675,7 @@ namespace Couriers.Speedex
         /// <param name="requestModel">The request model</param>
         /// <param name="cancellationToken">The cancellation token</param>
         /// <returns></returns>
-        private async Task<HttpRequestResult<TResponse>> BaseSOAPEnvelopeRequest<TResponse, TRequest>(TRequest requestModel, CancellationToken cancellationToken = default)
+        private async Task<InternalHttpRequestResult<TResponse>> BaseSoapEnvelopeRequest<TResponse, TRequest>(TRequest requestModel, CancellationToken cancellationToken = default)
             where TResponse : class, ISoapReturnMessageModel, new()
             where TRequest : class, new()
         {
@@ -634,6 +684,7 @@ namespace Couriers.Speedex
             var serializedResponsePayload = string.Empty;
 
 #pragma warning disable CA1031 // Do not catch general exception types
+
             try
             {
                 // Embed the request model
@@ -655,12 +706,12 @@ namespace Couriers.Speedex
                 serializedResponsePayload = await response.Content.ReadAsStringAsync(cancellationToken).ConfigureAwait(false);
 
                 if (!response.IsSuccessStatusCode)
-                    return new HttpRequestResult<TResponse>(serializedResponsePayload, serializedRequestPayload, serializedResponsePayload);
+                    return new InternalHttpRequestResult<TResponse>(serializedResponsePayload, serializedRequestPayload, serializedResponsePayload);
 
                 var deserializedResponse = XmlHelpers.FromXml<SoapEnvelopeDataModel<TResponse>>(serializedResponsePayload);
 
                 if (deserializedResponse is null)
-                    return new HttpRequestResult<TResponse>("De-serialization error", serializedRequestPayload, serializedResponsePayload);
+                    return new InternalHttpRequestResult<TResponse>("De-serialization error", serializedRequestPayload, serializedResponsePayload);
 
                 // Get the response model
                 var responseModel = deserializedResponse.Body.Model;
@@ -671,17 +722,86 @@ namespace Couriers.Speedex
                     // Get the error message
                     var errorMessage = responseModel.Message;
 
-                    return new HttpRequestResult<TResponse>(errorMessage, serializedRequestPayload, serializedResponsePayload);
+                    return new InternalHttpRequestResult<TResponse>(errorMessage, serializedRequestPayload, serializedResponsePayload, responseModel.Code);
                 }
 
                 // Return the successful result
-                return HttpRequestResult.FromResult(responseModel, serializedRequestPayload, serializedResponsePayload);
+                return new InternalHttpRequestResult<TResponse>(responseModel, serializedRequestPayload, serializedResponsePayload);
             }
             catch (Exception ex)
             {
-                return new HttpRequestResult<TResponse>(ex, serializedRequestPayload, serializedResponsePayload);
+                return new InternalHttpRequestResult<TResponse>(ex, serializedRequestPayload, serializedResponsePayload);
             }
+
 #pragma warning restore CA1031 // Do not catch general exception types
+
+        }
+
+        #endregion
+
+        #region Private Classes
+
+        /// <summary>
+        /// <inheritdoc/>
+        /// </summary>
+        /// <typeparam name="TResponse">The type of the result of the response</typeparam>
+        private sealed class InternalHttpRequestResult<TResponse> : HttpRequestResult<TResponse>
+        {
+            #region Constants
+
+            /// <summary>
+            /// The code that indicates whether the request is unauthorized
+            /// </summary>
+            public const uint UnauthorizedRequestCode = 1401;
+
+            #endregion
+
+            #region Public Properties
+
+            /// <summary>
+            /// A flag indicating whether the request was unauthorized
+            /// </summary>
+            public bool IsUnauthorizedRequest { get; }
+
+            #endregion
+
+            #region Constructors
+
+            /// <summary>
+            /// <inheritdoc/>
+            /// </summary>
+            /// <param name="exception">The exception</param>
+            /// <param name="requestPayload">The request payload</param>
+            /// <param name="responsePayload">The response payload</param>
+            public InternalHttpRequestResult([NotNull] Exception exception, string? requestPayload, string? responsePayload) : base(exception, requestPayload, responsePayload)
+            {
+
+            }
+
+            /// <summary>
+            /// <inheritdoc/>
+            /// </summary>
+            /// <param name="errorMessage">The error message</param>
+            /// <param name="requestPayload">The request payload</param>
+            /// <param name="responsePayload">The response payload</param>
+            /// <param name="errorCode">The error code</param>
+            public InternalHttpRequestResult([NotNull] string errorMessage, string? requestPayload, string? responsePayload, uint? errorCode = null) : base(errorMessage, requestPayload, responsePayload)
+            {
+                IsUnauthorizedRequest = errorCode.HasValue && errorCode.Value == UnauthorizedRequestCode;
+            }
+
+            /// <summary>
+            /// <inheritdoc/>
+            /// </summary>
+            /// <param name="result">The result</param>
+            /// <param name="requestPayload">The request payload</param>
+            /// <param name="responsePayload">The response payload</param>
+            internal InternalHttpRequestResult(TResponse result, string? requestPayload, string? responsePayload) : base(result, requestPayload, responsePayload)
+            {
+
+            }
+
+            #endregion
         }
 
         #endregion

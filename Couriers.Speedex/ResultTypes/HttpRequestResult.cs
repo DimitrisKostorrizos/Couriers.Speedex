@@ -109,8 +109,9 @@ namespace Couriers.Speedex
     }
 
     /// <summary>
-    /// Describes the result for an operation that can fail
+    /// <inheritdoc/>
     /// </summary>
+    /// <typeparam name="T">The type of the result of the response</typeparam>
     public class HttpRequestResult<T> : HttpRequestResult
     {
         #region Private Members
