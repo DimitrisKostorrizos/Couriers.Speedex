@@ -81,6 +81,8 @@ namespace Couriers.Speedex.Tests
 
         #region Test Methods
 
+#pragma warning disable CA1707 // Identifiers should not contain underscores
+
         /// <summary>
         /// Validates that when every
         /// </summary>
@@ -133,7 +135,7 @@ namespace Couriers.Speedex.Tests
         /// </summary>
         /// <returns></returns>
         [Fact]
-        public async Task WhenTheCreateSessionMethodIsCalledItSuccessfullyReturns()
+        public async Task CreateSessionAsync_WithDemoCredentials_SuccessfullyReturns()
         {
             var response = await _simulatedSpeedexClient.CreateSessionAsync()
                 .ConfigureAwait(true);
@@ -149,7 +151,7 @@ namespace Couriers.Speedex.Tests
         /// </summary>
         /// <returns></returns>
         [Fact]
-        public async Task WhenTheCancelConsignmentByVoucherMethodIsCalledItSuccessfullyReturns()
+        public async Task CancelConsignmentByVoucherIdAsync_WithRandomVoucher_SuccessfullyReturns()
         {
             var voucher = TestHelpers.GenerateTestVoucherNumber();
 
@@ -164,7 +166,7 @@ namespace Couriers.Speedex.Tests
         /// </summary>
         /// <returns></returns>
         [Fact]
-        public async Task WhenTheCreateConsignmentsMethodIsCalledItSuccessfullyReturns()
+        public async Task CreateConsignmentsAsync_WithMoqedData_ItSuccessfullyReturns()
         {
             var response = await _simulatedSpeedexClient.CreateConsignmentsAsync([ TestConstants.TestConsignment ]);
 
@@ -177,7 +179,7 @@ namespace Couriers.Speedex.Tests
         /// </summary>
         /// <returns></returns>
         [Fact]
-        public async Task WhenTheCreateConsignmentMethodIsCalledItSuccessfullyReturns()
+        public async Task CreateConsignmentAsync_WithMoqedData_ItSuccessfullyReturns()
         {
             var response = await _simulatedSpeedexClient.CreateConsignmentAsync(TestConstants.TestConsignment);
 
@@ -190,7 +192,7 @@ namespace Couriers.Speedex.Tests
         /// </summary>
         /// <returns></returns>
         [Fact]
-        public async Task WhenTheGetConsignmentPdfsIsCalledItSuccessfullyReturns()
+        public async Task GetConsignmentPdfsAsync_WithMoqedData_ItSuccessfullyReturns()
         {
             var request = new ConsignmentPdfRequestModel([TestHelpers.GenerateTestVoucherNumber()], PaperSize.A4, true);
 
@@ -205,7 +207,7 @@ namespace Couriers.Speedex.Tests
         /// </summary>
         /// <returns></returns>
         [Fact]
-        public async Task WhenTheGetConsignmentPdfIsCalledItSuccessfullyReturns()
+        public async Task GetConsignmentPdfAsync_WithMoqedData_ItSuccessfullyReturns()
         {
             var response = await _simulatedSpeedexClient.GetConsignmentPdfAsync(TestHelpers.GenerateTestVoucherNumber(), PaperSize.A4, true);
 
@@ -218,7 +220,7 @@ namespace Couriers.Speedex.Tests
         /// </summary>
         /// <returns></returns>
         [Fact]
-        public async Task WhenTheGetBranchesIsCalledItSuccessfullyReturns()
+        public async Task GetBranchesAsync_WithMoqedData_ItSuccessfullyReturns()
         {
             var response = await _simulatedSpeedexClient.GetBranchesAsync("26441");
 
@@ -231,7 +233,7 @@ namespace Couriers.Speedex.Tests
         /// </summary>
         /// <returns></returns>
         [Fact]
-        public async Task WhenTheGetLastCheckPointIsCalledItSuccessfullyReturns()
+        public async Task GetLastCheckPointAsync_WithMoqedData_ItSuccessfullyReturns()
         {
             var response = await _simulatedSpeedexClient.GetLastCheckPointAsync(TestHelpers.GenerateTestVoucherNumber());
 
@@ -244,7 +246,7 @@ namespace Couriers.Speedex.Tests
         /// </summary>
         /// <returns></returns>
         [Fact]
-        public async Task WhenTheGetLastPickupCheckPointIsCalledItSuccessfullyReturns()
+        public async Task GetLastPickupCheckPointAsync_WithMoqedData_ItSuccessfullyReturns()
         {
             var response = await _simulatedSpeedexClient.GetLastPickupCheckPointAsync(TestHelpers.GenerateTestVoucherNumber());
 
@@ -257,7 +259,7 @@ namespace Couriers.Speedex.Tests
         /// </summary>
         /// <returns></returns>
         [Fact]
-        public async Task WhenTheGetTraceByClientReferencesIsCalledItSuccessfullyReturns()
+        public async Task GetTraceByClientReferencesAsync_WithMoqedData_ItSuccessfullyReturns()
         {
             var request = new ClientReferencesRequestModel()
             {
@@ -275,7 +277,7 @@ namespace Couriers.Speedex.Tests
         /// </summary>
         /// <returns></returns>
         [Fact]
-        public async Task WhenTheGetTraceByTimeFrameIsCalledItSuccessfullyReturns()
+        public async Task GetTraceByTimeFrameAsync_WithMoqedData_ItSuccessfullyReturns()
         {
             var dateto = DateTime.Now;
 
@@ -292,7 +294,7 @@ namespace Couriers.Speedex.Tests
         /// </summary>
         /// <returns></returns>
         [Fact]
-        public async Task WhenTheGetTraceByVoucherIdIsCalledItSuccessfullyReturns()
+        public async Task GetTraceByVoucherIdAsync_WithMoqedData_ItSuccessfullyReturns()
         {
             var response = await _simulatedSpeedexClient.GetTraceByVoucherIdAsync(TestHelpers.GenerateTestVoucherNumber());
 
@@ -305,7 +307,7 @@ namespace Couriers.Speedex.Tests
         /// </summary>
         /// <returns></returns>
         [Fact]
-        public async Task WhenTheCancelPickupByIdIsCalledItSuccessfullyReturns()
+        public async Task CancelPickupByIdAsync_WithMoqedData_ItSuccessfullyReturns()
         {
             var response = await _simulatedSpeedexClient.CancelPickupByIdAsync(TestHelpers.GenerateTestVoucherNumber());
 
@@ -318,7 +320,7 @@ namespace Couriers.Speedex.Tests
         /// </summary>
         /// <returns></returns>
         [Fact]
-        public async Task WhenTheCreatePickupIsCalledItSuccessfullyReturns()
+        public async Task CreatePickupAsync_WithMoqedData_ItSuccessfullyReturns()
         {
             var pickup = DateOnly.FromDateTime(DateTime.Now.AddDays(3));
 
@@ -335,7 +337,7 @@ namespace Couriers.Speedex.Tests
         /// </summary>
         /// <returns></returns>
         [Fact]
-        public async Task WhenTheGetConsignmentsByDateRangeIsCalledItSuccessfullyReturns()
+        public async Task GetConsignmentsByDateRangeAsync_WithMoqedData_ItSuccessfullyReturns()
         {
             var dateTo = DateTime.Now;
 
@@ -352,7 +354,7 @@ namespace Couriers.Speedex.Tests
         /// </summary>
         /// <returns></returns>
         [Fact]
-        public async Task WhenTheGetDepositedConsignmentsByDateRangeIsCalledItSuccessfullyReturns()
+        public async Task GetDepositedConsignmentsByDateRangeAsync_WithMoqedData_ItSuccessfullyReturns()
         {
             var dateTo = DateTime.Now;
 
@@ -369,7 +371,7 @@ namespace Couriers.Speedex.Tests
         /// </summary>
         /// <returns></returns>
         [Fact]
-        public async Task WhenTheGetPickupByIdIsCalledItSuccessfullyReturns()
+        public async Task GetPickupByIdAsync_WithMoqedData_ItSuccessfullyReturns()
         {
             var response = await _simulatedSpeedexClient.GetPickupByIdAsync(TestHelpers.GenerateTestVoucherNumber());
 
@@ -382,7 +384,7 @@ namespace Couriers.Speedex.Tests
         /// </summary>
         /// <returns></returns>
         [Fact]
-        public async Task WhenTheReschedulePickupIsCalledItSuccessfullyReturns()
+        public async Task ReschedulePickupAsync_WithMoqedData_ItSuccessfullyReturns()
         {
             var pickupDate = DateTime.Now.AddDays(3);
 
@@ -392,6 +394,8 @@ namespace Couriers.Speedex.Tests
 
             AssertHttpRequest(response);
         }
+
+#pragma warning restore CA1707 // Identifiers should not contain underscores
 
         #endregion
 

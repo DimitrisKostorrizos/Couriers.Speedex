@@ -157,7 +157,7 @@ namespace Couriers.Speedex
 
         /// <summary>
         /// Creates the specified <paramref name="values"/>
-        /// NOTE: The max number of consignments per request is 10
+        /// NOTE: The max number of consignments per request is <see cref="SpeedexConstants.MaximumNumberOfConsignments"/>
         /// </summary>
         /// <param name="values">The consignments</param>
         /// <param name="cancellationToken">The cancellation token</param>
@@ -217,7 +217,7 @@ namespace Couriers.Speedex
 
         /// <summary>
         /// Get the voucher PDF for the specified <paramref name="value"/>
-        /// NOTE: The max number of consignments per request is 20
+        /// NOTE: The max number of consignments per request is <see cref="SpeedexConstants.MaximumNumberOfVouchers"/>
         /// </summary>
         /// <param name="value">The consignments</param>
         /// <param name="cancellationToken">The cancellation token</param>
@@ -491,7 +491,8 @@ namespace Couriers.Speedex
         }
 
         /// <summary>
-        /// Get all the consignment deposits created on the specified date range, from <paramref name="dateFrom"/> to <paramref name="dateTo"/>
+        /// Get all the consignment deposits created on the specified date range, 
+        /// from <paramref name="dateFrom"/> to <paramref name="dateTo"/>
         /// </summary>
         /// <param name="dateFrom">The beginning of the time frame</param>
         /// <param name="dateTo">The end of the time frame</param>

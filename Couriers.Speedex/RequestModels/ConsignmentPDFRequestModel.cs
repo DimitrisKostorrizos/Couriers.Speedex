@@ -13,7 +13,7 @@ namespace Couriers.Speedex
 
         /// <summary>
         /// The voucher ids
-        /// NOTE: The maximum number is 20 consignments.
+        /// NOTE: The maximum number is <see cref="SpeedexConstants.MaximumNumberOfVouchers"/> consignments.
         /// </summary>
         public IEnumerable<string> VoucherIds { get; }
 
