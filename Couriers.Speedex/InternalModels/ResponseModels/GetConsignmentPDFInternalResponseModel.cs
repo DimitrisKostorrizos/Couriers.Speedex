@@ -1,6 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
+using System.Reflection;
 using System.Xml.Serialization;
 
 namespace Couriers.Speedex
@@ -14,12 +16,21 @@ namespace Couriers.Speedex
     {
         #region Public Properties
 
+#if NET8_0_OR_GREATER
         /// <summary>
         /// The vouchers
         /// </summary>
         [XmlArray("GetBOLPdfResult")]
         [XmlArrayItem("Voucher")]
         public ConsignmentPdfInternalResponseModel[] Vouchers { get; set; } = [];
+#else
+        /// <summary>
+        /// The vouchers
+        /// </summary>
+        [XmlArray("GetBOLPdfResult")]
+        [XmlArrayItem("Voucher")]
+        public ConsignmentPdfInternalResponseModel[] Vouchers { get; set; } = Array.Empty<ConsignmentPdfInternalResponseModel>();
+#endif
 
         #endregion
 
@@ -47,7 +58,14 @@ namespace Couriers.Speedex
         /// Creates and return the <see cref="IEnumerable{T}"/> from the current object
         /// </summary>
         /// <returns></returns>
-        public IEnumerable<ConsignmentPdfResponseModel> ToResponseModel() => Vouchers.Select(x => x.ToResponseModel()).ToArray();
+        public IEnumerable<ConsignmentPdfResponseModel> ToResponseModel()
+        {
+#if NET8_0_OR_GREATER
+            return [.. Vouchers.Select(x => x.ToResponseModel())];
+#else
+            return Vouchers.Select(x => x.ToResponseModel()).ToArray();
+#endif
+        }
 
         #endregion
     }

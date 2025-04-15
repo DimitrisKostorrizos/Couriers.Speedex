@@ -268,10 +268,18 @@ namespace Couriers.Speedex
                 Weight = Weight
             };
 
+#if NET7_0_OR_GREATER
             if (DateTime.TryParse(DeliveryTimeFrom, CultureInfo.InvariantCulture, out var result))
+#else
+            if (DateTime.TryParse(DeliveryTimeFrom, CultureInfo.InvariantCulture, DateTimeStyles.None, out var result))
+#endif
                 model.DeliveryTimeFrom = result;
 
+#if NET7_0_OR_GREATER
             if (DateTime.TryParse(DeliveryTimeTo, CultureInfo.InvariantCulture, out result))
+#else
+            if (DateTime.TryParse(DeliveryTimeTo, CultureInfo.InvariantCulture, DateTimeStyles.None, out result))
+#endif
                 model.DeliveryTimeTo = result;
 
             return model;

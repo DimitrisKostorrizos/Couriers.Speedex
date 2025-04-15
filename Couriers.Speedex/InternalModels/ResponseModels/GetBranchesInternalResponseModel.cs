@@ -1,6 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
+using System.Reflection;
 using System.Xml.Serialization;
 
 namespace Couriers.Speedex
@@ -14,12 +16,21 @@ namespace Couriers.Speedex
     {
         #region Public Properties
 
+#if NET8_0_OR_GREATER
         /// <summary>
         /// The branch depots
         /// </summary>
         [XmlArray("Branches")]
         [XmlArrayItem("Branch")]
         public BranchInternalResponseModel[] BranchDepots { get; set; } = [];
+#else
+        /// <summary>
+        /// The branch depots
+        /// </summary>
+        [XmlArray("Branches")]
+        [XmlArrayItem("Branch")]
+        public BranchInternalResponseModel[] BranchDepots { get; set; } = Array.Empty<BranchInternalResponseModel>();
+#endif
 
         #endregion
 
@@ -47,7 +58,14 @@ namespace Couriers.Speedex
         /// Creates and return the <see cref="IEnumerable{T}"/> from the current object
         /// </summary>
         /// <returns></returns>
-        public IEnumerable<BranchResponseModel> ToResponseModel() => BranchDepots.Select(x => x.ToResponseModel()).ToArray();
+        public IEnumerable<BranchResponseModel> ToResponseModel()
+        {
+#if NET8_0_OR_GREATER
+            return [.. BranchDepots.Select(x => x.ToResponseModel())];
+#else
+            return BranchDepots.Select(x => x.ToResponseModel()).ToArray();
+#endif
+        }
 
         #endregion
     }

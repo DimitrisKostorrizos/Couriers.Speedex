@@ -2,6 +2,7 @@
 using System.ComponentModel;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
+using System.Xml.Linq;
 using System.Xml.Serialization;
 
 namespace Couriers.Speedex
@@ -27,6 +28,7 @@ namespace Couriers.Speedex
         [XmlElement("perVoucher")]
         public bool ReturnMultipleVouchers { get; set; }
 
+#if NET8_0_OR_GREATER
         /// <summary>
         /// The voucher ids
         /// NOTE: The maximum number is 20 consignments.
@@ -34,7 +36,15 @@ namespace Couriers.Speedex
         [XmlArray("voucherIDs")]
         [XmlArrayItem("string")]
         public string[] VoucherIds { get; set; } = [];
-
+#else
+        /// <summary>
+        /// The voucher ids
+        /// NOTE: The maximum number is 20 consignments.
+        /// </summary>
+        [XmlArray("voucherIDs")]
+        [XmlArrayItem("string")]
+        public string[] VoucherIds { get; set; } = Array.Empty<string>();
+#endif
         #endregion
 
         #region Constructors
@@ -58,13 +68,22 @@ namespace Couriers.Speedex
         /// <returns></returns>
         public static ConsignmentPdfInternalRequestModel FromRequestModel([NotNull] ConsignmentPdfRequestModel model)
         {
+#if NET6_0_OR_GREATER
             ArgumentNullException.ThrowIfNull(model);
+#else
+            if (model is null)
+                throw new ArgumentNullException(nameof(model));
+#endif
 
             return new()
             {
                 PaperSize = SpeedexHelpers.FromPaperType(model.PaperSize),
                 ReturnMultipleVouchers = model.ReturnMultipleVouchers,
+#if NET8_0_OR_GREATER
+                VoucherIds = [.. model.VoucherIds]
+#else
                 VoucherIds = model.VoucherIds.ToArray()
+#endif
             };
         }
 

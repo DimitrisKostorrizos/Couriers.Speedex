@@ -228,6 +228,7 @@ namespace Couriers.Speedex
             double cost, string address, string recipientName, string recipientPhoneNumber, string zipCode, double weight,
             int insuranceAmount = 0, bool shouldBeDeliveredOnSaturday = false, DeliveryTimeLimit deliveryTime = DeliveryTimeLimit.NoLimit) : base()
         {
+#if NET8_0_OR_GREATER
             ArgumentOutOfRangeException.ThrowIfNegativeOrZero(numberOfVouchers);
 
             ArgumentOutOfRangeException.ThrowIfNegative(cost);
@@ -243,6 +244,31 @@ namespace Couriers.Speedex
             ArgumentException.ThrowIfNullOrWhiteSpace(recipientPhoneNumber);
 
             ArgumentOutOfRangeException.ThrowIfGreaterThan(numberOfVouchers, SpeedexConstants.MaximumNumberOfVouchers);
+#else
+            if (numberOfVouchers <= 0)
+                throw new ArgumentOutOfRangeException(nameof(numberOfVouchers), $"The {nameof(numberOfVouchers)} cannot be negative or zero.");
+
+            if (cost < 0)
+                throw new ArgumentOutOfRangeException(nameof(cost), $"The {nameof(cost)} cannot be negative.");
+
+            if (insuranceAmount < 0)
+                throw new ArgumentOutOfRangeException(nameof(insuranceAmount), $"The {nameof(insuranceAmount)} cannot be negative.");
+
+            if (string.IsNullOrWhiteSpace(address))
+                throw new ArgumentException($"'{nameof(address)}' cannot be null or whitespace.", nameof(address));
+
+            if (string.IsNullOrWhiteSpace(recipientName))
+                throw new ArgumentException($"'{nameof(recipientName)}' cannot be null or whitespace.", nameof(recipientName));
+
+            if (string.IsNullOrWhiteSpace(zipCode))
+                throw new ArgumentException($"'{nameof(zipCode)}' cannot be null or whitespace.", nameof(zipCode));
+
+            if (string.IsNullOrWhiteSpace(recipientPhoneNumber))
+                throw new ArgumentException($"'{nameof(recipientPhoneNumber)}' cannot be null or whitespace.", nameof(recipientPhoneNumber));
+
+            if (numberOfVouchers > SpeedexConstants.MaximumNumberOfVouchers)
+                throw new ArgumentOutOfRangeException(nameof(numberOfVouchers), $"The {nameof(numberOfVouchers)} cannot be greater than {SpeedexConstants.MaximumNumberOfVouchers}.");
+#endif
 
             if (cost > 0 && !paymentType.HasValue)
                 throw new InvalidOperationException($"The '{nameof(paymentType)}' is required when the '{nameof(cost)}' is greater then 0.");

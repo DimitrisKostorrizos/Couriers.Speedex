@@ -9,7 +9,7 @@ using System.Xml.Serialization;
 namespace Couriers.Speedex
 {
     /// <summary>
-    /// Helper methods associated with the XML model
+    /// Contains the helper methods related to XML handling
     /// </summary>
     public static class XmlHelpers
     {
@@ -40,7 +40,12 @@ namespace Couriers.Speedex
         public static T Deserialize<T>([NotNull] this XContainer element)
             where T : class
         {
+#if NET6_0_OR_GREATER
             ArgumentNullException.ThrowIfNull(element);
+#else
+            if (element is null)
+                throw new ArgumentNullException(nameof(element));
+#endif
 
             // Use a temporary reader for the Xml element
             using var reader = element.CreateReader();
@@ -67,7 +72,12 @@ namespace Couriers.Speedex
         /// <returns></returns>
         public static XElement SerializeToXElement<T>([NotNull] this T obj)
         {
+#if NET6_0_OR_GREATER
             ArgumentNullException.ThrowIfNull(obj);
+#else
+            if (obj is null)
+                throw new ArgumentNullException(nameof(obj));
+#endif
 
             // Declare a document
             var document = new XDocument();
@@ -106,9 +116,17 @@ namespace Couriers.Speedex
         /// <param name="namespaces">The name spaces</param>
         public static string ToXml([NotNull] object obj, [NotNull] XmlSerializerNamespaces namespaces)
         {
+#if NET6_0_OR_GREATER
             ArgumentNullException.ThrowIfNull(obj);
 
             ArgumentNullException.ThrowIfNull(namespaces);
+#else
+            if (obj is null)
+                throw new ArgumentNullException(nameof(obj));
+
+            if (namespaces is null)
+                throw new ArgumentNullException(nameof(namespaces));
+#endif
 
             var objectType = obj.GetType();
 
@@ -132,11 +150,22 @@ namespace Couriers.Speedex
         /// <param name="settings">The settings</param>
         public static string ToXml([NotNull] object obj, [NotNull] XmlSerializerNamespaces namespaces, [NotNull] XmlWriterSettings settings)
         {
+#if NET6_0_OR_GREATER
             ArgumentNullException.ThrowIfNull(obj);
 
             ArgumentNullException.ThrowIfNull(namespaces);
 
             ArgumentNullException.ThrowIfNull(settings);
+#else
+            if (obj is null)
+                throw new ArgumentNullException(nameof(obj));
+
+            if (namespaces is null)
+                throw new ArgumentNullException(nameof(namespaces));
+
+            if (settings is null)
+                throw new ArgumentNullException(nameof(settings));
+#endif
 
             var T = obj.GetType();
 
@@ -166,9 +195,19 @@ namespace Couriers.Speedex
         /// </summary>
         public static object? FromXml([NotNull] string xml, [NotNull] Type type)
         {
+#if NET8_0_OR_GREATER
             ArgumentException.ThrowIfNullOrWhiteSpace(xml);
+#else
+            if (string.IsNullOrWhiteSpace(xml))
+                throw new ArgumentException($"'{nameof(xml)}' cannot be null or whitespace.", nameof(xml));
+#endif
 
+#if NET6_0_OR_GREATER
             ArgumentNullException.ThrowIfNull(type);
+#else
+            if (type is null)
+                throw new ArgumentNullException(nameof(type));
+#endif
 
             if (type == typeof(string))
                 return xml;

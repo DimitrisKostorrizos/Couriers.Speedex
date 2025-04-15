@@ -36,7 +36,12 @@ namespace Couriers.Speedex
         /// <param name="dateDeposited">The date-time of that the consignment was deposited</param>
         public DepositedConsignmentResponseModel(string id, decimal amount, DateTime dateDeposited) : base()
         {
+#if NET8_0_OR_GREATER
             ArgumentException.ThrowIfNullOrWhiteSpace(id);
+#else
+            if (string.IsNullOrWhiteSpace(id))
+                throw new ArgumentException($"'{nameof(id)}' cannot be null or whitespace.", nameof(id));
+#endif
 
             Id = id;
 

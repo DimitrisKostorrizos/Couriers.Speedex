@@ -114,7 +114,12 @@ namespace Couriers.Speedex
         /// <param name="value">The value</param>
         public static void ThrowIfInvalidZipCode(string value)
         {
+#if NET8_0_OR_GREATER
             ArgumentException.ThrowIfNullOrWhiteSpace(value);
+#else
+            if (string.IsNullOrWhiteSpace(value))
+                throw new ArgumentException($"'{nameof(value)}' cannot be null or whitespace.", nameof(value));
+#endif
 
             if (value.Length > SpeedexConstants.MaximumZipCodeLength)
                 throw new InvalidOperationException($"The '{nameof(value)}' is not a valid zip code. The maximum length for a zip code field is {SpeedexConstants.MaximumZipCodeLength}.");
@@ -157,13 +162,25 @@ namespace Couriers.Speedex
         public static DeliveryTimeWindow ToDeliveryTimeWindow(DeliveryTimeLimit value)
         {
             if (value == DeliveryTimeLimit.TenAMToOnePM)
+#if NET6_0_OR_GREATER
                 return new DeliveryTimeWindow(new TimeOnly(10, 0), new TimeOnly(13, 0));
+#else
+                return new DeliveryTimeWindow(DateTime.MinValue.AddHours(10), DateTime.MinValue.AddHours(13));
+#endif
 
             if (value == DeliveryTimeLimit.OnePMMToFourPM)
+#if NET6_0_OR_GREATER
                 return new DeliveryTimeWindow(new TimeOnly(13, 0), new TimeOnly(16, 0));
+#else
+                return new DeliveryTimeWindow(DateTime.MinValue.AddHours(13), DateTime.MinValue.AddHours(16));
+#endif
 
-            if (value == DeliveryTimeLimit.OnePMMToFourPM)
+            if (value == DeliveryTimeLimit.FourPMToSevenPM)
+#if NET6_0_OR_GREATER
                 return new DeliveryTimeWindow(new TimeOnly(16, 0), new TimeOnly(19, 0));
+#else
+                return new DeliveryTimeWindow(DateTime.MinValue.AddHours(16), DateTime.MinValue.AddHours(19));
+#endif
 
             return new();
         }

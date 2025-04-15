@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 
 namespace Couriers.Speedex
 {
@@ -39,7 +40,12 @@ namespace Couriers.Speedex
         /// <param name="returnMultipleVouchers">The flag indicating whether a single merged PDF file will be returned or one PDF file per consignment will be returned</param>
         public ConsignmentPdfRequestModel(IEnumerable<string> voucherIds, PaperSize paperSize, bool returnMultipleVouchers) : base()
         {
+#if NET6_0_OR_GREATER
             ArgumentNullException.ThrowIfNull(voucherIds);
+#else
+            if (voucherIds is null)
+                throw new ArgumentNullException(nameof(voucherIds));
+#endif
 
             var voucherCount = voucherIds.Count();
 
@@ -54,6 +60,24 @@ namespace Couriers.Speedex
             ReturnMultipleVouchers = returnMultipleVouchers;
 
             VoucherIds = voucherIds;
+        }
+
+        /// <summary>
+        /// Default constructor
+        /// </summary>
+        /// <param name="voucherId">The voucher id</param>
+        /// <param name="paperSize">The paper size</param>
+        /// <param name="returnMultipleVouchers">The flag indicating whether a single merged PDF file will be returned or one PDF file per consignment will be returned</param>
+        public ConsignmentPdfRequestModel(string voucherId, PaperSize paperSize, bool returnMultipleVouchers) : this(
+
+#if NET8_0_OR_GREATER
+            [voucherId]
+#else
+            new string[] { voucherId }
+#endif
+            , paperSize, returnMultipleVouchers)
+        {
+
         }
 
         #endregion

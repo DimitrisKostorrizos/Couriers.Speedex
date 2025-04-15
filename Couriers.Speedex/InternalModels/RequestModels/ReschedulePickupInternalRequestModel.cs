@@ -67,7 +67,12 @@ namespace Couriers.Speedex
         /// <returns></returns>
         public static ReschedulePickupInternalRequestModel FromRequestModel([NotNull] ReschedulePickupRequestModel model)
         {
+#if NET6_0_OR_GREATER
             ArgumentNullException.ThrowIfNull(model);
+#else
+            if (model is null)
+                throw new ArgumentNullException(nameof(model));
+#endif
 
             // Initialize the internal model
             var internalModel = new ReschedulePickupInternalRequestModel()

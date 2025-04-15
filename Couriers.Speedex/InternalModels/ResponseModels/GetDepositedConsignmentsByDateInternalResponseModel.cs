@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Xml.Serialization;
@@ -56,7 +57,14 @@ namespace Couriers.Speedex
         /// Creates and return the <see cref="IEnumerable{T}"/> from the current object
         /// </summary>
         /// <returns></returns>
-        public IEnumerable<DepositedConsignmentResponseModel> ToResponseModel() => Result.Results.Select(x => x.ToResponseModel()).ToArray();
+        public IEnumerable<DepositedConsignmentResponseModel> ToResponseModel()
+        {
+#if NET8_0_OR_GREATER
+            return [.. Result.Results.Select(x => x.ToResponseModel())];
+#else
+            return Result.Results.Select(x => x.ToResponseModel()).ToArray();
+#endif
+        }
 
         #endregion
     }
@@ -76,12 +84,21 @@ namespace Couriers.Speedex
         [XmlElement("Message")]
         public string Message { get; set; } = string.Empty;
 
+#if NET8_0_OR_GREATER
         /// <summary>
         /// The results
         /// </summary>
         [XmlArray("Result")]
         [XmlArrayItem("GetDepositedConsignmentsByDateResult")]
         public DepositedConsignmentInternalResponseModel[] Results { get; set; } = [];
+#else
+        /// <summary>
+        /// The results
+        /// </summary>
+        [XmlArray("Result")]
+        [XmlArrayItem("GetDepositedConsignmentsByDateResult")]
+        public DepositedConsignmentInternalResponseModel[] Results { get; set; } = Array.Empty<DepositedConsignmentInternalResponseModel>();
+#endif
 
         /// <summary>
         /// The return code
@@ -115,7 +132,14 @@ namespace Couriers.Speedex
         /// Creates and return the <see cref="IEnumerable{T}"/> from the current object
         /// </summary>
         /// <returns></returns>
-        public IEnumerable<DepositedConsignmentResponseModel> ToResponseModel() => Results.Select(x => x.ToResponseModel()).ToArray();
+        public IEnumerable<DepositedConsignmentResponseModel> ToResponseModel()
+        {
+#if NET8_0_OR_GREATER
+            return [.. Results.Select(x => x.ToResponseModel())];
+#else
+            return Results.Select(x => x.ToResponseModel()).ToArray();
+#endif
+        }
 
         #endregion
     }

@@ -41,8 +41,8 @@ namespace Couriers.Speedex
         /// <inheritdoc/>
         /// </summary>
         /// <param name="content">The content</param>
-        /// <param name="mediaType">The media type</param>
-        public TypedStringContent(string content, MediaTypeHeaderValue mediaType) : base(content, mediaType)
+        /// <param name="encoding">The encoding</param>
+        public TypedStringContent(string content, Encoding? encoding) : base(content, encoding)
         {
 
         }
@@ -52,7 +52,19 @@ namespace Couriers.Speedex
         /// </summary>
         /// <param name="content">The content</param>
         /// <param name="encoding">The encoding</param>
-        public TypedStringContent(string content, Encoding? encoding) : base(content, encoding)
+        /// <param name="mediaType">The media type</param>
+        public TypedStringContent(string content, Encoding? encoding, string mediaType) : base(content, encoding, mediaType)
+        {
+
+        }
+#if NET7_0_OR_GREATER
+
+        /// <summary>
+        /// <inheritdoc/>
+        /// </summary>
+        /// <param name="content">The content</param>
+        /// <param name="mediaType">The media type</param>
+        public TypedStringContent(string content, MediaTypeHeaderValue mediaType) : base(content, mediaType)
         {
 
         }
@@ -68,17 +80,7 @@ namespace Couriers.Speedex
 
         }
 
-        /// <summary>
-        /// <inheritdoc/>
-        /// </summary>
-        /// <param name="content">The content</param>
-        /// <param name="encoding">The encoding</param>
-        /// <param name="mediaType">The media type</param>
-        public TypedStringContent(string content, Encoding? encoding, string mediaType) : base(content, encoding, mediaType)
-        {
-
-        }
-
+#endif
         #endregion
     }
 
@@ -116,8 +118,8 @@ namespace Couriers.Speedex
         /// <inheritdoc/>
         /// </summary>
         /// <param name="content">The content</param>
-        /// <param name="mediaType">The media type</param>
-        protected TypedStringContent(string content, MediaTypeHeaderValue mediaType) : base(content, mediaType)
+        /// <param name="encoding">The encoding</param>
+        protected TypedStringContent(string content, Encoding? encoding) : base(content, encoding)
         {
 
         }
@@ -127,7 +129,19 @@ namespace Couriers.Speedex
         /// </summary>
         /// <param name="content">The content</param>
         /// <param name="encoding">The encoding</param>
-        protected TypedStringContent(string content, Encoding? encoding) : base(content, encoding)
+        /// <param name="mediaType">The media type</param>
+        protected TypedStringContent(string content, Encoding? encoding, string mediaType) : base(content, encoding, mediaType)
+        {
+
+        }
+#if NET7_0_OR_GREATER
+
+        /// <summary>
+        /// <inheritdoc/>
+        /// </summary>
+        /// <param name="content">The content</param>
+        /// <param name="mediaType">The media type</param>
+        protected TypedStringContent(string content, MediaTypeHeaderValue mediaType) : base(content, mediaType)
         {
 
         }
@@ -143,17 +157,7 @@ namespace Couriers.Speedex
 
         }
 
-        /// <summary>
-        /// <inheritdoc/>
-        /// </summary>
-        /// <param name="content">The content</param>
-        /// <param name="encoding">The encoding</param>
-        /// <param name="mediaType">The media type</param>
-        protected TypedStringContent(string content, Encoding? encoding, string mediaType) : base(content, encoding, mediaType)
-        {
-
-        }
-
+#endif
         #endregion
     }
 }

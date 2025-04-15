@@ -1,4 +1,5 @@
-﻿using System.ComponentModel;
+﻿using System;
+using System.ComponentModel;
 using System.Xml.Serialization;
 
 namespace Couriers.Speedex
@@ -18,11 +19,19 @@ namespace Couriers.Speedex
         [XmlElement("Message")]
         public string Message { get; set; } = string.Empty;
 
+#if NET8_0_OR_GREATER
         /// <summary>
         /// The result
         /// </summary>
         [XmlArray("Result")]
         public TArrayResult[] Result { get; set; } = [];
+#else
+        /// <summary>
+        /// The result
+        /// </summary>
+        [XmlArray("Result")]
+        public TArrayResult[] Result { get; set; } = Array.Empty<TArrayResult>();
+#endif
 
         /// <summary>
         /// The return code

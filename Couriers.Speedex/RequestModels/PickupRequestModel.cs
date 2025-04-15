@@ -26,10 +26,18 @@ namespace Couriers.Speedex
         /// </summary>
         public IEnumerable<string> ConsignmentIds { get; }
 
+
+#if NET5_0
+        /// <summary>
+        /// The requested date of the pickup
+        /// </summary>
+        public DateTime PickupDate { get; }
+#else
         /// <summary>
         /// The requested date of the pickup
         /// </summary>
         public DateOnly PickupDate { get; }
+#endif
 
         /// <summary>
         /// The delivery time
@@ -60,9 +68,20 @@ namespace Couriers.Speedex
         /// <param name="consignmentIds">The ids for the connected master consignments</param>
         /// <param name="pickupDate">The date for the pickup</param>
         /// <param name="deliveryTime">The delivery time frame</param>
-        public PickupRequestModel(IEnumerable<string> consignmentIds, DateOnly pickupDate, DeliveryTimeLimit deliveryTime) : base()
+        public PickupRequestModel(IEnumerable<string> consignmentIds,
+#if NET5_0
+            DateTime pickupDate,
+#else
+            DateOnly pickupDate,
+#endif
+            DeliveryTimeLimit deliveryTime) : base()
         {
+#if NET6_0_OR_GREATER
             ArgumentNullException.ThrowIfNull(consignmentIds);
+#else
+            if (consignmentIds is null)
+                throw new ArgumentNullException(nameof(consignmentIds));
+#endif
 
             var consignmentCount = consignmentIds.Count();
 
@@ -85,12 +104,29 @@ namespace Couriers.Speedex
         /// <param name="consignmentId">The id for the connected master consignment</param>
         /// <param name="pickupDate">The date for the pickup</param>
         /// <param name="deliveryTime">The delivery time frame</param>
-        public PickupRequestModel(string consignmentId, DateOnly pickupDate, DeliveryTimeLimit deliveryTime) : this([consignmentId], pickupDate, deliveryTime)
+        public PickupRequestModel(string consignmentId,
+#if NET5_0
+            DateTime pickupDate,
+#else
+            DateOnly pickupDate,
+#endif
+            DeliveryTimeLimit deliveryTime) : this(
+#if NET8_0_OR_GREATER
+                [consignmentId],
+#else
+                new string[] { consignmentId },
+#endif
+                pickupDate, deliveryTime)
         {
+#if NET8_0_OR_GREATER
             ArgumentException.ThrowIfNullOrWhiteSpace(consignmentId);
+#else
+            if (string.IsNullOrWhiteSpace(consignmentId))
+                throw new ArgumentException($"'{nameof(consignmentId)}' cannot be null or whitespace.", nameof(consignmentId));
+#endif
         }
 
-        #endregion
+#endregion
 
         #region Public Methods
 

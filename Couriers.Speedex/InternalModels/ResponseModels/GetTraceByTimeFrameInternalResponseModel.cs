@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Xml.Serialization;
@@ -14,12 +15,21 @@ namespace Couriers.Speedex
     {
         #region Public Properties
 
+#if NET8_0_OR_GREATER
         /// <summary>
         /// The checkpoints
         /// </summary>
         [XmlArray("checkpoints")]
         [XmlArrayItem("Checkpoint")]
         public CheckpointInternalResponseModel[] Checkpoints { get; set; } = [];
+#else
+        /// <summary>
+        /// The checkpoints
+        /// </summary>
+        [XmlArray("checkpoints")]
+        [XmlArrayItem("Checkpoint")]
+        public CheckpointInternalResponseModel[] Checkpoints { get; set; } = Array.Empty<CheckpointInternalResponseModel>();
+#endif
 
         #endregion
 
@@ -47,7 +57,14 @@ namespace Couriers.Speedex
         /// Creates and return the <see cref="IEnumerable{T}"/> from the current object
         /// </summary>
         /// <returns></returns>
-        public IEnumerable<CheckpointResponseModel> ToResponseModel() => Checkpoints.Select(x => x.ToResponseModel()).ToArray();
+        public IEnumerable<CheckpointResponseModel> ToResponseModel()
+        {
+#if NET8_0_OR_GREATER
+            return [.. Checkpoints.Select(x => x.ToResponseModel())];
+#else
+            return Checkpoints.Select(x => x.ToResponseModel()).ToArray();
+#endif
+        }
 
         #endregion
     }

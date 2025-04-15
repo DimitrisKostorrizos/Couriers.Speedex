@@ -30,9 +30,17 @@ namespace Couriers.Speedex
         /// <param name="base64String">The base64 representation of the PDF voucher</param>
         public ConsignmentPdfResponseModel(string voucherId, string base64String) : base()
         {
+#if NET8_0_OR_GREATER
             ArgumentException.ThrowIfNullOrWhiteSpace(voucherId);
 
             ArgumentException.ThrowIfNullOrWhiteSpace(base64String);
+#else
+            if (string.IsNullOrWhiteSpace(voucherId))
+                throw new ArgumentException($"'{nameof(voucherId)}' cannot be null or whitespace.", nameof(voucherId));
+
+            if (string.IsNullOrWhiteSpace(base64String))
+                throw new ArgumentException($"'{nameof(base64String)}' cannot be null or whitespace.", nameof(base64String));
+#endif
 
             VoucherId = voucherId;
 

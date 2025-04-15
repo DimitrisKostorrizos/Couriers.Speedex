@@ -55,7 +55,12 @@ namespace Couriers.Speedex
         /// <returns></returns>
         public static ClientReferencesInternalRequestModel FromRequestModel([NotNull] ClientReferencesRequestModel model)
         {
+#if NET6_0_OR_GREATER
             ArgumentNullException.ThrowIfNull(model);
+#else
+            if (model is null)
+                throw new ArgumentNullException(nameof(model));
+#endif
 
             return new()
             {

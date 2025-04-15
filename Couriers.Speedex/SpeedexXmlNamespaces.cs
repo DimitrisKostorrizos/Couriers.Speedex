@@ -1,4 +1,7 @@
-﻿using System.Xml.Serialization;
+﻿using System.Collections.Generic;
+using System.Linq;
+using System.Xml;
+using System.Xml.Serialization;
 
 namespace Couriers.Speedex
 {
@@ -7,6 +10,7 @@ namespace Couriers.Speedex
     /// </summary>
     public static class SpeedexXmlNamespaces
     {
+#if NET8_0_OR_GREATER
         /// <summary>
         /// The Xml namespaces
         /// </summary>
@@ -17,6 +21,18 @@ namespace Couriers.Speedex
             new(XsiPrefix, XsiNamespace),
             new(XsdPrefix, XsdNamespace)
         ]);
+#else
+        /// <summary>
+        /// The Xml namespaces
+        /// </summary>
+        public static readonly XmlSerializerNamespaces SpeedexNamespaces = new(new XmlQualifiedName[]
+        {
+            new(DefaultPrefix, DefaultNamespace),
+            new(SoapPrefix, SoapNamespace),
+            new(XsiPrefix, XsiNamespace),
+            new(XsdPrefix, XsdNamespace)
+        });
+#endif
 
         #region Prefixes
 

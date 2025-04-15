@@ -20,12 +20,21 @@ namespace Couriers.Speedex
         [XmlElement("Number")]
         public string Id { get; set; } = string.Empty;
 
+#if NET8_0_OR_GREATER
         /// <summary>
         /// The related consignment ids
         /// </summary>
         [XmlArray("ConsignmentNumbers")]
         [XmlArrayItem("string")]
         public string[] ConsignmentIds { get; set; } = [];
+#else
+        /// <summary>
+        /// The related consignment ids
+        /// </summary>
+        [XmlArray("ConsignmentNumbers")]
+        [XmlArrayItem("string")]
+        public string[] ConsignmentIds { get; set; } = Array.Empty<string>();
+#endif
 
         /// <summary>
         /// The checkpoint code
@@ -143,10 +152,18 @@ namespace Couriers.Speedex
                 PostCode = PostCode
             };
 
+#if NET7_0_OR_GREATER
             if (DateTime.TryParse(PickupTimeTo, CultureInfo.InvariantCulture, out var result))
+#else
+            if (DateTime.TryParse(PickupTimeTo, CultureInfo.InvariantCulture, DateTimeStyles.None, out var result))
+#endif
                 model.PickupTimeTo = result;
 
+#if NET7_0_OR_GREATER
             if (DateTime.TryParse(PickupTimeFrom, CultureInfo.InvariantCulture, out result))
+#else
+            if (DateTime.TryParse(PickupTimeFrom, CultureInfo.InvariantCulture, DateTimeStyles.None, out result))
+#endif
                 model.PickupTimeFrom = result;
 
             return model;

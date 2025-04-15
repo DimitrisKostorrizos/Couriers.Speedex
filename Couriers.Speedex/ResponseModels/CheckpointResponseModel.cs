@@ -85,11 +85,22 @@ namespace Couriers.Speedex
         public CheckpointResponseModel(string branchDepot, string branchId, DateTime checkpointDate, string? customerComments, string? firstCustomerReference,
             string? secondCustomerReference, string? thirdCustomerReference, string recipientName, string statusCode, string statusDescription, string voucherId) : base()
         {
+#if NET8_0_OR_GREATER
             ArgumentException.ThrowIfNullOrWhiteSpace(statusCode);
 
             ArgumentException.ThrowIfNullOrWhiteSpace(statusDescription);
 
             ArgumentException.ThrowIfNullOrWhiteSpace(voucherId);
+#else
+            if (string.IsNullOrWhiteSpace(statusCode))
+                throw new ArgumentException($"'{nameof(statusCode)}' cannot be null or whitespace.", nameof(statusCode));
+
+            if (string.IsNullOrWhiteSpace(statusDescription))
+                throw new ArgumentException($"'{nameof(statusDescription)}' cannot be null or whitespace.", nameof(statusDescription));
+
+            if (string.IsNullOrWhiteSpace(voucherId))
+                throw new ArgumentException($"'{nameof(voucherId)}' cannot be null or whitespace.", nameof(voucherId));
+#endif
 
             BranchDepot = branchDepot;
 

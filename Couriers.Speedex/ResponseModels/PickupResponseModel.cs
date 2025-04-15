@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Xml.Serialization;
 
 namespace Couriers.Speedex
 {
@@ -15,10 +17,17 @@ namespace Couriers.Speedex
         /// </summary>
         public string Id { get; set; } = string.Empty;
 
+#if NET8_0_OR_GREATER
         /// <summary>
         /// The related consignment ids
         /// </summary>
         public IEnumerable<string> ConsignmentIds { get; set; } = [];
+#else
+        /// <summary>
+        /// The related consignment ids
+        /// </summary>
+        public IEnumerable<string> ConsignmentIds { get; set; } = Enumerable.Empty<string>();
+#endif
 
         /// <summary>
         /// The checkpoint code

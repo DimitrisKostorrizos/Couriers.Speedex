@@ -2,6 +2,7 @@
 using System.ComponentModel;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
+using System.Xml.Linq;
 using System.Xml.Serialization;
 
 namespace Couriers.Speedex
@@ -15,13 +16,23 @@ namespace Couriers.Speedex
     {
         #region Public Properties
 
+#if NET8_0_OR_GREATER
         /// <summary>
         /// The ids for the connected master consignments
-        /// NOTE: The maximum count is 5 master consignment numbers
+        /// NOTE: The maximum count is <see cref="SpeedexConstants.MaximumNumberOfConsignmentsForPickup"/> master consignment numbers
         /// </summary>
         [XmlArray("consignmentNumbers")]
         [XmlArrayItem("string")]
         public string[] ConsignmentIds { get; set; } = [];
+#else
+        /// <summary>
+        /// The ids for the connected master consignments
+        /// NOTE: The maximum count is <see cref="SpeedexConstants.MaximumNumberOfConsignmentsForPickup"/> master consignment numbers
+        /// </summary>
+        [XmlArray("consignmentNumbers")]
+        [XmlArrayItem("string")]
+        public string[] ConsignmentIds { get; set; } = Array.Empty<string>();
+#endif
 
         /// <summary>
         /// The comments
@@ -70,13 +81,26 @@ namespace Couriers.Speedex
         /// <returns></returns>
         public static PickupInternalRequestModel FromRequestModel([NotNull] PickupRequestModel model)
         {
+#if NET6_0_OR_GREATER
             ArgumentNullException.ThrowIfNull(model);
+#else
+            if (model is null)
+                throw new ArgumentNullException(nameof(model));
+#endif
 
             var internalModel = new PickupInternalRequestModel()
             {
                 Comments = model.Comments,
+#if NET8_0_OR_GREATER
+                ConsignmentIds = [.. model.ConsignmentIds],
+#else
                 ConsignmentIds = model.ConsignmentIds.ToArray(),
+#endif
+#if NET6_0_OR_GREATER
                 PickupDate = model.PickupDate.ToDateTime(TimeOnly.MinValue)
+#else
+                PickupDate = model.PickupDate
+#endif
             };
 
             // Get the delivery times
@@ -85,12 +109,20 @@ namespace Couriers.Speedex
             var startingPickupTime = default(DateTime?);
 
             if (deliveryTimeWindow.StartingTime.HasValue)
+#if NET6_0_OR_GREATER
                 startingPickupTime = model.PickupDate.ToDateTime(deliveryTimeWindow.StartingTime.Value);
+#else
+                startingPickupTime = model.PickupDate.Date.AddHours(deliveryTimeWindow.StartingTime.Value.Hour);
+#endif
 
             var endingPickupTime = default(DateTime?);
 
             if (deliveryTimeWindow.EndingTime.HasValue)
+#if NET6_0_OR_GREATER
                 endingPickupTime = model.PickupDate.ToDateTime(deliveryTimeWindow.EndingTime.Value);
+#else
+                endingPickupTime = model.PickupDate.Date.AddHours(deliveryTimeWindow.EndingTime.Value.Hour);
+#endif
 
             // Set the starting delivery time
             internalModel.PickupHourFrom = startingPickupTime;
@@ -113,6 +145,6 @@ namespace Couriers.Speedex
         /// <returns></returns>
         public bool ShouldSerializePickupHourFrom() => PickupHourFrom.HasValue;
 
-        #endregion
+#endregion
     }
 }

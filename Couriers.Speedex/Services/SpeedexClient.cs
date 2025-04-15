@@ -4,6 +4,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
+using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -20,12 +21,14 @@ namespace Couriers.Speedex
         /// The media type header value
         /// </summary>
         public const string MediaHeader = "text/xml; charset=utf-8.";
+#if NET7_0_OR_GREATER
 
         /// <summary>
         /// The media type header
         /// </summary>
         private static readonly MediaTypeHeaderValue _mediaTypeHeaderValue = MediaTypeHeaderValue.Parse(MediaHeader);
 
+#endif
         /// <summary>
         /// The maximum expiration time for the <see cref="_sessionId"/>
         /// </summary>
@@ -87,9 +90,17 @@ namespace Couriers.Speedex
         /// <param name="shouldDispose">A flag indicating whether the current instance should be disposed</param>
         public SpeedexClient([NotNull] SpeedexCredentials credentials, [NotNull] HttpClient httpClient, bool useTestAPI = false, bool shouldDispose = true) : base()
         {
+#if NET6_0_OR_GREATER
             ArgumentNullException.ThrowIfNull(credentials);
 
             ArgumentNullException.ThrowIfNull(httpClient);
+#else
+            if (credentials is null)
+                throw new ArgumentNullException(nameof(credentials));
+
+            if (httpClient is null)
+                throw new ArgumentNullException(nameof(httpClient));
+#endif
 
             Credentials = credentials;
 
@@ -125,7 +136,7 @@ namespace Couriers.Speedex
             var requestModel = CredentialsInternalRequestModel.FromRequestModel(Credentials);
 
             // Get the response
-            var response = await BaseSoapEnvelopeRequest<SessionIdInternalResponseModel, CredentialsInternalRequestModel>(requestModel, cancellationToken).ConfigureAwait(false);
+            var response = await ExecuteSoapEnvelopeRequest<SessionIdInternalResponseModel, CredentialsInternalRequestModel>(requestModel, cancellationToken).ConfigureAwait(false);
 
             // If not successful...
             if (!response.IsSuccessful)
@@ -147,9 +158,13 @@ namespace Couriers.Speedex
         /// <returns></returns>
         public async Task<HttpRequestResult> CancelConsignmentByVoucherIdAsync([NotNull] string voucherId, CancellationToken cancellationToken = default)
         {
+#if NET8_0_OR_GREATER
             ArgumentException.ThrowIfNullOrWhiteSpace(voucherId);
-
-            return await BaseValidatedSOAPEnvelopeRequest<CancelConsignmentByVoucherIdInternalResponseModel, CancelConsignmentByVoucherIdInternalRequestModel>(new CancelConsignmentByVoucherIdInternalRequestModel()
+#else
+            if (string.IsNullOrWhiteSpace(voucherId))
+                throw new ArgumentException($"'{nameof(voucherId)}' cannot be null or whitespace.", nameof(voucherId));
+#endif
+            return await ExecuteValidatedSOAPEnvelopeRequest<CancelConsignmentByVoucherIdInternalResponseModel, CancelConsignmentByVoucherIdInternalRequestModel>(new CancelConsignmentByVoucherIdInternalRequestModel()
             {
                 VoucherId = voucherId
             }, cancellationToken).ConfigureAwait(false);
@@ -164,7 +179,12 @@ namespace Couriers.Speedex
         /// <returns></returns>
         public async Task<HttpRequestResult<IEnumerable<ConsignmentResponseModel>>> CreateConsignmentsAsync([NotNull] IEnumerable<ConsignmentRequestModel> values, CancellationToken cancellationToken = default)
         {
+#if NET6_0_OR_GREATER
             ArgumentNullException.ThrowIfNull(values);
+#else
+            if (values is null)
+                throw new ArgumentNullException(nameof(values));
+#endif
 
             var numberOfItems = values.Count();
 
@@ -176,7 +196,7 @@ namespace Couriers.Speedex
                 throw new InvalidOperationException($"The maximum number of consignments is {SpeedexConstants.MaximumNumberOfConsignments}.");
 
             // Get the response
-            var response = await BaseValidatedSOAPEnvelopeRequest<CreateConsignmentsInternalResponseModel, CreateConsignmentsInternalRequestModel>(CreateConsignmentsInternalRequestModel.FromRequestModel(values, Credentials.AgreementCode, Credentials.CustomerCode), cancellationToken).ConfigureAwait(false);
+            var response = await ExecuteValidatedSOAPEnvelopeRequest<CreateConsignmentsInternalResponseModel, CreateConsignmentsInternalRequestModel>(CreateConsignmentsInternalRequestModel.FromRequestModel(values, Credentials.AgreementCode, Credentials.CustomerCode), cancellationToken).ConfigureAwait(false);
 
             // If not successful...
             if (!response.IsSuccessful)
@@ -202,10 +222,20 @@ namespace Couriers.Speedex
         /// <returns></returns>
         public async Task<HttpRequestResult<ConsignmentResponseModel>> CreateConsignmentAsync([NotNull] ConsignmentRequestModel model, CancellationToken cancellationToken = default)
         {
+#if NET6_0_OR_GREATER
             ArgumentNullException.ThrowIfNull(model);
+#else
+            if (model is null)
+                throw new ArgumentNullException(nameof(model));
+#endif
 
+#if NET8_0_OR_GREATER
             // Get the response
             var response = await CreateConsignmentsAsync([model], cancellationToken).ConfigureAwait(false);
+#else
+            // Get the response
+            var response = await CreateConsignmentsAsync(new ConsignmentRequestModel[] { model }, cancellationToken).ConfigureAwait(false);
+#endif
 
             // If not successful...
             if (!response.IsSuccessful)
@@ -224,12 +254,17 @@ namespace Couriers.Speedex
         /// <returns></returns>
         public async Task<HttpRequestResult<IEnumerable<ConsignmentPdfResponseModel>>> GetConsignmentPdfsAsync([NotNull] ConsignmentPdfRequestModel value, CancellationToken cancellationToken = default)
         {
+#if NET6_0_OR_GREATER
             ArgumentNullException.ThrowIfNull(value);
+#else
+            if (value is null)
+                throw new ArgumentNullException(nameof(value));
+#endif
 
             var requestModel = ConsignmentPdfInternalRequestModel.FromRequestModel(value);
 
             // Get the response
-            var response = await BaseValidatedSOAPEnvelopeRequest<GetConsignmentPdfInternalResponseModel, ConsignmentPdfInternalRequestModel>(requestModel, cancellationToken).ConfigureAwait(false);
+            var response = await ExecuteValidatedSOAPEnvelopeRequest<GetConsignmentPdfInternalResponseModel, ConsignmentPdfInternalRequestModel>(requestModel, cancellationToken).ConfigureAwait(false);
 
             // If not successful...
             if (!response.IsSuccessful)
@@ -250,10 +285,15 @@ namespace Couriers.Speedex
         /// <returns></returns>
         public async Task<HttpRequestResult<string>> GetConsignmentPdfAsync([NotNull] string voucherId, PaperSize paperSize, bool returnMultipleVouchers = false, CancellationToken cancellationToken = default)
         {
+#if NET8_0_OR_GREATER
             ArgumentException.ThrowIfNullOrWhiteSpace(voucherId);
+#else
+            if (string.IsNullOrWhiteSpace(voucherId))
+                throw new ArgumentException($"'{nameof(voucherId)}' cannot be null or whitespace.", nameof(voucherId));
+#endif
 
             // Initialize the model
-            var value = new ConsignmentPdfRequestModel([voucherId], paperSize, returnMultipleVouchers);
+            var value = new ConsignmentPdfRequestModel(voucherId, paperSize, returnMultipleVouchers);
 
             // Get the response
             var response = await GetConsignmentPdfsAsync(value, cancellationToken).ConfigureAwait(false);
@@ -276,7 +316,12 @@ namespace Couriers.Speedex
         /// <returns></returns>
         public async Task<HttpRequestResult<IEnumerable<BranchResponseModel>>> GetBranchesAsync([NotNull] string zipCode, SupportedLanguage language = SupportedLanguage.Greek, CancellationToken cancellationToken = default)
         {
+#if NET8_0_OR_GREATER
             ArgumentException.ThrowIfNullOrWhiteSpace(zipCode);
+#else
+            if (string.IsNullOrWhiteSpace(zipCode))
+                throw new ArgumentException($"'{nameof(zipCode)}' cannot be null or whitespace.", nameof(zipCode));
+#endif
 
             SpeedexHelpers.ThrowIfInvalidZipCode(zipCode);
 
@@ -284,7 +329,7 @@ namespace Couriers.Speedex
             var selectedLanguage = SpeedexHelpers.FromSupportedLanguage(language);
 
             // Get the response
-            var response = await BaseValidatedSOAPEnvelopeRequest<GetBranchesInternalResponseModel, BranchInternalRequestModel>(new BranchInternalRequestModel()
+            var response = await ExecuteValidatedSOAPEnvelopeRequest<GetBranchesInternalResponseModel, BranchInternalRequestModel>(new BranchInternalRequestModel()
             {
                 ZipCode = zipCode,
                 Language = selectedLanguage
@@ -306,10 +351,15 @@ namespace Couriers.Speedex
         /// <returns></returns>
         public async Task<HttpRequestResult<CheckpointResponseModel>> GetLastCheckPointAsync([NotNull] string voucherId, CancellationToken cancellationToken = default)
         {
+#if NET8_0_OR_GREATER
             ArgumentException.ThrowIfNullOrWhiteSpace(voucherId);
+#else
+            if (string.IsNullOrWhiteSpace(voucherId))
+                throw new ArgumentException($"'{nameof(voucherId)}' cannot be null or whitespace.", nameof(voucherId));
+#endif
 
             // Get the response
-            var response = await BaseValidatedSOAPEnvelopeRequest<GetLastCheckpointInternalResponseModel, GetLastCheckpointInternalRequestModel>(new GetLastCheckpointInternalRequestModel()
+            var response = await ExecuteValidatedSOAPEnvelopeRequest<GetLastCheckpointInternalResponseModel, GetLastCheckpointInternalRequestModel>(new GetLastCheckpointInternalRequestModel()
             {
                 VoucherId = voucherId
             }, cancellationToken).ConfigureAwait(false);
@@ -330,10 +380,15 @@ namespace Couriers.Speedex
         /// <returns></returns>
         public async Task<HttpRequestResult<PickupCheckpointResponseModel>> GetLastPickupCheckPointAsync([NotNull] string pickupId, CancellationToken cancellationToken = default)
         {
+#if NET8_0_OR_GREATER
             ArgumentException.ThrowIfNullOrWhiteSpace(pickupId);
+#else
+            if (string.IsNullOrWhiteSpace(pickupId))
+                throw new ArgumentException($"'{nameof(pickupId)}' cannot be null or whitespace.", nameof(pickupId));
+#endif
 
             // Get the response
-            var response = await BaseValidatedSOAPEnvelopeRequest<GetLastPickupCheckpointInternalResponseModel, GetLastPickupCheckpointInternalRequestModel>(new GetLastPickupCheckpointInternalRequestModel()
+            var response = await ExecuteValidatedSOAPEnvelopeRequest<GetLastPickupCheckpointInternalResponseModel, GetLastPickupCheckpointInternalRequestModel>(new GetLastPickupCheckpointInternalRequestModel()
             {
                 PickupId = pickupId
             }, cancellationToken).ConfigureAwait(false);
@@ -354,12 +409,17 @@ namespace Couriers.Speedex
         /// <returns></returns>
         public async Task<HttpRequestResult<IEnumerable<CheckpointResponseModel>>> GetTraceByClientReferencesAsync([NotNull] ClientReferencesRequestModel model, CancellationToken cancellationToken = default)
         {
+#if NET6_0_OR_GREATER
             ArgumentNullException.ThrowIfNull(model);
+#else
+            if (model is null)
+                throw new ArgumentNullException(nameof(model));
+#endif
 
             var requestModel = ClientReferencesInternalRequestModel.FromRequestModel(model);
 
             // Get the response
-            var response = await BaseValidatedSOAPEnvelopeRequest<GetTraceByClientReferencesInternalResponseModel, ClientReferencesInternalRequestModel>(requestModel, cancellationToken).ConfigureAwait(false);
+            var response = await ExecuteValidatedSOAPEnvelopeRequest<GetTraceByClientReferencesInternalResponseModel, ClientReferencesInternalRequestModel>(requestModel, cancellationToken).ConfigureAwait(false);
 
             // If not successful...
             if (!response.IsSuccessful)
@@ -382,7 +442,7 @@ namespace Couriers.Speedex
                 throw new ArgumentOutOfRangeException(nameof(dateFrom), $"The {nameof(dateFrom)} has to be before {nameof(dateTo)}.");
 
             // Get the response
-            var response = await BaseValidatedSOAPEnvelopeRequest<GetTraceByTimeFrameInternalResponseModel, GetCheckpointsByTimeFrameInternalRequestModel>(new GetCheckpointsByTimeFrameInternalRequestModel()
+            var response = await ExecuteValidatedSOAPEnvelopeRequest<GetTraceByTimeFrameInternalResponseModel, GetCheckpointsByTimeFrameInternalRequestModel>(new GetCheckpointsByTimeFrameInternalRequestModel()
             {
                 DateFrom = dateFrom,
                 DateTo = dateTo
@@ -405,10 +465,15 @@ namespace Couriers.Speedex
         /// <returns></returns>
         public async Task<HttpRequestResult<IEnumerable<CheckpointResponseModel>>> GetTraceByVoucherIdAsync([NotNull] string voucherId, CancellationToken cancellationToken = default)
         {
+#if NET8_0_OR_GREATER
             ArgumentException.ThrowIfNullOrWhiteSpace(voucherId);
+#else
+            if (string.IsNullOrWhiteSpace(voucherId))
+                throw new ArgumentException($"'{nameof(voucherId)}' cannot be null or whitespace.", nameof(voucherId));
+#endif
 
             // Get the response
-            var response = await BaseValidatedSOAPEnvelopeRequest<GetTraceByVoucherIdInternalResponseModel, GetTraceByVoucherIdInternalRequestModel>(new GetTraceByVoucherIdInternalRequestModel()
+            var response = await ExecuteValidatedSOAPEnvelopeRequest<GetTraceByVoucherIdInternalResponseModel, GetTraceByVoucherIdInternalRequestModel>(new GetTraceByVoucherIdInternalRequestModel()
             {
                 VoucherId = voucherId
             }, cancellationToken).ConfigureAwait(false);
@@ -430,9 +495,14 @@ namespace Couriers.Speedex
         /// <returns></returns>
         public async Task<HttpRequestResult> CancelPickupByIdAsync([NotNull] string pickupId, CancellationToken cancellationToken = default)
         {
+#if NET8_0_OR_GREATER
             ArgumentException.ThrowIfNullOrWhiteSpace(pickupId);
+#else
+            if (string.IsNullOrWhiteSpace(pickupId))
+                throw new ArgumentException($"'{nameof(pickupId)}' cannot be null or whitespace.", nameof(pickupId));
+#endif
 
-            return await BaseValidatedSOAPEnvelopeRequest<CancelPickupInternalResponseModel, CancelPickupByIdInternalRequestModel>(new CancelPickupByIdInternalRequestModel()
+            return await ExecuteValidatedSOAPEnvelopeRequest<CancelPickupInternalResponseModel, CancelPickupByIdInternalRequestModel>(new CancelPickupByIdInternalRequestModel()
             {
                 PickupNumber = pickupId
             }, cancellationToken).ConfigureAwait(false);
@@ -446,12 +516,17 @@ namespace Couriers.Speedex
         /// <returns></returns>
         public async Task<HttpRequestResult<string>> CreatePickupAsync([NotNull] PickupRequestModel model, CancellationToken cancellationToken = default)
         {
+#if NET6_0_OR_GREATER
             ArgumentNullException.ThrowIfNull(model);
+#else
+            if (model is null)
+                throw new ArgumentNullException(nameof(model));
+#endif
 
             var requestModel = PickupInternalRequestModel.FromRequestModel(model);
 
             // Get the response
-            var response = await BaseValidatedSOAPEnvelopeRequest<CreatePickupInternalResponseModel, PickupInternalRequestModel>(requestModel, cancellationToken).ConfigureAwait(false);
+            var response = await ExecuteValidatedSOAPEnvelopeRequest<CreatePickupInternalResponseModel, PickupInternalRequestModel>(requestModel, cancellationToken).ConfigureAwait(false);
 
             // If not successful...
             if (!response.IsSuccessful)
@@ -475,7 +550,7 @@ namespace Couriers.Speedex
                 throw new ArgumentOutOfRangeException(nameof(dateFrom), $"The {nameof(dateFrom)} has to be before {nameof(dateTo)}.");
 
             // Get the response
-            var response = await BaseValidatedSOAPEnvelopeRequest<GetConsignmentsByDateInternalResponseModel, GetConsignmentsByDateRangeInternalRequestModel>(new GetConsignmentsByDateRangeInternalRequestModel()
+            var response = await ExecuteValidatedSOAPEnvelopeRequest<GetConsignmentsByDateInternalResponseModel, GetConsignmentsByDateRangeInternalRequestModel>(new GetConsignmentsByDateRangeInternalRequestModel()
             {
                 DateFrom = dateFrom,
                 DateTo = dateTo
@@ -504,7 +579,7 @@ namespace Couriers.Speedex
                 throw new ArgumentOutOfRangeException(nameof(dateFrom), $"The {nameof(dateFrom)} has to be before {nameof(dateTo)}.");
 
             // Get the response
-            var response = await BaseValidatedSOAPEnvelopeRequest<GetDepositedConsignmentsByDateInternalResponseModel, GetDepositedConsignmentsByDateRangeInternalRequestModel>(new GetDepositedConsignmentsByDateRangeInternalRequestModel()
+            var response = await ExecuteValidatedSOAPEnvelopeRequest<GetDepositedConsignmentsByDateInternalResponseModel, GetDepositedConsignmentsByDateRangeInternalRequestModel>(new GetDepositedConsignmentsByDateRangeInternalRequestModel()
             {
                 DateFrom = dateFrom,
                 DateTo = dateTo
@@ -527,10 +602,15 @@ namespace Couriers.Speedex
         /// <returns></returns>
         public async Task<HttpRequestResult<PickupResponseModel>> GetPickupByIdAsync([NotNull] string pickupId, CancellationToken cancellationToken = default)
         {
+#if NET8_0_OR_GREATER
             ArgumentException.ThrowIfNullOrWhiteSpace(pickupId);
+#else
+            if (string.IsNullOrWhiteSpace(pickupId))
+                throw new ArgumentException($"'{nameof(pickupId)}' cannot be null or whitespace.", nameof(pickupId));
+#endif
 
             // Get the response
-            var response = await BaseValidatedSOAPEnvelopeRequest<GetPickupInternalResponseModel, GetPickupByIdInternalRequestModel>(new GetPickupByIdInternalRequestModel()
+            var response = await ExecuteValidatedSOAPEnvelopeRequest<GetPickupInternalResponseModel, GetPickupByIdInternalRequestModel>(new GetPickupByIdInternalRequestModel()
             {
                 PickupNumber = pickupId
             }, cancellationToken).ConfigureAwait(false);
@@ -554,7 +634,7 @@ namespace Couriers.Speedex
         {
             var requestModel = ReschedulePickupInternalRequestModel.FromRequestModel(model);
 
-            return await BaseValidatedSOAPEnvelopeRequest<ReschedulePickupInternalResponseModel, ReschedulePickupInternalRequestModel>(requestModel, cancellationToken).ConfigureAwait(false);
+            return await ExecuteValidatedSOAPEnvelopeRequest<ReschedulePickupInternalResponseModel, ReschedulePickupInternalRequestModel>(requestModel, cancellationToken).ConfigureAwait(false);
         }
 
         /// <summary>
@@ -637,7 +717,7 @@ namespace Couriers.Speedex
         /// <param name="requestModel">The request model</param>
         /// <param name="cancellationToken">The cancellation token</param>
         /// <returns></returns>
-        private async Task<HttpRequestResult<TResponse>> BaseValidatedSOAPEnvelopeRequest<TResponse, TRequest>(TRequest requestModel, CancellationToken cancellationToken = default)
+        private async Task<HttpRequestResult<TResponse>> ExecuteValidatedSOAPEnvelopeRequest<TResponse, TRequest>(TRequest requestModel, CancellationToken cancellationToken = default)
             where TResponse : class, ISoapReturnMessageModel, new()
             where TRequest : SessionIdInternalRequestModel, new()
         {
@@ -650,7 +730,7 @@ namespace Couriers.Speedex
             requestModel.SessionId = _sessionId;
 
             // Get the response
-            var response = await BaseSoapEnvelopeRequest<TResponse, TRequest>(requestModel, cancellationToken).ConfigureAwait(false);
+            var response = await ExecuteSoapEnvelopeRequest<TResponse, TRequest>(requestModel, cancellationToken).ConfigureAwait(false);
 
             // If the request has failed, due to an expired session...
             if (response.IsUnauthorizedRequest)
@@ -661,7 +741,7 @@ namespace Couriers.Speedex
                 // Set the session id
                 requestModel.SessionId = _sessionId;
 
-                response = await BaseSoapEnvelopeRequest<TResponse, TRequest>(requestModel, cancellationToken).ConfigureAwait(false);
+                response = await ExecuteSoapEnvelopeRequest<TResponse, TRequest>(requestModel, cancellationToken).ConfigureAwait(false);
             }
 
             return response;
@@ -676,7 +756,7 @@ namespace Couriers.Speedex
         /// <param name="requestModel">The request model</param>
         /// <param name="cancellationToken">The cancellation token</param>
         /// <returns></returns>
-        private async Task<InternalHttpRequestResult<TResponse>> BaseSoapEnvelopeRequest<TResponse, TRequest>(TRequest requestModel, CancellationToken cancellationToken = default)
+        private async Task<InternalHttpRequestResult<TResponse>> ExecuteSoapEnvelopeRequest<TResponse, TRequest>(TRequest requestModel, CancellationToken cancellationToken = default)
             where TResponse : class, ISoapReturnMessageModel, new()
             where TRequest : class, new()
         {
@@ -699,7 +779,11 @@ namespace Couriers.Speedex
 
                 serializedRequestPayload = XmlHelpers.ToXml(model, SpeedexXmlNamespaces.SpeedexNamespaces);
 
+#if NET7_0_OR_GREATER
                 using var httpRequest = new TypedStringContent<TRequest, TResponse>(serializedRequestPayload, _mediaTypeHeaderValue);
+#else
+                using var httpRequest = new TypedStringContent<TRequest, TResponse>(serializedRequestPayload, Encoding.UTF8, MediaHeader);
+#endif
 
                 // Get the response
                 using var response = await _httpClient.PostAsync(Routes.GetBaseAddress(ShouldAccessTestAPI), httpRequest, cancellationToken).ConfigureAwait(false);
@@ -738,7 +822,7 @@ namespace Couriers.Speedex
 
         }
 
-        #endregion
+#endregion
 
         #region Private Classes
 

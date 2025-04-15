@@ -66,6 +66,7 @@ namespace Couriers.Speedex
         /// <param name="longitude">The longitude of the depot</param>
         public BranchResponseModel(string address, string city, string id, string name, string telephoneNumber, string zipCode, string latitude, string longitude) : base()
         {
+#if NET8_0_OR_GREATER
             ArgumentException.ThrowIfNullOrWhiteSpace(address);
 
             ArgumentException.ThrowIfNullOrWhiteSpace(city);
@@ -81,6 +82,31 @@ namespace Couriers.Speedex
             ArgumentException.ThrowIfNullOrWhiteSpace(latitude);
 
             ArgumentException.ThrowIfNullOrWhiteSpace(longitude);
+#else
+            if (string.IsNullOrWhiteSpace(address))
+                throw new ArgumentException($"'{nameof(address)}' cannot be null or whitespace.", nameof(address));
+
+            if (string.IsNullOrWhiteSpace(city))
+                throw new ArgumentException($"'{nameof(city)}' cannot be null or whitespace.", nameof(city));
+
+            if (string.IsNullOrWhiteSpace(id))
+                throw new ArgumentException($"'{nameof(id)}' cannot be null or whitespace.", nameof(id));
+
+            if (string.IsNullOrWhiteSpace(name))
+                throw new ArgumentException($"'{nameof(name)}' cannot be null or whitespace.", nameof(name));
+
+            if (string.IsNullOrWhiteSpace(telephoneNumber))
+                throw new ArgumentException($"'{nameof(telephoneNumber)}' cannot be null or whitespace.", nameof(telephoneNumber));
+
+            if (string.IsNullOrWhiteSpace(zipCode))
+                throw new ArgumentException($"'{nameof(zipCode)}' cannot be null or whitespace.", nameof(zipCode));
+
+            if (string.IsNullOrWhiteSpace(latitude))
+                throw new ArgumentException($"'{nameof(latitude)}' cannot be null or whitespace.", nameof(latitude));
+
+            if (string.IsNullOrWhiteSpace(longitude))
+                throw new ArgumentException($"'{nameof(longitude)}' cannot be null or whitespace.", nameof(longitude));
+#endif
 
             Address = address;
 
