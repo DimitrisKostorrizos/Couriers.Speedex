@@ -186,7 +186,7 @@ namespace Couriers.Speedex
         /// specified type
         /// </summary>
         /// <param name="xml">The XML</param>
-        public static T? FromXml<T>([NotNull] string xml) 
+        public static T? FromXml<T>([NotNull] string xml)
             => (T?)FromXml(xml, typeof(T));
 
         /// <summary>

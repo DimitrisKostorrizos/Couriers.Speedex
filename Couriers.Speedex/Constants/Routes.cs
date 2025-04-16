@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Couriers.Speedex
+namespace Couriers.Speedex.Constants
 {
     /// <summary>
     /// The routes used for accessing the Speedex web service

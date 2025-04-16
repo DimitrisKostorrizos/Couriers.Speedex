@@ -2,7 +2,7 @@
 using System.ComponentModel;
 using System.Xml.Serialization;
 
-namespace Couriers.Speedex
+namespace Couriers.Speedex.InternalModels.RequestModels
 {
     /// <summary>
     /// The internal request model for getting all the consignments created on the specified date range

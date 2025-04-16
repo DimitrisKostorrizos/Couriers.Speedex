@@ -1,4 +1,10 @@
-﻿using System;
+﻿using Couriers.Speedex.Constants;
+using Couriers.Speedex.Enums;
+using Couriers.Speedex.InternalModels.DataModels;
+using Couriers.Speedex.InternalModels.ResponseModels;
+using Couriers.Speedex.RequestModels;
+
+using System;
 using System.Collections.Frozen;
 using System.Collections.Generic;
 using System.Globalization;
@@ -389,7 +395,7 @@ namespace Couriers.Speedex.Tests
                                         new DepositedConsignmentInternalResponseModel()
                                         {
                                             Amount = 6,
-                                            DateDeposited = DateTime.Now.AddDays(-4).ToString(CultureInfo.InvariantCulture),
+                                            DateDeposited = DateTime.Now.AddDays(-4).ToString(SpeedexConstants.SpeedexCultureInfo),
                                             Id = TestHelpers.GenerateTestPickupId()
                                         }
                                     ]
@@ -421,7 +427,7 @@ namespace Couriers.Speedex.Tests
                                         ConsignmentIds = [ primaryVoucherId, secondaryVoucherId ],
                                         Name = "Test",
                                         PhoneNumber = "Test",
-                                        PickupDate = DateTime.Now.AddDays(-4).ToString(CultureInfo.InvariantCulture),
+                                        PickupDate = DateTime.Now.AddDays(-4).ToString(SpeedexConstants.SpeedexCultureInfo),
                                         PostCode = "Test"
                                     }
                                 }

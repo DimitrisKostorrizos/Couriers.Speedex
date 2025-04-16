@@ -1,10 +1,13 @@
-﻿using System;
+﻿using Couriers.Speedex.Interfaces;
+using Couriers.Speedex.ResponseModels;
+
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Xml.Serialization;
 
-namespace Couriers.Speedex
+namespace Couriers.Speedex.InternalModels.ResponseModels
 {
     /// <summary>
     /// The internal response model for getting all the deposited consignments created on the specified date range
@@ -78,6 +81,8 @@ namespace Couriers.Speedex
     {
         #region Public Properties
 
+#pragma warning disable CA1819 // Properties should not return arrays
+
         /// <summary>
         /// The return message
         /// </summary>
@@ -105,6 +110,8 @@ namespace Couriers.Speedex
         /// </summary>
         [XmlElement("Code")]
         public uint Code { get; set; }
+
+#pragma warning restore CA1819 // Properties should not return arrays
 
         #endregion
 

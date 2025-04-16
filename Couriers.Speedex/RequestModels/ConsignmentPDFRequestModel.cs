@@ -1,9 +1,11 @@
-﻿using System;
+﻿using Couriers.Speedex.Constants;
+using Couriers.Speedex.Enums;
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
 
-namespace Couriers.Speedex
+namespace Couriers.Speedex.RequestModels
 {
     /// <summary>
     /// The request model for the consignment PDF

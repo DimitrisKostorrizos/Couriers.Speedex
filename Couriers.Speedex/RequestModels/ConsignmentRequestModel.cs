@@ -1,6 +1,9 @@
-﻿using System;
+﻿using Couriers.Speedex.Constants;
+using Couriers.Speedex.Enums;
 
-namespace Couriers.Speedex
+using System;
+
+namespace Couriers.Speedex.RequestModels
 {
     /// <summary>
     /// The request model for the consignment

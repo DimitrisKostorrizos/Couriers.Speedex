@@ -3,7 +3,7 @@ using System.Diagnostics;
 using System.Xml.Linq;
 using System.Xml.Serialization;
 
-namespace Couriers.Speedex
+namespace Couriers.Speedex.InternalModels.DataModels
 {
     /// <summary>
     /// The data model for the SOAP envelope body
@@ -27,8 +27,8 @@ namespace Couriers.Speedex
         [XmlAnyElement, Browsable(false), EditorBrowsable(EditorBrowsableState.Never), DebuggerBrowsable(DebuggerBrowsableState.Never)]
         public XElement XmlEntity
         {
-            get => XmlHelpers.SerializeToXElement(Model);
-            set => Model = XmlHelpers.Deserialize<TBody>(value);
+            get => Model.SerializeToXElement();
+            set => Model = value.Deserialize<TBody>();
         }
 
         #endregion

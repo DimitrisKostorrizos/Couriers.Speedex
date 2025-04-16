@@ -1,8 +1,8 @@
-﻿using System.ComponentModel.DataAnnotations;
-using System.Diagnostics.CodeAnalysis;
+﻿using Couriers.Speedex.Services;
+
 using System.Globalization;
 
-namespace Couriers.Speedex
+namespace Couriers.Speedex.Constants
 {
     /// <summary>
     /// The constants used across the <see cref="SpeedexClient"/>

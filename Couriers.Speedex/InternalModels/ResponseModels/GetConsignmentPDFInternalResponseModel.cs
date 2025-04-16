@@ -1,11 +1,13 @@
-﻿using System;
+﻿using Couriers.Speedex.Interfaces;
+using Couriers.Speedex.ResponseModels;
+
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
-using System.Reflection;
 using System.Xml.Serialization;
 
-namespace Couriers.Speedex
+namespace Couriers.Speedex.InternalModels.ResponseModels
 {
     /// <summary>
     /// The internal response model for getting the consignment PDF
@@ -15,6 +17,8 @@ namespace Couriers.Speedex
     public class GetConsignmentPdfInternalResponseModel : ReturnMessageInternalResponseModel, ISoapResponseModel<IEnumerable<ConsignmentPdfResponseModel>>
     {
         #region Public Properties
+
+#pragma warning disable CA1819 // Properties should not return arrays
 
 #if NET8_0_OR_GREATER
         /// <summary>
@@ -31,6 +35,8 @@ namespace Couriers.Speedex
         [XmlArrayItem("Voucher")]
         public ConsignmentPdfInternalResponseModel[] Vouchers { get; set; } = Array.Empty<ConsignmentPdfInternalResponseModel>();
 #endif
+
+#pragma warning restore CA1819 // Properties should not return arrays
 
         #endregion
 

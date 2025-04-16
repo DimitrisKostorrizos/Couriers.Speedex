@@ -1,6 +1,8 @@
-﻿using System;
+﻿using Couriers.Speedex.Enums;
 
-namespace Couriers.Speedex
+using System;
+
+namespace Couriers.Speedex.RequestModels
 {
     /// <summary>
     /// The request model for rescheduling a pickup
@@ -18,10 +20,17 @@ namespace Couriers.Speedex
 
         #region Public Properties
 
+#if NET5_0
         /// <summary>
-        /// The date for the pickup
+        /// The requested date of the pickup
         /// </summary>
         public DateTime PickupDate { get; }
+#else
+        /// <summary>
+        /// The requested date of the pickup
+        /// </summary>
+        public DateOnly PickupDate { get; }
+#endif
 
         /// <summary>
         /// The delivery time frame
@@ -56,14 +65,21 @@ namespace Couriers.Speedex
         /// </summary>
         /// <param name="pickupDate">The date for the pickup</param>
         /// <param name="deliveryTime">The delivery time frame</param>
-        public ReschedulePickupRequestModel(DateTime pickupDate, DeliveryTimeLimit deliveryTime) : base()
+        public ReschedulePickupRequestModel(
+#if NET5_0
+            DateTime pickupDate, 
+#else
+            DateOnly pickupDate,
+#endif
+
+            DeliveryTimeLimit deliveryTime) : base()
         {
             PickupDate = pickupDate;
 
             DeliveryTime = deliveryTime;
         }
 
-        #endregion
+#endregion
 
         #region Public Methods
 

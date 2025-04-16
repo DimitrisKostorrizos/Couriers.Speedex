@@ -1,9 +1,11 @@
-﻿using System;
+﻿using Couriers.Speedex.RequestModels;
+
+using System;
 using System.ComponentModel;
 using System.Diagnostics.CodeAnalysis;
 using System.Xml.Serialization;
 
-namespace Couriers.Speedex
+namespace Couriers.Speedex.InternalModels.RequestModels
 {
     /// <summary>
     /// The internal request model for the client references

@@ -1,9 +1,13 @@
-﻿using System.Collections.Generic;
+﻿using Couriers.Speedex.Interfaces;
+using Couriers.Speedex.ResponseModels;
+
+using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Xml.Serialization;
 
-namespace Couriers.Speedex
+namespace Couriers.Speedex.InternalModels.ResponseModels
 {
     /// <summary>
     /// The internal response model for getting the last event of a consignment
@@ -14,12 +18,26 @@ namespace Couriers.Speedex
     {
         #region Public Properties
 
+#pragma warning disable CA1819 // Properties should not return arrays
+
+#if NET8_0_OR_GREATER
+
         /// <summary>
         /// The checkpoints
         /// </summary>
         [XmlArray("checkpoints")]
         [XmlArrayItem("Checkpoint")]
-        public CheckpointInternalResponseModel[] Checkpoints { get; set; } = null!;
+        public CheckpointInternalResponseModel[] Checkpoints { get; set; } = [];
+#else
+        /// <summary>
+        /// The checkpoints
+        /// </summary>
+        [XmlArray("checkpoints")]
+        [XmlArrayItem("Checkpoint")]
+        public CheckpointInternalResponseModel[] Checkpoints { get; set; } = Array.Empty<CheckpointInternalResponseModel>();
+#endif
+
+#pragma warning restore CA1819 // Properties should not return arrays
 
         #endregion
 

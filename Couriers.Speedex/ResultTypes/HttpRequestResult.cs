@@ -1,8 +1,7 @@
 ﻿using System;
 using System.Diagnostics.CodeAnalysis;
-using System.Reflection;
 
-namespace Couriers.Speedex
+namespace Couriers.Speedex.ResultTypes
 {
     /// <summary>
     /// The result type for a HTTP request operation
@@ -60,7 +59,7 @@ namespace Couriers.Speedex
                 throw new ArgumentNullException(nameof(exception));
 #endif
         }
-         
+
         /// <summary>
         /// <inheritdoc/>
         /// </summary>
@@ -138,7 +137,7 @@ namespace Couriers.Speedex
         /// <summary>
         /// <inheritdoc/>
         /// </summary>
-        public T Result => IsSuccessful ? _result : throw new InvalidOperationException ($"The '{nameof(Result)}' property can only be accessed if the '{nameof(IsSuccessful)}' is true");
+        public T Result => IsSuccessful ? _result : throw new InvalidOperationException($"The '{nameof(Result)}' property can only be accessed if the '{nameof(IsSuccessful)}' is true");
 
         #endregion
 

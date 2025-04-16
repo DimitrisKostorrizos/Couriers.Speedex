@@ -2,7 +2,7 @@
 using System.ComponentModel;
 using System.Xml.Serialization;
 
-namespace Couriers.Speedex
+namespace Couriers.Speedex.InternalModels.RequestModels
 {
     /// <summary>
     /// The internal request model for getting the checkpoints for all the new checkpoints of the consignments, in a specific time frame 

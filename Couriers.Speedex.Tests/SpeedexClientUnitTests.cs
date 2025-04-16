@@ -1,3 +1,8 @@
+using Couriers.Speedex.Enums;
+using Couriers.Speedex.RequestModels;
+using Couriers.Speedex.ResultTypes;
+using Couriers.Speedex.Services;
+
 using System;
 using System.Net.Http;
 using System.Threading.Tasks;
@@ -65,19 +70,19 @@ namespace Couriers.Speedex.Tests
         /// <inheritdoc/>
         /// </summary>
         /// <returns></returns>
-        public Task DisposeAsync()
+        public ValueTask DisposeAsync()
         {
             Dispose(true);
 
-            return Task.CompletedTask;
+            return ValueTask.CompletedTask;
         }
 
         /// <summary>
         /// <inheritdoc/>
         /// </summary>
         /// <returns></returns>
-        public Task InitializeAsync()
-            => Task.CompletedTask;
+        public ValueTask InitializeAsync()
+            => ValueTask.CompletedTask;
 
         #region Test Methods
 
@@ -90,41 +95,38 @@ namespace Couriers.Speedex.Tests
         [Fact]
         public async Task APIMethodCalls()
         {
+            var cancellationToken = TestContext.Current
+                                    .CancellationToken;
+
             using var speedexClient = new SpeedexClient(TestConstants.SpeedexCredentials, true);
 
-            var sessionResponse = await speedexClient.CreateSessionAsync()
-                .ConfigureAwait(true);
+            var sessionResponse = await speedexClient.CreateSessionAsync(cancellationToken);
 
             AssertHttpRequest(sessionResponse);
 
-            var createVoucherResponse = await speedexClient.CreateConsignmentAsync(TestConstants.TestConsignment);
+            var createVoucherResponse = await speedexClient.CreateConsignmentAsync(TestConstants.TestConsignment, cancellationToken);
 
             AssertHttpRequest(createVoucherResponse);
 
             var voucher = createVoucherResponse.Result.VoucherId;
 
-            var pdfResponse = await speedexClient.GetConsignmentPdfAsync(voucher, PaperSize.A4)
-                .ConfigureAwait(true);
+            var pdfResponse = await speedexClient.GetConsignmentPdfAsync(voucher, PaperSize.A4, false, cancellationToken);
 
             AssertHttpRequest(pdfResponse);
 
-            var lastCheckpointResponse = await speedexClient.GetLastCheckPointAsync(voucher)
-                .ConfigureAwait(true);
+            var lastCheckpointResponse = await speedexClient.GetLastCheckPointAsync(voucher, cancellationToken);
 
             AssertHttpRequest(lastCheckpointResponse);
 
-            var checkpointsResponse = await speedexClient.GetTraceByVoucherIdAsync(voucher)
-                .ConfigureAwait(true);
+            var checkpointsResponse = await speedexClient.GetTraceByVoucherIdAsync(voucher, cancellationToken);
 
             AssertHttpRequest(checkpointsResponse);
 
-            var cancelVoucherResponse = await speedexClient.CancelConsignmentByVoucherIdAsync(voucher)
-                .ConfigureAwait(true);
+            var cancelVoucherResponse = await speedexClient.CancelConsignmentByVoucherIdAsync(voucher, cancellationToken);
 
             AssertHttpRequest(cancelVoucherResponse);
 
-            var branchesResponse = await speedexClient.GetBranchesAsync("36100")
-                .ConfigureAwait(true);
+            var branchesResponse = await speedexClient.GetBranchesAsync("36100", SupportedLanguage.Greek, cancellationToken);
 
             AssertHttpRequest(branchesResponse);
         }
@@ -137,8 +139,7 @@ namespace Couriers.Speedex.Tests
         [Fact]
         public async Task CreateSessionAsync_WithDemoCredentials_SuccessfullyReturns()
         {
-            var response = await _simulatedSpeedexClient.CreateSessionAsync()
-                .ConfigureAwait(true);
+            var response = await _simulatedSpeedexClient.CreateSessionAsync(TestContext.Current.CancellationToken);
 
             AssertHttpRequest(response);
 
@@ -155,7 +156,7 @@ namespace Couriers.Speedex.Tests
         {
             var voucher = TestHelpers.GenerateTestVoucherNumber();
 
-            var response = await _simulatedSpeedexClient.CancelConsignmentByVoucherIdAsync(voucher).ConfigureAwait(true);
+            var response = await _simulatedSpeedexClient.CancelConsignmentByVoucherIdAsync(voucher, TestContext.Current.CancellationToken);
 
             AssertHttpRequest(response);
         }
@@ -168,7 +169,7 @@ namespace Couriers.Speedex.Tests
         [Fact]
         public async Task CreateConsignmentsAsync_WithMoqedData_ItSuccessfullyReturns()
         {
-            var response = await _simulatedSpeedexClient.CreateConsignmentsAsync([ TestConstants.TestConsignment ]);
+            var response = await _simulatedSpeedexClient.CreateConsignmentsAsync([TestConstants.TestConsignment], TestContext.Current.CancellationToken);
 
             AssertHttpRequest(response);
         }
@@ -181,7 +182,7 @@ namespace Couriers.Speedex.Tests
         [Fact]
         public async Task CreateConsignmentAsync_WithMoqedData_ItSuccessfullyReturns()
         {
-            var response = await _simulatedSpeedexClient.CreateConsignmentAsync(TestConstants.TestConsignment);
+            var response = await _simulatedSpeedexClient.CreateConsignmentAsync(TestConstants.TestConsignment, TestContext.Current.CancellationToken);
 
             AssertHttpRequest(response);
         }
@@ -196,7 +197,7 @@ namespace Couriers.Speedex.Tests
         {
             var request = new ConsignmentPdfRequestModel([TestHelpers.GenerateTestVoucherNumber()], PaperSize.A4, true);
 
-            var response = await _simulatedSpeedexClient.GetConsignmentPdfsAsync(request);
+            var response = await _simulatedSpeedexClient.GetConsignmentPdfsAsync(request, TestContext.Current.CancellationToken);
 
             AssertHttpRequest(response);
         }
@@ -209,7 +210,7 @@ namespace Couriers.Speedex.Tests
         [Fact]
         public async Task GetConsignmentPdfAsync_WithMoqedData_ItSuccessfullyReturns()
         {
-            var response = await _simulatedSpeedexClient.GetConsignmentPdfAsync(TestHelpers.GenerateTestVoucherNumber(), PaperSize.A4, true);
+            var response = await _simulatedSpeedexClient.GetConsignmentPdfAsync(TestHelpers.GenerateTestVoucherNumber(), PaperSize.A4, true, TestContext.Current.CancellationToken);
 
             AssertHttpRequest(response);
         }
@@ -222,7 +223,7 @@ namespace Couriers.Speedex.Tests
         [Fact]
         public async Task GetBranchesAsync_WithMoqedData_ItSuccessfullyReturns()
         {
-            var response = await _simulatedSpeedexClient.GetBranchesAsync("26441");
+            var response = await _simulatedSpeedexClient.GetBranchesAsync("26441", SupportedLanguage.Greek, TestContext.Current.CancellationToken);
 
             AssertHttpRequest(response);
         }
@@ -235,7 +236,7 @@ namespace Couriers.Speedex.Tests
         [Fact]
         public async Task GetLastCheckPointAsync_WithMoqedData_ItSuccessfullyReturns()
         {
-            var response = await _simulatedSpeedexClient.GetLastCheckPointAsync(TestHelpers.GenerateTestVoucherNumber());
+            var response = await _simulatedSpeedexClient.GetLastCheckPointAsync(TestHelpers.GenerateTestVoucherNumber(), TestContext.Current.CancellationToken);
 
             AssertHttpRequest(response);
         }
@@ -248,7 +249,7 @@ namespace Couriers.Speedex.Tests
         [Fact]
         public async Task GetLastPickupCheckPointAsync_WithMoqedData_ItSuccessfullyReturns()
         {
-            var response = await _simulatedSpeedexClient.GetLastPickupCheckPointAsync(TestHelpers.GenerateTestVoucherNumber());
+            var response = await _simulatedSpeedexClient.GetLastPickupCheckPointAsync(TestHelpers.GenerateTestVoucherNumber(), TestContext.Current.CancellationToken);
 
             AssertHttpRequest(response);
         }
@@ -263,10 +264,10 @@ namespace Couriers.Speedex.Tests
         {
             var request = new ClientReferencesRequestModel()
             {
-                FirstClientReference = "Test"  
+                FirstClientReference = "Test"
             };
 
-            var response = await _simulatedSpeedexClient.GetTraceByClientReferencesAsync(request);
+            var response = await _simulatedSpeedexClient.GetTraceByClientReferencesAsync(request, TestContext.Current.CancellationToken);
 
             AssertHttpRequest(response);
         }
@@ -283,7 +284,7 @@ namespace Couriers.Speedex.Tests
 
             var dateFrom = dateto.AddDays(-5);
 
-            var response = await _simulatedSpeedexClient.GetTraceByTimeFrameAsync(dateFrom, dateto);
+            var response = await _simulatedSpeedexClient.GetTraceByTimeFrameAsync(dateFrom, dateto, TestContext.Current.CancellationToken);
 
             AssertHttpRequest(response);
         }
@@ -296,7 +297,7 @@ namespace Couriers.Speedex.Tests
         [Fact]
         public async Task GetTraceByVoucherIdAsync_WithMoqedData_ItSuccessfullyReturns()
         {
-            var response = await _simulatedSpeedexClient.GetTraceByVoucherIdAsync(TestHelpers.GenerateTestVoucherNumber());
+            var response = await _simulatedSpeedexClient.GetTraceByVoucherIdAsync(TestHelpers.GenerateTestVoucherNumber(), TestContext.Current.CancellationToken);
 
             AssertHttpRequest(response);
         }
@@ -309,7 +310,7 @@ namespace Couriers.Speedex.Tests
         [Fact]
         public async Task CancelPickupByIdAsync_WithMoqedData_ItSuccessfullyReturns()
         {
-            var response = await _simulatedSpeedexClient.CancelPickupByIdAsync(TestHelpers.GenerateTestVoucherNumber());
+            var response = await _simulatedSpeedexClient.CancelPickupByIdAsync(TestHelpers.GenerateTestVoucherNumber(), TestContext.Current.CancellationToken);
 
             AssertHttpRequest(response);
         }
@@ -326,7 +327,7 @@ namespace Couriers.Speedex.Tests
 
             var request = new PickupRequestModel(TestHelpers.GenerateTestVoucherNumber(), pickup, DeliveryTimeLimit.NoLimit);
 
-            var response = await _simulatedSpeedexClient.CreatePickupAsync(request);
+            var response = await _simulatedSpeedexClient.CreatePickupAsync(request, TestContext.Current.CancellationToken);
 
             AssertHttpRequest(response);
         }
@@ -343,7 +344,7 @@ namespace Couriers.Speedex.Tests
 
             var dateFrom = dateTo.AddDays(-5);
 
-            var response = await _simulatedSpeedexClient.GetConsignmentsByDateRangeAsync(dateFrom, dateTo);
+            var response = await _simulatedSpeedexClient.GetConsignmentsByDateRangeAsync(dateFrom, dateTo, TestContext.Current.CancellationToken);
 
             AssertHttpRequest(response);
         }
@@ -360,7 +361,7 @@ namespace Couriers.Speedex.Tests
 
             var dateFrom = dateTo.AddDays(-5);
 
-            var response = await _simulatedSpeedexClient.GetDepositedConsignmentsByDateRangeAsync(dateFrom, dateTo);
+            var response = await _simulatedSpeedexClient.GetDepositedConsignmentsByDateRangeAsync(dateFrom, dateTo, TestContext.Current.CancellationToken);
 
             AssertHttpRequest(response);
         }
@@ -373,7 +374,7 @@ namespace Couriers.Speedex.Tests
         [Fact]
         public async Task GetPickupByIdAsync_WithMoqedData_ItSuccessfullyReturns()
         {
-            var response = await _simulatedSpeedexClient.GetPickupByIdAsync(TestHelpers.GenerateTestVoucherNumber());
+            var response = await _simulatedSpeedexClient.GetPickupByIdAsync(TestHelpers.GenerateTestVoucherNumber(), TestContext.Current.CancellationToken);
 
             AssertHttpRequest(response);
         }
@@ -386,11 +387,11 @@ namespace Couriers.Speedex.Tests
         [Fact]
         public async Task ReschedulePickupAsync_WithMoqedData_ItSuccessfullyReturns()
         {
-            var pickupDate = DateTime.Now.AddDays(3);
+            var pickupDate = DateOnly.FromDateTime(DateTime.Now.AddDays(3));
 
             var request = new ReschedulePickupRequestModel(pickupDate, DeliveryTimeLimit.TenAMToOnePM);
 
-            var response = await _simulatedSpeedexClient.ReschedulePickupAsync(request);
+            var response = await _simulatedSpeedexClient.ReschedulePickupAsync(request, TestContext.Current.CancellationToken);
 
             AssertHttpRequest(response);
         }

@@ -1,4 +1,4 @@
-﻿namespace Couriers.Speedex
+﻿namespace Couriers.Speedex.Enums
 {
     /// <summary>
     /// Provides enumeration for the available charge types of the consignment

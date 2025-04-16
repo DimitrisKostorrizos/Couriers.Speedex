@@ -1,4 +1,8 @@
-﻿using System;
+﻿using Couriers.Speedex.Constants;
+using Couriers.Speedex.Enums;
+using Couriers.Speedex.Structs;
+
+using System;
 
 namespace Couriers.Speedex
 {

@@ -1,9 +1,13 @@
-﻿using System;
+﻿using Couriers.Speedex.Constants;
+using Couriers.Speedex.Interfaces;
+using Couriers.Speedex.ResponseModels;
+
+using System;
 using System.ComponentModel;
 using System.Globalization;
 using System.Xml.Serialization;
 
-namespace Couriers.Speedex
+namespace Couriers.Speedex.InternalModels.ResponseModels
 {
     /// <summary>
     /// The internal response model for the deposited consignment
@@ -59,7 +63,7 @@ namespace Couriers.Speedex
         /// </summary>
         /// <returns></returns>
         public DepositedConsignmentResponseModel ToResponseModel()
-            => new(Id, Amount, DateTime.Parse(DateDeposited, CultureInfo.InvariantCulture));
+            => new(Id, Amount, DateTime.Parse(DateDeposited, SpeedexConstants.SpeedexCultureInfo));
 
         #endregion
     }

@@ -1,12 +1,13 @@
-﻿using System;
+﻿using Couriers.Speedex.RequestModels;
+
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
-using System.Reflection;
 using System.Xml.Serialization;
 
-namespace Couriers.Speedex
+namespace Couriers.Speedex.InternalModels.RequestModels
 {
     /// <summary>
     /// The internal request model for creating consignments
@@ -17,12 +18,16 @@ namespace Couriers.Speedex
     {
         #region Public Properties
 
+#pragma warning disable CA1819 // Properties should not return arrays
+
         /// <summary>
         /// The consignments
         /// </summary>
         [XmlArray("inListPod")]
         [XmlArrayItem("BOL")]
         public ConsignmentInternalRequestModel[]? Consignments { get; set; }
+
+#pragma warning restore CA1819 // Properties should not return arrays
 
         #endregion
 

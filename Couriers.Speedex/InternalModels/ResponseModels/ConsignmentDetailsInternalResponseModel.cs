@@ -1,9 +1,13 @@
-﻿using System;
+﻿using Couriers.Speedex.Constants;
+using Couriers.Speedex.Interfaces;
+using Couriers.Speedex.ResponseModels;
+
+using System;
 using System.ComponentModel;
 using System.Globalization;
 using System.Xml.Serialization;
 
-namespace Couriers.Speedex
+namespace Couriers.Speedex.InternalModels.ResponseModels
 {
     /// <summary>
     /// The internal response model for the consignment details
@@ -269,16 +273,16 @@ namespace Couriers.Speedex
             };
 
 #if NET7_0_OR_GREATER
-            if (DateTime.TryParse(DeliveryTimeFrom, CultureInfo.InvariantCulture, out var result))
+            if (DateTime.TryParse(DeliveryTimeFrom, SpeedexConstants.SpeedexCultureInfo, out var result))
 #else
-            if (DateTime.TryParse(DeliveryTimeFrom, CultureInfo.InvariantCulture, DateTimeStyles.None, out var result))
+            if (DateTime.TryParse(DeliveryTimeFrom, SpeedexConstants.SpeedexCultureInfo, DateTimeStyles.None, out var result))
 #endif
                 model.DeliveryTimeFrom = result;
 
 #if NET7_0_OR_GREATER
-            if (DateTime.TryParse(DeliveryTimeTo, CultureInfo.InvariantCulture, out result))
+            if (DateTime.TryParse(DeliveryTimeTo, SpeedexConstants.SpeedexCultureInfo, out result))
 #else
-            if (DateTime.TryParse(DeliveryTimeTo, CultureInfo.InvariantCulture, DateTimeStyles.None, out result))
+            if (DateTime.TryParse(DeliveryTimeTo, SpeedexConstants.SpeedexCultureInfo, DateTimeStyles.None, out result))
 #endif
                 model.DeliveryTimeTo = result;
 

@@ -66,7 +66,7 @@ namespace Couriers.Speedex.Tests
         /// Generates a new random pickup id
         /// </summary>
         /// <returns></returns>
-        public static string GenerateTestPickupId() 
+        public static string GenerateTestPickupId()
             => Guid.NewGuid()
                 .ToString("N");
 

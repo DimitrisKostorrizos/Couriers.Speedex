@@ -1,6 +1,8 @@
-﻿using System;
+﻿using Couriers.Speedex.Enums;
 
-namespace Couriers.Speedex
+using System;
+
+namespace Couriers.Speedex.ResponseModels
 {
     /// <summary>
     /// The response model for the consignment details

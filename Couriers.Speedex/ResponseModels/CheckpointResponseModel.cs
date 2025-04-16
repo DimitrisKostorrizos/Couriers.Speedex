@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Couriers.Speedex
+namespace Couriers.Speedex.ResponseModels
 {
     /// <summary>
     /// The response model for the consignment checkpoint

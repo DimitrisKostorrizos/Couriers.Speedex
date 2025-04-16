@@ -1,4 +1,6 @@
-﻿namespace Couriers.Speedex
+﻿using Couriers.Speedex.InternalModels.ResponseModels;
+
+namespace Couriers.Speedex.Interfaces
 {
     /// <summary>
     /// Provides abstractions for a SOAP internal response model for the new web methods

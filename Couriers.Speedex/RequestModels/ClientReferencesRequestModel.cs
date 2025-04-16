@@ -1,4 +1,4 @@
-﻿namespace Couriers.Speedex
+﻿namespace Couriers.Speedex.RequestModels
 {
     /// <summary>
     /// The request model for the client references

@@ -1,8 +1,11 @@
-﻿using System;
+﻿using Couriers.Speedex.Constants;
+using Couriers.Speedex.Enums;
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Couriers.Speedex
+namespace Couriers.Speedex.RequestModels
 {
     /// <summary>
     /// The request model for the pickup
@@ -25,7 +28,6 @@ namespace Couriers.Speedex
         /// NOTE: The maximum count is 5 master consignment numbers
         /// </summary>
         public IEnumerable<string> ConsignmentIds { get; }
-
 
 #if NET5_0
         /// <summary>
@@ -126,7 +128,7 @@ namespace Couriers.Speedex
 #endif
         }
 
-#endregion
+        #endregion
 
         #region Public Methods
 

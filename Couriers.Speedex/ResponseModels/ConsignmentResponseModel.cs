@@ -1,4 +1,6 @@
-﻿namespace Couriers.Speedex
+﻿using Couriers.Speedex.Enums;
+
+namespace Couriers.Speedex.ResponseModels
 {
     /// <summary>
     /// The response model for the consignment

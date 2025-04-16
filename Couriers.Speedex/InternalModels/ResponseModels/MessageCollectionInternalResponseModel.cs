@@ -1,17 +1,21 @@
-﻿using System;
+﻿using Couriers.Speedex.Interfaces;
+
+using System;
 using System.ComponentModel;
 using System.Xml.Serialization;
 
-namespace Couriers.Speedex
+namespace Couriers.Speedex.InternalModels.ResponseModels
 {
     /// <summary>
     /// The internal response model for the list of results
     /// </summary>
     /// <typeparam name="TArrayResult">The type of the array result</typeparam>
     [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
-    public class EnumerableMessageInternalResponseModel<TArrayResult> : ISoapReturnMessageModel
+    public class MessageCollectionInternalResponseModel<TArrayResult> : ISoapReturnMessageModel
     {
         #region Public Properties
+
+#pragma warning disable CA1819 // Properties should not return arrays
 
         /// <summary>
         /// The return message
@@ -39,6 +43,8 @@ namespace Couriers.Speedex
         [XmlElement("Code")]
         public uint Code { get; set; }
 
+#pragma warning restore CA1819 // Properties should not return arrays
+
         #endregion
 
         #region Constructors
@@ -46,7 +52,7 @@ namespace Couriers.Speedex
         /// <summary>
         /// Default constructor
         /// </summary>
-        public EnumerableMessageInternalResponseModel() : base()
+        public MessageCollectionInternalResponseModel() : base()
         {
 
         }

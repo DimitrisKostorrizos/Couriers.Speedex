@@ -1,9 +1,11 @@
-﻿using System;
+﻿using Couriers.Speedex.RequestModels;
+
+using System;
 using System.ComponentModel;
 using System.Diagnostics.CodeAnalysis;
 using System.Xml.Serialization;
 
-namespace Couriers.Speedex
+namespace Couriers.Speedex.InternalModels.RequestModels
 {
     /// <summary>
     /// The internal request model for rescheduling a pickup
@@ -78,7 +80,11 @@ namespace Couriers.Speedex
             var internalModel = new ReschedulePickupInternalRequestModel()
             {
                 Comments = model.Comments,
+#if NET5_0
                 PickupDate = model.PickupDate,
+#else
+                PickupDate = model.PickupDate.ToDateTime(TimeOnly.MinValue),
+#endif
                 PickupId = model.PickupId
             };
 
@@ -87,13 +93,20 @@ namespace Couriers.Speedex
 
             var startingPickupTime = default(DateTime?);
 
+            var endingPickupTime = default(DateTime?);
+#if NET5_0
             if (deliveryTimeWindow.StartingTime.HasValue)
                 startingPickupTime = model.PickupDate.AddTicks(deliveryTimeWindow.StartingTime.Value.Ticks);
 
-            var endingPickupTime = default(DateTime?);
-
             if (deliveryTimeWindow.EndingTime.HasValue)
                 endingPickupTime = model.PickupDate.AddTicks(deliveryTimeWindow.EndingTime.Value.Ticks);
+#else
+            if (deliveryTimeWindow.StartingTime.HasValue)
+                startingPickupTime = model.PickupDate.ToDateTime(deliveryTimeWindow.StartingTime.Value);
+
+            if (deliveryTimeWindow.EndingTime.HasValue)
+                endingPickupTime = model.PickupDate.ToDateTime(deliveryTimeWindow.EndingTime.Value);
+#endif
 
             // Set the starting delivery time
             internalModel.PickupHourFrom = startingPickupTime;
@@ -117,6 +130,6 @@ namespace Couriers.Speedex
         /// <returns></returns>
         public bool ShouldSerializePickupHourFrom() => PickupHourFrom.HasValue;
 
-        #endregion
+#endregion
     }
 }

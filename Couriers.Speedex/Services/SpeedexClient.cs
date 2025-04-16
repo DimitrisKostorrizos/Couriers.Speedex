@@ -1,4 +1,15 @@
-﻿using System;
+﻿using Couriers.Speedex.Constants;
+using Couriers.Speedex.Enums;
+using Couriers.Speedex.Extensions;
+using Couriers.Speedex.Interfaces;
+using Couriers.Speedex.InternalModels.DataModels;
+using Couriers.Speedex.InternalModels.RequestModels;
+using Couriers.Speedex.InternalModels.ResponseModels;
+using Couriers.Speedex.RequestModels;
+using Couriers.Speedex.ResponseModels;
+using Couriers.Speedex.ResultTypes;
+
+using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
@@ -8,7 +19,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Couriers.Speedex
+namespace Couriers.Speedex.Services
 {
     /// <summary>
     /// The client for the Speedex web service
@@ -188,7 +199,7 @@ namespace Couriers.Speedex
 
             var numberOfItems = values.Count();
 
-            if(numberOfItems == 0)
+            if (numberOfItems == 0)
                 throw new ArgumentOutOfRangeException(nameof(values), "At least one consignment must be specified");
 
             // If more than 10 values are specified...
@@ -822,7 +833,7 @@ namespace Couriers.Speedex
 
         }
 
-#endregion
+        #endregion
 
         #region Private Classes
 

@@ -1,9 +1,13 @@
-﻿using System;
+﻿using Couriers.Speedex.Constants;
+using Couriers.Speedex.Interfaces;
+using Couriers.Speedex.ResponseModels;
+
+using System;
 using System.ComponentModel;
 using System.Globalization;
 using System.Xml.Serialization;
 
-namespace Couriers.Speedex
+namespace Couriers.Speedex.InternalModels.ResponseModels
 {
     /// <summary>
     /// The internal response model for the pickup
@@ -13,6 +17,8 @@ namespace Couriers.Speedex
     public class PickupInternalResponseModel : ISoapResponseModel<PickupResponseModel>
     {
         #region Public Properties
+
+#pragma warning disable CA1819 // Properties should not return arrays
 
         /// <summary>
         /// The unique pickup id
@@ -108,6 +114,8 @@ namespace Couriers.Speedex
         [XmlElement("PickupTimeTo")]
         public string PickupTimeTo { get; set; } = string.Empty;
 
+#pragma warning restore CA1819 // Properties should not return arrays
+
         #endregion
 
         #region Constructors
@@ -136,6 +144,8 @@ namespace Couriers.Speedex
         /// <returns></returns>
         public PickupResponseModel ToResponseModel()
         {
+            var pickupDate = DateTime.Parse(PickupDate, SpeedexConstants.SpeedexCultureInfo);
+
             var model = new PickupResponseModel()
             {
                 Address = Address,
@@ -148,21 +158,29 @@ namespace Couriers.Speedex
                 Id = Id,
                 Name = Name,
                 PhoneNumber = PhoneNumber,
-                PickupDate = DateTime.Parse(PickupDate, CultureInfo.InvariantCulture),
+#if NET5_0
+                PickupDate = pickupDate,
+#else
+                PickupDate = DateOnly.FromDateTime(pickupDate),
+#endif
                 PostCode = PostCode
             };
 
-#if NET7_0_OR_GREATER
-            if (DateTime.TryParse(PickupTimeTo, CultureInfo.InvariantCulture, out var result))
+#if NET5_0
+            if (DateTime.TryParse(PickupTimeTo, SpeedexConstants.SpeedexCultureInfo, DateTimeStyles.None, out var result))
+#elif NET6_0
+            if (TimeOnly.TryParse(PickupTimeTo, SpeedexConstants.SpeedexCultureInfo, DateTimeStyles.None, out var result))
 #else
-            if (DateTime.TryParse(PickupTimeTo, CultureInfo.InvariantCulture, DateTimeStyles.None, out var result))
+            if (TimeOnly.TryParse(PickupTimeTo, SpeedexConstants.SpeedexCultureInfo, out var result))
 #endif
                 model.PickupTimeTo = result;
 
-#if NET7_0_OR_GREATER
-            if (DateTime.TryParse(PickupTimeFrom, CultureInfo.InvariantCulture, out result))
+#if NET5_0
+            if (DateTime.TryParse(PickupTimeFrom, SpeedexConstants.SpeedexCultureInfo, DateTimeStyles.None, out result))
+#elif NET6_0
+            if (TimeOnly.TryParse(PickupTimeFrom, SpeedexConstants.SpeedexCultureInfo, DateTimeStyles.None, out result))
 #else
-            if (DateTime.TryParse(PickupTimeFrom, CultureInfo.InvariantCulture, DateTimeStyles.None, out result))
+            if (TimeOnly.TryParse(PickupTimeFrom, SpeedexConstants.SpeedexCultureInfo, out result))
 #endif
                 model.PickupTimeFrom = result;
 

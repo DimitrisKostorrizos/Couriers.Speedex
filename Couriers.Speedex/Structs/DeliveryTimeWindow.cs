@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Diagnostics.CodeAnalysis;
 
-namespace Couriers.Speedex
+namespace Couriers.Speedex.Structs
 {
     /// <summary>
     /// Represents a time window for Speedex to handle the delivery
@@ -64,7 +64,7 @@ namespace Couriers.Speedex
         DateTime startingTime,
         DateTime endingTime
 #else
-        TimeOnly startingTime, 
+        TimeOnly startingTime,
         TimeOnly endingTime
 #endif
             )

@@ -1,11 +1,13 @@
-﻿using System;
+﻿using Couriers.Speedex.Constants;
+using Couriers.Speedex.RequestModels;
+
+using System;
 using System.ComponentModel;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
-using System.Xml.Linq;
 using System.Xml.Serialization;
 
-namespace Couriers.Speedex
+namespace Couriers.Speedex.InternalModels.RequestModels
 {
     /// <summary>
     /// The internal request model for the pickup
@@ -15,6 +17,8 @@ namespace Couriers.Speedex
     public class PickupInternalRequestModel : SessionIdInternalRequestModel
     {
         #region Public Properties
+
+#pragma warning disable CA1819 // Properties should not return arrays
 
 #if NET8_0_OR_GREATER
         /// <summary>
@@ -33,6 +37,8 @@ namespace Couriers.Speedex
         [XmlArrayItem("string")]
         public string[] ConsignmentIds { get; set; } = Array.Empty<string>();
 #endif
+
+#pragma warning restore CA1819 // Properties should not return arrays
 
         /// <summary>
         /// The comments
@@ -145,6 +151,6 @@ namespace Couriers.Speedex
         /// <returns></returns>
         public bool ShouldSerializePickupHourFrom() => PickupHourFrom.HasValue;
 
-#endregion
+        #endregion
     }
 }

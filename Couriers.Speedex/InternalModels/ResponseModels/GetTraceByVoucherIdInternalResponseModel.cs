@@ -1,10 +1,13 @@
-﻿using System;
+﻿using Couriers.Speedex.Interfaces;
+using Couriers.Speedex.ResponseModels;
+
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Xml.Serialization;
 
-namespace Couriers.Speedex
+namespace Couriers.Speedex.InternalModels.ResponseModels
 {
     /// <summary>
     /// The internal response model for all the new checkpoints of the consignment
@@ -14,6 +17,8 @@ namespace Couriers.Speedex
     public class GetTraceByVoucherIdInternalResponseModel : ReturnMessageInternalResponseModel, ISoapResponseModel<IEnumerable<CheckpointResponseModel>>
     {
         #region Public Properties
+
+#pragma warning disable CA1819 // Properties should not return arrays
 
 #if NET8_0_OR_GREATER
         /// <summary>
@@ -30,6 +35,8 @@ namespace Couriers.Speedex
         [XmlArrayItem("Checkpoint")]
         public CheckpointInternalResponseModel[] Checkpoints { get; set; } = Array.Empty<CheckpointInternalResponseModel>();
 #endif
+
+#pragma warning restore CA1819 // Properties should not return arrays
 
         #endregion
 

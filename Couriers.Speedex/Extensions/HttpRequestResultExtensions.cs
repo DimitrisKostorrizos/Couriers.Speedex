@@ -1,7 +1,9 @@
-﻿using System;
+﻿using Couriers.Speedex.ResultTypes;
+
+using System;
 using System.Diagnostics.CodeAnalysis;
 
-namespace Couriers.Speedex
+namespace Couriers.Speedex.Extensions
 {
     /// <summary>
     /// Contains the extensions methods related to the <see cref="HttpRequestResult"/>

@@ -1,7 +1,10 @@
-﻿using System.ComponentModel;
+﻿using Couriers.Speedex.Interfaces;
+using Couriers.Speedex.ResponseModels;
+
+using System.ComponentModel;
 using System.Xml.Serialization;
 
-namespace Couriers.Speedex
+namespace Couriers.Speedex.InternalModels.ResponseModels
 {
     /// <summary>
     /// The internal response model for the consignment
@@ -206,7 +209,7 @@ namespace Couriers.Speedex
                 RecipientPhoneNumber = RecipientPhoneNumber,
                 SecondCustomerReference = SecondCustomerReference,
                 SecondCommentsPart = SecondCommentsPart,
-                ShouldBeDeliveredOnSaturday = (ShouldBeDeliveredOnSaturday == 1),
+                ShouldBeDeliveredOnSaturday = ShouldBeDeliveredOnSaturday == 1,
                 VoucherId = VoucherId,
                 ThirdCustomerReference = ThirdCustomerReference,
                 ThirdCommentsPart = ThirdCommentsPart,

@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Couriers.Speedex.Constants;
+
+using System;
 using System.Diagnostics.CodeAnalysis;
 
 namespace Couriers.Speedex

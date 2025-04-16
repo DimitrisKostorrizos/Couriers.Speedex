@@ -1,9 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Xml.Serialization;
 
-namespace Couriers.Speedex
+namespace Couriers.Speedex.ResponseModels
 {
     /// <summary>
     /// The response model for the pickup
@@ -59,10 +58,17 @@ namespace Couriers.Speedex
         /// </summary>
         public string Comments { get; set; } = string.Empty;
 
+#if NET5_0
         /// <summary>
         /// The pickup date
         /// </summary>
         public DateTime PickupDate { get; set; }
+#else
+        /// <summary>
+        /// The pickup date
+        /// </summary>
+        public DateOnly PickupDate { get; set; }
+#endif
 
         /// <summary>
         /// The name for the pickup
@@ -79,6 +85,7 @@ namespace Couriers.Speedex
         /// </summary>
         public string PostCode { get; set; } = string.Empty;
 
+#if NET5_0
         /// <summary>
         /// The start of the time frame of the pickup
         /// </summary>
@@ -88,6 +95,17 @@ namespace Couriers.Speedex
         /// The end of the time frame of the pickup
         /// </summary>
         public DateTime? PickupTimeTo { get; set; }
+#else
+        /// <summary>
+        /// The start of the time frame of the pickup
+        /// </summary>
+        public TimeOnly? PickupTimeFrom { get; set; }
+
+        /// <summary>
+        /// The end of the time frame of the pickup
+        /// </summary>
+        public TimeOnly? PickupTimeTo { get; set; }
+#endif
 
         #endregion
 
