@@ -99,5 +99,10 @@ namespace Couriers.Speedex.Constants
         /// The culture info that Speedex uses
         /// </summary>
         public static readonly CultureInfo SpeedexCultureInfo = CultureInfo.GetCultureInfo("el-GR");
+
+        /// <summary>
+        /// The integer value that Speedex uses to represent a true value
+        /// </summary>
+        public const int TrueValueIntegerRepresentation = 1;
     }
 }

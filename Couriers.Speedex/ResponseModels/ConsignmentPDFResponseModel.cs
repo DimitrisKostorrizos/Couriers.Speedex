@@ -5,10 +5,47 @@ namespace Couriers.Speedex.ResponseModels
     /// <summary>
     /// The response model for the consignment PDF
     /// </summary>
-    public sealed record ConsignmentPdfResponseModel
+    public record ConsignmentPdfResponseModel
     {
         #region Public Properties
 
+#if NET7_0_OR_GREATER
+        /// <summary>
+        /// The unique voucher id
+        /// </summary>
+        public required string VoucherId
+        {
+            get;
+            init
+            {
+#if NET8_0_OR_GREATER
+                ArgumentException.ThrowIfNullOrWhiteSpace(value);
+#else
+                if (string.IsNullOrWhiteSpace(value))
+                    throw new ArgumentException($"'{nameof(value)}' cannot be null or whitespace.", nameof(value));
+#endif
+                field = value;
+            }
+        }
+
+        /// <summary>
+        /// The base64 representation of the PDF voucher
+        /// </summary>
+        public required string Base64String
+        {
+            get;
+            init
+            {
+#if NET8_0_OR_GREATER
+                ArgumentException.ThrowIfNullOrWhiteSpace(value);
+#else
+                if (string.IsNullOrWhiteSpace(value))
+                    throw new ArgumentException($"'{nameof(value)}' cannot be null or whitespace.", nameof(value));
+#endif
+                field = value;
+            }
+        }
+#else
         /// <summary>
         /// The unique voucher id
         /// </summary>
@@ -18,11 +55,21 @@ namespace Couriers.Speedex.ResponseModels
         /// The base64 representation of the PDF voucher
         /// </summary>
         public string Base64String { get; }
+#endif
 
         #endregion
 
         #region Constructors
 
+#if NET7_0_OR_GREATER
+        /// <summary>
+        /// Default constructor
+        /// </summary>
+        public ConsignmentPdfResponseModel() : base()
+        {
+
+        }
+#else
         /// <summary>
         /// Default constructor
         /// </summary>
@@ -46,6 +93,7 @@ namespace Couriers.Speedex.ResponseModels
 
             Base64String = base64String;
         }
+#endif
 
         #endregion
 

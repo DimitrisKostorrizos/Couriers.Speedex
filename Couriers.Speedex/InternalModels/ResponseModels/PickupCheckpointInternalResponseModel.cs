@@ -63,16 +63,23 @@ namespace Couriers.Speedex.InternalModels.ResponseModels
         public override string ToString() => PickupId;
 
         /// <summary>
-        /// Creates and return the <see cref="PickupCheckpointResponseModel"/> from the current object
+        /// <inheritdoc/>
         /// </summary>
         /// <returns></returns>
-        public PickupCheckpointResponseModel ToResponseModel() => new()
+        public PickupCheckpointResponseModel ToResponseModel()
         {
-            BranchDepot = BranchDepot,
-            CheckpointDate = CheckpointDate,
-            PickupId = PickupId,
-            StatusCode = StatusCode
-        };
+#if NET7_0_OR_GREATER
+            return new()
+            {
+                BranchDepot = BranchDepot,
+                CheckpointDate = CheckpointDate,
+                PickupId = PickupId,
+                StatusCode = StatusCode
+            };
+#else
+            return new(BranchDepot, CheckpointDate, PickupId, StatusCode);
+#endif
+        }
 
         #endregion
     }

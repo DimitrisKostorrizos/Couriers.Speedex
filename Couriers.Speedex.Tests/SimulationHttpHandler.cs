@@ -1,4 +1,7 @@
-﻿using System.Net;
+﻿using Couriers.Shared;
+using Couriers.Shared.Xml;
+
+using System.Net;
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;

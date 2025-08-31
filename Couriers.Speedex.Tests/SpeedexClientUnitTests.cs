@@ -1,6 +1,6 @@
+using Couriers.Shared.ResultTypes;
 using Couriers.Speedex.Enums;
 using Couriers.Speedex.RequestModels;
-using Couriers.Speedex.ResultTypes;
 using Couriers.Speedex.Services;
 
 using System;
@@ -98,6 +98,8 @@ namespace Couriers.Speedex.Tests
             var cancellationToken = TestContext.Current
                                     .CancellationToken;
 
+            var startingTime = DateTime.Now.AddHours(-10);
+
             using var speedexClient = new SpeedexClient(TestConstants.SpeedexCredentials, true);
 
             var sessionResponse = await speedexClient.CreateSessionAsync(cancellationToken);
@@ -108,7 +110,13 @@ namespace Couriers.Speedex.Tests
 
             AssertHttpRequest(createVoucherResponse);
 
-            var voucher = createVoucherResponse.Result.VoucherId;
+            var endingTime = DateTime.Now.AddHours(1);
+
+            var voucher = createVoucherResponse.Result.ConsignmentId;
+
+            var getVoucherResponse = await speedexClient.GetConsignmentsByDateRangeAsync(startingTime, endingTime, cancellationToken);
+
+            AssertHttpRequest(getVoucherResponse);
 
             var pdfResponse = await speedexClient.GetConsignmentPdfAsync(voucher, PaperSize.A4, false, cancellationToken);
 
@@ -126,7 +134,7 @@ namespace Couriers.Speedex.Tests
 
             AssertHttpRequest(cancelVoucherResponse);
 
-            var branchesResponse = await speedexClient.GetBranchesAsync("36100", SupportedLanguage.Greek, cancellationToken);
+            var branchesResponse = await speedexClient.GetBranchesAsync(TestConstants.BranchCode, SupportedLanguage.Greek, cancellationToken);
 
             AssertHttpRequest(branchesResponse);
         }
@@ -435,9 +443,9 @@ namespace Couriers.Speedex.Tests
         /// Asserts the <paramref name="httpRequestResult"/>
         /// </summary>
         /// <param name="httpRequestResult">The HTTP request result</param>
-        private static void AssertHttpRequest<T>(HttpRequestResult<T> httpRequestResult)
+        private static void AssertHttpRequest<T>(IHttpRequestResult<T> httpRequestResult)
         {
-            AssertHttpRequest((HttpRequestResult)httpRequestResult);
+            AssertHttpRequest((IHttpRequestResult)httpRequestResult);
 
             Assert.NotNull(httpRequestResult.Result);
         }
@@ -446,7 +454,7 @@ namespace Couriers.Speedex.Tests
         /// Asserts the <paramref name="httpRequestResult"/>
         /// </summary>
         /// <param name="httpRequestResult">The HTTP request result</param>
-        private static void AssertHttpRequest(HttpRequestResult httpRequestResult)
+        private static void AssertHttpRequest(IHttpRequestResult httpRequestResult)
         {
             Assert.NotNull(httpRequestResult);
 

@@ -60,14 +60,8 @@ namespace Couriers.Speedex.InternalModels.ResponseModels
         /// Creates and return the <see cref="IEnumerable{T}"/> from the current object
         /// </summary>
         /// <returns></returns>
-        public IEnumerable<DepositedConsignmentResponseModel> ToResponseModel()
-        {
-#if NET8_0_OR_GREATER
-            return [.. Result.Results.Select(x => x.ToResponseModel())];
-#else
-            return Result.Results.Select(x => x.ToResponseModel()).ToArray();
-#endif
-        }
+        public IEnumerable<DepositedConsignmentResponseModel> ToResponseModel() 
+            => [.. Result.Results.Select(x => x.ToResponseModel())];
 
         #endregion
     }
@@ -89,21 +83,12 @@ namespace Couriers.Speedex.InternalModels.ResponseModels
         [XmlElement("Message")]
         public string Message { get; set; } = string.Empty;
 
-#if NET8_0_OR_GREATER
         /// <summary>
         /// The results
         /// </summary>
         [XmlArray("Result")]
         [XmlArrayItem("GetDepositedConsignmentsByDateResult")]
         public DepositedConsignmentInternalResponseModel[] Results { get; set; } = [];
-#else
-        /// <summary>
-        /// The results
-        /// </summary>
-        [XmlArray("Result")]
-        [XmlArrayItem("GetDepositedConsignmentsByDateResult")]
-        public DepositedConsignmentInternalResponseModel[] Results { get; set; } = Array.Empty<DepositedConsignmentInternalResponseModel>();
-#endif
 
         /// <summary>
         /// The return code
@@ -136,17 +121,11 @@ namespace Couriers.Speedex.InternalModels.ResponseModels
         public override string ToString() => Message;
 
         /// <summary>
-        /// Creates and return the <see cref="IEnumerable{T}"/> from the current object
+        /// <inheritdoc/>
         /// </summary>
         /// <returns></returns>
-        public IEnumerable<DepositedConsignmentResponseModel> ToResponseModel()
-        {
-#if NET8_0_OR_GREATER
-            return [.. Results.Select(x => x.ToResponseModel())];
-#else
-            return Results.Select(x => x.ToResponseModel()).ToArray();
-#endif
-        }
+        public IEnumerable<DepositedConsignmentResponseModel> ToResponseModel() 
+            => [.. Results.Select(x => x.ToResponseModel())];
 
         #endregion
     }

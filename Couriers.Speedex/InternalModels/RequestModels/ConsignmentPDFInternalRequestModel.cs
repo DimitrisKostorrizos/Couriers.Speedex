@@ -32,7 +32,6 @@ namespace Couriers.Speedex.InternalModels.RequestModels
         [XmlElement("perVoucher")]
         public bool ReturnMultipleVouchers { get; set; }
 
-#if NET8_0_OR_GREATER
         /// <summary>
         /// The voucher ids
         /// NOTE: The maximum number is <see cref="SpeedexConstants.MaximumNumberOfVouchers"/> consignments.
@@ -40,15 +39,6 @@ namespace Couriers.Speedex.InternalModels.RequestModels
         [XmlArray("voucherIDs")]
         [XmlArrayItem("string")]
         public string[] VoucherIds { get; set; } = [];
-#else
-        /// <summary>
-        /// The voucher ids
-        /// NOTE: The maximum number is 20 consignments.
-        /// </summary>
-        [XmlArray("voucherIDs")]
-        [XmlArrayItem("string")]
-        public string[] VoucherIds { get; set; } = Array.Empty<string>();
-#endif
 
 #pragma warning restore CA1819 // Properties should not return arrays
 
@@ -86,11 +76,7 @@ namespace Couriers.Speedex.InternalModels.RequestModels
             {
                 PaperSize = SpeedexHelpers.FromPaperType(model.PaperSize),
                 ReturnMultipleVouchers = model.ReturnMultipleVouchers,
-#if NET8_0_OR_GREATER
                 VoucherIds = [.. model.VoucherIds]
-#else
-                VoucherIds = model.VoucherIds.ToArray()
-#endif
             };
         }
 

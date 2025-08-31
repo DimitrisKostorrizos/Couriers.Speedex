@@ -70,14 +70,7 @@ namespace Couriers.Speedex.RequestModels
         /// <param name="voucherId">The voucher id</param>
         /// <param name="paperSize">The paper size</param>
         /// <param name="returnMultipleVouchers">The flag indicating whether a single merged PDF file will be returned or one PDF file per consignment will be returned</param>
-        public ConsignmentPdfRequestModel(string voucherId, PaperSize paperSize, bool returnMultipleVouchers) : this(
-
-#if NET8_0_OR_GREATER
-            [voucherId]
-#else
-            new string[] { voucherId }
-#endif
-            , paperSize, returnMultipleVouchers)
+        public ConsignmentPdfRequestModel(string voucherId, PaperSize paperSize, bool returnMultipleVouchers) : this([voucherId], paperSize, returnMultipleVouchers)
         {
 
         }

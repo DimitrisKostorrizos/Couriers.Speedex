@@ -1,4 +1,6 @@
-﻿using System.ComponentModel;
+﻿using Couriers.Shared.Xml;
+
+using System.ComponentModel;
 using System.Diagnostics;
 using System.Xml.Linq;
 using System.Xml.Serialization;
@@ -27,7 +29,7 @@ namespace Couriers.Speedex.InternalModels.DataModels
         [XmlAnyElement, Browsable(false), EditorBrowsable(EditorBrowsableState.Never), DebuggerBrowsable(DebuggerBrowsableState.Never)]
         public XElement XmlEntity
         {
-            get => Model.SerializeToXElement();
+            get => Model.SerializeToSpeedexXElement();
             set => Model = value.Deserialize<TBody>();
         }
 

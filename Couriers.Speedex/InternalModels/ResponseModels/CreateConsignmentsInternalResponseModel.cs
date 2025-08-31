@@ -20,7 +20,6 @@ namespace Couriers.Speedex.InternalModels.ResponseModels
 
 #pragma warning disable CA1819 // Properties should not return arrays
 
-#if NET8_0_OR_GREATER
         /// <summary>
         /// The consignments
         /// </summary>
@@ -34,21 +33,6 @@ namespace Couriers.Speedex.InternalModels.ResponseModels
         [XmlArray("statusList")]
         [XmlArrayItem("string")]
         public string[] Statuses { get; set; } = [];
-#else
-        /// <summary>
-        /// The consignments
-        /// </summary>
-        [XmlArray("outListPod")]
-        [XmlArrayItem("BOL")]
-        public ConsignmentInternalResponseModel[] Consignments { get; set; } = Array.Empty<ConsignmentInternalResponseModel>();
-
-        /// <summary>
-        /// The consignments
-        /// </summary>
-        [XmlArray("statusList")]
-        [XmlArrayItem("string")]
-        public string[] Statuses { get; set; } = Array.Empty<string>();
-#endif
 
 #pragma warning restore CA1819 // Properties should not return arrays
 
@@ -78,14 +62,8 @@ namespace Couriers.Speedex.InternalModels.ResponseModels
         /// Creates and return the <see cref="IEnumerable{T}"/> from the current object
         /// </summary>
         /// <returns></returns>
-        public IEnumerable<ConsignmentResponseModel> ToResponseModel()
-        {
-#if NET8_0_OR_GREATER
-            return [.. Consignments.Select(x => x.ToResponseModel())];
-#else
-            return Consignments.Select(x => x.ToResponseModel()).ToArray();
-#endif
-        }
+        public IEnumerable<ConsignmentResponseModel> ToResponseModel() 
+            => [.. Consignments.Select(x => x.ToResponseModel())];
 
         #endregion
     }

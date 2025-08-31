@@ -86,11 +86,28 @@ namespace Couriers.Speedex.InternalModels.ResponseModels
         public override string ToString() => Id;
 
         /// <summary>
-        /// Creates and return the <see cref="BranchResponseModel"/> from the current object
+        /// <inheritdoc/>
         /// </summary>
         /// <returns></returns>
-        public BranchResponseModel ToResponseModel() => new(Address, City, Id, Name, TelephoneNumber, ZipCode, Latitude, Longitude);
+        public BranchResponseModel ToResponseModel()
+        {
+#if NET7_0_OR_GREATER
+            return new()
+            {
+                Address = Address, 
+                City = City, 
+                Id = Id, 
+                Name = Name,
+                TelephoneNumber = TelephoneNumber,
+                ZipCode = ZipCode,
+                Latitude = Latitude, 
+                Longitude = Longitude
+            };
+#else
+            return new(Address, City, Id, Name, TelephoneNumber, ZipCode, Latitude, Longitude);
+#endif
+        }
 
-        #endregion
+#endregion
     }
 }

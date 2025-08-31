@@ -19,24 +19,12 @@ namespace Couriers.Speedex.InternalModels.ResponseModels
         #region Public Properties
 
 #pragma warning disable CA1819 // Properties should not return arrays
-
-#if NET8_0_OR_GREATER
-
         /// <summary>
         /// The checkpoints
         /// </summary>
         [XmlArray("checkpoints")]
         [XmlArrayItem("Checkpoint")]
         public CheckpointInternalResponseModel[] Checkpoints { get; set; } = [];
-#else
-        /// <summary>
-        /// The checkpoints
-        /// </summary>
-        [XmlArray("checkpoints")]
-        [XmlArrayItem("Checkpoint")]
-        public CheckpointInternalResponseModel[] Checkpoints { get; set; } = Array.Empty<CheckpointInternalResponseModel>();
-#endif
-
 #pragma warning restore CA1819 // Properties should not return arrays
 
         #endregion
@@ -65,7 +53,7 @@ namespace Couriers.Speedex.InternalModels.ResponseModels
         /// Creates and return the <see cref="IEnumerable{T}"/> from the current object
         /// </summary>
         /// <returns></returns>
-        public IEnumerable<CheckpointResponseModel> ToResponseModel() => Checkpoints.Select(x => x.ToResponseModel()).ToArray();
+        public IEnumerable<CheckpointResponseModel> ToResponseModel() => [.. Checkpoints.Select(x => x.ToResponseModel())];
 
         #endregion
     }

@@ -7,7 +7,6 @@ using Couriers.Speedex.RequestModels;
 using System;
 using System.Collections.Frozen;
 using System.Collections.Generic;
-using System.Globalization;
 
 namespace Couriers.Speedex.Tests
 {
@@ -480,6 +479,11 @@ namespace Couriers.Speedex.Tests
         /// The customer code
         /// </summary>
         public const string CustomerCode = "DEMO";
+
+        /// <summary>
+        /// The branch code
+        /// </summary>
+        public const string BranchCode = "36100";
 
         /// <summary>
         /// The consignment used for testing

@@ -1,8 +1,13 @@
-﻿using Couriers.Speedex.Constants;
+﻿using Couriers.Shared.Xml;
+using Couriers.Speedex.Constants;
 using Couriers.Speedex.Enums;
 using Couriers.Speedex.Structs;
 
 using System;
+using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
+using System.Linq;
+using System.Xml.Linq;
 
 namespace Couriers.Speedex
 {
@@ -11,6 +16,30 @@ namespace Couriers.Speedex
     /// </summary>
     public static class SpeedexHelpers
     {
+        #region Private Fields
+
+        /// <summary>
+        /// Contains the mappings between the <see cref="DeliveryTimeLimit"/> and the respective <see cref="DeliveryTimeWindow"/>
+        /// </summary>
+        private static readonly Dictionary<DeliveryTimeLimit, DeliveryTimeWindow> _deliveryTimeMappings = new()
+        {
+#if NET6_0_OR_GREATER
+            { DeliveryTimeLimit.NoLimit, new DeliveryTimeWindow() },
+            { DeliveryTimeLimit.TenAMToOnePM, new DeliveryTimeWindow(new TimeOnly(10, 0), new TimeOnly(13, 0)) },
+            { DeliveryTimeLimit.OnePMMToFourPM, new DeliveryTimeWindow(new TimeOnly(13, 0), new TimeOnly(16, 0)) },
+            { DeliveryTimeLimit.FourPMToSevenPM, new DeliveryTimeWindow(new TimeOnly(16, 0), new TimeOnly(19, 0)) }
+#else
+            { DeliveryTimeLimit.NoLimit, new DeliveryTimeWindow() },
+            { DeliveryTimeLimit.TenAMToOnePM, new DeliveryTimeWindow(DateTime.MinValue.AddHours(10), DateTime.MinValue.AddHours(13)) },
+            { DeliveryTimeLimit.OnePMMToFourPM, new DeliveryTimeWindow(DateTime.MinValue.AddHours(13), DateTime.MinValue.AddHours(16)) },
+            { DeliveryTimeLimit.FourPMToSevenPM, new DeliveryTimeWindow(DateTime.MinValue.AddHours(16), DateTime.MinValue.AddHours(19)) },
+#endif
+        };
+
+        #endregion
+
+        #region Public Methods
+
         #region Charge Type
 
         /// <summary>
@@ -164,30 +193,41 @@ namespace Couriers.Speedex
         /// </summary>
         /// <param name="value">The delivery time limit</param>
         public static DeliveryTimeWindow ToDeliveryTimeWindow(DeliveryTimeLimit value)
+            => _deliveryTimeMappings[value];
+
+#if NET6_0_OR_GREATER
+        /// <summary>
+        /// Returns the related <see cref="DeliveryTimeLimit"/> for the specified <paramref name="startingTime"/> and <paramref name="endingTime"/>
+        /// </summary>
+        /// <param name="startingTime">The starting time of the delivery time</param>
+        /// <param name="endingTime">The ending time of the delivery time</param>
+        /// <returns></returns>
+        /// <exception cref="InvalidOperationException">An exception is thrown the specified parameters don't match a valid <see cref="DeliveryTimeLimit"/></exception>
+        public static DeliveryTimeLimit GetDeliveryTimeLimitByTimeRange(TimeOnly? startingTime, TimeOnly? endingTime)
         {
-            if (value == DeliveryTimeLimit.TenAMToOnePM)
-#if NET6_0_OR_GREATER
-                return new DeliveryTimeWindow(new TimeOnly(10, 0), new TimeOnly(13, 0));
-#else
-                return new DeliveryTimeWindow(DateTime.MinValue.AddHours(10), DateTime.MinValue.AddHours(13));
-#endif
+            foreach (var pair in _deliveryTimeMappings)
+                if (pair.Value.StartingTime == startingTime && pair.Value.EndingTime == endingTime)
+                    return pair.Key;
 
-            if (value == DeliveryTimeLimit.OnePMMToFourPM)
-#if NET6_0_OR_GREATER
-                return new DeliveryTimeWindow(new TimeOnly(13, 0), new TimeOnly(16, 0));
-#else
-                return new DeliveryTimeWindow(DateTime.MinValue.AddHours(13), DateTime.MinValue.AddHours(16));
-#endif
-
-            if (value == DeliveryTimeLimit.FourPMToSevenPM)
-#if NET6_0_OR_GREATER
-                return new DeliveryTimeWindow(new TimeOnly(16, 0), new TimeOnly(19, 0));
-#else
-                return new DeliveryTimeWindow(DateTime.MinValue.AddHours(16), DateTime.MinValue.AddHours(19));
-#endif
-
-            return new();
+            throw new InvalidOperationException($"No mapping exists for {nameof(startingTime)}:{startingTime} and {nameof(endingTime)}:{endingTime}.");
         }
+#else
+        /// <summary>
+        /// Returns the related <see cref="DeliveryTimeLimit"/> for the specified <paramref name="startingTime"/> and <paramref name="endingTime"/>
+        /// </summary>
+        /// <param name="startingTime">The starting time of the delivery time</param>
+        /// <param name="endingTime">The ending time of the delivery time</param>
+        /// <returns></returns>
+        /// <exception cref="InvalidOperationException">An exception is thrown the specified parameters don't match a valid <see cref="DeliveryTimeLimit"/></exception>
+        public static DeliveryTimeLimit GetDeliveryTimeLimitByTimeRange(DateTime? startingTime, DateTime? endingTime)
+        {
+            foreach (var pair in _deliveryTimeMappings)
+                if (pair.Value.StartingTime == startingTime && pair.Value.EndingTime == endingTime)
+                    return pair.Key;
+
+            throw new InvalidOperationException($"No mapping exists for {nameof(startingTime)}:{startingTime} and {nameof(endingTime)}:{endingTime}.");
+        }
+#endif
 
         #endregion
 
@@ -252,6 +292,21 @@ namespace Couriers.Speedex
                 SupportedLanguage.English => 2,
                 _ => throw new InvalidOperationException($"The {value} is not a valid supported language.")
             };
+        #endregion
+
+        #endregion
+
+        #region Internal Methods
+
+        /// <summary>
+        /// Serializes the <paramref name="obj"/> to the specified <typeparamref name="T"/>
+        /// </summary>
+        /// <typeparam name="T">The type of the object</typeparam>
+        /// <param name="obj">The object</param>
+        /// <returns></returns>
+        internal static XElement SerializeToSpeedexXElement<T>([NotNull] this T obj)
+            => XmlHelpers.SerializeToXElement(obj, SpeedexXmlNamespaces.DefaultPrefix, SpeedexXmlNamespaces.DefaultNamespace);
+
         #endregion
     }
 }

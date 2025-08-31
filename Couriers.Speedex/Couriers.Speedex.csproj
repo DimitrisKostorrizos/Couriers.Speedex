@@ -2,7 +2,9 @@
 
 	<PropertyGroup>
 		<TargetFrameworks>net5.0;net6.0;net7.0;net8.0;net9.0</TargetFrameworks>
+		<LangVersion>preview</LangVersion>
 		<Nullable>enable</Nullable>
+		<EnableTrimAnalyzer>true</EnableTrimAnalyzer>
 		<GenerateDocumentationFile>True</GenerateDocumentationFile>
 		<Title>Speedex Courier API Client</Title>
 		<Authors>Dimitrios Kostorrizos</Authors>
@@ -32,6 +34,10 @@
 			<Pack>True</Pack>
 			<PackagePath>\</PackagePath>
 		</None>
+	</ItemGroup>
+
+	<ItemGroup>
+	  <ProjectReference Include="..\..\Couriers.Shared.Xml\Couriers.Shared.Xml.csproj" />
 	</ItemGroup>
 
 </Project>

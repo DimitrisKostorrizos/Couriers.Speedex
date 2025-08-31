@@ -130,6 +130,6 @@ namespace Couriers.Speedex.InternalModels.RequestModels
         /// <returns></returns>
         public bool ShouldSerializePickupHourFrom() => PickupHourFrom.HasValue;
 
-#endregion
+        #endregion
     }
 }

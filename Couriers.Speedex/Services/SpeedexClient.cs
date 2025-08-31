@@ -1,13 +1,15 @@
-﻿using Couriers.Speedex.Constants;
+﻿using Couriers.Shared;
+using Couriers.Shared.Extensions;
+using Couriers.Shared.ResultTypes;
+using Couriers.Shared.Xml;
+using Couriers.Speedex.Constants;
 using Couriers.Speedex.Enums;
-using Couriers.Speedex.Extensions;
 using Couriers.Speedex.Interfaces;
 using Couriers.Speedex.InternalModels.DataModels;
 using Couriers.Speedex.InternalModels.RequestModels;
 using Couriers.Speedex.InternalModels.ResponseModels;
 using Couriers.Speedex.RequestModels;
 using Couriers.Speedex.ResponseModels;
-using Couriers.Speedex.ResultTypes;
 
 using System;
 using System.Collections.Generic;
@@ -44,6 +46,11 @@ namespace Couriers.Speedex.Services
         /// The maximum expiration time for the <see cref="_sessionId"/>
         /// </summary>
         private static readonly TimeSpan _maximumExpirationTime = new(1, 0, 0);
+
+        /// <summary>
+        /// The error message used when an asynchronous operation is cancelled
+        /// </summary>
+        private const string OperationCancelledErrorMessage = "Operation cancelled.";
 
         #endregion
 
@@ -142,8 +149,11 @@ namespace Couriers.Speedex.Services
         /// </summary>
         /// <param name="cancellationToken">The cancellation token</param>
         /// <returns></returns>
-        public async Task<HttpRequestResult<string>> CreateSessionAsync(CancellationToken cancellationToken = default)
+        public async Task<IHttpRequestResult<string>> CreateSessionAsync(CancellationToken cancellationToken = default)
         {
+            if (cancellationToken.IsCancellationRequested)
+                return new HttpRequestResult<string>(OperationCancelledErrorMessage);
+
             var requestModel = CredentialsInternalRequestModel.FromRequestModel(Credentials);
 
             // Get the response
@@ -167,18 +177,28 @@ namespace Couriers.Speedex.Services
         /// <param name="voucherId">The unique voucher id</param>
         /// <param name="cancellationToken">The cancellation token</param>
         /// <returns></returns>
-        public async Task<HttpRequestResult> CancelConsignmentByVoucherIdAsync([NotNull] string voucherId, CancellationToken cancellationToken = default)
+        public async Task<IHttpRequestResult> CancelConsignmentByVoucherIdAsync([NotNull] string voucherId, CancellationToken cancellationToken = default)
         {
+            if (cancellationToken.IsCancellationRequested)
+                return new HttpRequestResult(OperationCancelledErrorMessage);
+
+            try
+            {
 #if NET8_0_OR_GREATER
             ArgumentException.ThrowIfNullOrWhiteSpace(voucherId);
 #else
-            if (string.IsNullOrWhiteSpace(voucherId))
-                throw new ArgumentException($"'{nameof(voucherId)}' cannot be null or whitespace.", nameof(voucherId));
+                if (string.IsNullOrWhiteSpace(voucherId))
+                    throw new ArgumentException($"'{nameof(voucherId)}' cannot be null or whitespace.", nameof(voucherId));
 #endif
-            return await ExecuteValidatedSOAPEnvelopeRequest<CancelConsignmentByVoucherIdInternalResponseModel, CancelConsignmentByVoucherIdInternalRequestModel>(new CancelConsignmentByVoucherIdInternalRequestModel()
+                return await ExecuteValidatedSOAPEnvelopeRequest<CancelConsignmentByVoucherIdInternalResponseModel, CancelConsignmentByVoucherIdInternalRequestModel>(new CancelConsignmentByVoucherIdInternalRequestModel()
+                {
+                    VoucherId = voucherId
+                }, cancellationToken).ConfigureAwait(false);
+            }
+            catch (Exception ex)
             {
-                VoucherId = voucherId
-            }, cancellationToken).ConfigureAwait(false);
+                return new HttpRequestResult(ex, null, null);
+            }
         }
 
         /// <summary>
@@ -188,41 +208,51 @@ namespace Couriers.Speedex.Services
         /// <param name="values">The consignments</param>
         /// <param name="cancellationToken">The cancellation token</param>
         /// <returns></returns>
-        public async Task<HttpRequestResult<IEnumerable<ConsignmentResponseModel>>> CreateConsignmentsAsync([NotNull] IEnumerable<ConsignmentRequestModel> values, CancellationToken cancellationToken = default)
+        public async Task<IHttpRequestResult<IEnumerable<ConsignmentResponseModel>>> CreateConsignmentsAsync([NotNull] IEnumerable<ConsignmentRequestModel> values, CancellationToken cancellationToken = default)
         {
+            if (cancellationToken.IsCancellationRequested)
+                return new HttpRequestResult<IEnumerable<ConsignmentResponseModel>>(OperationCancelledErrorMessage);
+
+            try
+            {
 #if NET6_0_OR_GREATER
-            ArgumentNullException.ThrowIfNull(values);
+                ArgumentNullException.ThrowIfNull(values);
 #else
             if (values is null)
                 throw new ArgumentNullException(nameof(values));
 #endif
 
-            var numberOfItems = values.Count();
+                var numberOfItems = values.Count();
 
-            if (numberOfItems == 0)
-                throw new ArgumentOutOfRangeException(nameof(values), "At least one consignment must be specified");
+                if (numberOfItems == 0)
+                    throw new ArgumentOutOfRangeException(nameof(values), "At least one consignment must be specified");
 
-            // If more than 10 values are specified...
-            if (numberOfItems > SpeedexConstants.MaximumNumberOfConsignments)
-                throw new InvalidOperationException($"The maximum number of consignments is {SpeedexConstants.MaximumNumberOfConsignments}.");
+                // If more than 10 values are specified...
+                if (numberOfItems > SpeedexConstants.MaximumNumberOfConsignments)
+                    throw new InvalidOperationException($"The maximum number of consignments is {SpeedexConstants.MaximumNumberOfConsignments}.");
 
-            // Get the response
-            var response = await ExecuteValidatedSOAPEnvelopeRequest<CreateConsignmentsInternalResponseModel, CreateConsignmentsInternalRequestModel>(CreateConsignmentsInternalRequestModel.FromRequestModel(values, Credentials.AgreementCode, Credentials.CustomerCode), cancellationToken).ConfigureAwait(false);
+                // Get the response
+                var response = await ExecuteValidatedSOAPEnvelopeRequest<CreateConsignmentsInternalResponseModel, CreateConsignmentsInternalRequestModel>(CreateConsignmentsInternalRequestModel.FromRequestModel(values, Credentials.AgreementCode, Credentials.CustomerCode), cancellationToken).ConfigureAwait(false);
 
-            // If not successful...
-            if (!response.IsSuccessful)
-            {
-                var statusPerConsignment = response.Result
-                    .Statuses
-                    .Select((element, index) => $"Consignment {index}: {element}");
+                // If not successful...
+                if (!response.IsSuccessful)
+                {
+                    var statusPerConsignment = response.Result
+                        .Statuses
+                        .Select((element, index) => $"Consignment {index}: {element}");
 
-                var resultMessage = string.Join(", ", statusPerConsignment);
+                    var resultMessage = string.Join(", ", statusPerConsignment);
 
-                // Return the unsuccessful result
-                return response.ToUnsuccessfulHttpRequestResult<IEnumerable<ConsignmentResponseModel>>(resultMessage);
+                    // Return the unsuccessful result
+                    return response.ToUnsuccessfulHttpRequestResult<IEnumerable<ConsignmentResponseModel>>(resultMessage);
+                }
+
+                return HttpRequestResult.FromResult(response.Result.ToResponseModel(), response.RequestPayload, response.ResponsePayload);
             }
-
-            return HttpRequestResult.FromResult(response.Result.ToResponseModel(), response.RequestPayload, response.ResponsePayload);
+            catch (Exception ex)
+            {
+                return new HttpRequestResult<IEnumerable<ConsignmentResponseModel>>(ex, null, null);
+            }
         }
 
         /// <summary>
@@ -231,29 +261,34 @@ namespace Couriers.Speedex.Services
         /// <param name="model">The consignment</param>
         /// <param name="cancellationToken">The cancellation token</param>
         /// <returns></returns>
-        public async Task<HttpRequestResult<ConsignmentResponseModel>> CreateConsignmentAsync([NotNull] ConsignmentRequestModel model, CancellationToken cancellationToken = default)
+        public async Task<IHttpRequestResult<ConsignmentResponseModel>> CreateConsignmentAsync([NotNull] ConsignmentRequestModel model, CancellationToken cancellationToken = default)
         {
+            if (cancellationToken.IsCancellationRequested)
+                return new HttpRequestResult<ConsignmentResponseModel>(OperationCancelledErrorMessage);
+
+            try
+            {
 #if NET6_0_OR_GREATER
-            ArgumentNullException.ThrowIfNull(model);
+                ArgumentNullException.ThrowIfNull(model);
 #else
             if (model is null)
                 throw new ArgumentNullException(nameof(model));
 #endif
 
-#if NET8_0_OR_GREATER
-            // Get the response
-            var response = await CreateConsignmentsAsync([model], cancellationToken).ConfigureAwait(false);
-#else
-            // Get the response
-            var response = await CreateConsignmentsAsync(new ConsignmentRequestModel[] { model }, cancellationToken).ConfigureAwait(false);
-#endif
+                // Get the response
+                var response = await CreateConsignmentsAsync([model], cancellationToken).ConfigureAwait(false);
 
-            // If not successful...
-            if (!response.IsSuccessful)
-                return response.ToUnsuccessfulHttpRequestResult<ConsignmentResponseModel>();
+                // If not successful...
+                if (!response.IsSuccessful)
+                    return response.ToUnsuccessfulHttpRequestResult<ConsignmentResponseModel>();
 
-            // Return the response
-            return HttpRequestResult.FromResult(response.Result.First(), response.RequestPayload, response.ResponsePayload);
+                // Return the response
+                return HttpRequestResult.FromResult(response.Result.First(), response.RequestPayload, response.ResponsePayload);
+            }
+            catch (Exception ex)
+            {
+                return new HttpRequestResult<ConsignmentResponseModel>(ex, null, null);
+            }
         }
 
         /// <summary>
@@ -263,27 +298,37 @@ namespace Couriers.Speedex.Services
         /// <param name="value">The consignments</param>
         /// <param name="cancellationToken">The cancellation token</param>
         /// <returns></returns>
-        public async Task<HttpRequestResult<IEnumerable<ConsignmentPdfResponseModel>>> GetConsignmentPdfsAsync([NotNull] ConsignmentPdfRequestModel value, CancellationToken cancellationToken = default)
+        public async Task<IHttpRequestResult<IEnumerable<ConsignmentPdfResponseModel>>> GetConsignmentPdfsAsync([NotNull] ConsignmentPdfRequestModel value, CancellationToken cancellationToken = default)
         {
+            if (cancellationToken.IsCancellationRequested)
+                return new HttpRequestResult<IEnumerable<ConsignmentPdfResponseModel>>(OperationCancelledErrorMessage);
+
+            try
+            {
 #if NET6_0_OR_GREATER
-            ArgumentNullException.ThrowIfNull(value);
+                ArgumentNullException.ThrowIfNull(value);
 #else
             if (value is null)
                 throw new ArgumentNullException(nameof(value));
 #endif
 
-            var requestModel = ConsignmentPdfInternalRequestModel.FromRequestModel(value);
+                var requestModel = ConsignmentPdfInternalRequestModel.FromRequestModel(value);
 
-            // Get the response
-            var response = await ExecuteValidatedSOAPEnvelopeRequest<GetConsignmentPdfInternalResponseModel, ConsignmentPdfInternalRequestModel>(requestModel, cancellationToken).ConfigureAwait(false);
+                // Get the response
+                var response = await ExecuteValidatedSOAPEnvelopeRequest<GetConsignmentPdfInternalResponseModel, ConsignmentPdfInternalRequestModel>(requestModel, cancellationToken).ConfigureAwait(false);
 
-            // If not successful...
-            if (!response.IsSuccessful)
-                // Return the unsuccessful result
-                return response.ToUnsuccessfulHttpRequestResult<IEnumerable<ConsignmentPdfResponseModel>>();
+                // If not successful...
+                if (!response.IsSuccessful)
+                    // Return the unsuccessful result
+                    return response.ToUnsuccessfulHttpRequestResult<IEnumerable<ConsignmentPdfResponseModel>>();
 
-            // Return the successful result
-            return HttpRequestResult.FromResult(response.Result.ToResponseModel(), response.RequestPayload, response.ResponsePayload);
+                // Return the successful result
+                return HttpRequestResult.FromResult(response.Result.ToResponseModel(), response.RequestPayload, response.ResponsePayload);
+            }
+            catch (Exception ex)
+            {
+                return new HttpRequestResult<IEnumerable<ConsignmentPdfResponseModel>>(ex, null, null);
+            }
         }
 
         /// <summary>
@@ -294,28 +339,38 @@ namespace Couriers.Speedex.Services
         /// <param name="returnMultipleVouchers">The flag indicating whether a single merged PDF file will be returned or one PDF file per consignment will be returned</param>
         /// <param name="cancellationToken">The cancellation token</param>
         /// <returns></returns>
-        public async Task<HttpRequestResult<string>> GetConsignmentPdfAsync([NotNull] string voucherId, PaperSize paperSize, bool returnMultipleVouchers = false, CancellationToken cancellationToken = default)
+        public async Task<IHttpRequestResult<string>> GetConsignmentPdfAsync([NotNull] string voucherId, PaperSize paperSize, bool returnMultipleVouchers = false, CancellationToken cancellationToken = default)
         {
+            if (cancellationToken.IsCancellationRequested)
+                return new HttpRequestResult<string>(OperationCancelledErrorMessage);
+
+            try
+            {
 #if NET8_0_OR_GREATER
             ArgumentException.ThrowIfNullOrWhiteSpace(voucherId);
 #else
-            if (string.IsNullOrWhiteSpace(voucherId))
-                throw new ArgumentException($"'{nameof(voucherId)}' cannot be null or whitespace.", nameof(voucherId));
+                if (string.IsNullOrWhiteSpace(voucherId))
+                    throw new ArgumentException($"'{nameof(voucherId)}' cannot be null or whitespace.", nameof(voucherId));
 #endif
 
-            // Initialize the model
-            var value = new ConsignmentPdfRequestModel(voucherId, paperSize, returnMultipleVouchers);
+                // Initialize the model
+                var value = new ConsignmentPdfRequestModel(voucherId, paperSize, returnMultipleVouchers);
 
-            // Get the response
-            var response = await GetConsignmentPdfsAsync(value, cancellationToken).ConfigureAwait(false);
+                // Get the response
+                var response = await GetConsignmentPdfsAsync(value, cancellationToken).ConfigureAwait(false);
 
-            // If not successful...
-            if (!response.IsSuccessful)
-                // Return the unsuccessful result
-                return response.ToUnsuccessfulHttpRequestResult<string>();
+                // If not successful...
+                if (!response.IsSuccessful)
+                    // Return the unsuccessful result
+                    return response.ToUnsuccessfulHttpRequestResult<string>();
 
-            // Return the successful result
-            return HttpRequestResult.FromResult(response.Result.First().Base64String, response.RequestPayload, response.ResponsePayload);
+                // Return the successful result
+                return HttpRequestResult.FromResult(response.Result.First().Base64String, response.RequestPayload, response.ResponsePayload);
+            }
+            catch (Exception ex)
+            {
+                return new HttpRequestResult<string>(ex, null, null);
+            }
         }
 
         /// <summary>
@@ -325,33 +380,43 @@ namespace Couriers.Speedex.Services
         /// <param name="language">The language that the results will be translated to</param>
         /// <param name="cancellationToken">The cancellation token</param>
         /// <returns></returns>
-        public async Task<HttpRequestResult<IEnumerable<BranchResponseModel>>> GetBranchesAsync([NotNull] string zipCode, SupportedLanguage language = SupportedLanguage.Greek, CancellationToken cancellationToken = default)
+        public async Task<IHttpRequestResult<IEnumerable<BranchResponseModel>>> GetBranchesAsync([NotNull] string zipCode, SupportedLanguage language = SupportedLanguage.Greek, CancellationToken cancellationToken = default)
         {
+            if (cancellationToken.IsCancellationRequested)
+                return new HttpRequestResult<IEnumerable<BranchResponseModel>>(OperationCancelledErrorMessage);
+
+            try
+            {
 #if NET8_0_OR_GREATER
             ArgumentException.ThrowIfNullOrWhiteSpace(zipCode);
 #else
-            if (string.IsNullOrWhiteSpace(zipCode))
-                throw new ArgumentException($"'{nameof(zipCode)}' cannot be null or whitespace.", nameof(zipCode));
+                if (string.IsNullOrWhiteSpace(zipCode))
+                    throw new ArgumentException($"'{nameof(zipCode)}' cannot be null or whitespace.", nameof(zipCode));
 #endif
 
-            SpeedexHelpers.ThrowIfInvalidZipCode(zipCode);
+                SpeedexHelpers.ThrowIfInvalidZipCode(zipCode);
 
-            // Get the selected language
-            var selectedLanguage = SpeedexHelpers.FromSupportedLanguage(language);
+                // Get the selected language
+                var selectedLanguage = SpeedexHelpers.FromSupportedLanguage(language);
 
-            // Get the response
-            var response = await ExecuteValidatedSOAPEnvelopeRequest<GetBranchesInternalResponseModel, BranchInternalRequestModel>(new BranchInternalRequestModel()
+                // Get the response
+                var response = await ExecuteValidatedSOAPEnvelopeRequest<GetBranchesInternalResponseModel, BranchInternalRequestModel>(new BranchInternalRequestModel()
+                {
+                    ZipCode = zipCode,
+                    Language = selectedLanguage
+                }, cancellationToken).ConfigureAwait(false);
+
+                // If not successful...
+                if (!response.IsSuccessful)
+                    // Return the unsuccessful result
+                    return response.ToUnsuccessfulHttpRequestResult<IEnumerable<BranchResponseModel>>();
+
+                return HttpRequestResult.FromResult(response.Result.ToResponseModel(), response.RequestPayload, response.ResponsePayload);
+            }
+            catch (Exception ex)
             {
-                ZipCode = zipCode,
-                Language = selectedLanguage
-            }, cancellationToken).ConfigureAwait(false);
-
-            // If not successful...
-            if (!response.IsSuccessful)
-                // Return the unsuccessful result
-                return response.ToUnsuccessfulHttpRequestResult<IEnumerable<BranchResponseModel>>();
-
-            return HttpRequestResult.FromResult(response.Result.ToResponseModel(), response.RequestPayload, response.ResponsePayload);
+                return new HttpRequestResult<IEnumerable<BranchResponseModel>>(ex, null, null);
+            }
         }
 
         /// <summary>
@@ -360,27 +425,37 @@ namespace Couriers.Speedex.Services
         /// <param name="voucherId">The unique voucher id</param>
         /// <param name="cancellationToken">The cancellation token</param>
         /// <returns></returns>
-        public async Task<HttpRequestResult<CheckpointResponseModel>> GetLastCheckPointAsync([NotNull] string voucherId, CancellationToken cancellationToken = default)
+        public async Task<IHttpRequestResult<CheckpointResponseModel>> GetLastCheckPointAsync([NotNull] string voucherId, CancellationToken cancellationToken = default)
         {
+            if (cancellationToken.IsCancellationRequested)
+                return new HttpRequestResult<CheckpointResponseModel>(OperationCancelledErrorMessage);
+
+            try
+            {
 #if NET8_0_OR_GREATER
             ArgumentException.ThrowIfNullOrWhiteSpace(voucherId);
 #else
-            if (string.IsNullOrWhiteSpace(voucherId))
-                throw new ArgumentException($"'{nameof(voucherId)}' cannot be null or whitespace.", nameof(voucherId));
+                if (string.IsNullOrWhiteSpace(voucherId))
+                    throw new ArgumentException($"'{nameof(voucherId)}' cannot be null or whitespace.", nameof(voucherId));
 #endif
 
-            // Get the response
-            var response = await ExecuteValidatedSOAPEnvelopeRequest<GetLastCheckpointInternalResponseModel, GetLastCheckpointInternalRequestModel>(new GetLastCheckpointInternalRequestModel()
+                // Get the response
+                var response = await ExecuteValidatedSOAPEnvelopeRequest<GetLastCheckpointInternalResponseModel, GetLastCheckpointInternalRequestModel>(new GetLastCheckpointInternalRequestModel()
+                {
+                    VoucherId = voucherId
+                }, cancellationToken).ConfigureAwait(false);
+
+                // If not successful...
+                if (!response.IsSuccessful)
+                    // Return the unsuccessful result
+                    return response.ToUnsuccessfulHttpRequestResult<CheckpointResponseModel>();
+
+                return HttpRequestResult.FromResult(response.Result.ToResponseModel(), response.RequestPayload, response.ResponsePayload);
+            }
+            catch (Exception ex)
             {
-                VoucherId = voucherId
-            }, cancellationToken).ConfigureAwait(false);
-
-            // If not successful...
-            if (!response.IsSuccessful)
-                // Return the unsuccessful result
-                return response.ToUnsuccessfulHttpRequestResult<CheckpointResponseModel>();
-
-            return HttpRequestResult.FromResult(response.Result.ToResponseModel(), response.RequestPayload, response.ResponsePayload);
+                return new HttpRequestResult<CheckpointResponseModel>(ex, null, null);
+            }
         }
 
         /// <summary>
@@ -389,27 +464,37 @@ namespace Couriers.Speedex.Services
         /// <param name="pickupId">The unique pickup id</param>
         /// <param name="cancellationToken">The cancellation token</param>
         /// <returns></returns>
-        public async Task<HttpRequestResult<PickupCheckpointResponseModel>> GetLastPickupCheckPointAsync([NotNull] string pickupId, CancellationToken cancellationToken = default)
+        public async Task<IHttpRequestResult<PickupCheckpointResponseModel>> GetLastPickupCheckPointAsync([NotNull] string pickupId, CancellationToken cancellationToken = default)
         {
+            if (cancellationToken.IsCancellationRequested)
+                return new HttpRequestResult<PickupCheckpointResponseModel>(OperationCancelledErrorMessage);
+
+            try
+            {
 #if NET8_0_OR_GREATER
             ArgumentException.ThrowIfNullOrWhiteSpace(pickupId);
 #else
-            if (string.IsNullOrWhiteSpace(pickupId))
-                throw new ArgumentException($"'{nameof(pickupId)}' cannot be null or whitespace.", nameof(pickupId));
+                if (string.IsNullOrWhiteSpace(pickupId))
+                    throw new ArgumentException($"'{nameof(pickupId)}' cannot be null or whitespace.", nameof(pickupId));
 #endif
 
-            // Get the response
-            var response = await ExecuteValidatedSOAPEnvelopeRequest<GetLastPickupCheckpointInternalResponseModel, GetLastPickupCheckpointInternalRequestModel>(new GetLastPickupCheckpointInternalRequestModel()
+                // Get the response
+                var response = await ExecuteValidatedSOAPEnvelopeRequest<GetLastPickupCheckpointInternalResponseModel, GetLastPickupCheckpointInternalRequestModel>(new GetLastPickupCheckpointInternalRequestModel()
+                {
+                    PickupId = pickupId
+                }, cancellationToken).ConfigureAwait(false);
+
+                // If not successful...
+                if (!response.IsSuccessful)
+                    // Return the unsuccessful result
+                    return response.ToUnsuccessfulHttpRequestResult<PickupCheckpointResponseModel>();
+
+                return HttpRequestResult.FromResult(response.Result.ToResponseModel(), response.RequestPayload, response.ResponsePayload);
+            }
+            catch (Exception ex)
             {
-                PickupId = pickupId
-            }, cancellationToken).ConfigureAwait(false);
-
-            // If not successful...
-            if (!response.IsSuccessful)
-                // Return the unsuccessful result
-                return response.ToUnsuccessfulHttpRequestResult<PickupCheckpointResponseModel>();
-
-            return HttpRequestResult.FromResult(response.Result.ToResponseModel(), response.RequestPayload, response.ResponsePayload);
+                return new HttpRequestResult<PickupCheckpointResponseModel>(ex, null, null);
+            }
         }
 
         /// <summary>
@@ -418,26 +503,36 @@ namespace Couriers.Speedex.Services
         /// <param name="model">The client references</param>
         /// <param name="cancellationToken">The cancellation token</param>
         /// <returns></returns>
-        public async Task<HttpRequestResult<IEnumerable<CheckpointResponseModel>>> GetTraceByClientReferencesAsync([NotNull] ClientReferencesRequestModel model, CancellationToken cancellationToken = default)
+        public async Task<IHttpRequestResult<IEnumerable<CheckpointResponseModel>>> GetTraceByClientReferencesAsync([NotNull] ClientReferencesRequestModel model, CancellationToken cancellationToken = default)
         {
+            if (cancellationToken.IsCancellationRequested)
+                return new HttpRequestResult<IEnumerable<CheckpointResponseModel>>(OperationCancelledErrorMessage);
+
+            try
+            {
 #if NET6_0_OR_GREATER
-            ArgumentNullException.ThrowIfNull(model);
+                ArgumentNullException.ThrowIfNull(model);
 #else
             if (model is null)
                 throw new ArgumentNullException(nameof(model));
 #endif
 
-            var requestModel = ClientReferencesInternalRequestModel.FromRequestModel(model);
+                var requestModel = ClientReferencesInternalRequestModel.FromRequestModel(model);
 
-            // Get the response
-            var response = await ExecuteValidatedSOAPEnvelopeRequest<GetTraceByClientReferencesInternalResponseModel, ClientReferencesInternalRequestModel>(requestModel, cancellationToken).ConfigureAwait(false);
+                // Get the response
+                var response = await ExecuteValidatedSOAPEnvelopeRequest<GetTraceByClientReferencesInternalResponseModel, ClientReferencesInternalRequestModel>(requestModel, cancellationToken).ConfigureAwait(false);
 
-            // If not successful...
-            if (!response.IsSuccessful)
-                // Return the unsuccessful result
-                return response.ToUnsuccessfulHttpRequestResult<IEnumerable<CheckpointResponseModel>>();
+                // If not successful...
+                if (!response.IsSuccessful)
+                    // Return the unsuccessful result
+                    return response.ToUnsuccessfulHttpRequestResult<IEnumerable<CheckpointResponseModel>>();
 
-            return HttpRequestResult.FromResult(response.Result.ToResponseModel(), response.RequestPayload, response.ResponsePayload);
+                return HttpRequestResult.FromResult(response.Result.ToResponseModel(), response.RequestPayload, response.ResponsePayload);
+            }
+            catch (Exception ex)
+            {
+                return new HttpRequestResult<IEnumerable<CheckpointResponseModel>>(ex, null, null);
+            }
         }
 
         /// <summary>
@@ -447,25 +542,35 @@ namespace Couriers.Speedex.Services
         /// <param name="dateTo">The end of the time frame</param>
         /// <param name="cancellationToken">The cancellation token</param>
         /// <returns></returns>
-        public async Task<HttpRequestResult<IEnumerable<CheckpointResponseModel>>> GetTraceByTimeFrameAsync(DateTime dateFrom, DateTime dateTo, CancellationToken cancellationToken = default)
+        public async Task<IHttpRequestResult<IEnumerable<CheckpointResponseModel>>> GetTraceByTimeFrameAsync(DateTime dateFrom, DateTime dateTo, CancellationToken cancellationToken = default)
         {
-            if (dateFrom > dateTo)
-                throw new ArgumentOutOfRangeException(nameof(dateFrom), $"The {nameof(dateFrom)} has to be before {nameof(dateTo)}.");
+            if (cancellationToken.IsCancellationRequested)
+                return new HttpRequestResult<IEnumerable<CheckpointResponseModel>>(OperationCancelledErrorMessage);
 
-            // Get the response
-            var response = await ExecuteValidatedSOAPEnvelopeRequest<GetTraceByTimeFrameInternalResponseModel, GetCheckpointsByTimeFrameInternalRequestModel>(new GetCheckpointsByTimeFrameInternalRequestModel()
+            try
             {
-                DateFrom = dateFrom,
-                DateTo = dateTo
-            }, cancellationToken).ConfigureAwait(false);
+                if (dateFrom > dateTo)
+                    throw new ArgumentOutOfRangeException(nameof(dateFrom), $"The {nameof(dateFrom)} has to be before {nameof(dateTo)}.");
 
-            // If not successful...
-            if (!response.IsSuccessful)
-                // Return the unsuccessful result
-                return response.ToUnsuccessfulHttpRequestResult<IEnumerable<CheckpointResponseModel>>();
+                // Get the response
+                var response = await ExecuteValidatedSOAPEnvelopeRequest<GetTraceByTimeFrameInternalResponseModel, GetCheckpointsByTimeFrameInternalRequestModel>(new GetCheckpointsByTimeFrameInternalRequestModel()
+                {
+                    DateFrom = dateFrom,
+                    DateTo = dateTo
+                }, cancellationToken).ConfigureAwait(false);
 
-            // Return the successful result
-            return HttpRequestResult.FromResult(response.Result.ToResponseModel(), response.RequestPayload, response.ResponsePayload);
+                // If not successful...
+                if (!response.IsSuccessful)
+                    // Return the unsuccessful result
+                    return response.ToUnsuccessfulHttpRequestResult<IEnumerable<CheckpointResponseModel>>();
+
+                // Return the successful result
+                return HttpRequestResult.FromResult(response.Result.ToResponseModel(), response.RequestPayload, response.ResponsePayload);
+            }
+            catch (Exception ex)
+            {
+                return new HttpRequestResult<IEnumerable<CheckpointResponseModel>>(ex, null, null);
+            }
         }
 
         /// <summary>
@@ -474,28 +579,38 @@ namespace Couriers.Speedex.Services
         /// <param name="voucherId">The unique voucher id</param>
         /// <param name="cancellationToken">The cancellation token</param>
         /// <returns></returns>
-        public async Task<HttpRequestResult<IEnumerable<CheckpointResponseModel>>> GetTraceByVoucherIdAsync([NotNull] string voucherId, CancellationToken cancellationToken = default)
+        public async Task<IHttpRequestResult<IEnumerable<CheckpointResponseModel>>> GetTraceByVoucherIdAsync([NotNull] string voucherId, CancellationToken cancellationToken = default)
         {
+            if (cancellationToken.IsCancellationRequested)
+                return new HttpRequestResult<IEnumerable<CheckpointResponseModel>>(OperationCancelledErrorMessage);
+
+            try
+            {
 #if NET8_0_OR_GREATER
             ArgumentException.ThrowIfNullOrWhiteSpace(voucherId);
 #else
-            if (string.IsNullOrWhiteSpace(voucherId))
-                throw new ArgumentException($"'{nameof(voucherId)}' cannot be null or whitespace.", nameof(voucherId));
+                if (string.IsNullOrWhiteSpace(voucherId))
+                    throw new ArgumentException($"'{nameof(voucherId)}' cannot be null or whitespace.", nameof(voucherId));
 #endif
 
-            // Get the response
-            var response = await ExecuteValidatedSOAPEnvelopeRequest<GetTraceByVoucherIdInternalResponseModel, GetTraceByVoucherIdInternalRequestModel>(new GetTraceByVoucherIdInternalRequestModel()
+                // Get the response
+                var response = await ExecuteValidatedSOAPEnvelopeRequest<GetTraceByVoucherIdInternalResponseModel, GetTraceByVoucherIdInternalRequestModel>(new GetTraceByVoucherIdInternalRequestModel()
+                {
+                    VoucherId = voucherId
+                }, cancellationToken).ConfigureAwait(false);
+
+                // If not successful...
+                if (!response.IsSuccessful)
+                    // Return the unsuccessful result
+                    return response.ToUnsuccessfulHttpRequestResult<IEnumerable<CheckpointResponseModel>>();
+
+                // Return the successful result
+                return HttpRequestResult.FromResult(response.Result.ToResponseModel(), response.RequestPayload, response.ResponsePayload);
+            }
+            catch (Exception ex)
             {
-                VoucherId = voucherId
-            }, cancellationToken).ConfigureAwait(false);
-
-            // If not successful...
-            if (!response.IsSuccessful)
-                // Return the unsuccessful result
-                return response.ToUnsuccessfulHttpRequestResult<IEnumerable<CheckpointResponseModel>>();
-
-            // Return the successful result
-            return HttpRequestResult.FromResult(response.Result.ToResponseModel(), response.RequestPayload, response.ResponsePayload);
+                return new HttpRequestResult<IEnumerable<CheckpointResponseModel>>(ex, null, null);
+            }
         }
 
         /// <summary>
@@ -504,19 +619,29 @@ namespace Couriers.Speedex.Services
         /// <param name="pickupId">The unique pickup id</param>
         /// <param name="cancellationToken">The cancellation token</param>
         /// <returns></returns>
-        public async Task<HttpRequestResult> CancelPickupByIdAsync([NotNull] string pickupId, CancellationToken cancellationToken = default)
+        public async Task<IHttpRequestResult> CancelPickupByIdAsync([NotNull] string pickupId, CancellationToken cancellationToken = default)
         {
+            if (cancellationToken.IsCancellationRequested)
+                return new HttpRequestResult<IEnumerable<CheckpointResponseModel>>(OperationCancelledErrorMessage);
+
+            try
+            {
 #if NET8_0_OR_GREATER
             ArgumentException.ThrowIfNullOrWhiteSpace(pickupId);
 #else
-            if (string.IsNullOrWhiteSpace(pickupId))
-                throw new ArgumentException($"'{nameof(pickupId)}' cannot be null or whitespace.", nameof(pickupId));
+                if (string.IsNullOrWhiteSpace(pickupId))
+                    throw new ArgumentException($"'{nameof(pickupId)}' cannot be null or whitespace.", nameof(pickupId));
 #endif
 
-            return await ExecuteValidatedSOAPEnvelopeRequest<CancelPickupInternalResponseModel, CancelPickupByIdInternalRequestModel>(new CancelPickupByIdInternalRequestModel()
+                return await ExecuteValidatedSOAPEnvelopeRequest<CancelPickupInternalResponseModel, CancelPickupByIdInternalRequestModel>(new CancelPickupByIdInternalRequestModel()
+                {
+                    PickupNumber = pickupId
+                }, cancellationToken).ConfigureAwait(false);
+            }
+            catch (Exception ex)
             {
-                PickupNumber = pickupId
-            }, cancellationToken).ConfigureAwait(false);
+                return new HttpRequestResult(ex, null, null);
+            }
         }
 
         /// <summary>
@@ -525,27 +650,37 @@ namespace Couriers.Speedex.Services
         /// <param name="model">The pickup details</param>
         /// <param name="cancellationToken">The cancellation token</param>
         /// <returns></returns>
-        public async Task<HttpRequestResult<string>> CreatePickupAsync([NotNull] PickupRequestModel model, CancellationToken cancellationToken = default)
+        public async Task<IHttpRequestResult<string>> CreatePickupAsync([NotNull] PickupRequestModel model, CancellationToken cancellationToken = default)
         {
+            if (cancellationToken.IsCancellationRequested)
+                return new HttpRequestResult<string>(OperationCancelledErrorMessage);
+
+            try
+            {
 #if NET6_0_OR_GREATER
-            ArgumentNullException.ThrowIfNull(model);
+                ArgumentNullException.ThrowIfNull(model);
 #else
             if (model is null)
                 throw new ArgumentNullException(nameof(model));
 #endif
 
-            var requestModel = PickupInternalRequestModel.FromRequestModel(model);
+                var requestModel = PickupInternalRequestModel.FromRequestModel(model);
 
-            // Get the response
-            var response = await ExecuteValidatedSOAPEnvelopeRequest<CreatePickupInternalResponseModel, PickupInternalRequestModel>(requestModel, cancellationToken).ConfigureAwait(false);
+                // Get the response
+                var response = await ExecuteValidatedSOAPEnvelopeRequest<CreatePickupInternalResponseModel, PickupInternalRequestModel>(requestModel, cancellationToken).ConfigureAwait(false);
 
-            // If not successful...
-            if (!response.IsSuccessful)
-                // Return the unsuccessful result
-                return response.ToUnsuccessfulHttpRequestResult<string>();
+                // If not successful...
+                if (!response.IsSuccessful)
+                    // Return the unsuccessful result
+                    return response.ToUnsuccessfulHttpRequestResult<string>();
 
-            // Return the successful result
-            return HttpRequestResult.FromResult(response.Result.Result.Result, response.RequestPayload, response.ResponsePayload);
+                // Return the successful result
+                return HttpRequestResult.FromResult(response.Result.Result.Result, response.RequestPayload, response.ResponsePayload);
+            }
+            catch (Exception ex)
+            {
+                return new HttpRequestResult<string>(ex, null, null);
+            }
         }
 
         /// <summary>
@@ -555,25 +690,35 @@ namespace Couriers.Speedex.Services
         /// <param name="dateTo">The end of the time frame</param>
         /// <param name="cancellationToken">The cancellation token</param>
         /// <returns></returns>
-        public async Task<HttpRequestResult<IEnumerable<ConsignmentDetailsResponseModel>>> GetConsignmentsByDateRangeAsync(DateTime dateFrom, DateTime dateTo, CancellationToken cancellationToken = default)
+        public async Task<IHttpRequestResult<IEnumerable<ConsignmentDetailsResponseModel>>> GetConsignmentsByDateRangeAsync(DateTime dateFrom, DateTime dateTo, CancellationToken cancellationToken = default)
         {
-            if (dateFrom > dateTo)
-                throw new ArgumentOutOfRangeException(nameof(dateFrom), $"The {nameof(dateFrom)} has to be before {nameof(dateTo)}.");
+            if (cancellationToken.IsCancellationRequested)
+                return new HttpRequestResult<IEnumerable<ConsignmentDetailsResponseModel>>(OperationCancelledErrorMessage);
 
-            // Get the response
-            var response = await ExecuteValidatedSOAPEnvelopeRequest<GetConsignmentsByDateInternalResponseModel, GetConsignmentsByDateRangeInternalRequestModel>(new GetConsignmentsByDateRangeInternalRequestModel()
+            try
             {
-                DateFrom = dateFrom,
-                DateTo = dateTo
-            }, cancellationToken).ConfigureAwait(false);
+                if (dateFrom > dateTo)
+                    throw new ArgumentOutOfRangeException(nameof(dateFrom), $"The {nameof(dateFrom)} has to be before {nameof(dateTo)}.");
 
-            // If not successful...
-            if (!response.IsSuccessful)
-                // Return the unsuccessful result
-                return response.ToUnsuccessfulHttpRequestResult<IEnumerable<ConsignmentDetailsResponseModel>>();
+                // Get the response
+                var response = await ExecuteValidatedSOAPEnvelopeRequest<GetConsignmentsByDateInternalResponseModel, GetConsignmentsByDateRangeInternalRequestModel>(new GetConsignmentsByDateRangeInternalRequestModel()
+                {
+                    DateFrom = dateFrom,
+                    DateTo = dateTo
+                }, cancellationToken).ConfigureAwait(false);
 
-            // Return the successful result
-            return HttpRequestResult.FromResult(response.Result.ToResponseModel(), response.RequestPayload, response.ResponsePayload);
+                // If not successful...
+                if (!response.IsSuccessful)
+                    // Return the unsuccessful result
+                    return response.ToUnsuccessfulHttpRequestResult<IEnumerable<ConsignmentDetailsResponseModel>>();
+
+                // Return the successful result
+                return HttpRequestResult.FromResult(response.Result.ToResponseModel(), response.RequestPayload, response.ResponsePayload);
+            }
+            catch (Exception ex)
+            {
+                return new HttpRequestResult<IEnumerable<ConsignmentDetailsResponseModel>>(ex, null, null);
+            }
         }
 
         /// <summary>
@@ -584,25 +729,35 @@ namespace Couriers.Speedex.Services
         /// <param name="dateTo">The end of the time frame</param>
         /// <param name="cancellationToken">The cancellation token</param>
         /// <returns></returns>
-        public async Task<HttpRequestResult<IEnumerable<DepositedConsignmentResponseModel>>> GetDepositedConsignmentsByDateRangeAsync(DateTime dateFrom, DateTime dateTo, CancellationToken cancellationToken = default)
+        public async Task<IHttpRequestResult<IEnumerable<DepositedConsignmentResponseModel>>> GetDepositedConsignmentsByDateRangeAsync(DateTime dateFrom, DateTime dateTo, CancellationToken cancellationToken = default)
         {
-            if (dateFrom > dateTo)
-                throw new ArgumentOutOfRangeException(nameof(dateFrom), $"The {nameof(dateFrom)} has to be before {nameof(dateTo)}.");
+            if (cancellationToken.IsCancellationRequested)
+                return new HttpRequestResult<IEnumerable<DepositedConsignmentResponseModel>>(OperationCancelledErrorMessage);
 
-            // Get the response
-            var response = await ExecuteValidatedSOAPEnvelopeRequest<GetDepositedConsignmentsByDateInternalResponseModel, GetDepositedConsignmentsByDateRangeInternalRequestModel>(new GetDepositedConsignmentsByDateRangeInternalRequestModel()
+            try
             {
-                DateFrom = dateFrom,
-                DateTo = dateTo
-            }, cancellationToken).ConfigureAwait(false);
+                if (dateFrom > dateTo)
+                    throw new ArgumentOutOfRangeException(nameof(dateFrom), $"The {nameof(dateFrom)} has to be before {nameof(dateTo)}.");
 
-            // If not successful...
-            if (!response.IsSuccessful)
-                // Return the unsuccessful result
-                return response.ToUnsuccessfulHttpRequestResult<IEnumerable<DepositedConsignmentResponseModel>>();
+                // Get the response
+                var response = await ExecuteValidatedSOAPEnvelopeRequest<GetDepositedConsignmentsByDateInternalResponseModel, GetDepositedConsignmentsByDateRangeInternalRequestModel>(new GetDepositedConsignmentsByDateRangeInternalRequestModel()
+                {
+                    DateFrom = dateFrom,
+                    DateTo = dateTo
+                }, cancellationToken).ConfigureAwait(false);
 
-            // Return the successful result
-            return HttpRequestResult.FromResult(response.Result.ToResponseModel(), response.RequestPayload, response.ResponsePayload);
+                // If not successful...
+                if (!response.IsSuccessful)
+                    // Return the unsuccessful result
+                    return response.ToUnsuccessfulHttpRequestResult<IEnumerable<DepositedConsignmentResponseModel>>();
+
+                // Return the successful result
+                return HttpRequestResult.FromResult(response.Result.ToResponseModel(), response.RequestPayload, response.ResponsePayload);
+            }
+            catch (Exception ex)
+            {
+                return new HttpRequestResult<IEnumerable<DepositedConsignmentResponseModel>>(ex, null, null);
+            }
         }
 
         /// <summary>
@@ -611,28 +766,38 @@ namespace Couriers.Speedex.Services
         /// <param name="pickupId">The unique pickup id</param>
         /// <param name="cancellationToken">The cancellation token</param>
         /// <returns></returns>
-        public async Task<HttpRequestResult<PickupResponseModel>> GetPickupByIdAsync([NotNull] string pickupId, CancellationToken cancellationToken = default)
+        public async Task<IHttpRequestResult<PickupResponseModel>> GetPickupByIdAsync([NotNull] string pickupId, CancellationToken cancellationToken = default)
         {
+            if (cancellationToken.IsCancellationRequested)
+                return new HttpRequestResult<PickupResponseModel>(OperationCancelledErrorMessage);
+
+            try
+            {
 #if NET8_0_OR_GREATER
             ArgumentException.ThrowIfNullOrWhiteSpace(pickupId);
 #else
-            if (string.IsNullOrWhiteSpace(pickupId))
-                throw new ArgumentException($"'{nameof(pickupId)}' cannot be null or whitespace.", nameof(pickupId));
+                if (string.IsNullOrWhiteSpace(pickupId))
+                    throw new ArgumentException($"'{nameof(pickupId)}' cannot be null or whitespace.", nameof(pickupId));
 #endif
 
-            // Get the response
-            var response = await ExecuteValidatedSOAPEnvelopeRequest<GetPickupInternalResponseModel, GetPickupByIdInternalRequestModel>(new GetPickupByIdInternalRequestModel()
+                // Get the response
+                var response = await ExecuteValidatedSOAPEnvelopeRequest<GetPickupInternalResponseModel, GetPickupByIdInternalRequestModel>(new GetPickupByIdInternalRequestModel()
+                {
+                    PickupNumber = pickupId
+                }, cancellationToken).ConfigureAwait(false);
+
+                // If not successful...
+                if (!response.IsSuccessful)
+                    // Return the unsuccessful result
+                    return response.ToUnsuccessfulHttpRequestResult<PickupResponseModel>();
+
+                // Return the successful result
+                return HttpRequestResult.FromResult(response.Result.ToResponseModel(), response.RequestPayload, response.ResponsePayload);
+            }
+            catch (Exception ex)
             {
-                PickupNumber = pickupId
-            }, cancellationToken).ConfigureAwait(false);
-
-            // If not successful...
-            if (!response.IsSuccessful)
-                // Return the unsuccessful result
-                return response.ToUnsuccessfulHttpRequestResult<PickupResponseModel>();
-
-            // Return the successful result
-            return HttpRequestResult.FromResult(response.Result.ToResponseModel(), response.RequestPayload, response.ResponsePayload);
+                return new HttpRequestResult<PickupResponseModel>(ex, null, null);
+            }
         }
 
         /// <summary>
@@ -641,8 +806,11 @@ namespace Couriers.Speedex.Services
         /// <param name="model">The details for the pickup reschedule</param>
         /// <param name="cancellationToken">The cancellation token</param>
         /// <returns></returns>
-        public async Task<HttpRequestResult> ReschedulePickupAsync(ReschedulePickupRequestModel model, CancellationToken cancellationToken = default)
+        public async Task<IHttpRequestResult> ReschedulePickupAsync(ReschedulePickupRequestModel model, CancellationToken cancellationToken = default)
         {
+            if (cancellationToken.IsCancellationRequested)
+                return new HttpRequestResult(OperationCancelledErrorMessage);
+
             var requestModel = ReschedulePickupInternalRequestModel.FromRequestModel(model);
 
             return await ExecuteValidatedSOAPEnvelopeRequest<ReschedulePickupInternalResponseModel, ReschedulePickupInternalRequestModel>(requestModel, cancellationToken).ConfigureAwait(false);
@@ -700,8 +868,11 @@ namespace Couriers.Speedex.Services
         /// </summary>
         /// <param name="cancellationToken">The cancellation token</param>
         /// <returns></returns>
-        private async Task<HttpRequestResult> EnsureValidSessionAsync(CancellationToken cancellationToken = default)
+        private async Task<IHttpRequestResult> EnsureValidSessionAsync(CancellationToken cancellationToken = default)
         {
+            if (cancellationToken.IsCancellationRequested)
+                return new HttpRequestResult<IEnumerable<CheckpointResponseModel>>("Operation cancelled.");
+
             // Get the response
             var response = await CreateSessionAsync(cancellationToken).ConfigureAwait(false);
 
@@ -728,10 +899,13 @@ namespace Couriers.Speedex.Services
         /// <param name="requestModel">The request model</param>
         /// <param name="cancellationToken">The cancellation token</param>
         /// <returns></returns>
-        private async Task<HttpRequestResult<TResponse>> ExecuteValidatedSOAPEnvelopeRequest<TResponse, TRequest>(TRequest requestModel, CancellationToken cancellationToken = default)
+        private async Task<IHttpRequestResult<TResponse>> ExecuteValidatedSOAPEnvelopeRequest<TResponse, TRequest>(TRequest requestModel, CancellationToken cancellationToken = default)
             where TResponse : class, ISoapReturnMessageModel, new()
             where TRequest : SessionIdInternalRequestModel, new()
         {
+            if (cancellationToken.IsCancellationRequested)
+                return new HttpRequestResult<TResponse>(OperationCancelledErrorMessage);
+
             // If the session id requires refresh...
             if (RequiresSessionIdRefresh())
                 // Refresh the token
@@ -771,11 +945,13 @@ namespace Couriers.Speedex.Services
             where TResponse : class, ISoapReturnMessageModel, new()
             where TRequest : class, new()
         {
+            if (cancellationToken.IsCancellationRequested)
+                return new InternalHttpRequestResult<TResponse>("Operation cancelled.");
+
             var serializedRequestPayload = string.Empty;
 
             var serializedResponsePayload = string.Empty;
 
-#pragma warning disable CA1031 // Do not catch general exception types
 
             try
             {
@@ -828,9 +1004,6 @@ namespace Couriers.Speedex.Services
             {
                 return new InternalHttpRequestResult<TResponse>(ex, serializedRequestPayload, serializedResponsePayload);
             }
-
-#pragma warning restore CA1031 // Do not catch general exception types
-
         }
 
         #endregion
@@ -884,6 +1057,15 @@ namespace Couriers.Speedex.Services
             public InternalHttpRequestResult([NotNull] string errorMessage, string? requestPayload, string? responsePayload, uint? errorCode = null) : base(errorMessage, requestPayload, responsePayload)
             {
                 IsUnauthorizedRequest = errorCode.HasValue && errorCode.Value == UnauthorizedRequestCode;
+            }
+
+            /// <summary>
+            /// <inheritdoc/>
+            /// </summary>
+            /// <param name="errorMessage">The error message</param>
+            public InternalHttpRequestResult([NotNull] string errorMessage) : this(errorMessage, null, null, 0)
+            {
+
             }
 
             /// <summary>

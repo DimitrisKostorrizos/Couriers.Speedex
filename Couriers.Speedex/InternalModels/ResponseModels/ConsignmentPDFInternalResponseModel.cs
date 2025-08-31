@@ -50,10 +50,21 @@ namespace Couriers.Speedex.InternalModels.ResponseModels
         public override string ToString() => VoucherId;
 
         /// <summary>
-        /// Creates and return the <see cref="ConsignmentPdfResponseModel"/> from the current object
+        /// <inheritdoc/>
         /// </summary>
         /// <returns></returns>
-        public ConsignmentPdfResponseModel ToResponseModel() => new(VoucherId, Voucher);
+        public ConsignmentPdfResponseModel ToResponseModel()
+        {
+#if NET7_0_OR_GREATER
+            return new()
+            {
+                Base64String = Voucher,
+                VoucherId = VoucherId
+            };
+#else
+            return new(VoucherId, Voucher);
+#endif
+        }
 
         #endregion
     }

@@ -4,7 +4,6 @@ using Couriers.Speedex.RequestModels;
 using System;
 using System.ComponentModel;
 using System.Diagnostics.CodeAnalysis;
-using System.Linq;
 using System.Xml.Serialization;
 
 namespace Couriers.Speedex.InternalModels.RequestModels
@@ -20,7 +19,6 @@ namespace Couriers.Speedex.InternalModels.RequestModels
 
 #pragma warning disable CA1819 // Properties should not return arrays
 
-#if NET8_0_OR_GREATER
         /// <summary>
         /// The ids for the connected master consignments
         /// NOTE: The maximum count is <see cref="SpeedexConstants.MaximumNumberOfConsignmentsForPickup"/> master consignment numbers
@@ -28,15 +26,6 @@ namespace Couriers.Speedex.InternalModels.RequestModels
         [XmlArray("consignmentNumbers")]
         [XmlArrayItem("string")]
         public string[] ConsignmentIds { get; set; } = [];
-#else
-        /// <summary>
-        /// The ids for the connected master consignments
-        /// NOTE: The maximum count is <see cref="SpeedexConstants.MaximumNumberOfConsignmentsForPickup"/> master consignment numbers
-        /// </summary>
-        [XmlArray("consignmentNumbers")]
-        [XmlArrayItem("string")]
-        public string[] ConsignmentIds { get; set; } = Array.Empty<string>();
-#endif
 
 #pragma warning restore CA1819 // Properties should not return arrays
 
@@ -97,11 +86,7 @@ namespace Couriers.Speedex.InternalModels.RequestModels
             var internalModel = new PickupInternalRequestModel()
             {
                 Comments = model.Comments,
-#if NET8_0_OR_GREATER
                 ConsignmentIds = [.. model.ConsignmentIds],
-#else
-                ConsignmentIds = model.ConsignmentIds.ToArray(),
-#endif
 #if NET6_0_OR_GREATER
                 PickupDate = model.PickupDate.ToDateTime(TimeOnly.MinValue)
 #else

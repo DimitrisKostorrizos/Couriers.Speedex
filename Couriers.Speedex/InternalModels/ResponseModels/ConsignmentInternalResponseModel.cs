@@ -1,4 +1,6 @@
-﻿using Couriers.Speedex.Interfaces;
+﻿using Couriers.Speedex.Constants;
+using Couriers.Speedex.Enums;
+using Couriers.Speedex.Interfaces;
 using Couriers.Speedex.ResponseModels;
 
 using System.ComponentModel;
@@ -86,7 +88,7 @@ namespace Couriers.Speedex.InternalModels.ResponseModels
         /// The payment type
         /// </summary>
         [XmlElement("Pod_Amount_Description")]
-        public string PaymentType { get; set; } = string.Empty;
+        public string? PaymentType { get; set; }
 
         /// <summary>
         /// The address for the delivery
@@ -186,41 +188,60 @@ namespace Couriers.Speedex.InternalModels.ResponseModels
         public override string ToString() => VoucherId;
 
         /// <summary>
-        /// Creates and return the <see cref="ConsignmentResponseModel"/> from the current object
+        /// <inheritdoc/>
         /// </summary>
         /// <returns></returns>
         public ConsignmentResponseModel ToResponseModel()
         {
-            var responseModel = new ConsignmentResponseModel()
+            var paymentType = default(PaymentType?);
+
+            if (!string.IsNullOrWhiteSpace(PaymentType))
+                paymentType = SpeedexHelpers.ToPaymentType(PaymentType);
+
+            var chargeType = SpeedexHelpers.ToChargeType(ChargeType);
+
+            var deliveryTime = SpeedexHelpers.ToDeliveryTimeLimit(DeliveryTime);
+
+            var shouldBeDeliveredOnSaturday = ShouldBeDeliveredOnSaturday == SpeedexConstants.TrueValueIntegerRepresentation;
+
+            var customerFlag = (int)CustomerFlag;
+
+            var itemCount = (int)ItemCount;
+
+            var cost = (decimal)Cost;
+
+#if NET7_0_OR_GREATER
+            return new()
             {
                 Address = Address,
                 AgreementCode = AgreementCode,
                 BranchBankCode = BranchBankCode,
-                ChargeType = SpeedexHelpers.ToChargeType(ChargeType),
-                Cost = Cost,
+                ChargeType = chargeType,
+                Cost = cost,
                 CustomerCode = CustomerCode,
-                CustomerFlag = CustomerFlag,
-                DeliveryTime = SpeedexHelpers.ToDeliveryTimeLimit(DeliveryTime),
+                CustomerFlag = customerFlag,
+                DeliveryTime = deliveryTime,
                 FirstCustomerReference = FirstCustomerReference,
-                FirstCommentsPart = FirstCustomerReference,
+                CommentsFirstPart = FirstCustomerReference,
                 InsuranceAmount = InsuranceAmount,
-                ItemCount = ItemCount,
+                ParcelCount = itemCount,
                 RecipientName = RecipientName,
                 RecipientPhoneNumber = RecipientPhoneNumber,
                 SecondCustomerReference = SecondCustomerReference,
-                SecondCommentsPart = SecondCommentsPart,
-                ShouldBeDeliveredOnSaturday = ShouldBeDeliveredOnSaturday == 1,
-                VoucherId = VoucherId,
+                CommentsSecondPart = SecondCommentsPart,
+                ShouldBeDeliveredOnSaturday = shouldBeDeliveredOnSaturday,
+                ConsignmentId = VoucherId,
                 ThirdCustomerReference = ThirdCustomerReference,
-                ThirdCommentsPart = ThirdCommentsPart,
+                CommentsThirdPart = ThirdCommentsPart,
                 Weight = Weight,
-                ZipCode = ZipCode
+                ZipCode = ZipCode,
+                PaymentType = paymentType
             };
-
-            if (PaymentType is not null)
-                responseModel.PaymentType = SpeedexHelpers.ToPaymentType(PaymentType);
-
-            return responseModel;
+#else
+            return new(customerFlag, BranchBankCode, FirstCommentsPart, SecondCommentsPart, ThirdCommentsPart, paymentType, 
+                cost, Weight, chargeType, AgreementCode, CustomerCode, FirstCustomerReference, SecondCustomerReference, ThirdCustomerReference, Address,RecipientName, 
+                RecipientPhoneNumber, InsuranceAmount, shouldBeDeliveredOnSaturday, VoucherId, itemCount, ZipCode, deliveryTime);
+#endif
         }
 
         #endregion

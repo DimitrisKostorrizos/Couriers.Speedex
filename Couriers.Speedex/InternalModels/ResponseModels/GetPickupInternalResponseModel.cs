@@ -41,13 +41,13 @@ namespace Couriers.Speedex.InternalModels.ResponseModels
         /// <inheritdoc/>
         /// </summary>
         /// <returns></returns>
-        public override string ToString() => Result.Result?.ToString() ?? string.Empty;
+        public override string ToString() => Result.Result.ToString();
 
         /// <summary>
         /// Creates and return the <see cref="PickupResponseModel"/> from the current object
         /// </summary>
         /// <returns></returns>
-        public PickupResponseModel ToResponseModel() => Result.Result?.ToResponseModel() ?? new PickupResponseModel();
+        public PickupResponseModel ToResponseModel() => Result.Result.ToResponseModel();
 
         #endregion
     }

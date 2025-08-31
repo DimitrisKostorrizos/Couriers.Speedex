@@ -252,11 +252,11 @@ namespace Couriers.Speedex.InternalModels.ResponseModels
                 CountryCode = CountryCode,
                 CustomerCode = CustomerCode,
                 CustomerComments = CustomerComments,
-                DeliveryPostCode = DeliveryPostCode,
+                ZipCode = DeliveryPostCode,
                 FirstCustomerReference = FirstCustomerReference,
                 InsuranceAmount = InsuranceAmount,
                 IsReturnItem = IsReturnItem,
-                IsSaturdayDelivery = IsSaturdayDelivery,
+                ShouldBeDeliveredOnSaturday = IsSaturdayDelivery,
                 MasterConsignmentId = MasterConsignmentId,
                 ParcelCount = ParcelCount,
                 PickupAddress = PickupAddress,
@@ -285,6 +285,8 @@ namespace Couriers.Speedex.InternalModels.ResponseModels
             if (DateTime.TryParse(DeliveryTimeTo, SpeedexConstants.SpeedexCultureInfo, DateTimeStyles.None, out result))
 #endif
                 model.DeliveryTimeTo = result;
+
+            model.DeliveryTime = SpeedexHelpers.GetDeliveryTimeLimitByTimeRange(model.DeliveryTimeFrom, model.DeliveryTimeTo);
 
             return model;
         }

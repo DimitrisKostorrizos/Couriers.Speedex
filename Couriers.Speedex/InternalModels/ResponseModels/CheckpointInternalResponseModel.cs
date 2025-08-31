@@ -105,11 +105,31 @@ namespace Couriers.Speedex.InternalModels.ResponseModels
         public override string ToString() => VoucherId;
 
         /// <summary>
-        /// Creates and return the <see cref="CheckpointResponseModel"/> from the current object
+        /// <inheritdoc/>
         /// </summary>
         /// <returns></returns>
-        public CheckpointResponseModel ToResponseModel() => new(BranchDepot, BranchId, CheckpointDate, CustomerComments, FirstCustomerReference,
+        public CheckpointResponseModel ToResponseModel()
+        {
+#if NET7_0_OR_GREATER
+            return new()
+            {
+                BranchDepot = BranchDepot, 
+                BranchId = BranchId,
+                CheckpointDate = CheckpointDate,
+                CustomerComments = CustomerComments,
+                FirstCustomerReference = FirstCustomerReference,
+                RecipientName = RecipientName,
+                SecondCustomerReference = SecondCustomerReference,
+                StatusCode = StatusCode,
+                StatusDescription = StatusDescription,
+                ThirdCustomerReference = ThirdCustomerReference,
+                VoucherId = VoucherId
+            };
+#else
+            return new(BranchDepot, BranchId, CheckpointDate, CustomerComments, FirstCustomerReference,
             SecondCustomerReference, ThirdCustomerReference, RecipientName, StatusCode, StatusDescription, VoucherId);
+#endif
+        }
 
         #endregion
     }

@@ -20,21 +20,12 @@ namespace Couriers.Speedex.InternalModels.ResponseModels
 
 #pragma warning disable CA1819 // Properties should not return arrays
 
-#if NET8_0_OR_GREATER
         /// <summary>
         /// The branch depots
         /// </summary>
         [XmlArray("Branches")]
         [XmlArrayItem("Branch")]
         public BranchInternalResponseModel[] BranchDepots { get; set; } = [];
-#else
-        /// <summary>
-        /// The branch depots
-        /// </summary>
-        [XmlArray("Branches")]
-        [XmlArrayItem("Branch")]
-        public BranchInternalResponseModel[] BranchDepots { get; set; } = Array.Empty<BranchInternalResponseModel>();
-#endif
 
 #pragma warning restore CA1819 // Properties should not return arrays
 
@@ -64,14 +55,8 @@ namespace Couriers.Speedex.InternalModels.ResponseModels
         /// Creates and return the <see cref="IEnumerable{T}"/> from the current object
         /// </summary>
         /// <returns></returns>
-        public IEnumerable<BranchResponseModel> ToResponseModel()
-        {
-#if NET8_0_OR_GREATER
-            return [.. BranchDepots.Select(x => x.ToResponseModel())];
-#else
-            return BranchDepots.Select(x => x.ToResponseModel()).ToArray();
-#endif
-        }
+        public IEnumerable<BranchResponseModel> ToResponseModel() 
+            => [.. BranchDepots.Select(x => x.ToResponseModel())];
 
         #endregion
     }

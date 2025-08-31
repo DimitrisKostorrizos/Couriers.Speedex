@@ -67,7 +67,7 @@ namespace Couriers.Speedex.RequestModels
         /// <param name="deliveryTime">The delivery time frame</param>
         public ReschedulePickupRequestModel(
 #if NET5_0
-            DateTime pickupDate, 
+            DateTime pickupDate,
 #else
             DateOnly pickupDate,
 #endif
@@ -79,7 +79,7 @@ namespace Couriers.Speedex.RequestModels
             DeliveryTime = deliveryTime;
         }
 
-#endregion
+        #endregion
 
         #region Public Methods
 

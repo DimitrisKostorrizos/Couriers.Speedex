@@ -26,21 +26,12 @@ namespace Couriers.Speedex.InternalModels.ResponseModels
         [XmlElement("Number")]
         public string Id { get; set; } = string.Empty;
 
-#if NET8_0_OR_GREATER
         /// <summary>
         /// The related consignment ids
         /// </summary>
         [XmlArray("ConsignmentNumbers")]
         [XmlArrayItem("string")]
         public string[] ConsignmentIds { get; set; } = [];
-#else
-        /// <summary>
-        /// The related consignment ids
-        /// </summary>
-        [XmlArray("ConsignmentNumbers")]
-        [XmlArrayItem("string")]
-        public string[] ConsignmentIds { get; set; } = Array.Empty<string>();
-#endif
 
         /// <summary>
         /// The checkpoint code
@@ -146,7 +137,19 @@ namespace Couriers.Speedex.InternalModels.ResponseModels
         {
             var pickupDate = DateTime.Parse(PickupDate, SpeedexConstants.SpeedexCultureInfo);
 
-            var model = new PickupResponseModel()
+#if NET7_0_OR_GREATER
+
+            var pickupTimeFrom = default(TimeOnly?);
+
+            if (TimeOnly.TryParse(PickupTimeFrom, SpeedexConstants.SpeedexCultureInfo, out var pickupTimeFromResult))
+                pickupTimeFrom = pickupTimeFromResult;
+
+            var pickupTimeTo = default(TimeOnly?);
+
+            if (TimeOnly.TryParse(PickupTimeTo, SpeedexConstants.SpeedexCultureInfo, out var pickupTimeToResult))
+                pickupTimeTo = pickupTimeToResult;
+
+            return new PickupResponseModel()
             {
                 Address = Address,
                 CheckpointCode = CheckpointCode,
@@ -157,34 +160,37 @@ namespace Couriers.Speedex.InternalModels.ResponseModels
                 CountryCode = CountryCode,
                 Id = Id,
                 Name = Name,
+                PostCode = PostCode,
                 PhoneNumber = PhoneNumber,
-#if NET5_0
-                PickupDate = pickupDate,
-#else
                 PickupDate = DateOnly.FromDateTime(pickupDate),
-#endif
-                PostCode = PostCode
+                PickupTimeFrom = pickupTimeFrom,
+                PickupTimeTo = pickupTimeTo
             };
-
-#if NET5_0
-            if (DateTime.TryParse(PickupTimeTo, SpeedexConstants.SpeedexCultureInfo, DateTimeStyles.None, out var result))
 #elif NET6_0
-            if (TimeOnly.TryParse(PickupTimeTo, SpeedexConstants.SpeedexCultureInfo, DateTimeStyles.None, out var result))
-#else
-            if (TimeOnly.TryParse(PickupTimeTo, SpeedexConstants.SpeedexCultureInfo, out var result))
-#endif
-                model.PickupTimeTo = result;
+            var pickupTimeFrom = default(TimeOnly?);
 
-#if NET5_0
-            if (DateTime.TryParse(PickupTimeFrom, SpeedexConstants.SpeedexCultureInfo, DateTimeStyles.None, out result))
-#elif NET6_0
-            if (TimeOnly.TryParse(PickupTimeFrom, SpeedexConstants.SpeedexCultureInfo, DateTimeStyles.None, out result))
-#else
-            if (TimeOnly.TryParse(PickupTimeFrom, SpeedexConstants.SpeedexCultureInfo, out result))
-#endif
-                model.PickupTimeFrom = result;
+            if (TimeOnly.TryParse(PickupTimeFrom, SpeedexConstants.SpeedexCultureInfo, DateTimeStyles.None, out var pickupTimeFromResult))
+                pickupTimeFrom = pickupTimeFromResult;
 
-            return model;
+            var pickupTimeTo = default(TimeOnly?);
+
+            if (TimeOnly.TryParse(PickupTimeTo, SpeedexConstants.SpeedexCultureInfo, DateTimeStyles.None, out var pickupTimeToResult))
+                pickupTimeTo = pickupTimeToResult;
+
+            return new(Id, ConsignmentIds, CheckpointCode, CheckpointGroupCode, Address, City, CountryCode, Comments, Name, PhoneNumber, PostCode, DateOnly.FromDateTime(pickupDate), pickupTimeFrom, pickupTimeTo);
+#else
+            var pickupTimeFrom = default(DateTime?);
+
+            if (DateTime.TryParse(PickupTimeFrom, SpeedexConstants.SpeedexCultureInfo, DateTimeStyles.None, out var pickupTimeFromResult))
+                pickupTimeFrom = pickupTimeFromResult;
+
+            var pickupTimeTo = default(DateTime?);
+
+            if (DateTime.TryParse(PickupTimeTo, SpeedexConstants.SpeedexCultureInfo, DateTimeStyles.None, out var pickupTimeToResult))
+                pickupTimeTo = pickupTimeToResult;
+
+            return new(Id, ConsignmentIds, CheckpointCode, CheckpointGroupCode, Address, City, CountryCode, Comments, Name, PhoneNumber, PostCode, pickupDate, pickupTimeFrom, pickupTimeTo);
+#endif
         }
 
         #endregion
