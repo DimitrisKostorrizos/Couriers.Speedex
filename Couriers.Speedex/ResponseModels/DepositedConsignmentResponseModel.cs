@@ -74,7 +74,7 @@ namespace Couriers.Speedex.ResponseModels
 
 #if NET7_0_OR_GREATER
         /// <summary>
-        /// Default constructor
+        /// Creates a new instance of <see cref="DepositedConsignmentResponseModel"/>
         /// </summary>
         public DepositedConsignmentResponseModel() : base()
         {
@@ -82,7 +82,7 @@ namespace Couriers.Speedex.ResponseModels
         }
 #else
         /// <summary>
-        /// Default constructor
+        /// Creates a new instance of <see cref="DepositedConsignmentResponseModel"/>
         /// </summary>
         /// <param name="id">The unique consignment id</param>
         /// <param name="amount">The deposited amount</param>

@@ -63,7 +63,7 @@ namespace Couriers.Speedex.ResponseModels
 
 #if NET7_0_OR_GREATER
         /// <summary>
-        /// Default constructor
+        /// Creates a new instance of <see cref="ConsignmentPdfResponseModel"/>
         /// </summary>
         public ConsignmentPdfResponseModel() : base()
         {
@@ -71,7 +71,7 @@ namespace Couriers.Speedex.ResponseModels
         }
 #else
         /// <summary>
-        /// Default constructor
+        /// Creates a new instance of <see cref="ConsignmentPdfResponseModel"/>
         /// </summary>
         /// <param name="voucherId">The unique voucher id</param>
         /// <param name="base64String">The base64 representation of the PDF voucher</param>

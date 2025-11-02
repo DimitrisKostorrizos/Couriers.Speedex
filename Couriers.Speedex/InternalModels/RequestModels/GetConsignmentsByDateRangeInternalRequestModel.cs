@@ -30,7 +30,7 @@ namespace Couriers.Speedex.InternalModels.RequestModels
         #region Constructors
 
         /// <summary>
-        /// Default constructor
+        /// Creates a new instance of <see cref="GetConsignmentsByDateRangeInternalRequestModel"/>
         /// </summary>
         public GetConsignmentsByDateRangeInternalRequestModel() : base()
         {

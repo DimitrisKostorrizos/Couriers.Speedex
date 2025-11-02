@@ -25,7 +25,7 @@ namespace Couriers.Speedex.InternalModels.DataModels
         #region Constructors
 
         /// <summary>
-        /// Default constructor
+        /// Creates a new instance of <see cref="SoapEnvelopeDataModel{TBody}"/>
         /// </summary>
         public SoapEnvelopeDataModel() : base()
         {

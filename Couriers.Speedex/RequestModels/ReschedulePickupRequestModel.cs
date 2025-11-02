@@ -61,7 +61,7 @@ namespace Couriers.Speedex.RequestModels
         #region Constructors
 
         /// <summary>
-        /// Default constructor
+        /// Creates a new instance of <see cref="ReschedulePickupRequestModel"/>
         /// </summary>
         /// <param name="pickupDate">The date for the pickup</param>
         /// <param name="deliveryTime">The delivery time frame</param>

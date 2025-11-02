@@ -33,7 +33,7 @@ namespace Couriers.Speedex.InternalModels.ResponseModels
         #region Constructors
 
         /// <summary>
-        /// Default constructor
+        /// Creates a new instance of <see cref="GetConsignmentPdfInternalResponseModel"/>
         /// </summary>
         public GetConsignmentPdfInternalResponseModel() : base()
         {

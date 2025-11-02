@@ -118,7 +118,7 @@ namespace Couriers.Speedex.ResponseModels
 
 #if NET7_0_OR_GREATER
         /// <summary>
-        /// Default constructor
+        /// Creates a new instance of <see cref="ConsignmentResponseModel"/>
         /// </summary>
         public ConsignmentResponseModel() : base()
         {
@@ -126,7 +126,7 @@ namespace Couriers.Speedex.ResponseModels
         }
 #else
         /// <summary>
-        /// Default constructor
+        /// Creates a new instance of <see cref="ConsignmentResponseModel"/>
         /// </summary>
         public ConsignmentResponseModel(int customerFlag, string branchBankCode, string? commentsFirstPart, 
             string? commentsSecondPart, string? commentsThirdPart, PaymentType? paymentType, decimal cost, double weight, 

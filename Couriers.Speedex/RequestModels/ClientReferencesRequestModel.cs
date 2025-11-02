@@ -72,7 +72,7 @@
         #region Constructors
 
         /// <summary>
-        /// Default constructor
+        /// Creates a new instance of <see cref="ClientReferencesRequestModel"/>
         /// </summary>
         public ClientReferencesRequestModel() : base()
         {

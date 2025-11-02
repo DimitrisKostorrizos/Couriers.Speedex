@@ -87,7 +87,7 @@ namespace Couriers.Speedex.InternalModels.ResponseModels
         #region Constructors
 
         /// <summary>
-        /// Default constructor
+        /// Creates a new instance of <see cref="CheckpointInternalResponseModel"/>
         /// </summary>
         public CheckpointInternalResponseModel() : base()
         {

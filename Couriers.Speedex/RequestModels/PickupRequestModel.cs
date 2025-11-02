@@ -65,7 +65,7 @@ namespace Couriers.Speedex.RequestModels
         #region Constructors
 
         /// <summary>
-        /// Default constructor
+        /// Creates a new instance of <see cref="PickupRequestModel"/>
         /// </summary>
         /// <param name="consignmentIds">The ids for the connected master consignments</param>
         /// <param name="pickupDate">The date for the pickup</param>
@@ -101,7 +101,7 @@ namespace Couriers.Speedex.RequestModels
         }
 
         /// <summary>
-        /// Default constructor
+        /// Creates a new instance of <see cref="PickupRequestModel"/>
         /// </summary>
         /// <param name="consignmentId">The id for the connected master consignment</param>
         /// <param name="pickupDate">The date for the pickup</param>

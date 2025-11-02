@@ -5,16 +5,16 @@ using System.Net.Http;
 namespace Couriers.Speedex.Services
 {
     /// <summary>
-    /// The client for the production Speedex web service
+    /// The client for the demo Speedex web service
     /// </summary>
-    public class SpeedexClient : BaseSpeedexClient
+    public class DemoSpeedexClient : BaseSpeedexClient
     {
         #region Public Properties
 
         /// <summary>
         /// <inheritdoc/>
         /// </summary>
-        public override Uri APIURL { get; } = new("https://spdxws.gr/accesspoint.asmx");
+        public override Uri APIURL { get; } = new("https://devspdxws.gr/accesspoint.asmx");
 
         #endregion
 
@@ -25,7 +25,7 @@ namespace Couriers.Speedex.Services
         /// </summary>
         /// <param name="credentials">The credentials</param>
         /// <param name="httpClient">The HTTP client</param>
-        public SpeedexClient([NotNull] SpeedexCredentials credentials, [NotNull] HttpClient httpClient) : base(credentials, httpClient)
+        public DemoSpeedexClient([NotNull] SpeedexCredentials credentials, [NotNull] HttpClient httpClient) : base(credentials, httpClient)
         {
 
         }
@@ -34,7 +34,7 @@ namespace Couriers.Speedex.Services
         /// Creates a new instance of <see cref="SpeedexClient"/>
         /// </summary>
         /// <param name="credentials">The credentials</param>
-        public SpeedexClient([NotNull] SpeedexCredentials credentials) : base(credentials)
+        public DemoSpeedexClient([NotNull] SpeedexCredentials credentials) : base(credentials)
         {
 
         }

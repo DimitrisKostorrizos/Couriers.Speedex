@@ -46,7 +46,7 @@ namespace Couriers.Speedex.Structs
 
 #if NET7_0_OR_GREATER
         /// <summary>
-        /// Default constructor
+        /// Creates a new instance of <see cref="DeliveryTimeWindow"/>
         /// </summary>
         public DeliveryTimeWindow()
         {

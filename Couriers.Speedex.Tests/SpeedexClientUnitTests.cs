@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 namespace Couriers.Speedex.Tests
 {
     /// <summary>
-    /// The unit tests for the <see cref="SpeedexClient"/>
+    /// The unit tests for the <see cref="DemoSpeedexClient"/>
     /// </summary>
     public sealed class SpeedexClientUnitTests : IAsyncLifetime, IDisposable
     {
@@ -19,7 +19,7 @@ namespace Couriers.Speedex.Tests
         /// <summary>
         /// The client
         /// </summary>
-        private SpeedexClient _simulatedSpeedexClient;
+        private DemoSpeedexClient _simulatedSpeedexClient;
 
         /// <summary>
         /// The HTTP handler that simulates the request
@@ -41,7 +41,7 @@ namespace Couriers.Speedex.Tests
         #region Constructors
 
         /// <summary>
-        /// Default constructor
+        /// Creates a new instance of <see cref="SpeedexClientUnitTests"/>
         /// </summary>
         public SpeedexClientUnitTests() : base()
         {
@@ -49,7 +49,7 @@ namespace Couriers.Speedex.Tests
 
             _simulatedHttpClient = new HttpClient(_simulatedHttpHandler);
 
-            _simulatedSpeedexClient = new(TestConstants.SpeedexCredentials, _simulatedHttpClient, true);
+            _simulatedSpeedexClient = new(TestConstants.SpeedexCredentials, _simulatedHttpClient);
         }
 
         #endregion

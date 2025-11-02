@@ -23,7 +23,7 @@ namespace Couriers.Speedex.InternalModels.RequestModels
         #region Constructors
 
         /// <summary>
-        /// Default constructor
+        /// Creates a new instance of <see cref="CancelPickupByIdInternalRequestModel"/>
         /// </summary>
         public CancelPickupByIdInternalRequestModel() : base()
         {

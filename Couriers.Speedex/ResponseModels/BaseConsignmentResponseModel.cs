@@ -305,7 +305,7 @@ namespace Couriers.Speedex.ResponseModels
 
 #if NET7_0_OR_GREATER
         /// <summary>
-        /// Default constructor
+        /// Creates a new instance of <see cref="BaseConsignmentResponseModel"/>
         /// </summary>
         public BaseConsignmentResponseModel() : base()
         {
@@ -313,7 +313,7 @@ namespace Couriers.Speedex.ResponseModels
         }
 #else
         /// <summary>
-        /// Default constructor
+        /// Creates a new instance of <see cref="BaseConsignmentResponseModel"/>
         /// </summary>
         /// <param name="weight">The weight of the consignment</param>
         /// <param name="chargeType">The charge type of the consignment</param>

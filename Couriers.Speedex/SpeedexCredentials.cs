@@ -37,7 +37,7 @@ namespace Couriers.Speedex
         #region Constructors
 
         /// <summary>
-        /// Default constructor
+        /// Creates a new instance of <see cref="SpeedexCredentials"/>
         /// </summary>
         /// <param name="username">The username</param>
         /// <param name="password">The password</param>

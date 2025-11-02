@@ -35,7 +35,7 @@ namespace Couriers.Speedex.RequestModels
         #region Constructors
 
         /// <summary>
-        /// Default constructor
+        /// Creates a new instance of <see cref="ConsignmentPdfRequestModel"/>
         /// </summary>
         /// <param name="voucherIds">The voucher ids</param>
         /// <param name="paperSize">The paper size</param>
@@ -65,7 +65,7 @@ namespace Couriers.Speedex.RequestModels
         }
 
         /// <summary>
-        /// Default constructor
+        /// Creates a new instance of <see cref="ConsignmentPdfRequestModel"/>
         /// </summary>
         /// <param name="voucherId">The voucher id</param>
         /// <param name="paperSize">The paper size</param>

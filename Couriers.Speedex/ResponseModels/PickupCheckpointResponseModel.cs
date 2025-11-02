@@ -96,7 +96,7 @@ namespace Couriers.Speedex.ResponseModels
 
 #if NET7_0_OR_GREATER
         /// <summary>
-        /// Default constructor
+        /// Creates a new instance of <see cref="PickupCheckpointResponseModel"/>
         /// </summary>
         public PickupCheckpointResponseModel() : base()
         {
@@ -104,7 +104,7 @@ namespace Couriers.Speedex.ResponseModels
         }
 #else
         /// <summary>
-        /// Default constructor
+        /// Creates a new instance of <see cref="PickupCheckpointResponseModel"/>
         /// </summary>
         /// <param name="branchDepot">The name of the depot responsible for the event</param>
         /// <param name="checkpointDate">The date-time of the event</param>

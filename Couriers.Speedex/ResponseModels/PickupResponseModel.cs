@@ -276,7 +276,7 @@ namespace Couriers.Speedex.ResponseModels
 
 #if NET7_0_OR_GREATER
         /// <summary>
-        /// Default constructor
+        /// Creates a new instance of <see cref="PickupResponseModel"/>
         /// </summary>
         public PickupResponseModel() : base()
         {
@@ -284,7 +284,7 @@ namespace Couriers.Speedex.ResponseModels
         }
 #else
         /// <summary>
-        /// Default constructor
+        /// Creates a new instance of <see cref="PickupResponseModel"/>
         /// </summary>
         /// <param name="id"></param>
         /// <param name="consignmentIds"></param>

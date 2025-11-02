@@ -5,7 +5,7 @@ using System.Globalization;
 namespace Couriers.Speedex.Constants
 {
     /// <summary>
-    /// The constants used across the <see cref="SpeedexClient"/>
+    /// The constants used across the <see cref="BaseSpeedexClient"/>
     /// </summary>
     public static class SpeedexConstants
     {

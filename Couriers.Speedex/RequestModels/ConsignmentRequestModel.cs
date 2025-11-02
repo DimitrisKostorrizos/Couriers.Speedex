@@ -212,7 +212,7 @@ namespace Couriers.Speedex.RequestModels
         #region Constructors
 
         /// <summary>
-        /// Default constructor
+        /// Creates a new instance of <see cref="ConsignmentRequestModel"/>
         /// </summary>
         /// <param name="customerFlag">The customer flag</param>
         /// <param name="numberOfVouchers">The number of vouchers</param>

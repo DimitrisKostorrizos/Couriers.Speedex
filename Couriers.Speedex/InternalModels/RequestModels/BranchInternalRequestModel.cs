@@ -29,7 +29,7 @@ namespace Couriers.Speedex.InternalModels.RequestModels
         #region Constructors
 
         /// <summary>
-        /// Default constructor
+        /// Creates a new instance of <see cref="BranchInternalRequestModel"/>
         /// </summary>
         public BranchInternalRequestModel() : base()
         {

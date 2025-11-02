@@ -39,7 +39,7 @@ namespace Couriers.Speedex.InternalModels.ResponseModels
         #region Constructors
 
         /// <summary>
-        /// Default constructor
+        /// Creates a new instance of <see cref="GetConsignmentsByDateInternalResponseModel"/>
         /// </summary>
         public GetConsignmentsByDateInternalResponseModel() : base()
         {
@@ -118,7 +118,7 @@ namespace Couriers.Speedex.InternalModels.ResponseModels
         #region Constructors
 
         /// <summary>
-        /// Default constructor
+        /// Creates a new instance of <see cref="GetConsignmentsByDateResult"/>
         /// </summary>
         public GetConsignmentsByDateResult() : base()
         {

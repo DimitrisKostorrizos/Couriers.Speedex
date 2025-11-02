@@ -215,7 +215,7 @@ namespace Couriers.Speedex.InternalModels.ResponseModels
         #region Constructors
 
         /// <summary>
-        /// Default constructor
+        /// Creates a new instance of <see cref="ConsignmentDetailsInternalResponseModel"/>
         /// </summary>
         public ConsignmentDetailsInternalResponseModel() : base()
         {
