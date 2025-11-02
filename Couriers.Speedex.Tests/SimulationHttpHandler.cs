@@ -20,7 +20,7 @@ namespace Couriers.Speedex.Tests
         /// </summary>
         public SimulationHttpHandler()
         {
-
+            InnerHandler = new HttpClientHandler();
         }
 
         /// <summary>

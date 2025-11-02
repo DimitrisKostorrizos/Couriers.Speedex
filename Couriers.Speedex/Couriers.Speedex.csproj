@@ -13,18 +13,19 @@
 		<RepositoryUrl>https://github.com/DimitrisKostorrizos/Couriers.Speedex</RepositoryUrl>
 		<PackageProjectUrl>https://github.com/DimitrisKostorrizos/Couriers.Speedex</PackageProjectUrl>
 		<PackageTags>Speedex;Courier;API</PackageTags>
+		<PackageVersion>1.0.0</PackageVersion>
+		<EnableNETAnalyzers>true</EnableNETAnalyzers>
 	</PropertyGroup>
 
 	<Choose>
 		<When Condition="'$(Configuration)'=='Debug'">
 			<PropertyGroup>
-				<AnalysisMode>all</AnalysisMode>
+				<AnalysisLevel>latest-Recommended</AnalysisLevel>
 			</PropertyGroup>
 		</When>
 		<When Condition="'$(Configuration)'=='Release'">
 			<PropertyGroup>
-                <Optimize>true</Optimize>
-				<PackageVersion>1.0.0</PackageVersion>
+				<Optimize>true</Optimize>
 			</PropertyGroup>
 		</When>
 	</Choose>
@@ -37,7 +38,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <ProjectReference Include="..\..\Couriers.Shared.Xml\Couriers.Shared.Xml.csproj" />
+		<ProjectReference Include="..\..\Couriers.Shared.Xml\Couriers.Shared.Xml.csproj" />
 	</ItemGroup>
 
 </Project>
