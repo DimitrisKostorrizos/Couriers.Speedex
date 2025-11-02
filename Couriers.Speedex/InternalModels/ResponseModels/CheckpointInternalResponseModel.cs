@@ -110,25 +110,8 @@ namespace Couriers.Speedex.InternalModels.ResponseModels
         /// <returns></returns>
         public CheckpointResponseModel ToResponseModel()
         {
-#if NET7_0_OR_GREATER
-            return new()
-            {
-                BranchDepot = BranchDepot, 
-                BranchId = BranchId,
-                CheckpointDate = CheckpointDate,
-                CustomerComments = CustomerComments,
-                FirstCustomerReference = FirstCustomerReference,
-                RecipientName = RecipientName,
-                SecondCustomerReference = SecondCustomerReference,
-                StatusCode = StatusCode,
-                StatusDescription = StatusDescription,
-                ThirdCustomerReference = ThirdCustomerReference,
-                VoucherId = VoucherId
-            };
-#else
             return new(BranchDepot, BranchId, CheckpointDate, CustomerComments, FirstCustomerReference,
             SecondCustomerReference, ThirdCustomerReference, RecipientName, StatusCode, StatusDescription, VoucherId);
-#endif
         }
 
         #endregion

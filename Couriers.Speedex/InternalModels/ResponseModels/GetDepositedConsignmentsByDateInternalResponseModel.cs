@@ -60,8 +60,8 @@ namespace Couriers.Speedex.InternalModels.ResponseModels
         /// Creates and return the <see cref="IEnumerable{T}"/> from the current object
         /// </summary>
         /// <returns></returns>
-        public IEnumerable<DepositedConsignmentResponseModel> ToResponseModel() 
-            => [.. Result.Results.Select(x => x.ToResponseModel())];
+        public IEnumerable<DepositedConsignmentResponseModel> ToResponseModel()
+            => Result.Results.Select(x => x.ToResponseModel()).ToList();
 
         #endregion
     }
@@ -88,7 +88,7 @@ namespace Couriers.Speedex.InternalModels.ResponseModels
         /// </summary>
         [XmlArray("Result")]
         [XmlArrayItem("GetDepositedConsignmentsByDateResult")]
-        public DepositedConsignmentInternalResponseModel[] Results { get; set; } = [];
+        public DepositedConsignmentInternalResponseModel[] Results { get; set; } = Array.Empty<DepositedConsignmentInternalResponseModel>();
 
         /// <summary>
         /// The return code
@@ -124,8 +124,8 @@ namespace Couriers.Speedex.InternalModels.ResponseModels
         /// <inheritdoc/>
         /// </summary>
         /// <returns></returns>
-        public IEnumerable<DepositedConsignmentResponseModel> ToResponseModel() 
-            => [.. Results.Select(x => x.ToResponseModel())];
+        public IEnumerable<DepositedConsignmentResponseModel> ToResponseModel()
+            => Results.Select(x => x.ToResponseModel()).ToList();
 
         #endregion
     }

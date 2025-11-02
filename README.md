@@ -27,8 +27,12 @@ if(!createVoucherResponse.IsSuccessful)
 
 	var responsePayload = createVoucherResponse.ResponsePayload;
 
+	// Handle the scenario when an error occurs
 	throw new InvalidOperationException(errorMessage);
 }
 
 var voucher = createVoucherResponse.Result.VoucherId;
 ```
+
+Dependency Injection
+

@@ -6,7 +6,6 @@ using Couriers.Speedex.Structs;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
-using System.Linq;
 using System.Xml.Linq;
 
 namespace Couriers.Speedex
@@ -23,17 +22,10 @@ namespace Couriers.Speedex
         /// </summary>
         private static readonly Dictionary<DeliveryTimeLimit, DeliveryTimeWindow> _deliveryTimeMappings = new()
         {
-#if NET6_0_OR_GREATER
-            { DeliveryTimeLimit.NoLimit, new DeliveryTimeWindow() },
-            { DeliveryTimeLimit.TenAMToOnePM, new DeliveryTimeWindow(new TimeOnly(10, 0), new TimeOnly(13, 0)) },
-            { DeliveryTimeLimit.OnePMMToFourPM, new DeliveryTimeWindow(new TimeOnly(13, 0), new TimeOnly(16, 0)) },
-            { DeliveryTimeLimit.FourPMToSevenPM, new DeliveryTimeWindow(new TimeOnly(16, 0), new TimeOnly(19, 0)) }
-#else
             { DeliveryTimeLimit.NoLimit, new DeliveryTimeWindow() },
             { DeliveryTimeLimit.TenAMToOnePM, new DeliveryTimeWindow(DateTime.MinValue.AddHours(10), DateTime.MinValue.AddHours(13)) },
             { DeliveryTimeLimit.OnePMMToFourPM, new DeliveryTimeWindow(DateTime.MinValue.AddHours(13), DateTime.MinValue.AddHours(16)) },
-            { DeliveryTimeLimit.FourPMToSevenPM, new DeliveryTimeWindow(DateTime.MinValue.AddHours(16), DateTime.MinValue.AddHours(19)) },
-#endif
+            { DeliveryTimeLimit.FourPMToSevenPM, new DeliveryTimeWindow(DateTime.MinValue.AddHours(16), DateTime.MinValue.AddHours(19)) }
         };
 
         #endregion
@@ -51,7 +43,7 @@ namespace Couriers.Speedex
             => value switch
             {
                 1 => ChargeType.Sender,
-                2 => ChargeType.Recipient,
+                2 => ChargeType.Receiver,
                 3 => ChargeType.ThirdParty,
                 _ => throw new InvalidOperationException($"The {value} is not a valid charge type.")
             };
@@ -65,7 +57,7 @@ namespace Couriers.Speedex
             => value switch
             {
                 "Sender" => ChargeType.Sender,
-                "Recipient" => ChargeType.Recipient,
+                "Receiver" => ChargeType.Receiver,
                 "ThirdParty" => ChargeType.ThirdParty,
                 _ => throw new InvalidOperationException($"The {value} is not a valid charge type.")
             };
@@ -79,7 +71,7 @@ namespace Couriers.Speedex
             => value switch
             {
                 ChargeType.Sender => 1,
-                ChargeType.Recipient => 2,
+                ChargeType.Receiver => 2,
                 ChargeType.ThirdParty => 3,
                 _ => throw new InvalidOperationException($"The {value} is not a valid charge type.")
             };
@@ -147,12 +139,8 @@ namespace Couriers.Speedex
         /// <param name="value">The value</param>
         public static void ThrowIfInvalidZipCode(string value)
         {
-#if NET8_0_OR_GREATER
-            ArgumentException.ThrowIfNullOrWhiteSpace(value);
-#else
             if (string.IsNullOrWhiteSpace(value))
                 throw new ArgumentException($"'{nameof(value)}' cannot be null or whitespace.", nameof(value));
-#endif
 
             if (value.Length > SpeedexConstants.MaximumZipCodeLength)
                 throw new InvalidOperationException($"The '{nameof(value)}' is not a valid zip code. The maximum length for a zip code field is {SpeedexConstants.MaximumZipCodeLength}.");
@@ -195,23 +183,6 @@ namespace Couriers.Speedex
         public static DeliveryTimeWindow ToDeliveryTimeWindow(DeliveryTimeLimit value)
             => _deliveryTimeMappings[value];
 
-#if NET6_0_OR_GREATER
-        /// <summary>
-        /// Returns the related <see cref="DeliveryTimeLimit"/> for the specified <paramref name="startingTime"/> and <paramref name="endingTime"/>
-        /// </summary>
-        /// <param name="startingTime">The starting time of the delivery time</param>
-        /// <param name="endingTime">The ending time of the delivery time</param>
-        /// <returns></returns>
-        /// <exception cref="InvalidOperationException">An exception is thrown the specified parameters don't match a valid <see cref="DeliveryTimeLimit"/></exception>
-        public static DeliveryTimeLimit GetDeliveryTimeLimitByTimeRange(TimeOnly? startingTime, TimeOnly? endingTime)
-        {
-            foreach (var pair in _deliveryTimeMappings)
-                if (pair.Value.StartingTime == startingTime && pair.Value.EndingTime == endingTime)
-                    return pair.Key;
-
-            throw new InvalidOperationException($"No mapping exists for {nameof(startingTime)}:{startingTime} and {nameof(endingTime)}:{endingTime}.");
-        }
-#else
         /// <summary>
         /// Returns the related <see cref="DeliveryTimeLimit"/> for the specified <paramref name="startingTime"/> and <paramref name="endingTime"/>
         /// </summary>
@@ -227,7 +198,6 @@ namespace Couriers.Speedex
 
             throw new InvalidOperationException($"No mapping exists for {nameof(startingTime)}:{startingTime} and {nameof(endingTime)}:{endingTime}.");
         }
-#endif
 
         #endregion
 

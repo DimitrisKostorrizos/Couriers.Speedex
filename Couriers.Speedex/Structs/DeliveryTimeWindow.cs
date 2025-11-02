@@ -10,8 +10,6 @@ namespace Couriers.Speedex.Structs
     {
         #region Public Properties
 
-#if NET5_0
-
         /// <summary>
         /// The starting time
         /// </summary>
@@ -21,18 +19,6 @@ namespace Couriers.Speedex.Structs
         /// The ending time
         /// </summary>
         public DateTime? EndingTime { get; }
-#else
-
-        /// <summary>
-        /// The starting time
-        /// </summary>
-        public TimeOnly? StartingTime { get; }
-
-        /// <summary>
-        /// The ending time
-        /// </summary>
-        public TimeOnly? EndingTime { get; }
-#endif
 
         /// <summary>
         /// A flag indicating whether the time window is specified
@@ -44,30 +30,12 @@ namespace Couriers.Speedex.Structs
 
         #region Constructors
 
-#if NET7_0_OR_GREATER
-        /// <summary>
-        /// Creates a new instance of <see cref="DeliveryTimeWindow"/>
-        /// </summary>
-        public DeliveryTimeWindow()
-        {
-
-        }
-#endif
-
         /// <summary>
         /// Creates a new instance using the specified <paramref name="startingTime"/> and <paramref name="endingTime"/>
         /// </summary>
         /// <param name="startingTime">The starting time</param>
         /// <param name="endingTime">The ending time</param>
-        public DeliveryTimeWindow(
-#if NET5_0
-        DateTime startingTime,
-        DateTime endingTime
-#else
-        TimeOnly startingTime,
-        TimeOnly endingTime
-#endif
-            )
+        public DeliveryTimeWindow(DateTime startingTime, DateTime endingTime)
         {
             if (endingTime < startingTime)
                 throw new InvalidOperationException($"The {nameof(startingTime)} must not be before {nameof(endingTime)}.");

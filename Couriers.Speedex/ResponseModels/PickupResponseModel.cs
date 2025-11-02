@@ -10,177 +10,6 @@ namespace Couriers.Speedex.ResponseModels
     {
         #region Public Properties
 
-#if NET7_0_OR_GREATER
-        /// <summary>
-        /// The unique pickup id
-        /// </summary>
-        public required string Id
-        {
-            get;
-            init
-            {
-#if NET8_0_OR_GREATER
-                ArgumentException.ThrowIfNullOrWhiteSpace(value);
-#else
-                if (string.IsNullOrWhiteSpace(value))
-                    throw new ArgumentException($"'{nameof(value)}' cannot be null or whitespace.", nameof(value));
-#endif
-                field = value;
-            }
-        }
-
-        /// <summary>
-        /// The related consignment ids
-        /// </summary>
-        public required IEnumerable<string> ConsignmentIds
-        {
-            get;
-            init
-            {
-                ArgumentNullException.ThrowIfNull(value);
-
-                field = value;
-            }
-        }
-
-        /// <summary>
-        /// The checkpoint code
-        /// </summary>
-        public required string CheckpointCode
-        {
-            get;
-            init
-            {
-#if NET8_0_OR_GREATER
-                ArgumentException.ThrowIfNullOrWhiteSpace(value);
-#else
-                if (string.IsNullOrWhiteSpace(value))
-                    throw new ArgumentException($"'{nameof(value)}' cannot be null or whitespace.", nameof(value));
-#endif
-                field = value;
-            }
-        }
-
-        /// <summary>
-        /// The group checkpoint code
-        /// </summary>
-        public required string CheckpointGroupCode
-        {
-            get;
-            init
-            {
-#if NET8_0_OR_GREATER
-                ArgumentException.ThrowIfNullOrWhiteSpace(value);
-#else
-                if (string.IsNullOrWhiteSpace(value))
-                    throw new ArgumentException($"'{nameof(value)}' cannot be null or whitespace.", nameof(value));
-#endif
-                field = value;
-            }
-        }
-
-        /// <summary>
-        /// The address for the pickup
-        /// </summary>
-        public required string Address
-        {
-            get;
-            init
-            {
-#if NET8_0_OR_GREATER
-                ArgumentException.ThrowIfNullOrWhiteSpace(value);
-#else
-                if (string.IsNullOrWhiteSpace(value))
-                    throw new ArgumentException($"'{nameof(value)}' cannot be null or whitespace.", nameof(value));
-#endif
-                field = value;
-            }
-        }
-
-        /// <summary>
-        /// The city for the pickup
-        /// </summary>
-        public required string City
-        {
-            get;
-            init
-            {
-#if NET8_0_OR_GREATER
-                ArgumentException.ThrowIfNullOrWhiteSpace(value);
-#else
-                if (string.IsNullOrWhiteSpace(value))
-                    throw new ArgumentException($"'{nameof(value)}' cannot be null or whitespace.", nameof(value));
-#endif
-                field = value;
-            }
-        }
-
-        /// <summary>
-        /// The country code for the pickup
-        /// </summary>
-        public required string CountryCode
-        {
-            get;
-            init
-            {
-#if NET8_0_OR_GREATER
-                ArgumentException.ThrowIfNullOrWhiteSpace(value);
-#else
-                if (string.IsNullOrWhiteSpace(value))
-                    throw new ArgumentException($"'{nameof(value)}' cannot be null or whitespace.", nameof(value));
-#endif
-                field = value;
-            }
-        }
-
-        /// <summary>
-        /// The comments of the pickup
-        /// </summary>
-        public string? Comments { get; init; }
-
-        /// <summary>
-        /// The pickup date
-        /// </summary>
-        public required DateOnly PickupDate { get; init; }
-
-        /// <summary>
-        /// The name for the pickup
-        /// </summary>
-        public string? Name { get; init; }
-
-        /// <summary>
-        /// The phone number for the pickup
-        /// </summary>
-        public string? PhoneNumber { get; set; }
-
-        /// <summary>
-        /// The post code for the pickup
-        /// </summary>
-        public required string PostCode
-        {
-            get;
-            init
-            {
-#if NET8_0_OR_GREATER
-                ArgumentException.ThrowIfNullOrWhiteSpace(value);
-#else
-                if (string.IsNullOrWhiteSpace(value))
-                    throw new ArgumentException($"'{nameof(value)}' cannot be null or whitespace.", nameof(value));
-#endif
-                field = value;
-            }
-        }
-
-        /// <summary>
-        /// The start of the time frame of the pickup
-        /// </summary>
-        public TimeOnly? PickupTimeFrom { get; init; }
-
-        /// <summary>
-        /// The end of the time frame of the pickup
-        /// </summary>
-        public TimeOnly? PickupTimeTo { get; init; }
-#else
         /// <summary>
         /// The unique pickup id
         /// </summary>
@@ -189,12 +18,12 @@ namespace Couriers.Speedex.ResponseModels
         /// <summary>
         /// The related consignment ids
         /// </summary>
-        public IEnumerable<string> ConsignmentIds { get;}
+        public IEnumerable<string> ConsignmentIds { get; }
 
         /// <summary>
         /// The checkpoint code
         /// </summary>
-        public string CheckpointCode { get;}
+        public string CheckpointCode { get; }
 
         /// <summary>
         /// The group checkpoint code
@@ -234,9 +63,8 @@ namespace Couriers.Speedex.ResponseModels
         /// <summary>
         /// The post code for the pickup
         /// </summary>
-        public string PostCode { get;}
+        public string PostCode { get; }
 
-#if NET5_0
         /// <summary>
         /// The pickup date
         /// </summary>
@@ -251,38 +79,11 @@ namespace Couriers.Speedex.ResponseModels
         /// The end of the time frame of the pickup
         /// </summary>
         public DateTime? PickupTimeTo { get; }
-#else
-        /// <summary>
-        /// The pickup date
-        /// </summary>
-        public DateOnly PickupDate { get; }
-
-        /// <summary>
-        /// The start of the time frame of the pickup
-        /// </summary>
-        public TimeOnly? PickupTimeFrom { get; }
-
-        /// <summary>
-        /// The end of the time frame of the pickup
-        /// </summary>
-        public TimeOnly? PickupTimeTo { get; }
-#endif
-
-#endif
 
         #endregion
 
         #region Constructors
 
-#if NET7_0_OR_GREATER
-        /// <summary>
-        /// Creates a new instance of <see cref="PickupResponseModel"/>
-        /// </summary>
-        public PickupResponseModel() : base()
-        {
-
-        }
-#else
         /// <summary>
         /// Creates a new instance of <see cref="PickupResponseModel"/>
         /// </summary>
@@ -302,12 +103,7 @@ namespace Couriers.Speedex.ResponseModels
         /// <param name="pickupTimeTo">The end of the time frame of the pickup</param>
         public PickupResponseModel(string id, IEnumerable<string> consignmentIds, string checkpointCode, string checkpointGroupCode,
             string address, string city, string countryCode, string? comments, string? name, string? phoneNumber, string postCode,
-#if NET5_0
-        DateTime pickupDate, DateTime? pickupTimeFrom, DateTime? pickupTimeTo
-#else
-            DateOnly pickupDate, TimeOnly? pickupTimeFrom, TimeOnly? pickupTimeTo
-#endif
-            ) : base()
+            DateTime pickupDate, DateTime? pickupTimeFrom, DateTime? pickupTimeTo) : base()
         {
             if (string.IsNullOrWhiteSpace(id))
                 throw new ArgumentException($"'{nameof(id)}' cannot be null or whitespace.", nameof(id));
@@ -349,7 +145,7 @@ namespace Couriers.Speedex.ResponseModels
             PickupTimeFrom = pickupTimeFrom;
             PickupTimeTo = pickupTimeTo;
         }
-#endif
+
         #endregion
 
         #region Public Methods

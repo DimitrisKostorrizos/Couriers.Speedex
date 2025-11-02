@@ -231,23 +231,6 @@ namespace Couriers.Speedex.RequestModels
             double cost, string address, string recipientName, string recipientPhoneNumber, string zipCode, double weight,
             int insuranceAmount = 0, bool shouldBeDeliveredOnSaturday = false, DeliveryTimeLimit deliveryTime = DeliveryTimeLimit.NoLimit) : base()
         {
-#if NET8_0_OR_GREATER
-            ArgumentOutOfRangeException.ThrowIfNegativeOrZero(numberOfVouchers);
-
-            ArgumentOutOfRangeException.ThrowIfNegative(cost);
-
-            ArgumentOutOfRangeException.ThrowIfNegative(insuranceAmount);
-
-            ArgumentException.ThrowIfNullOrWhiteSpace(address);
-
-            ArgumentException.ThrowIfNullOrWhiteSpace(recipientName);
-
-            ArgumentException.ThrowIfNullOrWhiteSpace(zipCode);
-
-            ArgumentException.ThrowIfNullOrWhiteSpace(recipientPhoneNumber);
-
-            ArgumentOutOfRangeException.ThrowIfGreaterThan(numberOfVouchers, SpeedexConstants.MaximumNumberOfVouchers);
-#else
             if (numberOfVouchers <= 0)
                 throw new ArgumentOutOfRangeException(nameof(numberOfVouchers), $"The {nameof(numberOfVouchers)} cannot be negative or zero.");
 
@@ -271,7 +254,6 @@ namespace Couriers.Speedex.RequestModels
 
             if (numberOfVouchers > SpeedexConstants.MaximumNumberOfVouchers)
                 throw new ArgumentOutOfRangeException(nameof(numberOfVouchers), $"The {nameof(numberOfVouchers)} cannot be greater than {SpeedexConstants.MaximumNumberOfVouchers}.");
-#endif
 
             if (cost > 0 && !paymentType.HasValue)
                 throw new InvalidOperationException($"The '{nameof(paymentType)}' is required when the '{nameof(cost)}' is greater then 0.");

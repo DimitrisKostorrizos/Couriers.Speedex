@@ -54,24 +54,14 @@ namespace Couriers.Speedex.InternalModels.RequestModels
         /// <returns></returns>
         public static CreateConsignmentsInternalRequestModel FromRequestModel([NotNull] IEnumerable<ConsignmentRequestModel> values, [NotNull] string agreementCode, [NotNull] string customerCode)
         {
-#if NET6_0_OR_GREATER
-            ArgumentNullException.ThrowIfNull(values);
-#else
             if (values is null)
                 throw new ArgumentNullException(nameof(values));
-#endif
 
-#if NET8_0_OR_GREATER
-            ArgumentException.ThrowIfNullOrWhiteSpace(agreementCode);
-
-            ArgumentException.ThrowIfNullOrWhiteSpace(customerCode);
-#else
             if (string.IsNullOrWhiteSpace(agreementCode))
                 throw new ArgumentException($"'{nameof(agreementCode)}' cannot be null or whitespace.", nameof(agreementCode));
 
             if (string.IsNullOrWhiteSpace(customerCode))
                 throw new ArgumentException($"'{nameof(customerCode)}' cannot be null or whitespace.", nameof(customerCode));
-#endif
 
             // Transform the values
             var internalValues = values.Select(x => ConsignmentInternalRequestModel.FromRequestModel(x, agreementCode, customerCode)).ToArray();

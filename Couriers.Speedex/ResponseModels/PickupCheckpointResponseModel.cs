@@ -9,66 +9,7 @@ namespace Couriers.Speedex.ResponseModels
     {
         #region Public Properties
 
-#if NET7_0_OR_GREATER
-        /// <summary>
-        /// The name of the depot responsible for the event
-        /// </summary>
-        public required string BranchDepot
-        {
-            get;
-            init
-            {
-#if NET8_0_OR_GREATER
-                ArgumentException.ThrowIfNullOrWhiteSpace(value);
-#else
-                if (string.IsNullOrWhiteSpace(value))
-                    throw new ArgumentException($"'{nameof(value)}' cannot be null or whitespace.", nameof(value));
-#endif
-                field = value;
-            }
-        }
 
-        /// <summary>
-        /// The date-time of the event
-        /// </summary>
-        public required DateTime CheckpointDate { get; init; }
-
-        /// <summary>
-        /// The unique pickup id
-        /// </summary>
-        public required string PickupId
-        {
-            get;
-            init
-            {
-#if NET8_0_OR_GREATER
-                ArgumentException.ThrowIfNullOrWhiteSpace(value);
-#else
-                if (string.IsNullOrWhiteSpace(value))
-                    throw new ArgumentException($"'{nameof(value)}' cannot be null or whitespace.", nameof(value));
-#endif
-                field = value;
-            }
-        }
-
-        /// <summary>
-        /// The code of the event
-        /// </summary>
-        public required string StatusCode
-        {
-            get;
-            init
-            {
-#if NET8_0_OR_GREATER
-                ArgumentException.ThrowIfNullOrWhiteSpace(value);
-#else
-                if (string.IsNullOrWhiteSpace(value))
-                    throw new ArgumentException($"'{nameof(value)}' cannot be null or whitespace.", nameof(value));
-#endif
-                field = value;
-            }
-        }
-#else
         /// <summary>
         /// The name of the depot responsible for the event
         /// </summary>
@@ -88,21 +29,11 @@ namespace Couriers.Speedex.ResponseModels
         /// The code of the event
         /// </summary>
         public string StatusCode { get; }
-#endif
 
         #endregion
 
         #region Constructors
 
-#if NET7_0_OR_GREATER
-        /// <summary>
-        /// Creates a new instance of <see cref="PickupCheckpointResponseModel"/>
-        /// </summary>
-        public PickupCheckpointResponseModel() : base()
-        {
-
-        }
-#else
         /// <summary>
         /// Creates a new instance of <see cref="PickupCheckpointResponseModel"/>
         /// </summary>
@@ -129,7 +60,6 @@ namespace Couriers.Speedex.ResponseModels
 
             StatusCode = statusCode;
         }
-#endif
 
         #endregion
 

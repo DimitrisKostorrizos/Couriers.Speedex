@@ -67,19 +67,7 @@ namespace Couriers.Speedex.InternalModels.ResponseModels
         /// </summary>
         /// <returns></returns>
         public PickupCheckpointResponseModel ToResponseModel()
-        {
-#if NET7_0_OR_GREATER
-            return new()
-            {
-                BranchDepot = BranchDepot,
-                CheckpointDate = CheckpointDate,
-                PickupId = PickupId,
-                StatusCode = StatusCode
-            };
-#else
-            return new(BranchDepot, CheckpointDate, PickupId, StatusCode);
-#endif
-        }
+            => new(BranchDepot, CheckpointDate, PickupId, StatusCode);
 
         #endregion
     }

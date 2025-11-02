@@ -65,16 +65,7 @@ namespace Couriers.Speedex.InternalModels.ResponseModels
         {
             var dateDeposited = DateTime.Parse(DateDeposited, SpeedexConstants.SpeedexCultureInfo);
 
-#if NET7_0_OR_GREATER
-            return new()
-            {
-                Id = Id,
-                Amount = Amount,
-                DateDeposited = dateDeposited
-            };
-#else
             return new(Id, Amount, dateDeposited);
-#endif
         }
 
         #endregion

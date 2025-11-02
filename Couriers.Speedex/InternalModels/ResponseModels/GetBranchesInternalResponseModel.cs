@@ -25,7 +25,7 @@ namespace Couriers.Speedex.InternalModels.ResponseModels
         /// </summary>
         [XmlArray("Branches")]
         [XmlArrayItem("Branch")]
-        public BranchInternalResponseModel[] BranchDepots { get; set; } = [];
+        public BranchInternalResponseModel[] BranchDepots { get; set; } = Array.Empty<BranchInternalResponseModel>();
 
 #pragma warning restore CA1819 // Properties should not return arrays
 
@@ -55,8 +55,8 @@ namespace Couriers.Speedex.InternalModels.ResponseModels
         /// Creates and return the <see cref="IEnumerable{T}"/> from the current object
         /// </summary>
         /// <returns></returns>
-        public IEnumerable<BranchResponseModel> ToResponseModel() 
-            => [.. BranchDepots.Select(x => x.ToResponseModel())];
+        public IEnumerable<BranchResponseModel> ToResponseModel()
+            => BranchDepots.Select(x => x.ToResponseModel()).ToList();
 
         #endregion
     }

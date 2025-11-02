@@ -20,17 +20,10 @@ namespace Couriers.Speedex.RequestModels
 
         #region Public Properties
 
-#if NET5_0
         /// <summary>
         /// The requested date of the pickup
         /// </summary>
         public DateTime PickupDate { get; }
-#else
-        /// <summary>
-        /// The requested date of the pickup
-        /// </summary>
-        public DateOnly PickupDate { get; }
-#endif
 
         /// <summary>
         /// The delivery time frame
@@ -65,14 +58,7 @@ namespace Couriers.Speedex.RequestModels
         /// </summary>
         /// <param name="pickupDate">The date for the pickup</param>
         /// <param name="deliveryTime">The delivery time frame</param>
-        public ReschedulePickupRequestModel(
-#if NET5_0
-            DateTime pickupDate,
-#else
-            DateOnly pickupDate,
-#endif
-
-            DeliveryTimeLimit deliveryTime) : base()
+        public ReschedulePickupRequestModel(DateTime pickupDate, DeliveryTimeLimit deliveryTime) : base()
         {
             PickupDate = pickupDate;
 

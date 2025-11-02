@@ -84,17 +84,11 @@ namespace Couriers.Speedex.Constants
         /// </summary>
         public const string DeliveryTimeWindowFormat = "HH:mm";
 
-#if NET6_0_OR_GREATER
-        /// <summary>
-        /// The date-time format that Speedex uses
-        /// </summary>
-        public const string DateTimeFormat = $"{DateFormat}T{TimeFormat}";
-#else
         /// <summary>
         /// The date-time format that Speedex uses
         /// </summary>
         public static readonly string DateTimeFormat = $"{DateFormat}T{TimeFormat}";
-#endif
+
         /// <summary>
         /// The culture info that Speedex uses
         /// </summary>

@@ -54,17 +54,7 @@ namespace Couriers.Speedex.InternalModels.ResponseModels
         /// </summary>
         /// <returns></returns>
         public ConsignmentPdfResponseModel ToResponseModel()
-        {
-#if NET7_0_OR_GREATER
-            return new()
-            {
-                Base64String = Voucher,
-                VoucherId = VoucherId
-            };
-#else
-            return new(VoucherId, Voucher);
-#endif
-        }
+            => new(VoucherId, Voucher);
 
         #endregion
     }

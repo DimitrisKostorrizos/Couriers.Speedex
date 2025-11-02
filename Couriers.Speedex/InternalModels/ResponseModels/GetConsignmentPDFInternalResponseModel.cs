@@ -1,6 +1,7 @@
 ﻿using Couriers.Speedex.Interfaces;
 using Couriers.Speedex.ResponseModels;
 
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
@@ -24,7 +25,7 @@ namespace Couriers.Speedex.InternalModels.ResponseModels
         /// </summary>
         [XmlArray("GetBOLPdfResult")]
         [XmlArrayItem("Voucher")]
-        public ConsignmentPdfInternalResponseModel[] Vouchers { get; set; } = [];
+        public ConsignmentPdfInternalResponseModel[] Vouchers { get; set; } = Array.Empty<ConsignmentPdfInternalResponseModel>();
 
 #pragma warning restore CA1819 // Properties should not return arrays
 
@@ -54,8 +55,8 @@ namespace Couriers.Speedex.InternalModels.ResponseModels
         /// <inheritdoc/>
         /// </summary>
         /// <returns></returns>
-        public IEnumerable<ConsignmentPdfResponseModel> ToResponseModel() 
-            => [.. Vouchers.Select(x => x.ToResponseModel())];
+        public IEnumerable<ConsignmentPdfResponseModel> ToResponseModel()
+            => Vouchers.Select(x => x.ToResponseModel()).ToList();
 
         #endregion
     }

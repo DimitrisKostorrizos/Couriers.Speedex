@@ -24,7 +24,7 @@ namespace Couriers.Speedex.InternalModels.ResponseModels
         /// </summary>
         [XmlArray("checkpoints")]
         [XmlArrayItem("Checkpoint")]
-        public CheckpointInternalResponseModel[] Checkpoints { get; set; } = [];
+        public CheckpointInternalResponseModel[] Checkpoints { get; set; } = Array.Empty<CheckpointInternalResponseModel>();
 #pragma warning restore CA1819 // Properties should not return arrays
 
         #endregion
@@ -53,7 +53,7 @@ namespace Couriers.Speedex.InternalModels.ResponseModels
         /// Creates and return the <see cref="IEnumerable{T}"/> from the current object
         /// </summary>
         /// <returns></returns>
-        public IEnumerable<CheckpointResponseModel> ToResponseModel() => [.. Checkpoints.Select(x => x.ToResponseModel())];
+        public IEnumerable<CheckpointResponseModel> ToResponseModel() => Checkpoints.Select(x => x.ToResponseModel()).ToList();
 
         #endregion
     }

@@ -37,7 +37,7 @@ namespace Couriers.Speedex.InternalModels.ResponseModels
         #region Constructors
 
         /// <summary>
-        /// Creates a new instance of <see cref="MessageInternalResponseModel"/>
+        /// Creates a new instance of <see cref="MessageInternalResponseModel{TResult}"/>
         /// </summary>
         public MessageInternalResponseModel() : base()
         {

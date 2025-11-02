@@ -8,153 +8,7 @@ namespace Couriers.Speedex.ResponseModels
     public record BranchResponseModel
     {
         #region Public Properties
-#if NET7_0_OR_GREATER
 
-        /// <summary>
-        /// The address of the depot
-        /// </summary>
-        public required string Address
-        {
-            get;
-            init
-            {
-#if NET8_0_OR_GREATER
-                ArgumentException.ThrowIfNullOrWhiteSpace(value);
-#else
-                if (string.IsNullOrWhiteSpace(value))
-                    throw new ArgumentException($"'{nameof(value)}' cannot be null or whitespace.", nameof(value));
-#endif
-                field = value;
-            }
-        }
-
-        /// <summary>
-        /// The city of the depot
-        /// </summary>
-        public required string City
-        {
-            get;
-            init
-            {
-#if NET8_0_OR_GREATER
-                ArgumentException.ThrowIfNullOrWhiteSpace(value);
-#else
-                if (string.IsNullOrWhiteSpace(value))
-                    throw new ArgumentException($"'{nameof(value)}' cannot be null or whitespace.", nameof(value));
-#endif
-                field = value;
-            }
-        }
-        /// <summary>
-        /// The unique id of the depot
-        /// </summary>
-        public required string Id
-        {
-            get;
-            init
-            {
-#if NET8_0_OR_GREATER
-                ArgumentException.ThrowIfNullOrWhiteSpace(value);
-#else
-                if (string.IsNullOrWhiteSpace(value))
-                    throw new ArgumentException($"'{nameof(value)}' cannot be null or whitespace.", nameof(value));
-#endif
-                field = value;
-            }
-        }
-
-        /// <summary>
-        /// The name of the depot
-        /// </summary>
-        public required string Name
-        {
-            get;
-            init
-            {
-#if NET8_0_OR_GREATER
-                ArgumentException.ThrowIfNullOrWhiteSpace(value);
-#else
-                if (string.IsNullOrWhiteSpace(value))
-                    throw new ArgumentException($"'{nameof(value)}' cannot be null or whitespace.", nameof(value));
-#endif
-                field = value;
-            }
-        }
-
-        /// <summary>
-        /// The telephone number of the depot
-        /// </summary>
-        public required string TelephoneNumber
-        {
-            get;
-            init
-            {
-#if NET8_0_OR_GREATER
-                ArgumentException.ThrowIfNullOrWhiteSpace(value);
-#else
-                if (string.IsNullOrWhiteSpace(value))
-                    throw new ArgumentException($"'{nameof(value)}' cannot be null or whitespace.", nameof(value));
-#endif
-                field = value;
-            }
-        }
-
-        /// <summary>
-        /// The zip code of the depot
-        /// </summary>
-        public required string ZipCode
-        {
-            get;
-            init
-            {
-#if NET8_0_OR_GREATER
-                ArgumentException.ThrowIfNullOrWhiteSpace(value);
-#else
-                if (string.IsNullOrWhiteSpace(value))
-                    throw new ArgumentException($"'{nameof(value)}' cannot be null or whitespace.", nameof(value));
-#endif
-                field = value;
-            }
-
-        }
-
-        /// <summary>
-        /// The latitude of the depot
-        /// </summary>
-        public required string Latitude
-        {
-            get;
-            init
-            {
-#if NET8_0_OR_GREATER
-                ArgumentException.ThrowIfNullOrWhiteSpace(value);
-#else
-                if (string.IsNullOrWhiteSpace(value))
-                    throw new ArgumentException($"'{nameof(value)}' cannot be null or whitespace.", nameof(value));
-#endif
-                field = value;
-            }
-        }
-
-        /// <summary>
-        /// The longitude of the depot
-        /// </summary>
-        public required string Longitude
-        {
-            get;
-            init
-            {
-#if NET8_0_OR_GREATER
-                ArgumentException.ThrowIfNullOrWhiteSpace(value);
-#else
-                if (string.IsNullOrWhiteSpace(value))
-                    throw new ArgumentException($"'{nameof(value)}' cannot be null or whitespace.", nameof(value));
-#endif
-                field = value;
-            }
-        }
-
-#else
         /// <summary>
         /// The address of the depot
         /// </summary>
@@ -194,22 +48,11 @@ namespace Couriers.Speedex.ResponseModels
         /// The longitude of the depot
         /// </summary>
         public string Longitude { get; }
-#endif
 
         #endregion
 
         #region Constructors
 
-#if NET7_0_OR_GREATER
-
-        /// <summary>
-        /// Creates a new instance of <see cref="BranchResponseModel"/>
-        /// </summary>
-        public BranchResponseModel() : base()
-        {
-
-        }
-#else
         /// <summary>
         /// Creates a new instance of <see cref="BranchResponseModel"/>
         /// </summary>
@@ -263,7 +106,6 @@ namespace Couriers.Speedex.ResponseModels
 
             Longitude = longitude;
         }
-#endif
 
         #endregion
 

@@ -100,7 +100,7 @@ namespace Couriers.Speedex.Tests
 
             var startingTime = DateTime.Now.AddHours(-10);
 
-            using var speedexClient = new SpeedexClient(TestConstants.SpeedexCredentials, true);
+            using var speedexClient = new DemoSpeedexClient(TestConstants.SpeedexCredentials);
 
             var sessionResponse = await speedexClient.CreateSessionAsync(cancellationToken);
 
@@ -140,7 +140,7 @@ namespace Couriers.Speedex.Tests
         }
 
         /// <summary>
-        /// Validates that when <see cref="SpeedexClient.CreateSessionAsync"/> is called, 
+        /// Validates that when <see cref="BaseSpeedexClient.CreateSessionAsync"/> is called, 
         /// it successfully returns a session id
         /// </summary>
         /// <returns></returns>
@@ -155,7 +155,7 @@ namespace Couriers.Speedex.Tests
         }
 
         /// <summary>
-        /// Validates that when <see cref="SpeedexClient.CancelConsignmentByVoucherIdAsync"/> is called, 
+        /// Validates that when <see cref="BaseSpeedexClient.CancelConsignmentByVoucherIdAsync"/> is called, 
         /// it successfully returns
         /// </summary>
         /// <returns></returns>
@@ -170,7 +170,7 @@ namespace Couriers.Speedex.Tests
         }
 
         /// <summary>
-        /// Validates that when <see cref="SpeedexClient.CreateConsignmentsAsync"/> is called, 
+        /// Validates that when <see cref="BaseSpeedexClient.CreateConsignmentsAsync"/> is called, 
         /// it successfully returns
         /// </summary>
         /// <returns></returns>
@@ -183,7 +183,7 @@ namespace Couriers.Speedex.Tests
         }
 
         /// <summary>
-        /// Validates that when <see cref="SpeedexClient.CreateConsignmentAsync"/> is called, 
+        /// Validates that when <see cref="BaseSpeedexClient.CreateConsignmentAsync"/> is called, 
         /// it successfully returns
         /// </summary>
         /// <returns></returns>
@@ -196,7 +196,7 @@ namespace Couriers.Speedex.Tests
         }
 
         /// <summary>
-        /// Validates that when <see cref="SpeedexClient.GetConsignmentPdfsAsync"/> is called, 
+        /// Validates that when <see cref="BaseSpeedexClient.GetConsignmentPdfsAsync"/> is called, 
         /// it successfully returns
         /// </summary>
         /// <returns></returns>
@@ -211,7 +211,7 @@ namespace Couriers.Speedex.Tests
         }
 
         /// <summary>
-        /// Validates that when <see cref="SpeedexClient.GetConsignmentPdfAsync"/> is called, 
+        /// Validates that when <see cref="BaseSpeedexClient.GetConsignmentPdfAsync"/> is called, 
         /// it successfully returns
         /// </summary>
         /// <returns></returns>
@@ -224,7 +224,7 @@ namespace Couriers.Speedex.Tests
         }
 
         /// <summary>
-        /// Validates that when <see cref="SpeedexClient.GetBranchesAsync"/> is called, 
+        /// Validates that when <see cref="BaseSpeedexClient.GetBranchesAsync"/> is called, 
         /// it successfully returns
         /// </summary>
         /// <returns></returns>
@@ -237,7 +237,7 @@ namespace Couriers.Speedex.Tests
         }
 
         /// <summary>
-        /// Validates that when <see cref="SpeedexClient.GetLastCheckPointAsync"/> is called, 
+        /// Validates that when <see cref="BaseSpeedexClient.GetLastCheckPointAsync"/> is called, 
         /// it successfully returns
         /// </summary>
         /// <returns></returns>
@@ -250,7 +250,7 @@ namespace Couriers.Speedex.Tests
         }
 
         /// <summary>
-        /// Validates that when <see cref="SpeedexClient.GetLastPickupCheckPointAsync"/> is called, 
+        /// Validates that when <see cref="BaseSpeedexClient.GetLastPickupCheckPointAsync"/> is called, 
         /// it successfully returns
         /// </summary>
         /// <returns></returns>
@@ -263,7 +263,7 @@ namespace Couriers.Speedex.Tests
         }
 
         /// <summary>
-        /// Validates that when <see cref="SpeedexClient.GetTraceByClientReferencesAsync"/> is called, 
+        /// Validates that when <see cref="BaseSpeedexClient.GetTraceByClientReferencesAsync"/> is called, 
         /// it successfully returns
         /// </summary>
         /// <returns></returns>
@@ -281,7 +281,7 @@ namespace Couriers.Speedex.Tests
         }
 
         /// <summary>
-        /// Validates that when <see cref="SpeedexClient.GetTraceByTimeFrameAsync"/> is called, 
+        /// Validates that when <see cref="BaseSpeedexClient.GetTraceByTimeFrameAsync"/> is called, 
         /// it successfully returns
         /// </summary>
         /// <returns></returns>
@@ -298,7 +298,7 @@ namespace Couriers.Speedex.Tests
         }
 
         /// <summary>
-        /// Validates that when <see cref="SpeedexClient.GetTraceByVoucherIdAsync"/> is called, 
+        /// Validates that when <see cref="BaseSpeedexClient.GetTraceByVoucherIdAsync"/> is called, 
         /// it successfully returns
         /// </summary>
         /// <returns></returns>
@@ -311,7 +311,7 @@ namespace Couriers.Speedex.Tests
         }
 
         /// <summary>
-        /// Validates that when <see cref="SpeedexClient.CancelPickupByIdAsync"/> is called, 
+        /// Validates that when <see cref="BaseSpeedexClient.CancelPickupByIdAsync"/> is called, 
         /// it successfully returns
         /// </summary>
         /// <returns></returns>
@@ -324,14 +324,14 @@ namespace Couriers.Speedex.Tests
         }
 
         /// <summary>
-        /// Validates that when <see cref="SpeedexClient.CreatePickupAsync"/> is called, 
+        /// Validates that when <see cref="BaseSpeedexClient.CreatePickupAsync"/> is called, 
         /// it successfully returns
         /// </summary>
         /// <returns></returns>
         [Fact]
         public async Task CreatePickupAsync_WithMoqedData_ItSuccessfullyReturns()
         {
-            var pickup = DateOnly.FromDateTime(DateTime.Now.AddDays(3));
+            var pickup = DateTime.Now.AddDays(3);
 
             var request = new PickupRequestModel(TestHelpers.GenerateTestVoucherNumber(), pickup, DeliveryTimeLimit.NoLimit);
 
@@ -341,7 +341,7 @@ namespace Couriers.Speedex.Tests
         }
 
         /// <summary>
-        /// Validates that when <see cref="SpeedexClient.GetConsignmentsByDateRangeAsync"/> is called, 
+        /// Validates that when <see cref="BaseSpeedexClient.GetConsignmentsByDateRangeAsync"/> is called, 
         /// it successfully returns
         /// </summary>
         /// <returns></returns>
@@ -358,7 +358,7 @@ namespace Couriers.Speedex.Tests
         }
 
         /// <summary>
-        /// Validates that when <see cref="SpeedexClient.GetDepositedConsignmentsByDateRangeAsync"/> is called, 
+        /// Validates that when <see cref="BaseSpeedexClient.GetDepositedConsignmentsByDateRangeAsync"/> is called, 
         /// it successfully returns
         /// </summary>
         /// <returns></returns>
@@ -375,7 +375,7 @@ namespace Couriers.Speedex.Tests
         }
 
         /// <summary>
-        /// Validates that when <see cref="SpeedexClient.GetPickupByIdAsync"/> is called, 
+        /// Validates that when <see cref="BaseSpeedexClient.GetPickupByIdAsync"/> is called, 
         /// it successfully returns
         /// </summary>
         /// <returns></returns>
@@ -388,14 +388,14 @@ namespace Couriers.Speedex.Tests
         }
 
         /// <summary>
-        /// Validates that when <see cref="SpeedexClient.ReschedulePickupAsync"/> is called, 
+        /// Validates that when <see cref="BaseSpeedexClient.ReschedulePickupAsync"/> is called, 
         /// it successfully returns
         /// </summary>
         /// <returns></returns>
         [Fact]
         public async Task ReschedulePickupAsync_WithMoqedData_ItSuccessfullyReturns()
         {
-            var pickupDate = DateOnly.FromDateTime(DateTime.Now.AddDays(3));
+            var pickupDate = DateTime.Now.AddDays(3);
 
             var request = new ReschedulePickupRequestModel(pickupDate, DeliveryTimeLimit.TenAMToOnePM);
 

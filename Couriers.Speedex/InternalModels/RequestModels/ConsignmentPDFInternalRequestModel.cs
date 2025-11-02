@@ -38,7 +38,7 @@ namespace Couriers.Speedex.InternalModels.RequestModels
         /// </summary>
         [XmlArray("voucherIDs")]
         [XmlArrayItem("string")]
-        public string[] VoucherIds { get; set; } = [];
+        public string[] VoucherIds { get; set; } = Array.Empty<string>();
 
 #pragma warning restore CA1819 // Properties should not return arrays
 
@@ -65,18 +65,14 @@ namespace Couriers.Speedex.InternalModels.RequestModels
         /// <returns></returns>
         public static ConsignmentPdfInternalRequestModel FromRequestModel([NotNull] ConsignmentPdfRequestModel model)
         {
-#if NET6_0_OR_GREATER
-            ArgumentNullException.ThrowIfNull(model);
-#else
             if (model is null)
                 throw new ArgumentNullException(nameof(model));
-#endif
 
             return new()
             {
                 PaperSize = SpeedexHelpers.FromPaperType(model.PaperSize),
                 ReturnMultipleVouchers = model.ReturnMultipleVouchers,
-                VoucherIds = [.. model.VoucherIds]
+                VoucherIds = model.VoucherIds.ToArray()
             };
         }
 

@@ -25,14 +25,14 @@ namespace Couriers.Speedex.InternalModels.ResponseModels
         /// </summary>
         [XmlArray("outListPod")]
         [XmlArrayItem("BOL")]
-        public ConsignmentInternalResponseModel[] Consignments { get; set; } = [];
+        public ConsignmentInternalResponseModel[] Consignments { get; set; } = Array.Empty<ConsignmentInternalResponseModel>();
 
         /// <summary>
         /// The consignments
         /// </summary>
         [XmlArray("statusList")]
         [XmlArrayItem("string")]
-        public string[] Statuses { get; set; } = [];
+        public string[] Statuses { get; set; } = Array.Empty<string>();
 
 #pragma warning restore CA1819 // Properties should not return arrays
 
@@ -62,8 +62,8 @@ namespace Couriers.Speedex.InternalModels.ResponseModels
         /// Creates and return the <see cref="IEnumerable{T}"/> from the current object
         /// </summary>
         /// <returns></returns>
-        public IEnumerable<ConsignmentResponseModel> ToResponseModel() 
-            => [.. Consignments.Select(x => x.ToResponseModel())];
+        public IEnumerable<ConsignmentResponseModel> ToResponseModel()
+            => Consignments.Select(x => x.ToResponseModel()).ToList();
 
         #endregion
     }

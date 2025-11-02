@@ -210,38 +210,9 @@ namespace Couriers.Speedex.InternalModels.ResponseModels
 
             var cost = (decimal)Cost;
 
-#if NET7_0_OR_GREATER
-            return new()
-            {
-                Address = Address,
-                AgreementCode = AgreementCode,
-                BranchBankCode = BranchBankCode,
-                ChargeType = chargeType,
-                Cost = cost,
-                CustomerCode = CustomerCode,
-                CustomerFlag = customerFlag,
-                DeliveryTime = deliveryTime,
-                FirstCustomerReference = FirstCustomerReference,
-                CommentsFirstPart = FirstCustomerReference,
-                InsuranceAmount = InsuranceAmount,
-                ParcelCount = itemCount,
-                RecipientName = RecipientName,
-                RecipientPhoneNumber = RecipientPhoneNumber,
-                SecondCustomerReference = SecondCustomerReference,
-                CommentsSecondPart = SecondCommentsPart,
-                ShouldBeDeliveredOnSaturday = shouldBeDeliveredOnSaturday,
-                ConsignmentId = VoucherId,
-                ThirdCustomerReference = ThirdCustomerReference,
-                CommentsThirdPart = ThirdCommentsPart,
-                Weight = Weight,
-                ZipCode = ZipCode,
-                PaymentType = paymentType
-            };
-#else
-            return new(customerFlag, BranchBankCode, FirstCommentsPart, SecondCommentsPart, ThirdCommentsPart, paymentType, 
-                cost, Weight, chargeType, AgreementCode, CustomerCode, FirstCustomerReference, SecondCustomerReference, ThirdCustomerReference, Address,RecipientName, 
+            return new(customerFlag, BranchBankCode, FirstCommentsPart, SecondCommentsPart, ThirdCommentsPart, paymentType,
+                cost, Weight, chargeType, AgreementCode, CustomerCode, FirstCustomerReference, SecondCustomerReference, ThirdCustomerReference, Address, RecipientName,
                 RecipientPhoneNumber, InsuranceAmount, shouldBeDeliveredOnSaturday, VoucherId, itemCount, ZipCode, deliveryTime);
-#endif
         }
 
         #endregion

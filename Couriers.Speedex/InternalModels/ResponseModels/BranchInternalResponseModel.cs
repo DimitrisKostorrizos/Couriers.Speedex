@@ -90,24 +90,8 @@ namespace Couriers.Speedex.InternalModels.ResponseModels
         /// </summary>
         /// <returns></returns>
         public BranchResponseModel ToResponseModel()
-        {
-#if NET7_0_OR_GREATER
-            return new()
-            {
-                Address = Address, 
-                City = City, 
-                Id = Id, 
-                Name = Name,
-                TelephoneNumber = TelephoneNumber,
-                ZipCode = ZipCode,
-                Latitude = Latitude, 
-                Longitude = Longitude
-            };
-#else
-            return new(Address, City, Id, Name, TelephoneNumber, ZipCode, Latitude, Longitude);
-#endif
-        }
+            => new(Address, City, Id, Name, TelephoneNumber, ZipCode, Latitude, Longitude);
 
-#endregion
+        #endregion
     }
 }

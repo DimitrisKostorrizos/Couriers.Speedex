@@ -238,57 +238,23 @@ namespace Couriers.Speedex.InternalModels.ResponseModels
         /// <returns></returns>
         public ConsignmentDetailsResponseModel ToResponseModel()
         {
-            var model = new ConsignmentDetailsResponseModel()
-            {
-                Address = Address,
-                AgreementCode = AgreementCode,
-                CashAmount = CashAmount,
-                ChargeType = SpeedexHelpers.ToChargeType(ChargeType),
-                CheckAmount = CheckAmount,
-                CheckpointCode = CheckpointCode,
-                CheckpointGroupCode = CheckpointGroupCode,
-                City = City,
-                ConsignmentId = ConsignmentId,
-                CountryCode = CountryCode,
-                CustomerCode = CustomerCode,
-                CustomerComments = CustomerComments,
-                ZipCode = DeliveryPostCode,
-                FirstCustomerReference = FirstCustomerReference,
-                InsuranceAmount = InsuranceAmount,
-                IsReturnItem = IsReturnItem,
-                ShouldBeDeliveredOnSaturday = IsSaturdayDelivery,
-                MasterConsignmentId = MasterConsignmentId,
-                ParcelCount = ParcelCount,
-                PickupAddress = PickupAddress,
-                PickupCity = PickupCity,
-                PickupCountryCode = PickupCountryCode,
-                PickupName = PickupName,
-                PickupPhoneNumber = PickupPhoneNumber,
-                PickupPostCode = PickupPostCode,
-                RecipientName = RecipientName,
-                RecipientPhoneNumber = RecipientPhoneNumber,
-                SecondCustomerReference = SecondCustomerReference,
-                ThirdCustomerReference = ThirdCustomerReference,
-                Weight = Weight
-            };
+            var startingDeliveryTime = default(DateTime?);
 
-#if NET7_0_OR_GREATER
-            if (DateTime.TryParse(DeliveryTimeFrom, SpeedexConstants.SpeedexCultureInfo, out var result))
-#else
             if (DateTime.TryParse(DeliveryTimeFrom, SpeedexConstants.SpeedexCultureInfo, DateTimeStyles.None, out var result))
-#endif
-                model.DeliveryTimeFrom = result;
+                startingDeliveryTime = result;
 
-#if NET7_0_OR_GREATER
-            if (DateTime.TryParse(DeliveryTimeTo, SpeedexConstants.SpeedexCultureInfo, out result))
-#else
+            var endingDeliveryTime = default(DateTime?);
+
             if (DateTime.TryParse(DeliveryTimeTo, SpeedexConstants.SpeedexCultureInfo, DateTimeStyles.None, out result))
-#endif
-                model.DeliveryTimeTo = result;
+                endingDeliveryTime = result;
 
-            model.DeliveryTime = SpeedexHelpers.GetDeliveryTimeLimitByTimeRange(model.DeliveryTimeFrom, model.DeliveryTimeTo);
+            var deliveryTime = SpeedexHelpers.GetDeliveryTimeLimitByTimeRange(startingDeliveryTime, endingDeliveryTime);
 
-            return model;
+            var chargeType = SpeedexHelpers.ToChargeType(ChargeType);
+
+            return new(CashAmount, CheckAmount, City, CountryCode, CustomerComments, startingDeliveryTime, endingDeliveryTime, CheckpointCode, CheckpointGroupCode, IsReturnItem, MasterConsignmentId, PickupAddress,
+                PickupCity, PickupCountryCode, PickupName, PickupPhoneNumber, PickupPostCode, Weight, chargeType, AgreementCode, CustomerCode, FirstCustomerReference, SecondCustomerReference,
+                ThirdCustomerReference, Address, RecipientName, RecipientPhoneNumber, InsuranceAmount, IsSaturdayDelivery, ConsignmentId, (int)ParcelCount, DeliveryPostCode, deliveryTime);
         }
 
         #endregion

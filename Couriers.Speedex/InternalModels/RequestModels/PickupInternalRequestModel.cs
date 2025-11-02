@@ -4,6 +4,7 @@ using Couriers.Speedex.RequestModels;
 using System;
 using System.ComponentModel;
 using System.Diagnostics.CodeAnalysis;
+using System.Linq;
 using System.Xml.Serialization;
 
 namespace Couriers.Speedex.InternalModels.RequestModels
@@ -25,7 +26,7 @@ namespace Couriers.Speedex.InternalModels.RequestModels
         /// </summary>
         [XmlArray("consignmentNumbers")]
         [XmlArrayItem("string")]
-        public string[] ConsignmentIds { get; set; } = [];
+        public string[] ConsignmentIds { get; set; } = Array.Empty<string>();
 
 #pragma warning restore CA1819 // Properties should not return arrays
 
@@ -76,22 +77,14 @@ namespace Couriers.Speedex.InternalModels.RequestModels
         /// <returns></returns>
         public static PickupInternalRequestModel FromRequestModel([NotNull] PickupRequestModel model)
         {
-#if NET6_0_OR_GREATER
-            ArgumentNullException.ThrowIfNull(model);
-#else
             if (model is null)
                 throw new ArgumentNullException(nameof(model));
-#endif
 
             var internalModel = new PickupInternalRequestModel()
             {
                 Comments = model.Comments,
-                ConsignmentIds = [.. model.ConsignmentIds],
-#if NET6_0_OR_GREATER
-                PickupDate = model.PickupDate.ToDateTime(TimeOnly.MinValue)
-#else
+                ConsignmentIds = model.ConsignmentIds.ToArray(),
                 PickupDate = model.PickupDate
-#endif
             };
 
             // Get the delivery times
@@ -100,20 +93,12 @@ namespace Couriers.Speedex.InternalModels.RequestModels
             var startingPickupTime = default(DateTime?);
 
             if (deliveryTimeWindow.StartingTime.HasValue)
-#if NET6_0_OR_GREATER
-                startingPickupTime = model.PickupDate.ToDateTime(deliveryTimeWindow.StartingTime.Value);
-#else
                 startingPickupTime = model.PickupDate.Date.AddHours(deliveryTimeWindow.StartingTime.Value.Hour);
-#endif
 
             var endingPickupTime = default(DateTime?);
 
             if (deliveryTimeWindow.EndingTime.HasValue)
-#if NET6_0_OR_GREATER
-                endingPickupTime = model.PickupDate.ToDateTime(deliveryTimeWindow.EndingTime.Value);
-#else
                 endingPickupTime = model.PickupDate.Date.AddHours(deliveryTimeWindow.EndingTime.Value.Hour);
-#endif
 
             // Set the starting delivery time
             internalModel.PickupHourFrom = startingPickupTime;

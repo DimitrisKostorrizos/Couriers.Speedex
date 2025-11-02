@@ -69,22 +69,14 @@ namespace Couriers.Speedex.InternalModels.RequestModels
         /// <returns></returns>
         public static ReschedulePickupInternalRequestModel FromRequestModel([NotNull] ReschedulePickupRequestModel model)
         {
-#if NET6_0_OR_GREATER
-            ArgumentNullException.ThrowIfNull(model);
-#else
             if (model is null)
                 throw new ArgumentNullException(nameof(model));
-#endif
 
             // Initialize the internal model
             var internalModel = new ReschedulePickupInternalRequestModel()
             {
                 Comments = model.Comments,
-#if NET5_0
                 PickupDate = model.PickupDate,
-#else
-                PickupDate = model.PickupDate.ToDateTime(TimeOnly.MinValue),
-#endif
                 PickupId = model.PickupId
             };
 
@@ -94,19 +86,12 @@ namespace Couriers.Speedex.InternalModels.RequestModels
             var startingPickupTime = default(DateTime?);
 
             var endingPickupTime = default(DateTime?);
-#if NET5_0
+
             if (deliveryTimeWindow.StartingTime.HasValue)
                 startingPickupTime = model.PickupDate.AddTicks(deliveryTimeWindow.StartingTime.Value.Ticks);
 
             if (deliveryTimeWindow.EndingTime.HasValue)
                 endingPickupTime = model.PickupDate.AddTicks(deliveryTimeWindow.EndingTime.Value.Ticks);
-#else
-            if (deliveryTimeWindow.StartingTime.HasValue)
-                startingPickupTime = model.PickupDate.ToDateTime(deliveryTimeWindow.StartingTime.Value);
-
-            if (deliveryTimeWindow.EndingTime.HasValue)
-                endingPickupTime = model.PickupDate.ToDateTime(deliveryTimeWindow.EndingTime.Value);
-#endif
 
             // Set the starting delivery time
             internalModel.PickupHourFrom = startingPickupTime;

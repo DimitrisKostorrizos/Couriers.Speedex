@@ -9,49 +9,6 @@ namespace Couriers.Speedex.ResponseModels
     {
         #region Public Properties
 
-#if NET7_0_OR_GREATER
-
-        /// <summary>
-        /// The unique consignment id
-        /// </summary>
-        public required string Id
-        {
-            get;
-            init
-            {
-#if NET8_0_OR_GREATER
-                ArgumentException.ThrowIfNullOrWhiteSpace(value);
-#else
-                if (string.IsNullOrWhiteSpace(value))
-                    throw new ArgumentException($"'{nameof(value)}' cannot be null or whitespace.", nameof(value));
-#endif
-                field = value;
-            }
-        }
-
-        /// <summary>
-        /// The deposited amount
-        /// </summary>
-        public required decimal Amount
-        {
-            get;
-            init
-            {
-#if NET8_0_OR_GREATER
-                ArgumentOutOfRangeException.ThrowIfNegative(value);
-#else
-                if (value < 0)
-                    throw new ArgumentException($"'{nameof(value)}' cannot be negative.", nameof(value));
-#endif
-                field = value;
-            }
-        }
-
-        /// <summary>
-        /// The date-time of that the consignment was deposited
-        /// </summary>
-        public required DateTime DateDeposited { get; init; }
-#else
         /// <summary>
         /// The unique consignment id
         /// </summary>
@@ -66,21 +23,11 @@ namespace Couriers.Speedex.ResponseModels
         /// The date-time of that the consignment was deposited
         /// </summary>
         public DateTime DateDeposited { get; }
-#endif
 
         #endregion
 
         #region Constructors
 
-#if NET7_0_OR_GREATER
-        /// <summary>
-        /// Creates a new instance of <see cref="DepositedConsignmentResponseModel"/>
-        /// </summary>
-        public DepositedConsignmentResponseModel() : base()
-        {
-
-        }
-#else
         /// <summary>
         /// Creates a new instance of <see cref="DepositedConsignmentResponseModel"/>
         /// </summary>
@@ -91,20 +38,15 @@ namespace Couriers.Speedex.ResponseModels
         {
             if (string.IsNullOrWhiteSpace(id))
                 throw new ArgumentException($"'{nameof(id)}' cannot be null or whitespace.", nameof(id));
-                
-#if NET8_0_OR_GREATER
-            ArgumentOutOfRangeException.ThrowIfNegative(value);
-#else
+
             if (amount < 0)
                 throw new ArgumentException($"'{nameof(amount)}' cannot be negative.", nameof(amount));
-#endif
             Id = id;
 
             Amount = amount;
 
             DateDeposited = dateDeposited;
         }
-#endif
 
         #endregion
 

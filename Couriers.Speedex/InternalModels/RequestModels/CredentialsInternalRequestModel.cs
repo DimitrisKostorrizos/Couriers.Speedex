@@ -49,12 +49,8 @@ namespace Couriers.Speedex.InternalModels.RequestModels
         /// <returns></returns>
         public static CredentialsInternalRequestModel FromRequestModel([NotNull] SpeedexCredentials model)
         {
-#if NET6_0_OR_GREATER
-            ArgumentNullException.ThrowIfNull(model);
-#else
             if (model is null)
                 throw new ArgumentNullException(nameof(model));
-#endif
 
             return new()
             {
