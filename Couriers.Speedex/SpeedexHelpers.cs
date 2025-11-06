@@ -43,8 +43,9 @@ namespace Couriers.Speedex
             => value switch
             {
                 1 => ChargeType.Sender,
-                2 => ChargeType.Receiver,
+                2 => ChargeType.Recipient,
                 3 => ChargeType.ThirdParty,
+                4 => ChargeType.Receiver,
                 _ => throw new InvalidOperationException($"The {value} is not a valid charge type.")
             };
 
@@ -57,6 +58,7 @@ namespace Couriers.Speedex
             => value switch
             {
                 "Sender" => ChargeType.Sender,
+                "Recipient" => ChargeType.Recipient,
                 "Receiver" => ChargeType.Receiver,
                 "ThirdParty" => ChargeType.ThirdParty,
                 _ => throw new InvalidOperationException($"The {value} is not a valid charge type.")
@@ -71,8 +73,9 @@ namespace Couriers.Speedex
             => value switch
             {
                 ChargeType.Sender => 1,
-                ChargeType.Receiver => 2,
+                ChargeType.Recipient => 2,
                 ChargeType.ThirdParty => 3,
+                ChargeType.Receiver => 4,
                 _ => throw new InvalidOperationException($"The {value} is not a valid charge type.")
             };
 

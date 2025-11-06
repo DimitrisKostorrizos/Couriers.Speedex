@@ -4,6 +4,9 @@ using Couriers.Speedex.RequestModels;
 using Couriers.Speedex.Services;
 
 using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
 
@@ -89,59 +92,8 @@ namespace Couriers.Speedex.Tests
 #pragma warning disable CA1707 // Identifiers should not contain underscores
 
         /// <summary>
-        /// Validates that when every
-        /// </summary>
-        /// <returns></returns>
-        [Fact]
-        public async Task APIMethodCalls()
-        {
-            var cancellationToken = TestContext.Current
-                                    .CancellationToken;
-
-            var startingTime = DateTime.Now.AddHours(-10);
-
-            using var speedexClient = new DemoSpeedexClient(TestConstants.SpeedexCredentials);
-
-            var sessionResponse = await speedexClient.CreateSessionAsync(cancellationToken);
-
-            AssertHttpRequest(sessionResponse);
-
-            var createVoucherResponse = await speedexClient.CreateConsignmentAsync(TestConstants.TestConsignment, cancellationToken);
-
-            AssertHttpRequest(createVoucherResponse);
-
-            var endingTime = DateTime.Now.AddHours(1);
-
-            var voucher = createVoucherResponse.Result.ConsignmentId;
-
-            var getVoucherResponse = await speedexClient.GetConsignmentsByDateRangeAsync(startingTime, endingTime, cancellationToken);
-
-            AssertHttpRequest(getVoucherResponse);
-
-            var pdfResponse = await speedexClient.GetConsignmentPdfAsync(voucher, PaperSize.A4, false, cancellationToken);
-
-            AssertHttpRequest(pdfResponse);
-
-            var lastCheckpointResponse = await speedexClient.GetLastCheckPointAsync(voucher, cancellationToken);
-
-            AssertHttpRequest(lastCheckpointResponse);
-
-            var checkpointsResponse = await speedexClient.GetTraceByVoucherIdAsync(voucher, cancellationToken);
-
-            AssertHttpRequest(checkpointsResponse);
-
-            var cancelVoucherResponse = await speedexClient.CancelConsignmentByVoucherIdAsync(voucher, cancellationToken);
-
-            AssertHttpRequest(cancelVoucherResponse);
-
-            var branchesResponse = await speedexClient.GetBranchesAsync(TestConstants.BranchCode, SupportedLanguage.Greek, cancellationToken);
-
-            AssertHttpRequest(branchesResponse);
-        }
-
-        /// <summary>
         /// Validates that when <see cref="BaseSpeedexClient.CreateSessionAsync"/> is called, 
-        /// it successfully returns a session id
+        /// with valid data, it successfully returns a session id
         /// </summary>
         /// <returns></returns>
         [Fact]
@@ -149,14 +101,29 @@ namespace Couriers.Speedex.Tests
         {
             var response = await _simulatedSpeedexClient.CreateSessionAsync(TestContext.Current.CancellationToken);
 
-            AssertHttpRequest(response);
+            AssertValidHttpRequestResult(response);
 
             Assert.False(string.IsNullOrWhiteSpace(response.Result));
         }
 
         /// <summary>
         /// Validates that when <see cref="BaseSpeedexClient.CancelConsignmentByVoucherIdAsync"/> is called, 
-        /// it successfully returns
+        /// with empty data, it unsuccessfully returns
+        /// </summary>
+        /// <param name="voucher">The voucher</param>
+        /// <returns></returns>
+        [Theory]
+        [MemberData(nameof(TestHelpers.EmptyStringValues), MemberType = typeof(TestHelpers))]
+        public async Task CancelConsignmentByVoucherIdAsync_WithEmptyVoucher_UnsuccessfullyReturns(string? voucher)
+        {
+            var response = await _simulatedSpeedexClient.CancelConsignmentByVoucherIdAsync(voucher!, TestContext.Current.CancellationToken);
+
+            AssertInvalidHttpRequestResult(response);
+        }
+
+        /// <summary>
+        /// Validates that when <see cref="BaseSpeedexClient.CancelConsignmentByVoucherIdAsync"/> is called, 
+        /// with valid data, it successfully returns
         /// </summary>
         /// <returns></returns>
         [Fact]
@@ -166,109 +133,214 @@ namespace Couriers.Speedex.Tests
 
             var response = await _simulatedSpeedexClient.CancelConsignmentByVoucherIdAsync(voucher, TestContext.Current.CancellationToken);
 
-            AssertHttpRequest(response);
+            AssertValidHttpRequestResult(response);
         }
 
         /// <summary>
         /// Validates that when <see cref="BaseSpeedexClient.CreateConsignmentsAsync"/> is called, 
-        /// it successfully returns
+        /// with empty data, it unsuccessfully returns
+        /// </summary>
+        /// <param name="consignments">The consignments</param>
+        /// <returns></returns>
+        [Theory]
+        [ClassData<EmptyIEnumerableTestData<ConsignmentRequestModel>>]
+        public async Task CreateConsignmentsAsync_WithEmptyData_UnsuccessfullyReturns(IEnumerable<ConsignmentRequestModel?> consignments)
+        {
+            var response = await _simulatedSpeedexClient.CreateConsignmentsAsync(consignments!, TestContext.Current.CancellationToken);
+
+            AssertInvalidHttpRequestResult(response);
+        }
+
+        /// <summary>
+        /// Validates that when <see cref="BaseSpeedexClient.CreateConsignmentsAsync"/> is called, 
+        /// with valid data, it successfully returns
         /// </summary>
         /// <returns></returns>
         [Fact]
-        public async Task CreateConsignmentsAsync_WithMoqedData_ItSuccessfullyReturns()
+        public async Task CreateConsignmentsAsync_WithMoqedData_SuccessfullyReturns()
         {
             var response = await _simulatedSpeedexClient.CreateConsignmentsAsync([TestConstants.TestConsignment], TestContext.Current.CancellationToken);
 
-            AssertHttpRequest(response);
+            AssertValidHttpRequestResult(response);
         }
 
         /// <summary>
         /// Validates that when <see cref="BaseSpeedexClient.CreateConsignmentAsync"/> is called, 
-        /// it successfully returns
+        /// with valid data, it successfully returns
         /// </summary>
         /// <returns></returns>
         [Fact]
-        public async Task CreateConsignmentAsync_WithMoqedData_ItSuccessfullyReturns()
+        public async Task CreateConsignmentAsync_WithMoqedData_SuccessfullyReturns()
         {
             var response = await _simulatedSpeedexClient.CreateConsignmentAsync(TestConstants.TestConsignment, TestContext.Current.CancellationToken);
 
-            AssertHttpRequest(response);
+            AssertValidHttpRequestResult(response);
         }
 
         /// <summary>
         /// Validates that when <see cref="BaseSpeedexClient.GetConsignmentPdfsAsync"/> is called, 
-        /// it successfully returns
+        /// with an empty voucher, it unsuccessfully returns
+        /// </summary>
+        /// <param name="voucher">The voucher</param>
+        /// <returns></returns>
+        [Theory]
+        [MemberData(nameof(TestHelpers.EmptyStringValues), MemberType = typeof(TestHelpers))]
+        public async Task GetConsignmentPdfsAsync_WithEmptyVoucher_UnuccessfullyReturns(string? voucher)
+        {
+            var request = new ConsignmentPdfRequestModel(voucher!, PaperSize.A4, true);
+
+            var response = await _simulatedSpeedexClient.GetConsignmentPdfsAsync(request, TestContext.Current.CancellationToken);
+
+            AssertValidHttpRequestResult(response);
+        }
+
+        /// <summary>
+        /// Validates that when <see cref="BaseSpeedexClient.GetConsignmentPdfsAsync"/> is called, 
+        /// with valid data, it successfully returns
         /// </summary>
         /// <returns></returns>
         [Fact]
-        public async Task GetConsignmentPdfsAsync_WithMoqedData_ItSuccessfullyReturns()
+        public async Task GetConsignmentPdfsAsync_WithMoqedData_SuccessfullyReturns()
         {
             var request = new ConsignmentPdfRequestModel([TestHelpers.GenerateTestVoucherNumber()], PaperSize.A4, true);
 
             var response = await _simulatedSpeedexClient.GetConsignmentPdfsAsync(request, TestContext.Current.CancellationToken);
 
-            AssertHttpRequest(response);
+            AssertValidHttpRequestResult(response);
         }
 
         /// <summary>
         /// Validates that when <see cref="BaseSpeedexClient.GetConsignmentPdfAsync"/> is called, 
-        /// it successfully returns
+        /// with an empty voucher, it unsuccessfully returns
+        /// </summary>
+        /// <param name="voucher">The voucher</param>
+        /// <returns></returns>
+        [Theory]
+        [MemberData(nameof(TestHelpers.EmptyStringValues), MemberType = typeof(TestHelpers))]
+        public async Task GetConsignmentPdfAsync_WithEmptyVoucher_UnuccessfullyReturns(string? voucher)
+        {
+            var response = await _simulatedSpeedexClient.GetConsignmentPdfAsync(voucher!, PaperSize.A4, true, TestContext.Current.CancellationToken);
+
+            AssertInvalidHttpRequestResult(response);
+        }
+
+        /// <summary>
+        /// Validates that when <see cref="BaseSpeedexClient.GetConsignmentPdfAsync"/> is called, 
+        /// with valid data, it successfully returns
         /// </summary>
         /// <returns></returns>
         [Fact]
-        public async Task GetConsignmentPdfAsync_WithMoqedData_ItSuccessfullyReturns()
+        public async Task GetConsignmentPdfAsync_WithMoqedData_SuccessfullyReturns()
         {
             var response = await _simulatedSpeedexClient.GetConsignmentPdfAsync(TestHelpers.GenerateTestVoucherNumber(), PaperSize.A4, true, TestContext.Current.CancellationToken);
 
-            AssertHttpRequest(response);
+            AssertValidHttpRequestResult(response);
         }
 
         /// <summary>
         /// Validates that when <see cref="BaseSpeedexClient.GetBranchesAsync"/> is called, 
-        /// it successfully returns
+        /// with an empty branch id, it unsuccessfully returns
+        /// </summary>
+        /// <param name="branchId">The branch id</param>
+        /// <returns></returns>
+        [Theory]
+        [MemberData(nameof(TestHelpers.EmptyStringValues), MemberType = typeof(TestHelpers))]
+        public async Task GetBranchesAsync_WithEmptyBranch_UnsuccessfullyReturns(string? branchId)
+        {
+            var response = await _simulatedSpeedexClient.GetBranchesAsync(branchId!, SupportedLanguage.Greek, TestContext.Current.CancellationToken);
+
+            AssertInvalidHttpRequestResult(response);
+        }
+
+        /// <summary>
+        /// Validates that when <see cref="BaseSpeedexClient.GetBranchesAsync"/> is called, 
+        /// with valid data, it successfully returns
         /// </summary>
         /// <returns></returns>
         [Fact]
-        public async Task GetBranchesAsync_WithMoqedData_ItSuccessfullyReturns()
+        public async Task GetBranchesAsync_WithMoqedData_SuccessfullyReturns()
         {
             var response = await _simulatedSpeedexClient.GetBranchesAsync("26441", SupportedLanguage.Greek, TestContext.Current.CancellationToken);
 
-            AssertHttpRequest(response);
+            AssertValidHttpRequestResult(response);
         }
 
         /// <summary>
         /// Validates that when <see cref="BaseSpeedexClient.GetLastCheckPointAsync"/> is called, 
-        /// it successfully returns
+        /// with an empty voucher, it unsuccessfully returns
+        /// </summary>
+        /// <param name="voucher">The voucher</param>
+        /// <returns></returns>
+        [Theory]
+        [MemberData(nameof(TestHelpers.EmptyStringValues), MemberType = typeof(TestHelpers))]
+        public async Task GetLastCheckPointAsync_WithEmptyVouchera_UnuccessfullyReturns(string? voucher)
+        {
+            var response = await _simulatedSpeedexClient.GetLastCheckPointAsync(voucher!, TestContext.Current.CancellationToken);
+
+            AssertInvalidHttpRequestResult(response);
+        }
+
+        /// <summary>
+        /// Validates that when <see cref="BaseSpeedexClient.GetLastCheckPointAsync"/> is called, 
+        /// with valid data, it successfully returns
         /// </summary>
         /// <returns></returns>
         [Fact]
-        public async Task GetLastCheckPointAsync_WithMoqedData_ItSuccessfullyReturns()
+        public async Task GetLastCheckPointAsync_WithMoqedData_SuccessfullyReturns()
         {
             var response = await _simulatedSpeedexClient.GetLastCheckPointAsync(TestHelpers.GenerateTestVoucherNumber(), TestContext.Current.CancellationToken);
 
-            AssertHttpRequest(response);
+            AssertValidHttpRequestResult(response);
         }
 
         /// <summary>
         /// Validates that when <see cref="BaseSpeedexClient.GetLastPickupCheckPointAsync"/> is called, 
-        /// it successfully returns
+        /// with an empty voucher, it unsuccessfully returns
+        /// </summary>
+        /// <param name="voucher">The voucher</param>
+        /// <returns></returns>
+        [Theory]
+        [MemberData(nameof(TestHelpers.EmptyStringValues), MemberType = typeof(TestHelpers))]
+        public async Task GetLastPickupCheckPointAsync_WithEmptyVoucher_UnsuccessfullyReturns(string? voucher)
+        {
+            var response = await _simulatedSpeedexClient.GetLastPickupCheckPointAsync(voucher!, TestContext.Current.CancellationToken);
+
+            AssertInvalidHttpRequestResult(response);
+        }
+
+        /// <summary>
+        /// Validates that when <see cref="BaseSpeedexClient.GetLastPickupCheckPointAsync"/> is called, 
+        /// with valid data, it successfully returns
         /// </summary>
         /// <returns></returns>
         [Fact]
-        public async Task GetLastPickupCheckPointAsync_WithMoqedData_ItSuccessfullyReturns()
+        public async Task GetLastPickupCheckPointAsync_WithMoqedData_SuccessfullyReturns()
         {
             var response = await _simulatedSpeedexClient.GetLastPickupCheckPointAsync(TestHelpers.GenerateTestVoucherNumber(), TestContext.Current.CancellationToken);
 
-            AssertHttpRequest(response);
+            AssertValidHttpRequestResult(response);
         }
 
         /// <summary>
         /// Validates that when <see cref="BaseSpeedexClient.GetTraceByClientReferencesAsync"/> is called, 
-        /// it successfully returns
+        /// with <see langword="null"/> data, it unsuccessfully returns
         /// </summary>
         /// <returns></returns>
         [Fact]
-        public async Task GetTraceByClientReferencesAsync_WithMoqedData_ItSuccessfullyReturns()
+        public async Task GetTraceByClientReferencesAsync_WithNullData_UnsuccessfullyReturns()
+        {
+            var response = await _simulatedSpeedexClient.GetTraceByClientReferencesAsync(null!, TestContext.Current.CancellationToken);
+
+            AssertInvalidHttpRequestResult(response);
+        }
+
+        /// <summary>
+        /// Validates that when <see cref="BaseSpeedexClient.GetTraceByClientReferencesAsync"/> is called, 
+        /// with valid data, it successfully returns
+        /// </summary>
+        /// <returns></returns>
+        [Fact]
+        public async Task GetTraceByClientReferencesAsync_WithMoqedData_SuccessfullyReturns()
         {
             var request = new ClientReferencesRequestModel()
             {
@@ -277,59 +349,106 @@ namespace Couriers.Speedex.Tests
 
             var response = await _simulatedSpeedexClient.GetTraceByClientReferencesAsync(request, TestContext.Current.CancellationToken);
 
-            AssertHttpRequest(response);
+            AssertValidHttpRequestResult(response);
         }
 
         /// <summary>
         /// Validates that when <see cref="BaseSpeedexClient.GetTraceByTimeFrameAsync"/> is called, 
-        /// it successfully returns
+        /// with invalid dates, it unsuccessfully returns
         /// </summary>
         /// <returns></returns>
         [Fact]
-        public async Task GetTraceByTimeFrameAsync_WithMoqedData_ItSuccessfullyReturns()
+        public async Task GetTraceByTimeFrameAsync_WithInvalidDates_UnsuccessfullyReturns()
         {
             var dateto = DateTime.Now;
 
             var dateFrom = dateto.AddDays(-5);
 
-            var response = await _simulatedSpeedexClient.GetTraceByTimeFrameAsync(dateFrom, dateto, TestContext.Current.CancellationToken);
+            var response = await _simulatedSpeedexClient.GetTraceByTimeFrameAsync(dateto, dateFrom, TestContext.Current.CancellationToken);
 
-            AssertHttpRequest(response);
+            AssertInvalidHttpRequestResult(response);
+        }
+
+        /// <summary>
+        /// Validates that when <see cref="BaseSpeedexClient.GetTraceByTimeFrameAsync"/> is called, 
+        /// with valid data, it successfully returns
+        /// </summary>
+        /// <returns></returns>
+        [Fact]
+        public async Task GetTraceByTimeFrameAsync_WithMoqedData_SuccessfullyReturns()
+        {
+            var startingDate = DateTime.Now;
+
+            var endingDate = startingDate.AddDays(-5);
+
+            var response = await _simulatedSpeedexClient.GetTraceByTimeFrameAsync(endingDate, startingDate, TestContext.Current.CancellationToken);
+
+            AssertValidHttpRequestResult(response);
         }
 
         /// <summary>
         /// Validates that when <see cref="BaseSpeedexClient.GetTraceByVoucherIdAsync"/> is called, 
-        /// it successfully returns
+        /// with an empty voucher, it unsuccessfully returns
+        /// </summary>
+        /// <param name="voucher">The voucher</param>
+        /// <returns></returns>
+        [Theory]
+        [MemberData(nameof(TestHelpers.EmptyStringValues), MemberType = typeof(TestHelpers))]
+        public async Task GetTraceByVoucherIdAsync_WithEmptyVoucher_UnuccessfullyReturns(string? voucher)
+        {
+            var response = await _simulatedSpeedexClient.GetTraceByVoucherIdAsync(voucher!, TestContext.Current.CancellationToken);
+
+            AssertInvalidHttpRequestResult(response);
+        }
+
+        /// <summary>
+        /// Validates that when <see cref="BaseSpeedexClient.GetTraceByVoucherIdAsync"/> is called, 
+        /// with valid data, it successfully returns
         /// </summary>
         /// <returns></returns>
         [Fact]
-        public async Task GetTraceByVoucherIdAsync_WithMoqedData_ItSuccessfullyReturns()
+        public async Task GetTraceByVoucherIdAsync_WithMoqedData_SuccessfullyReturns()
         {
             var response = await _simulatedSpeedexClient.GetTraceByVoucherIdAsync(TestHelpers.GenerateTestVoucherNumber(), TestContext.Current.CancellationToken);
 
-            AssertHttpRequest(response);
+            AssertValidHttpRequestResult(response);
         }
 
         /// <summary>
         /// Validates that when <see cref="BaseSpeedexClient.CancelPickupByIdAsync"/> is called, 
-        /// it successfully returns
+        /// with an empty voucher, it unsuccessfully returns
+        /// </summary>
+        /// <param name="voucher">The voucher</param>
+        /// <returns></returns>
+        [Theory]
+        [MemberData(nameof(TestHelpers.EmptyStringValues), MemberType = typeof(TestHelpers))]
+        public async Task CancelPickupByIdAsync_WithEmptyVoucher_UnuccessfullyReturns(string? voucher)
+        {
+            var response = await _simulatedSpeedexClient.CancelPickupByIdAsync(voucher!, TestContext.Current.CancellationToken);
+
+            AssertInvalidHttpRequestResult(response);
+        }
+
+        /// <summary>
+        /// Validates that when <see cref="BaseSpeedexClient.CancelPickupByIdAsync"/> is called, 
+        /// with valid data, it successfully returns
         /// </summary>
         /// <returns></returns>
         [Fact]
-        public async Task CancelPickupByIdAsync_WithMoqedData_ItSuccessfullyReturns()
+        public async Task CancelPickupByIdAsync_WithMoqedData_SuccessfullyReturns()
         {
             var response = await _simulatedSpeedexClient.CancelPickupByIdAsync(TestHelpers.GenerateTestVoucherNumber(), TestContext.Current.CancellationToken);
 
-            AssertHttpRequest(response);
+            AssertValidHttpRequestResult(response);
         }
 
         /// <summary>
         /// Validates that when <see cref="BaseSpeedexClient.CreatePickupAsync"/> is called, 
-        /// it successfully returns
+        /// with valid data, it successfully returns
         /// </summary>
         /// <returns></returns>
         [Fact]
-        public async Task CreatePickupAsync_WithMoqedData_ItSuccessfullyReturns()
+        public async Task CreatePickupAsync_WithMoqedData_SuccessfullyReturns()
         {
             var pickup = DateTime.Now.AddDays(3);
 
@@ -337,16 +456,33 @@ namespace Couriers.Speedex.Tests
 
             var response = await _simulatedSpeedexClient.CreatePickupAsync(request, TestContext.Current.CancellationToken);
 
-            AssertHttpRequest(response);
+            AssertValidHttpRequestResult(response);
         }
 
         /// <summary>
         /// Validates that when <see cref="BaseSpeedexClient.GetConsignmentsByDateRangeAsync"/> is called, 
-        /// it successfully returns
+        /// with invalid dates, it unsuccessfully returns
         /// </summary>
         /// <returns></returns>
         [Fact]
-        public async Task GetConsignmentsByDateRangeAsync_WithMoqedData_ItSuccessfullyReturns()
+        public async Task GetConsignmentsByDateRangeAsync_WithInvalidDates_UnsuccessfullyReturns()
+        {
+            var startingDate = DateTime.Now;
+
+            var endingDate = startingDate.AddDays(-5);
+
+            var response = await _simulatedSpeedexClient.GetConsignmentsByDateRangeAsync(startingDate, endingDate, TestContext.Current.CancellationToken);
+
+            AssertInvalidHttpRequestResult(response);
+        }
+
+        /// <summary>
+        /// Validates that when <see cref="BaseSpeedexClient.GetConsignmentsByDateRangeAsync"/> is called, 
+        /// with valid data, it successfully returns
+        /// </summary>
+        /// <returns></returns>
+        [Fact]
+        public async Task GetConsignmentsByDateRangeAsync_WithMoqedData_SuccessfullyReturns()
         {
             var dateTo = DateTime.Now;
 
@@ -354,16 +490,33 @@ namespace Couriers.Speedex.Tests
 
             var response = await _simulatedSpeedexClient.GetConsignmentsByDateRangeAsync(dateFrom, dateTo, TestContext.Current.CancellationToken);
 
-            AssertHttpRequest(response);
+            AssertValidHttpRequestResult(response);
         }
 
         /// <summary>
         /// Validates that when <see cref="BaseSpeedexClient.GetDepositedConsignmentsByDateRangeAsync"/> is called, 
-        /// it successfully returns
+        /// with invalid dates, it unsuccessfully returns
         /// </summary>
         /// <returns></returns>
         [Fact]
-        public async Task GetDepositedConsignmentsByDateRangeAsync_WithMoqedData_ItSuccessfullyReturns()
+        public async Task GetDepositedConsignmentsByDateRangeAsync_WithInvalidDates_UnsuccessfullyReturns()
+        {
+            var startingDate = DateTime.Now;
+
+            var endingDate = startingDate.AddDays(-5);
+
+            var response = await _simulatedSpeedexClient.GetDepositedConsignmentsByDateRangeAsync(startingDate, endingDate, TestContext.Current.CancellationToken);
+
+            AssertInvalidHttpRequestResult(response);
+        }
+
+        /// <summary>
+        /// Validates that when <see cref="BaseSpeedexClient.GetDepositedConsignmentsByDateRangeAsync"/> is called, 
+        /// with valid data, it successfully returns
+        /// </summary>
+        /// <returns></returns>
+        [Fact]
+        public async Task GetDepositedConsignmentsByDateRangeAsync_WithMoqedData_SuccessfullyReturns()
         {
             var dateTo = DateTime.Now;
 
@@ -371,29 +524,44 @@ namespace Couriers.Speedex.Tests
 
             var response = await _simulatedSpeedexClient.GetDepositedConsignmentsByDateRangeAsync(dateFrom, dateTo, TestContext.Current.CancellationToken);
 
-            AssertHttpRequest(response);
+            AssertValidHttpRequestResult(response);
         }
 
         /// <summary>
         /// Validates that when <see cref="BaseSpeedexClient.GetPickupByIdAsync"/> is called, 
-        /// it successfully returns
+        /// with an empty voucher, it unsuccessfully returns
+        /// </summary>
+        /// <param name="voucher">The voucher</param>
+        /// <returns></returns>
+        [Theory]
+        [MemberData(nameof(TestHelpers.EmptyStringValues), MemberType = typeof(TestHelpers))]
+        public async Task GetPickupByIdAsync_WithEmptyVoucher_UnuccessfullyReturns(string? voucher)
+        {
+            var response = await _simulatedSpeedexClient.GetPickupByIdAsync(voucher!, TestContext.Current.CancellationToken);
+
+            AssertInvalidHttpRequestResult(response);
+        }
+
+        /// <summary>
+        /// Validates that when <see cref="BaseSpeedexClient.GetPickupByIdAsync"/> is called, 
+        /// with valid data, it successfully returns
         /// </summary>
         /// <returns></returns>
         [Fact]
-        public async Task GetPickupByIdAsync_WithMoqedData_ItSuccessfullyReturns()
+        public async Task GetPickupByIdAsync_WithMoqedData_SuccessfullyReturns()
         {
             var response = await _simulatedSpeedexClient.GetPickupByIdAsync(TestHelpers.GenerateTestVoucherNumber(), TestContext.Current.CancellationToken);
 
-            AssertHttpRequest(response);
+            AssertValidHttpRequestResult(response);
         }
 
         /// <summary>
         /// Validates that when <see cref="BaseSpeedexClient.ReschedulePickupAsync"/> is called, 
-        /// it successfully returns
+        /// with valid data, it successfully returns
         /// </summary>
         /// <returns></returns>
         [Fact]
-        public async Task ReschedulePickupAsync_WithMoqedData_ItSuccessfullyReturns()
+        public async Task ReschedulePickupAsync_WithMoqedData_SuccessfullyReturns()
         {
             var pickupDate = DateTime.Now.AddDays(3);
 
@@ -401,7 +569,7 @@ namespace Couriers.Speedex.Tests
 
             var response = await _simulatedSpeedexClient.ReschedulePickupAsync(request, TestContext.Current.CancellationToken);
 
-            AssertHttpRequest(response);
+            AssertValidHttpRequestResult(response);
         }
 
 #pragma warning restore CA1707 // Identifiers should not contain underscores
@@ -443,18 +611,18 @@ namespace Couriers.Speedex.Tests
         /// Asserts the <paramref name="httpRequestResult"/>
         /// </summary>
         /// <param name="httpRequestResult">The HTTP request result</param>
-        private static void AssertHttpRequest<T>(IHttpRequestResult<T> httpRequestResult)
+        private static void AssertValidHttpRequestResult<T>(IHttpRequestResult<T> httpRequestResult)
         {
-            AssertHttpRequest((IHttpRequestResult)httpRequestResult);
+            AssertValidHttpRequestResult((IHttpRequestResult)httpRequestResult);
 
             Assert.NotNull(httpRequestResult.Result);
         }
 
         /// <summary>
-        /// Asserts the <paramref name="httpRequestResult"/>
+        /// Asserts the <paramref name="httpRequestResult"/> is valid
         /// </summary>
         /// <param name="httpRequestResult">The HTTP request result</param>
-        private static void AssertHttpRequest(IHttpRequestResult httpRequestResult)
+        private static void AssertValidHttpRequestResult(IHttpRequestResult httpRequestResult)
         {
             Assert.NotNull(httpRequestResult);
 
@@ -463,6 +631,19 @@ namespace Couriers.Speedex.Tests
             Assert.False(string.IsNullOrWhiteSpace(httpRequestResult.RequestPayload));
 
             Assert.False(string.IsNullOrWhiteSpace(httpRequestResult.ResponsePayload));
+        }
+
+        /// <summary>
+        /// Asserts the <paramref name="httpRequestResult"/> is invalid
+        /// </summary>
+        /// <param name="httpRequestResult">The HTTP request result</param>
+        private static void AssertInvalidHttpRequestResult(IHttpRequestResult httpRequestResult)
+        {
+            Assert.NotNull(httpRequestResult);
+
+            Assert.False(httpRequestResult.IsSuccessful);
+
+            Assert.NotNull(httpRequestResult.ErrorMessage);
         }
 
         #endregion

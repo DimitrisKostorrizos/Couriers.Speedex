@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace Couriers.Speedex.Tests
 {
@@ -21,6 +22,29 @@ namespace Couriers.Speedex.Tests
         /// The number of days per week
         /// </summary>
         private static readonly int NumberOfDays = Enum.GetValues<DayOfWeek>().Length;
+
+        #endregion
+
+        #region Public Fields
+
+        /// <summary>
+        /// The empty values for a <see cref="string"/>
+        /// </summary>
+        public static readonly IEnumerable<TheoryDataRow<string?>> EmptyStringValues = 
+        [
+            new TheoryDataRow<string?>(null),
+            new TheoryDataRow<string?>(string.Empty),
+            new TheoryDataRow<string?>("  ")
+        ];
+
+        /// <summary>
+        /// The empty values for a <see cref="IEnumerable{T}"/>
+        /// </summary>
+        public static IEnumerable<ITheoryDataRow> Empty()
+        {
+            yield return new TheoryDataRow<IEnumerable<object>?>(null!);
+            yield return new TheoryDataRow<IEnumerable<object>?>([]);
+        }
 
         #endregion
 

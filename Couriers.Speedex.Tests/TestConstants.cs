@@ -488,7 +488,7 @@ namespace Couriers.Speedex.Tests
         /// <summary>
         /// The consignment used for testing
         /// </summary>
-        public static readonly ConsignmentRequestModel TestConsignment = new(0, 2, ChargeType.Receiver, PaymentType.Cash, 2, "Test", "Test", "1234567890", "12345", 4);
+        public static readonly ConsignmentRequestModel TestConsignment = new(0, 2, ChargeType.Recipient, PaymentType.Cash, 2, "Test", "Test", "1234567890", "12345", 4);
 
         #endregion
     }

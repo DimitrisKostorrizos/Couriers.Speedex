@@ -12,10 +12,14 @@
         /// <summary>
         /// Charge the recipient of the consignment
         /// </summary>
-        Receiver,
+        Recipient,
         /// <summary>
         /// Charge the third party
         /// </summary>
-        ThirdParty
+        ThirdParty,
+        /// <summary>
+        /// Charge the receiver of the consignment
+        /// </summary>
+        Receiver,
     }
 }

@@ -22,6 +22,7 @@
 		</When>
 		<When Condition="'$(Configuration)'=='Release'">
 			<PropertyGroup>
+				<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
 				<Optimize>true</Optimize>
 			</PropertyGroup>
 		</When>
