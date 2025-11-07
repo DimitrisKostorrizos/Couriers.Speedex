@@ -60,7 +60,7 @@ namespace Couriers.Speedex
                 "Sender" => ChargeType.Sender,
                 "Recipient" => ChargeType.Recipient,
                 "Receiver" => ChargeType.Receiver,
-                "ThirdParty" => ChargeType.ThirdParty,
+                "Third Party" => ChargeType.ThirdParty,
                 _ => throw new InvalidOperationException($"The {value} is not a valid charge type.")
             };
 

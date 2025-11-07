@@ -66,6 +66,22 @@ namespace Couriers.Speedex.Tests
         }
 
         /// <summary>
+        /// Generates a new random voucher number
+        /// </summary>
+        /// <returns></returns>
+        public static string GenerateTestPickupNumber()
+        {
+#pragma warning disable CA5394 // Do not use insecure randomness
+
+            var selectedDigits = Random.Shared.GetItems(_digits, 8);
+
+#pragma warning restore CA5394 // Do not use insecure randomness
+
+            var digits = string.Join(string.Empty, selectedDigits);
+
+            return $"PU-{digits}";
+        }
+        /// <summary>
         /// Returns the day in the next week based on the specified <paramref name="dayOfWeek"/>
         /// </summary>
         /// <param name="dayOfWeek">The day of week</param>

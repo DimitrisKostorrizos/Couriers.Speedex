@@ -37,7 +37,7 @@ namespace Couriers.Speedex.RequestModels
         /// <summary>
         /// The delivery time
         /// </summary>
-        public DeliveryTimeLimit DeliveryTime { get; }
+        public DeliveryTimeLimit DeliveryTime { get; set; }
 
         /// <summary>
         /// The comments
@@ -62,8 +62,7 @@ namespace Couriers.Speedex.RequestModels
         /// </summary>
         /// <param name="consignmentIds">The ids for the connected master consignments</param>
         /// <param name="pickupDate">The date for the pickup</param>
-        /// <param name="deliveryTime">The delivery time frame</param>
-        public PickupRequestModel(IEnumerable<string> consignmentIds, DateTime pickupDate, DeliveryTimeLimit deliveryTime) : base()
+        public PickupRequestModel(IEnumerable<string> consignmentIds, DateTime pickupDate) : base()
         {
             if (consignmentIds is null)
                 throw new ArgumentNullException(nameof(consignmentIds));
@@ -79,8 +78,6 @@ namespace Couriers.Speedex.RequestModels
             ConsignmentIds = consignmentIds;
 
             PickupDate = pickupDate;
-
-            DeliveryTime = deliveryTime;
         }
 
         /// <summary>
@@ -88,8 +85,7 @@ namespace Couriers.Speedex.RequestModels
         /// </summary>
         /// <param name="consignmentId">The id for the connected master consignment</param>
         /// <param name="pickupDate">The date for the pickup</param>
-        /// <param name="deliveryTime">The delivery time frame</param>
-        public PickupRequestModel(string consignmentId, DateTime pickupDate, DeliveryTimeLimit deliveryTime) : this(new string[] { consignmentId }, pickupDate, deliveryTime)
+        public PickupRequestModel(string consignmentId, DateTime pickupDate) : this(new string[] { consignmentId }, pickupDate)
         {
             if (string.IsNullOrWhiteSpace(consignmentId))
                 throw new ArgumentException($"'{nameof(consignmentId)}' cannot be null or whitespace.", nameof(consignmentId));

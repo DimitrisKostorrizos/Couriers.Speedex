@@ -20,6 +20,6 @@
         /// <summary>
         /// Charge the receiver of the consignment
         /// </summary>
-        Receiver,
+        Receiver
     }
 }

@@ -23,7 +23,7 @@ namespace Couriers.Speedex.ResponseModels
         /// <summary>
         /// The checkpoint code
         /// </summary>
-        public string CheckpointCode { get; }
+        public string? CheckpointCode { get; }
 
         /// <summary>
         /// The group checkpoint code
@@ -101,7 +101,7 @@ namespace Couriers.Speedex.ResponseModels
         /// <param name="pickupDate">The pickup date</param>
         /// <param name="pickupTimeFrom">The start of the time frame of the pickup</param>
         /// <param name="pickupTimeTo">The end of the time frame of the pickup</param>
-        public PickupResponseModel(string id, IEnumerable<string> consignmentIds, string checkpointCode, string checkpointGroupCode,
+        public PickupResponseModel(string id, IEnumerable<string> consignmentIds, string? checkpointCode, string checkpointGroupCode,
             string address, string city, string countryCode, string? comments, string? name, string? phoneNumber, string postCode,
             DateTime pickupDate, DateTime? pickupTimeFrom, DateTime? pickupTimeTo) : base()
         {
@@ -110,9 +110,6 @@ namespace Couriers.Speedex.ResponseModels
 
             if (consignmentIds is null)
                 throw new ArgumentNullException(nameof(consignmentIds));
-
-            if (string.IsNullOrWhiteSpace(checkpointCode))
-                throw new ArgumentException($"'{nameof(checkpointCode)}' cannot be null or whitespace.", nameof(checkpointCode));
 
             if (string.IsNullOrWhiteSpace(checkpointGroupCode))
                 throw new ArgumentException($"'{nameof(checkpointGroupCode)}' cannot be null or whitespace.", nameof(checkpointGroupCode));

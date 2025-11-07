@@ -32,7 +32,7 @@ namespace Couriers.Speedex.ResponseModels
         /// <summary>
         /// The telephone number of the depot
         /// </summary>
-        public string TelephoneNumber { get; }
+        public string? TelephoneNumber { get; }
 
         /// <summary>
         /// The zip code of the depot
@@ -64,7 +64,7 @@ namespace Couriers.Speedex.ResponseModels
         /// <param name="zipCode">The zip code of the depot</param>
         /// <param name="latitude">The latitude of the depot</param>
         /// <param name="longitude">The longitude of the depot</param>
-        public BranchResponseModel(string address, string city, string id, string name, string telephoneNumber, string zipCode, string latitude, string longitude) : base()
+        public BranchResponseModel(string address, string city, string id, string name, string? telephoneNumber, string zipCode, string latitude, string longitude) : base()
         {
             if (string.IsNullOrWhiteSpace(address))
                 throw new ArgumentException($"'{nameof(address)}' cannot be null or whitespace.", nameof(address));
@@ -77,9 +77,6 @@ namespace Couriers.Speedex.ResponseModels
 
             if (string.IsNullOrWhiteSpace(name))
                 throw new ArgumentException($"'{nameof(name)}' cannot be null or whitespace.", nameof(name));
-
-            if (string.IsNullOrWhiteSpace(telephoneNumber))
-                throw new ArgumentException($"'{nameof(telephoneNumber)}' cannot be null or whitespace.", nameof(telephoneNumber));
 
             if (string.IsNullOrWhiteSpace(zipCode))
                 throw new ArgumentException($"'{nameof(zipCode)}' cannot be null or whitespace.", nameof(zipCode));

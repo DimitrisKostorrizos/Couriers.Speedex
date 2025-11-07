@@ -3,11 +3,14 @@ using Couriers.Speedex.Enums;
 using Couriers.Speedex.RequestModels;
 using Couriers.Speedex.Services;
 
+using Microsoft.Extensions.DependencyInjection;
+
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Couriers.Speedex.Tests
@@ -452,7 +455,7 @@ namespace Couriers.Speedex.Tests
         {
             var pickup = DateTime.Now.AddDays(3);
 
-            var request = new PickupRequestModel(TestHelpers.GenerateTestVoucherNumber(), pickup, DeliveryTimeLimit.NoLimit);
+            var request = new PickupRequestModel(TestHelpers.GenerateTestVoucherNumber(), pickup);
 
             var response = await _simulatedSpeedexClient.CreatePickupAsync(request, TestContext.Current.CancellationToken);
 
@@ -565,7 +568,9 @@ namespace Couriers.Speedex.Tests
         {
             var pickupDate = DateTime.Now.AddDays(3);
 
-            var request = new ReschedulePickupRequestModel(pickupDate, DeliveryTimeLimit.TenAMToOnePM);
+            var pickupId = TestHelpers.GenerateTestPickupId();
+
+            var request = new ReschedulePickupRequestModel(pickupId, pickupDate);
 
             var response = await _simulatedSpeedexClient.ReschedulePickupAsync(request, TestContext.Current.CancellationToken);
 
