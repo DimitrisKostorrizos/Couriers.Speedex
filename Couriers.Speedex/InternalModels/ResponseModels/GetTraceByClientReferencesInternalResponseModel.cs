@@ -25,6 +25,7 @@ namespace Couriers.Speedex.InternalModels.ResponseModels
         [XmlArray("checkpoints")]
         [XmlArrayItem("Checkpoint")]
         public CheckpointInternalResponseModel[] Checkpoints { get; set; } = Array.Empty<CheckpointInternalResponseModel>();
+
 #pragma warning restore CA1819 // Properties should not return arrays
 
         #endregion

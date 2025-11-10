@@ -1,6 +1,7 @@
 ﻿using Couriers.Speedex.Interfaces;
 
 using System.ComponentModel;
+using System.Xml;
 using System.Xml.Serialization;
 
 namespace Couriers.Speedex.InternalModels.ResponseModels
@@ -10,7 +11,7 @@ namespace Couriers.Speedex.InternalModels.ResponseModels
     /// </summary>
     /// <typeparam name="TResult">The type of result</typeparam>
     [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
-    public class MessageInternalResponseModel<TResult> : ISoapReturnMessageModel
+    public class MessageInternalResponseModel<TResult> : ISoapReturnMessageModel, IUnmappedXml
     {
         #region Public Properties
 
@@ -31,6 +32,12 @@ namespace Couriers.Speedex.InternalModels.ResponseModels
         /// </summary>
         [XmlElement("Code")]
         public uint Code { get; set; }
+
+        /// <summary>
+        /// <inheritdoc/>
+        /// </summary>
+        [XmlAnyElement]
+        public XmlElement[]? UnmappedElements { get; set; }
 
         #endregion
 

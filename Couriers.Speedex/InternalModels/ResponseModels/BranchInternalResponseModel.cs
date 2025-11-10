@@ -2,6 +2,7 @@
 using Couriers.Speedex.ResponseModels;
 
 using System.ComponentModel;
+using System.Xml;
 using System.Xml.Serialization;
 
 namespace Couriers.Speedex.InternalModels.ResponseModels
@@ -11,7 +12,7 @@ namespace Couriers.Speedex.InternalModels.ResponseModels
     /// </summary>
     [XmlRoot("Voucher", Namespace = SpeedexXmlNamespaces.DefaultNamespace)]
     [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
-    public class BranchInternalResponseModel : ISoapResponseModel<BranchResponseModel>
+    public class BranchInternalResponseModel : ISoapResponseModel<BranchResponseModel>, IUnmappedXml
     {
         #region Public Properties
 
@@ -62,6 +63,12 @@ namespace Couriers.Speedex.InternalModels.ResponseModels
         /// </summary>
         [XmlElement("pointY")]
         public string Longitude { get; set; } = string.Empty;
+
+        /// <summary>
+        /// <inheritdoc/>
+        /// </summary>
+        [XmlAnyElement]
+        public XmlElement[]? UnmappedElements { get; set; }
 
         #endregion
 

@@ -2,6 +2,7 @@
 using Couriers.Speedex.ResponseModels;
 
 using System.ComponentModel;
+using System.Xml;
 using System.Xml.Serialization;
 
 namespace Couriers.Speedex.InternalModels.ResponseModels
@@ -11,7 +12,7 @@ namespace Couriers.Speedex.InternalModels.ResponseModels
     /// </summary>
     [XmlRoot("GetPickupResponse", Namespace = SpeedexXmlNamespaces.DefaultNamespace)]
     [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
-    public class GetPickupInternalResponseModel : INewWebMethodSoapReturnMessageModel<PickupInternalResponseModel>, ISoapResponseModel<PickupResponseModel>
+    public class GetPickupInternalResponseModel : INewWebMethodSoapReturnMessageModel<PickupInternalResponseModel>, ISoapResponseModel<PickupResponseModel>, IUnmappedXml
     {
         #region Public Properties
 
@@ -20,6 +21,12 @@ namespace Couriers.Speedex.InternalModels.ResponseModels
         /// </summary>
         [XmlElement("GetPickupResult")]
         public MessageInternalResponseModel<PickupInternalResponseModel> Result { get; set; } = new();
+
+        /// <summary>
+        /// <inheritdoc/>
+        /// </summary>
+        [XmlAnyElement]
+        public XmlElement[]? UnmappedElements { get; set; }
 
         #endregion
 

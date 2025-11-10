@@ -2,6 +2,7 @@
 
 using System;
 using System.ComponentModel;
+using System.Xml;
 using System.Xml.Serialization;
 
 namespace Couriers.Speedex.InternalModels.ResponseModels
@@ -11,7 +12,7 @@ namespace Couriers.Speedex.InternalModels.ResponseModels
     /// </summary>
     /// <typeparam name="TArrayResult">The type of the array result</typeparam>
     [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
-    public class MessageCollectionInternalResponseModel<TArrayResult> : ISoapReturnMessageModel
+    public class MessageCollectionInternalResponseModel<TArrayResult> : ISoapReturnMessageModel, IUnmappedXml
     {
         #region Public Properties
 
@@ -34,6 +35,12 @@ namespace Couriers.Speedex.InternalModels.ResponseModels
         /// </summary>
         [XmlElement("Code")]
         public uint Code { get; set; }
+
+        /// <summary>
+        /// <inheritdoc/>
+        /// </summary>
+        [XmlAnyElement]
+        public XmlElement[]? UnmappedElements { get; set; }
 
 #pragma warning restore CA1819 // Properties should not return arrays
 

@@ -30,7 +30,7 @@ namespace Couriers.Speedex.Tests
         /// <summary>
         /// The empty values for a <see cref="string"/>
         /// </summary>
-        public static readonly IEnumerable<TheoryDataRow<string?>> EmptyStringValues = 
+        public static readonly IEnumerable<TheoryDataRow<string?>> EmptyStringValues =
         [
             new TheoryDataRow<string?>(null),
             new TheoryDataRow<string?>(string.Empty),

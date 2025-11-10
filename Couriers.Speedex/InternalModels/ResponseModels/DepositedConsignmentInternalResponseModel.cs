@@ -4,6 +4,7 @@ using Couriers.Speedex.ResponseModels;
 
 using System;
 using System.ComponentModel;
+using System.Xml;
 using System.Xml.Serialization;
 
 namespace Couriers.Speedex.InternalModels.ResponseModels
@@ -13,7 +14,7 @@ namespace Couriers.Speedex.InternalModels.ResponseModels
     /// </summary>
     [XmlRoot(Namespace = SpeedexXmlNamespaces.DefaultNamespace)]
     [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
-    public class DepositedConsignmentInternalResponseModel : ISoapResponseModel<DepositedConsignmentResponseModel>
+    public class DepositedConsignmentInternalResponseModel : ISoapResponseModel<DepositedConsignmentResponseModel>, IUnmappedXml
     {
         #region Public Properties
 
@@ -34,6 +35,12 @@ namespace Couriers.Speedex.InternalModels.ResponseModels
         /// </summary>
         [XmlElement("Date")]
         public string DateDeposited { get; set; } = string.Empty;
+
+        /// <summary>
+        /// <inheritdoc/>
+        /// </summary>
+        [XmlAnyElement]
+        public XmlElement[]? UnmappedElements { get; set; }
 
         #endregion
 

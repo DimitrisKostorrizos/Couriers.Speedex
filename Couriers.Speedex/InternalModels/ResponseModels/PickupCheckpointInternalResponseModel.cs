@@ -3,6 +3,7 @@ using Couriers.Speedex.ResponseModels;
 
 using System;
 using System.ComponentModel;
+using System.Xml;
 using System.Xml.Serialization;
 
 namespace Couriers.Speedex.InternalModels.ResponseModels
@@ -12,7 +13,7 @@ namespace Couriers.Speedex.InternalModels.ResponseModels
     /// </summary>
     [XmlRoot("Ordercheckpoint", Namespace = SpeedexXmlNamespaces.DefaultNamespace)]
     [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
-    public class PickupCheckpointInternalResponseModel : ISoapResponseModel<PickupCheckpointResponseModel>
+    public class PickupCheckpointInternalResponseModel : ISoapResponseModel<PickupCheckpointResponseModel>, IUnmappedXml
     {
         #region Public Properties
 
@@ -39,6 +40,12 @@ namespace Couriers.Speedex.InternalModels.ResponseModels
         /// </summary>
         [XmlElement("StatusDesc")]
         public string StatusCode { get; set; } = string.Empty;
+
+        /// <summary>
+        /// <inheritdoc/>
+        /// </summary>
+        [XmlAnyElement]
+        public XmlElement[]? UnmappedElements { get; set; }
 
         #endregion
 

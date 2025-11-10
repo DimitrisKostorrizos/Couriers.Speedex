@@ -30,7 +30,7 @@ namespace Couriers.Speedex.DependencyInjection
 
             services.AddHttpClient();
 
-            services.AddScoped(serviceProvider => new SpeedexClient(speedexCredentials, serviceProvider.GetRequiredService<IHttpClientFactory>().CreateClient()));
+            services.AddScoped<ISpeedexClient>(serviceProvider => new SpeedexClient(speedexCredentials, serviceProvider.GetRequiredService<IHttpClientFactory>().CreateClient()));
 
             return services;
         }
@@ -52,7 +52,7 @@ namespace Couriers.Speedex.DependencyInjection
 
             services.AddHttpClient();
 
-            services.AddScoped(serviceProvider => new DemoSpeedexClient(speedexCredentials, serviceProvider.GetRequiredService<IHttpClientFactory>().CreateClient()));
+            services.AddScoped<ISpeedexClient>(serviceProvider => new DemoSpeedexClient(speedexCredentials, serviceProvider.GetRequiredService<IHttpClientFactory>().CreateClient()));
 
             return services;
         }

@@ -1,6 +1,7 @@
 ﻿using Couriers.Speedex.Interfaces;
 
 using System.ComponentModel;
+using System.Xml;
 using System.Xml.Serialization;
 
 namespace Couriers.Speedex.InternalModels.ResponseModels

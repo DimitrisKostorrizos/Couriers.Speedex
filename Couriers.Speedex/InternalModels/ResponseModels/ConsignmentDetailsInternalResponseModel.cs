@@ -5,6 +5,7 @@ using Couriers.Speedex.ResponseModels;
 using System;
 using System.ComponentModel;
 using System.Globalization;
+using System.Xml;
 using System.Xml.Serialization;
 
 namespace Couriers.Speedex.InternalModels.ResponseModels
@@ -14,7 +15,7 @@ namespace Couriers.Speedex.InternalModels.ResponseModels
     /// </summary>
     [XmlType("Consignment", IncludeInSchema = false, Namespace = SpeedexXmlNamespaces.DefaultNamespace)]
     [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
-    public class ConsignmentDetailsInternalResponseModel : ISoapResponseModel<ConsignmentDetailsResponseModel>
+    public class ConsignmentDetailsInternalResponseModel : ISoapResponseModel<ConsignmentDetailsResponseModel>, IUnmappedXml
     {
         #region Public Properties
 
@@ -121,7 +122,7 @@ namespace Couriers.Speedex.InternalModels.ResponseModels
         public string DeliveryTimeFrom { get; set; } = string.Empty;
 
         /// <summary>
-        /// The final time of the delivery timeframe window
+        /// The final time of the delivery time-frame window
         /// </summary>
         [XmlElement("DeliveryTimeTo")]
         public string DeliveryTimeTo { get; set; } = string.Empty;
@@ -209,6 +210,12 @@ namespace Couriers.Speedex.InternalModels.ResponseModels
         /// </summary>
         [XmlElement("TotalNumberOfParcels")]
         public uint ParcelCount { get; set; }
+
+        /// <summary>
+        /// <inheritdoc/>
+        /// </summary>
+        [XmlAnyElement]
+        public XmlElement[]? UnmappedElements { get; set; }
 
         #endregion
 

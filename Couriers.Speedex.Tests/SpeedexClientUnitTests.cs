@@ -1,22 +1,17 @@
-using Couriers.Shared.ResultTypes;
+using Couriers.Common.ResultTypes;
 using Couriers.Speedex.Enums;
 using Couriers.Speedex.RequestModels;
 using Couriers.Speedex.Services;
 
-using Microsoft.Extensions.DependencyInjection;
-
 using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 using System.Net.Http;
-using System.Threading;
 using System.Threading.Tasks;
 
 namespace Couriers.Speedex.Tests
 {
     /// <summary>
-    /// The unit tests for the <see cref="DemoSpeedexClient"/>
+    /// The unit tests for the <see cref="BaseSpeedexClient"/>
     /// </summary>
     public sealed class SpeedexClientUnitTests : IAsyncLifetime, IDisposable
     {
@@ -165,6 +160,19 @@ namespace Couriers.Speedex.Tests
             var response = await _simulatedSpeedexClient.CreateConsignmentsAsync([TestConstants.TestConsignment], TestContext.Current.CancellationToken);
 
             AssertValidHttpRequestResult(response);
+        }
+
+        /// <summary>
+        /// Validates that when <see cref="BaseSpeedexClient.CreateConsignmentAsync"/> is called, 
+        /// with empty data, it unsuccessfully returns
+        /// </summary>
+        /// <returns></returns>
+        [Fact]
+        public async Task CreateConsignmentAsync_WithEmptyData_UnuccessfullyReturns()
+        {
+            var response = await _simulatedSpeedexClient.CreateConsignmentAsync(null!, TestContext.Current.CancellationToken);
+
+            AssertInvalidHttpRequestResult(response);
         }
 
         /// <summary>
@@ -556,6 +564,19 @@ namespace Couriers.Speedex.Tests
             var response = await _simulatedSpeedexClient.GetPickupByIdAsync(TestHelpers.GenerateTestVoucherNumber(), TestContext.Current.CancellationToken);
 
             AssertValidHttpRequestResult(response);
+        }
+
+        /// <summary>
+        /// Validates that when <see cref="BaseSpeedexClient.ReschedulePickupAsync"/> is called, 
+        /// with empty data, it unsuccessfully returns
+        /// </summary>
+        /// <returns></returns>
+        [Fact]
+        public async Task ReschedulePickupAsync_WithEmptyData_UnuccessfullyReturns()
+        {
+            var response = await _simulatedSpeedexClient.ReschedulePickupAsync(null!, TestContext.Current.CancellationToken);
+
+            AssertInvalidHttpRequestResult(response);
         }
 
         /// <summary>

@@ -5,6 +5,7 @@ using Couriers.Speedex.ResponseModels;
 using System;
 using System.ComponentModel;
 using System.Globalization;
+using System.Xml;
 using System.Xml.Serialization;
 
 namespace Couriers.Speedex.InternalModels.ResponseModels
@@ -14,7 +15,7 @@ namespace Couriers.Speedex.InternalModels.ResponseModels
     /// </summary>
     [XmlRoot("Result", Namespace = SpeedexXmlNamespaces.DefaultNamespace)]
     [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
-    public class PickupInternalResponseModel : ISoapResponseModel<PickupResponseModel>
+    public class PickupInternalResponseModel : ISoapResponseModel<PickupResponseModel>, IUnmappedXml
     {
         #region Public Properties
 
@@ -104,6 +105,12 @@ namespace Couriers.Speedex.InternalModels.ResponseModels
         /// </summary>
         [XmlElement("PickupTimeTo")]
         public string PickupTimeTo { get; set; } = string.Empty;
+
+        /// <summary>
+        /// <inheritdoc/>
+        /// </summary>
+        [XmlAnyElement]
+        public XmlElement[]? UnmappedElements { get; set; }
 
 #pragma warning restore CA1819 // Properties should not return arrays
 

@@ -1,4 +1,4 @@
-﻿using Couriers.Shared.Xml;
+﻿using Couriers.Common.Xml;
 using Couriers.Speedex.Constants;
 using Couriers.Speedex.Enums;
 using Couriers.Speedex.Structs;

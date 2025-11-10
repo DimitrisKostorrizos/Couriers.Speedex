@@ -1,7 +1,7 @@
-﻿using Couriers.Shared;
-using Couriers.Shared.Extensions;
-using Couriers.Shared.ResultTypes;
-using Couriers.Shared.Xml;
+﻿using Couriers.Common;
+using Couriers.Common.Extensions;
+using Couriers.Common.ResultTypes;
+using Couriers.Common.Xml;
 using Couriers.Speedex.Constants;
 using Couriers.Speedex.Enums;
 using Couriers.Speedex.Interfaces;
@@ -13,6 +13,7 @@ using Couriers.Speedex.ResponseModels;
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Net.Http;
@@ -25,7 +26,7 @@ namespace Couriers.Speedex.Services
     /// <summary>
     /// The base client for the Speedex web service
     /// </summary>
-    public abstract class BaseSpeedexClient : IDisposable
+    public abstract class BaseSpeedexClient : ISpeedexClient, IDisposable
     {
         #region Constants
 
@@ -118,7 +119,7 @@ namespace Couriers.Speedex.Services
         #region Public Methods
 
         /// <summary>
-        /// Creates a new session
+        /// <inheritdoc/>
         /// </summary>
         /// <param name="cancellationToken">The cancellation token</param>
         /// <returns></returns>
@@ -142,10 +143,7 @@ namespace Couriers.Speedex.Services
         }
 
         /// <summary>
-        /// Cancels the consignment for the order with the specified <paramref name="voucherId"/>
-        /// NOTE: A consignment that has already been picked up, cannot be canceled. 
-        /// A member consignment of a master consignment, cannot be canceled.
-        /// If a master consignment is canceled, all its member consignments are also canceled.
+        /// <inheritdoc/>
         /// </summary>
         /// <param name="voucherId">The unique voucher id</param>
         /// <param name="cancellationToken">The cancellation token</param>
@@ -172,7 +170,7 @@ namespace Couriers.Speedex.Services
         }
 
         /// <summary>
-        /// Creates the specified <paramref name="values"/>
+        /// <inheritdoc/>
         /// NOTE: The max number of consignments per request is <see cref="SpeedexConstants.MaximumNumberOfConsignments"/>
         /// </summary>
         /// <param name="values">The consignments</param>
@@ -222,7 +220,7 @@ namespace Couriers.Speedex.Services
         }
 
         /// <summary>
-        /// Creates the specified <paramref name="model"/>
+        /// <inheritdoc/>
         /// </summary>
         /// <param name="model">The consignment</param>
         /// <param name="cancellationToken">The cancellation token</param>
@@ -254,7 +252,7 @@ namespace Couriers.Speedex.Services
         }
 
         /// <summary>
-        /// Get the voucher PDF for the specified <paramref name="value"/>
+        /// <inheritdoc/>
         /// NOTE: The max number of consignments per request is <see cref="SpeedexConstants.MaximumNumberOfVouchers"/>
         /// </summary>
         /// <param name="value">The consignments</param>
@@ -290,7 +288,7 @@ namespace Couriers.Speedex.Services
         }
 
         /// <summary>
-        /// Get the voucher PDF for the voucher with the specified <paramref name="voucherId"/>
+        /// <inheritdoc/>
         /// </summary>
         /// <param name="voucherId">The voucher id</param>
         /// <param name="paperSize">The paper size</param>
@@ -328,7 +326,7 @@ namespace Couriers.Speedex.Services
         }
 
         /// <summary>
-        /// Get the branch depots for the area with the specified <paramref name="zipCode"/>
+        /// <inheritdoc/>
         /// </summary>
         /// <param name="zipCode">The zip code</param>
         /// <param name="language">The language that the results will be translated to</param>
@@ -370,7 +368,7 @@ namespace Couriers.Speedex.Services
         }
 
         /// <summary>
-        /// Get last checkpoint of the for the consignment with the specified <paramref name="voucherId"/>
+        /// <inheritdoc/>
         /// </summary>
         /// <param name="voucherId">The unique voucher id</param>
         /// <param name="cancellationToken">The cancellation token</param>
@@ -405,7 +403,7 @@ namespace Couriers.Speedex.Services
         }
 
         /// <summary>
-        /// Get last checkpoint of the for the pickup with the specified <paramref name="pickupId"/>
+        /// <inheritdoc/>
         /// </summary>
         /// <param name="pickupId">The unique pickup id</param>
         /// <param name="cancellationToken">The cancellation token</param>
@@ -440,7 +438,7 @@ namespace Couriers.Speedex.Services
         }
 
         /// <summary>
-        /// Get all the checkpoints of a consignment, using the specified <paramref name="model"/>
+        /// <inheritdoc/>
         /// </summary>
         /// <param name="model">The client references</param>
         /// <param name="cancellationToken">The cancellation token</param>
@@ -474,7 +472,7 @@ namespace Couriers.Speedex.Services
         }
 
         /// <summary>
-        /// Get the checkpoints for all the new checkpoints of the consignments, in a specific time frame from <paramref name="dateTo"/> to <paramref name="dateFrom"/>
+        /// <inheritdoc/>
         /// </summary>
         /// <param name="dateFrom">The beginning of the time frame</param>
         /// <param name="dateTo">The end of the time frame</param>
@@ -512,7 +510,7 @@ namespace Couriers.Speedex.Services
         }
 
         /// <summary>
-        /// Get the checkpoints for all the new checkpoints of the consignments with the specified <paramref name="voucherId"/>
+        /// <inheritdoc/>
         /// </summary>
         /// <param name="voucherId">The unique voucher id</param>
         /// <param name="cancellationToken">The cancellation token</param>
@@ -548,7 +546,7 @@ namespace Couriers.Speedex.Services
         }
 
         /// <summary>
-        /// Cancels the pickup with the specified <paramref name="pickupId"/>
+        /// <inheritdoc/>
         /// </summary>
         /// <param name="pickupId">The unique pickup id</param>
         /// <param name="cancellationToken">The cancellation token</param>
@@ -575,7 +573,7 @@ namespace Couriers.Speedex.Services
         }
 
         /// <summary>
-        /// Creates the pickup with the specified <paramref name="model"/>
+        /// <inheritdoc/>
         /// </summary>
         /// <param name="model">The pickup details</param>
         /// <param name="cancellationToken">The cancellation token</param>
@@ -610,7 +608,7 @@ namespace Couriers.Speedex.Services
         }
 
         /// <summary>
-        /// Get all the consignments created on the specified date range, from <paramref name="dateFrom"/> to <paramref name="dateTo"/>
+        /// <inheritdoc/>
         /// </summary>
         /// <param name="dateFrom">The beginning of the time frame</param>
         /// <param name="dateTo">The end of the time frame</param>
@@ -648,8 +646,7 @@ namespace Couriers.Speedex.Services
         }
 
         /// <summary>
-        /// Get all the consignment deposits created on the specified date range, 
-        /// from <paramref name="dateFrom"/> to <paramref name="dateTo"/>
+        /// <inheritdoc/>
         /// </summary>
         /// <param name="dateFrom">The beginning of the time frame</param>
         /// <param name="dateTo">The end of the time frame</param>
@@ -687,7 +684,7 @@ namespace Couriers.Speedex.Services
         }
 
         /// <summary>
-        /// Get the pickup with the specified <paramref name="pickupId"/>
+        /// <inheritdoc/>
         /// </summary>
         /// <param name="pickupId">The unique pickup id</param>
         /// <param name="cancellationToken">The cancellation token</param>
@@ -723,19 +720,29 @@ namespace Couriers.Speedex.Services
         }
 
         /// <summary>
-        /// Reschedules the specified <paramref name="model"/>
+        /// <inheritdoc/>
         /// </summary>
         /// <param name="model">The details for the pickup reschedule</param>
         /// <param name="cancellationToken">The cancellation token</param>
         /// <returns></returns>
-        public async Task<IHttpRequestResult> ReschedulePickupAsync(ReschedulePickupRequestModel model, CancellationToken cancellationToken = default)
+        public async Task<IHttpRequestResult> ReschedulePickupAsync([NotNull] ReschedulePickupRequestModel model, CancellationToken cancellationToken = default)
         {
             if (cancellationToken.IsCancellationRequested)
                 return new HttpRequestResult(OperationCancelledErrorMessage);
 
-            var requestModel = ReschedulePickupInternalRequestModel.FromRequestModel(model);
+            try
+            {
+                if (model is null)
+                    throw new ArgumentNullException(nameof(model));
 
-            return await ExecuteValidatedSOAPEnvelopeRequest<ReschedulePickupInternalResponseModel, ReschedulePickupInternalRequestModel>(requestModel, cancellationToken).ConfigureAwait(false);
+                var requestModel = ReschedulePickupInternalRequestModel.FromRequestModel(model);
+
+                return await ExecuteValidatedSOAPEnvelopeRequest<ReschedulePickupInternalResponseModel, ReschedulePickupInternalRequestModel>(requestModel, cancellationToken).ConfigureAwait(false);
+            }
+            catch (Exception ex)
+            {
+                return new HttpRequestResult<PickupResponseModel>(ex, null, null);
+            }
         }
 
         /// <summary>
@@ -819,7 +826,7 @@ namespace Couriers.Speedex.Services
         /// <param name="cancellationToken">The cancellation token</param>
         /// <returns></returns>
         private async Task<IHttpRequestResult<TResponse>> ExecuteValidatedSOAPEnvelopeRequest<TResponse, TRequest>(TRequest requestModel, CancellationToken cancellationToken = default)
-            where TResponse : class, ISoapReturnMessageModel, new()
+            where TResponse : class, ISoapReturnMessageModel, IUnmappedXml, new()
             where TRequest : SessionIdInternalRequestModel, new()
         {
             if (cancellationToken.IsCancellationRequested)
@@ -861,11 +868,11 @@ namespace Couriers.Speedex.Services
         /// <param name="cancellationToken">The cancellation token</param>
         /// <returns></returns>
         private async Task<InternalHttpRequestResult<TResponse>> ExecuteSoapEnvelopeRequest<TResponse, TRequest>(TRequest requestModel, CancellationToken cancellationToken = default)
-            where TResponse : class, ISoapReturnMessageModel, new()
+            where TResponse : class, ISoapReturnMessageModel, IUnmappedXml, new()
             where TRequest : class, new()
         {
             if (cancellationToken.IsCancellationRequested)
-                return new InternalHttpRequestResult<TResponse>("Operation cancelled.");
+                return new InternalHttpRequestResult<TResponse>(OperationCancelledErrorMessage);
 
             var serializedRequestPayload = string.Empty;
 
@@ -910,6 +917,12 @@ namespace Couriers.Speedex.Services
 
                     return new InternalHttpRequestResult<TResponse>(errorMessage, serializedRequestPayload, serializedResponsePayload, responseModel.Code);
                 }
+
+#if DEBUG
+                // If there is at least one unmapped XML element...
+                if (responseModel.HasUnmappedElements)
+                    Debugger.Break();
+#endif
 
                 // Return the successful result
                 return new InternalHttpRequestResult<TResponse>(responseModel, serializedRequestPayload, serializedResponsePayload);
@@ -988,7 +1001,7 @@ namespace Couriers.Speedex.Services
             /// <param name="result">The result</param>
             /// <param name="requestPayload">The request payload</param>
             /// <param name="responsePayload">The response payload</param>
-            internal InternalHttpRequestResult(TResponse result, string? requestPayload, string? responsePayload) : base(result, requestPayload, responsePayload)
+            internal InternalHttpRequestResult(TResponse result, string requestPayload, string responsePayload) : base(result, requestPayload, responsePayload)
             {
 
             }

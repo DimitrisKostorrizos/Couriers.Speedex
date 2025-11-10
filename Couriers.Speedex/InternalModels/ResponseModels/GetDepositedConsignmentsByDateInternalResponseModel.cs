@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
+using System.Xml;
 using System.Xml.Serialization;
 
 namespace Couriers.Speedex.InternalModels.ResponseModels
@@ -14,7 +15,7 @@ namespace Couriers.Speedex.InternalModels.ResponseModels
     /// </summary>
     [XmlRoot("GetDepositedConsignmentsByDateResponse", Namespace = SpeedexXmlNamespaces.DefaultNamespace)]
     [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
-    public class GetDepositedConsignmentsByDateInternalResponseModel : ISoapReturnMessageModel, ISoapResponseModel<IEnumerable<DepositedConsignmentResponseModel>>
+    public class GetDepositedConsignmentsByDateInternalResponseModel : ISoapReturnMessageModel, ISoapResponseModel<IEnumerable<DepositedConsignmentResponseModel>>, IUnmappedXml
     {
         #region Public Properties
 
@@ -33,6 +34,12 @@ namespace Couriers.Speedex.InternalModels.ResponseModels
         /// The return code
         /// </summary>
         uint ISoapReturnMessageModel.Code { get => Result.Code; set { Result.Code = value; } }
+
+        /// <summary>
+        /// <inheritdoc/>
+        /// </summary>
+        [XmlAnyElement]
+        public XmlElement[]? UnmappedElements { get; set; }
 
         #endregion
 
@@ -71,7 +78,7 @@ namespace Couriers.Speedex.InternalModels.ResponseModels
     /// </summary>
     [XmlRoot(Namespace = SpeedexXmlNamespaces.DefaultNamespace)]
     [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
-    public class GetDepositedConsignmentsByDateResult : ISoapResponseModel<IEnumerable<DepositedConsignmentResponseModel>>
+    public class GetDepositedConsignmentsByDateResult : ISoapResponseModel<IEnumerable<DepositedConsignmentResponseModel>>, IUnmappedXml
     {
         #region Public Properties
 
@@ -95,6 +102,12 @@ namespace Couriers.Speedex.InternalModels.ResponseModels
         /// </summary>
         [XmlElement("Code")]
         public uint Code { get; set; }
+
+        /// <summary>
+        /// <inheritdoc/>
+        /// </summary>
+        [XmlAnyElement]
+        public XmlElement[]? UnmappedElements { get; set; }
 
 #pragma warning restore CA1819 // Properties should not return arrays
 

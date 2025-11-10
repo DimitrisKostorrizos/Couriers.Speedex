@@ -1,4 +1,4 @@
-﻿using Couriers.Shared.Xml;
+﻿using Couriers.Common.Xml;
 
 using System.ComponentModel;
 using System.Diagnostics;

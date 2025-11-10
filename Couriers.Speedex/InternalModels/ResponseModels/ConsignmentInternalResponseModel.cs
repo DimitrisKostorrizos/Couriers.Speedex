@@ -4,6 +4,7 @@ using Couriers.Speedex.Interfaces;
 using Couriers.Speedex.ResponseModels;
 
 using System.ComponentModel;
+using System.Xml;
 using System.Xml.Serialization;
 
 namespace Couriers.Speedex.InternalModels.ResponseModels
@@ -13,7 +14,7 @@ namespace Couriers.Speedex.InternalModels.ResponseModels
     /// </summary>
     [XmlRoot("BOL", Namespace = SpeedexXmlNamespaces.DefaultNamespace)]
     [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
-    public class ConsignmentInternalResponseModel : ISoapResponseModel<ConsignmentResponseModel>
+    public class ConsignmentInternalResponseModel : ISoapResponseModel<ConsignmentResponseModel>, IUnmappedXml
     {
         #region Public Properties
 
@@ -164,6 +165,12 @@ namespace Couriers.Speedex.InternalModels.ResponseModels
         /// It is possible to change after the weighting from Speedex
         /// </summary>
         public double Weight { get; set; }
+
+        /// <summary>
+        /// <inheritdoc/>
+        /// </summary>
+        [XmlAnyElement]
+        public XmlElement[]? UnmappedElements { get; set; }
 
         #endregion
 

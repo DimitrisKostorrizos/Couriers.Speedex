@@ -1,5 +1,5 @@
-﻿using Couriers.Shared;
-using Couriers.Shared.Xml;
+﻿using Couriers.Common;
+using Couriers.Common.Xml;
 
 using System.Net;
 using System.Net.Http;

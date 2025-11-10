@@ -1,6 +1,7 @@
 ﻿using Couriers.Speedex.Interfaces;
 
 using System.ComponentModel;
+using System.Xml;
 using System.Xml.Serialization;
 
 namespace Couriers.Speedex.InternalModels.ResponseModels
@@ -10,7 +11,7 @@ namespace Couriers.Speedex.InternalModels.ResponseModels
     /// </summary>
     [XmlRoot("ReschedulePickupResponse", Namespace = SpeedexXmlNamespaces.DefaultNamespace)]
     [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
-    public class ReschedulePickupInternalResponseModel : INewWebMethodSoapReturnMessageModel<bool>
+    public class ReschedulePickupInternalResponseModel : INewWebMethodSoapReturnMessageModel<bool>, IUnmappedXml
     {
         #region Public Properties
 
@@ -19,6 +20,12 @@ namespace Couriers.Speedex.InternalModels.ResponseModels
         /// </summary>
         [XmlElement("ReschedulePickupResult")]
         public MessageInternalResponseModel<bool> Result { get; set; } = new();
+
+        /// <summary>
+        /// <inheritdoc/>
+        /// </summary>
+        [XmlAnyElement]
+        public XmlElement[]? UnmappedElements { get; set; }
 
         #endregion
 
