@@ -1,14 +1,14 @@
 ﻿using System.ComponentModel;
 using System.Xml.Serialization;
 
-namespace Couriers.Speedex
+namespace Couriers.Speedex.InternalModels.DataModels
 {
     /// <summary>
     /// The data model for the SOAP envelope
     /// </summary>
     /// <typeparam name="TBody">The body</typeparam>
     [XmlRoot("Envelope", Namespace = SpeedexXmlNamespaces.SoapNamespace)]
-    [EditorBrowsable(EditorBrowsableState.Never)]
+    [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
     public class SoapEnvelopeDataModel<TBody>
         where TBody : class, new()
     {
@@ -25,7 +25,7 @@ namespace Couriers.Speedex
         #region Constructors
 
         /// <summary>
-        /// Default constructor
+        /// Creates a new instance of <see cref="SoapEnvelopeDataModel{TBody}"/>
         /// </summary>
         public SoapEnvelopeDataModel() : base()
         {

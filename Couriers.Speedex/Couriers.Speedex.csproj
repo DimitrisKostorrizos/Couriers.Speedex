@@ -1,10 +1,54 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
-		<TargetFramework>net9.0</TargetFramework>
+		<TargetFrameworks>net9.0</TargetFrameworks>
 		<Nullable>enable</Nullable>
 		<GenerateDocumentationFile>True</GenerateDocumentationFile>
-		<AnalysisMode>all</AnalysisMode>
+		<Title>Speedex Courier API Client</Title>
+		<Authors>Dimitrios Kostorrizos</Authors>
+		<Description>A .Net client used to access the Speedex Courier API.</Description>
+		<PackageReadmeFile>README.md</PackageReadmeFile>
+		<RepositoryUrl>https://github.com/DimitrisKostorrizos/Couriers.Speedex</RepositoryUrl>
+		<PackageProjectUrl>https://github.com/DimitrisKostorrizos/Couriers.Speedex</PackageProjectUrl>
+		<PackageTags>Speedex;Courier;API</PackageTags>
+		<PackageVersion>1.0.0</PackageVersion>
+		<DebugSymbols>true</DebugSymbols>
+		<EmbedAllSources>true</EmbedAllSources>
+		<DebugType>portable</DebugType>
+		<IncludeSymbols>true</IncludeSymbols>
+		<PublishRepositoryUrl>true</PublishRepositoryUrl>
+		<SymbolPackageFormat>snupkg</SymbolPackageFormat>
+		<EnableNETAnalyzers>true</EnableNETAnalyzers>
+		<PackageLicenseExpression>MIT</PackageLicenseExpression>
+		<AllowedOutputExtensionsInPackageBuildOutputFolder>$(AllowedOutputExtensionsInPackageBuildOutputFolder);.pdb</AllowedOutputExtensionsInPackageBuildOutputFolder>
 	</PropertyGroup>
+
+	<Choose>
+		<When Condition="'$(Configuration)'=='Debug'">
+			<PropertyGroup>
+				<AnalysisLevel>latest-Recommended</AnalysisLevel>
+			</PropertyGroup>
+		</When>
+		<When Condition="'$(Configuration)'=='Release'">
+			<PropertyGroup>
+				<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+				<Optimize>true</Optimize>
+			</PropertyGroup>
+		</When>
+	</Choose>
+
+	<ItemGroup>
+		<None Include="..\README.md">
+			<Pack>True</Pack>
+			<PackagePath>\</PackagePath>
+		</None>
+	</ItemGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Couriers.Common" Version="1.0.0" />
+		<PackageReference Include="Couriers.Common.Xml" Version="1.0.0" />
+		<PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="5.0.0" />
+		<PackageReference Include="Microsoft.Extensions.Http" Version="5.0.0" />
+	</ItemGroup>
 
 </Project>

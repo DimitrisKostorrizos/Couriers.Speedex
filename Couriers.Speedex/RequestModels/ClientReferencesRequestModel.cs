@@ -1,4 +1,4 @@
-﻿namespace Couriers.Speedex
+﻿namespace Couriers.Speedex.RequestModels
 {
     /// <summary>
     /// The request model for the client references
@@ -72,7 +72,7 @@
         #region Constructors
 
         /// <summary>
-        /// Default constructor
+        /// Creates a new instance of <see cref="ClientReferencesRequestModel"/>
         /// </summary>
         public ClientReferencesRequestModel() : base()
         {

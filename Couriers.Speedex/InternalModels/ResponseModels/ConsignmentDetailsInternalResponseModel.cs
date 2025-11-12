@@ -1,16 +1,21 @@
-﻿using System;
+﻿using Couriers.Speedex.Constants;
+using Couriers.Speedex.Interfaces;
+using Couriers.Speedex.ResponseModels;
+
+using System;
 using System.ComponentModel;
 using System.Globalization;
+using System.Xml;
 using System.Xml.Serialization;
 
-namespace Couriers.Speedex
+namespace Couriers.Speedex.InternalModels.ResponseModels
 {
     /// <summary>
     /// The internal response model for the consignment details
     /// </summary>
     [XmlType("Consignment", IncludeInSchema = false, Namespace = SpeedexXmlNamespaces.DefaultNamespace)]
     [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
-    public class ConsignmentDetailsInternalResponseModel : ISoapResponseModel<ConsignmentDetailsResponseModel>
+    public class ConsignmentDetailsInternalResponseModel : ISoapResponseModel<ConsignmentDetailsResponseModel>, IUnmappedXml
     {
         #region Public Properties
 
@@ -117,7 +122,7 @@ namespace Couriers.Speedex
         public string DeliveryTimeFrom { get; set; } = string.Empty;
 
         /// <summary>
-        /// The final time of the delivery timeframe window
+        /// The final time of the delivery time-frame window
         /// </summary>
         [XmlElement("DeliveryTimeTo")]
         public string DeliveryTimeTo { get; set; } = string.Empty;
@@ -206,12 +211,18 @@ namespace Couriers.Speedex
         [XmlElement("TotalNumberOfParcels")]
         public uint ParcelCount { get; set; }
 
+        /// <summary>
+        /// <inheritdoc/>
+        /// </summary>
+        [XmlAnyElement]
+        public XmlElement[]? UnmappedElements { get; set; }
+
         #endregion
 
         #region Constructors
 
         /// <summary>
-        /// Default constructor
+        /// Creates a new instance of <see cref="ConsignmentDetailsInternalResponseModel"/>
         /// </summary>
         public ConsignmentDetailsInternalResponseModel() : base()
         {
@@ -234,47 +245,23 @@ namespace Couriers.Speedex
         /// <returns></returns>
         public ConsignmentDetailsResponseModel ToResponseModel()
         {
-            var model = new ConsignmentDetailsResponseModel()
-            {
-                Address = Address,
-                AgreementCode = AgreementCode,
-                CashAmount = CashAmount,
-                ChargeType = SpeedexHelpers.ToChargeType(ChargeType),
-                CheckAmount = CheckAmount,
-                CheckpointCode = CheckpointCode,
-                CheckpointGroupCode = CheckpointGroupCode,
-                City = City,
-                ConsignmentId = ConsignmentId,
-                CountryCode = CountryCode,
-                CustomerCode = CustomerCode,
-                CustomerComments = CustomerComments,
-                DeliveryPostCode = DeliveryPostCode,
-                FirstCustomerReference = FirstCustomerReference,
-                InsuranceAmount = InsuranceAmount,
-                IsReturnItem = IsReturnItem,
-                IsSaturdayDelivery = IsSaturdayDelivery,
-                MasterConsignmentId = MasterConsignmentId,
-                ParcelCount = ParcelCount,
-                PickupAddress = PickupAddress,
-                PickupCity = PickupCity,
-                PickupCountryCode = PickupCountryCode,
-                PickupName = PickupName,
-                PickupPhoneNumber = PickupPhoneNumber,
-                PickupPostCode = PickupPostCode,
-                RecipientName = RecipientName,
-                RecipientPhoneNumber = RecipientPhoneNumber,
-                SecondCustomerReference = SecondCustomerReference,
-                ThirdCustomerReference = ThirdCustomerReference,
-                Weight = Weight
-            };
+            var startingDeliveryTime = default(DateTime?);
 
-            if (DateTime.TryParse(DeliveryTimeFrom, CultureInfo.InvariantCulture, out var result))
-                model.DeliveryTimeFrom = result;
+            if (DateTime.TryParse(DeliveryTimeFrom, SpeedexConstants.SpeedexCultureInfo, DateTimeStyles.None, out var result))
+                startingDeliveryTime = result;
 
-            if (DateTime.TryParse(DeliveryTimeTo, CultureInfo.InvariantCulture, out result))
-                model.DeliveryTimeTo = result;
+            var endingDeliveryTime = default(DateTime?);
 
-            return model;
+            if (DateTime.TryParse(DeliveryTimeTo, SpeedexConstants.SpeedexCultureInfo, DateTimeStyles.None, out result))
+                endingDeliveryTime = result;
+
+            var deliveryTime = SpeedexHelpers.GetDeliveryTimeLimitByTimeRange(startingDeliveryTime, endingDeliveryTime);
+
+            var chargeType = SpeedexHelpers.ToChargeType(ChargeType);
+
+            return new(CashAmount, CheckAmount, City, CountryCode, CustomerComments, startingDeliveryTime, endingDeliveryTime, CheckpointCode, CheckpointGroupCode, IsReturnItem, MasterConsignmentId, PickupAddress,
+                PickupCity, PickupCountryCode, PickupName, PickupPhoneNumber, PickupPostCode, Weight, chargeType, AgreementCode, CustomerCode, FirstCustomerReference, SecondCustomerReference,
+                ThirdCustomerReference, Address, RecipientName, RecipientPhoneNumber, InsuranceAmount, IsSaturdayDelivery, ConsignmentId, (int)ParcelCount, DeliveryPostCode, deliveryTime);
         }
 
         #endregion

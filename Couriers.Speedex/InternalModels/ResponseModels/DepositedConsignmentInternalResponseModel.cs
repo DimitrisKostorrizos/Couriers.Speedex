@@ -1,16 +1,20 @@
-﻿using System;
+﻿using Couriers.Speedex.Constants;
+using Couriers.Speedex.Interfaces;
+using Couriers.Speedex.ResponseModels;
+
+using System;
 using System.ComponentModel;
-using System.Globalization;
+using System.Xml;
 using System.Xml.Serialization;
 
-namespace Couriers.Speedex
+namespace Couriers.Speedex.InternalModels.ResponseModels
 {
     /// <summary>
     /// The internal response model for the deposited consignment
     /// </summary>
     [XmlRoot(Namespace = SpeedexXmlNamespaces.DefaultNamespace)]
     [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
-    public class DepositedConsignmentInternalResponseModel : ISoapResponseModel<DepositedConsignmentResponseModel>
+    public class DepositedConsignmentInternalResponseModel : ISoapResponseModel<DepositedConsignmentResponseModel>, IUnmappedXml
     {
         #region Public Properties
 
@@ -32,12 +36,18 @@ namespace Couriers.Speedex
         [XmlElement("Date")]
         public string DateDeposited { get; set; } = string.Empty;
 
+        /// <summary>
+        /// <inheritdoc/>
+        /// </summary>
+        [XmlAnyElement]
+        public XmlElement[]? UnmappedElements { get; set; }
+
         #endregion
 
         #region Constructors
 
         /// <summary>
-        /// Default constructor
+        /// Creates a new instance of <see cref="DepositedConsignmentInternalResponseModel"/>
         /// </summary>
         public DepositedConsignmentInternalResponseModel() : base()
         {
@@ -55,11 +65,15 @@ namespace Couriers.Speedex
         public override string ToString() => Id;
 
         /// <summary>
-        /// Creates and return the <see cref="DepositedConsignmentResponseModel"/> from the current object
+        /// <inheritdoc/>
         /// </summary>
         /// <returns></returns>
         public DepositedConsignmentResponseModel ToResponseModel()
-            => new(Id, Amount, DateTime.Parse(DateDeposited, CultureInfo.InvariantCulture));
+        {
+            var dateDeposited = DateTime.Parse(DateDeposited, SpeedexConstants.SpeedexCultureInfo);
+
+            return new(Id, Amount, dateDeposited);
+        }
 
         #endregion
     }

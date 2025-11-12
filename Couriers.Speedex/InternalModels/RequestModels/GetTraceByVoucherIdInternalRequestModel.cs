@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel;
 using System.Xml.Serialization;
 
-namespace Couriers.Speedex
+namespace Couriers.Speedex.InternalModels.RequestModels
 {
     /// <summary>
     /// The internal request model for getting the tracing for the consignment that is related to the specified voucher
@@ -23,7 +23,7 @@ namespace Couriers.Speedex
         #region Constructors
 
         /// <summary>
-        /// Default constructor
+        /// Creates a new instance of <see cref="GetTraceByVoucherIdInternalRequestModel"/>
         /// </summary>
         public GetTraceByVoucherIdInternalRequestModel() : base()
         {

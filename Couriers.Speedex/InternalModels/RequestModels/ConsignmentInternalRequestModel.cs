@@ -1,9 +1,11 @@
-﻿using System;
+﻿using Couriers.Speedex.RequestModels;
+
+using System;
 using System.ComponentModel;
 using System.Diagnostics.CodeAnalysis;
 using System.Xml.Serialization;
 
-namespace Couriers.Speedex
+namespace Couriers.Speedex.InternalModels.RequestModels
 {
     /// <summary>
     /// The internal request model for the consignment
@@ -164,7 +166,7 @@ namespace Couriers.Speedex
         #region Constructors
 
         /// <summary>
-        /// Default constructor
+        /// Creates a new instance of <see cref="ConsignmentInternalRequestModel"/>
         /// </summary>
         public ConsignmentInternalRequestModel() : base()
         {
@@ -184,11 +186,14 @@ namespace Couriers.Speedex
         /// <returns></returns>
         public static ConsignmentInternalRequestModel FromRequestModel([NotNull] ConsignmentRequestModel model, [NotNull] string agreementCode, [NotNull] string customerCode)
         {
-            ArgumentNullException.ThrowIfNull(model);
+            if (model is null)
+                throw new ArgumentNullException(nameof(model));
 
-            ArgumentException.ThrowIfNullOrWhiteSpace(agreementCode);
+            if (string.IsNullOrWhiteSpace(agreementCode))
+                throw new ArgumentException($"'{nameof(agreementCode)}' cannot be null or whitespace.", nameof(agreementCode));
 
-            ArgumentException.ThrowIfNullOrWhiteSpace(customerCode);
+            if (string.IsNullOrWhiteSpace(customerCode))
+                throw new ArgumentException($"'{nameof(customerCode)}' cannot be null or whitespace.", nameof(customerCode));
 
             var internalModel = new ConsignmentInternalRequestModel()
             {

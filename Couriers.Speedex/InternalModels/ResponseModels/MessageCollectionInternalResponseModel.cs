@@ -1,16 +1,22 @@
-﻿using System.ComponentModel;
+﻿using Couriers.Speedex.Interfaces;
+
+using System;
+using System.ComponentModel;
+using System.Xml;
 using System.Xml.Serialization;
 
-namespace Couriers.Speedex
+namespace Couriers.Speedex.InternalModels.ResponseModels
 {
     /// <summary>
     /// The internal response model for the list of results
     /// </summary>
     /// <typeparam name="TArrayResult">The type of the array result</typeparam>
     [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
-    public class EnumerableMessageInternalResponseModel<TArrayResult> : ISoapReturnMessageModel
+    public class MessageCollectionInternalResponseModel<TArrayResult> : ISoapReturnMessageModel, IUnmappedXml
     {
         #region Public Properties
+
+#pragma warning disable CA1819 // Properties should not return arrays
 
         /// <summary>
         /// The return message
@@ -22,7 +28,7 @@ namespace Couriers.Speedex
         /// The result
         /// </summary>
         [XmlArray("Result")]
-        public TArrayResult[] Result { get; set; } = [];
+        public TArrayResult[] Result { get; set; } = Array.Empty<TArrayResult>();
 
         /// <summary>
         /// The return code
@@ -30,14 +36,22 @@ namespace Couriers.Speedex
         [XmlElement("Code")]
         public uint Code { get; set; }
 
+        /// <summary>
+        /// <inheritdoc/>
+        /// </summary>
+        [XmlAnyElement]
+        public XmlElement[]? UnmappedElements { get; set; }
+
+#pragma warning restore CA1819 // Properties should not return arrays
+
         #endregion
 
         #region Constructors
 
         /// <summary>
-        /// Default constructor
+        /// Creates a new instance of <see cref="MessageCollectionInternalResponseModel{TArrayResult}"/>
         /// </summary>
-        public EnumerableMessageInternalResponseModel() : base()
+        public MessageCollectionInternalResponseModel() : base()
         {
 
         }

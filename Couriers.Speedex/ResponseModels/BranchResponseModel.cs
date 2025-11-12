@@ -1,11 +1,11 @@
 ﻿using System;
 
-namespace Couriers.Speedex
+namespace Couriers.Speedex.ResponseModels
 {
     /// <summary>
     /// The response model for the branch depot
     /// </summary>
-    public sealed record BranchResponseModel
+    public record BranchResponseModel
     {
         #region Public Properties
 
@@ -32,7 +32,7 @@ namespace Couriers.Speedex
         /// <summary>
         /// The telephone number of the depot
         /// </summary>
-        public string TelephoneNumber { get; }
+        public string? TelephoneNumber { get; }
 
         /// <summary>
         /// The zip code of the depot
@@ -54,7 +54,7 @@ namespace Couriers.Speedex
         #region Constructors
 
         /// <summary>
-        /// Default constructor
+        /// Creates a new instance of <see cref="BranchResponseModel"/>
         /// </summary>
         /// <param name="address">The address of the depot</param>
         /// <param name="city">The city of the depot</param>
@@ -64,23 +64,28 @@ namespace Couriers.Speedex
         /// <param name="zipCode">The zip code of the depot</param>
         /// <param name="latitude">The latitude of the depot</param>
         /// <param name="longitude">The longitude of the depot</param>
-        public BranchResponseModel(string address, string city, string id, string name, string telephoneNumber, string zipCode, string latitude, string longitude) : base()
+        public BranchResponseModel(string address, string city, string id, string name, string? telephoneNumber, string zipCode, string latitude, string longitude) : base()
         {
-            ArgumentException.ThrowIfNullOrWhiteSpace(address);
+            if (string.IsNullOrWhiteSpace(address))
+                throw new ArgumentException($"'{nameof(address)}' cannot be null or whitespace.", nameof(address));
 
-            ArgumentException.ThrowIfNullOrWhiteSpace(city);
+            if (string.IsNullOrWhiteSpace(city))
+                throw new ArgumentException($"'{nameof(city)}' cannot be null or whitespace.", nameof(city));
 
-            ArgumentException.ThrowIfNullOrWhiteSpace(id);
+            if (string.IsNullOrWhiteSpace(id))
+                throw new ArgumentException($"'{nameof(id)}' cannot be null or whitespace.", nameof(id));
 
-            ArgumentException.ThrowIfNullOrWhiteSpace(name);
+            if (string.IsNullOrWhiteSpace(name))
+                throw new ArgumentException($"'{nameof(name)}' cannot be null or whitespace.", nameof(name));
 
-            ArgumentException.ThrowIfNullOrWhiteSpace(telephoneNumber);
+            if (string.IsNullOrWhiteSpace(zipCode))
+                throw new ArgumentException($"'{nameof(zipCode)}' cannot be null or whitespace.", nameof(zipCode));
 
-            ArgumentException.ThrowIfNullOrWhiteSpace(zipCode);
+            if (string.IsNullOrWhiteSpace(latitude))
+                throw new ArgumentException($"'{nameof(latitude)}' cannot be null or whitespace.", nameof(latitude));
 
-            ArgumentException.ThrowIfNullOrWhiteSpace(latitude);
-
-            ArgumentException.ThrowIfNullOrWhiteSpace(longitude);
+            if (string.IsNullOrWhiteSpace(longitude))
+                throw new ArgumentException($"'{nameof(longitude)}' cannot be null or whitespace.", nameof(longitude));
 
             Address = address;
 

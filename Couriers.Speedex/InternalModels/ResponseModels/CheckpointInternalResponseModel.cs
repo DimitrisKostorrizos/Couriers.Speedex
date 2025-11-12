@@ -1,15 +1,19 @@
-﻿using System;
+﻿using Couriers.Speedex.Interfaces;
+using Couriers.Speedex.ResponseModels;
+
+using System;
 using System.ComponentModel;
+using System.Xml;
 using System.Xml.Serialization;
 
-namespace Couriers.Speedex
+namespace Couriers.Speedex.InternalModels.ResponseModels
 {
     /// <summary>
     /// The internal response model for the consignment checkpoint
     /// </summary>
     [XmlRoot("checkpoint", Namespace = SpeedexXmlNamespaces.DefaultNamespace)]
     [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
-    public class CheckpointInternalResponseModel : ISoapResponseModel<CheckpointResponseModel>
+    public class CheckpointInternalResponseModel : ISoapResponseModel<CheckpointResponseModel>, IUnmappedXml
     {
         #region Public Properties
 
@@ -79,12 +83,18 @@ namespace Couriers.Speedex
         [XmlElement("VoucherID")]
         public string VoucherId { get; set; } = string.Empty;
 
+        /// <summary>
+        /// <inheritdoc/>
+        /// </summary>
+        [XmlAnyElement]
+        public XmlElement[]? UnmappedElements { get; set; }
+
         #endregion
 
         #region Constructors
 
         /// <summary>
-        /// Default constructor
+        /// Creates a new instance of <see cref="CheckpointInternalResponseModel"/>
         /// </summary>
         public CheckpointInternalResponseModel() : base()
         {
@@ -102,11 +112,14 @@ namespace Couriers.Speedex
         public override string ToString() => VoucherId;
 
         /// <summary>
-        /// Creates and return the <see cref="CheckpointResponseModel"/> from the current object
+        /// <inheritdoc/>
         /// </summary>
         /// <returns></returns>
-        public CheckpointResponseModel ToResponseModel() => new(BranchDepot, BranchId, CheckpointDate, CustomerComments, FirstCustomerReference,
+        public CheckpointResponseModel ToResponseModel()
+        {
+            return new(BranchDepot, BranchId, CheckpointDate, CustomerComments, FirstCustomerReference,
             SecondCustomerReference, ThirdCustomerReference, RecipientName, StatusCode, StatusDescription, VoucherId);
+        }
 
         #endregion
     }

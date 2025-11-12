@@ -1,14 +1,20 @@
-﻿using System.ComponentModel;
+﻿using Couriers.Speedex.Constants;
+using Couriers.Speedex.Enums;
+using Couriers.Speedex.Interfaces;
+using Couriers.Speedex.ResponseModels;
+
+using System.ComponentModel;
+using System.Xml;
 using System.Xml.Serialization;
 
-namespace Couriers.Speedex
+namespace Couriers.Speedex.InternalModels.ResponseModels
 {
     /// <summary>
     /// The internal response model for the consignment
     /// </summary>
     [XmlRoot("BOL", Namespace = SpeedexXmlNamespaces.DefaultNamespace)]
     [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
-    public class ConsignmentInternalResponseModel : ISoapResponseModel<ConsignmentResponseModel>
+    public class ConsignmentInternalResponseModel : ISoapResponseModel<ConsignmentResponseModel>, IUnmappedXml
     {
         #region Public Properties
 
@@ -83,7 +89,7 @@ namespace Couriers.Speedex
         /// The payment type
         /// </summary>
         [XmlElement("Pod_Amount_Description")]
-        public string PaymentType { get; set; } = string.Empty;
+        public string? PaymentType { get; set; }
 
         /// <summary>
         /// The address for the delivery
@@ -160,12 +166,18 @@ namespace Couriers.Speedex
         /// </summary>
         public double Weight { get; set; }
 
+        /// <summary>
+        /// <inheritdoc/>
+        /// </summary>
+        [XmlAnyElement]
+        public XmlElement[]? UnmappedElements { get; set; }
+
         #endregion
 
         #region Constructors
 
         /// <summary>
-        /// Default constructor
+        /// Creates a new instance of <see cref="ConsignmentInternalResponseModel"/>
         /// </summary>
         public ConsignmentInternalResponseModel() : base()
         {
@@ -183,41 +195,31 @@ namespace Couriers.Speedex
         public override string ToString() => VoucherId;
 
         /// <summary>
-        /// Creates and return the <see cref="ConsignmentResponseModel"/> from the current object
+        /// <inheritdoc/>
         /// </summary>
         /// <returns></returns>
         public ConsignmentResponseModel ToResponseModel()
         {
-            var responseModel = new ConsignmentResponseModel()
-            {
-                Address = Address,
-                AgreementCode = AgreementCode,
-                BranchBankCode = BranchBankCode,
-                ChargeType = SpeedexHelpers.ToChargeType(ChargeType),
-                Cost = Cost,
-                CustomerCode = CustomerCode,
-                CustomerFlag = CustomerFlag,
-                DeliveryTime = SpeedexHelpers.ToDeliveryTimeLimit(DeliveryTime),
-                FirstCustomerReference = FirstCustomerReference,
-                FirstCommentsPart = FirstCustomerReference,
-                InsuranceAmount = InsuranceAmount,
-                ItemCount = ItemCount,
-                RecipientName = RecipientName,
-                RecipientPhoneNumber = RecipientPhoneNumber,
-                SecondCustomerReference = SecondCustomerReference,
-                SecondCommentsPart = SecondCommentsPart,
-                ShouldBeDeliveredOnSaturday = (ShouldBeDeliveredOnSaturday == 1),
-                VoucherId = VoucherId,
-                ThirdCustomerReference = ThirdCustomerReference,
-                ThirdCommentsPart = ThirdCommentsPart,
-                Weight = Weight,
-                ZipCode = ZipCode
-            };
+            var paymentType = default(PaymentType?);
 
-            if (PaymentType is not null)
-                responseModel.PaymentType = SpeedexHelpers.ToPaymentType(PaymentType);
+            if (!string.IsNullOrWhiteSpace(PaymentType))
+                paymentType = SpeedexHelpers.ToPaymentType(PaymentType);
 
-            return responseModel;
+            var chargeType = SpeedexHelpers.ToChargeType(ChargeType);
+
+            var deliveryTime = SpeedexHelpers.ToDeliveryTimeLimit(DeliveryTime);
+
+            var shouldBeDeliveredOnSaturday = ShouldBeDeliveredOnSaturday == SpeedexConstants.TrueValueIntegerRepresentation;
+
+            var customerFlag = (int)CustomerFlag;
+
+            var itemCount = (int)ItemCount;
+
+            var cost = (decimal)Cost;
+
+            return new(customerFlag, BranchBankCode, FirstCommentsPart, SecondCommentsPart, ThirdCommentsPart, paymentType,
+                cost, Weight, chargeType, AgreementCode, CustomerCode, FirstCustomerReference, SecondCustomerReference, ThirdCustomerReference, Address, RecipientName,
+                RecipientPhoneNumber, InsuranceAmount, shouldBeDeliveredOnSaturday, VoucherId, itemCount, ZipCode, deliveryTime);
         }
 
         #endregion

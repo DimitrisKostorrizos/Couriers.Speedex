@@ -1,13 +1,16 @@
-﻿using System.ComponentModel;
+﻿using Couriers.Speedex.Interfaces;
+
+using System.ComponentModel;
+using System.Xml;
 using System.Xml.Serialization;
 
-namespace Couriers.Speedex
+namespace Couriers.Speedex.InternalModels.ResponseModels
 {
     /// <summary>
     /// The internal response model for the return message
     /// </summary>
     [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
-    public class ReturnMessageInternalResponseModel : ISoapReturnMessageModel
+    public class ReturnMessageInternalResponseModel : ISoapReturnMessageModel, IUnmappedXml
     {
         #region Public Properties
 
@@ -33,12 +36,18 @@ namespace Couriers.Speedex
         /// </summary>
         uint ISoapReturnMessageModel.Code { get => ReturnCode; set => ReturnCode = value; }
 
+        /// <summary>
+        /// <inheritdoc/>
+        /// </summary>
+        [XmlAnyElement]
+        public XmlElement[]? UnmappedElements { get; set; }
+
         #endregion
 
         #region Constructors
 
         /// <summary>
-        /// Default constructor
+        /// Creates a new instance of <see cref="ReturnMessageInternalResponseModel"/>
         /// </summary>
         public ReturnMessageInternalResponseModel() : base()
         {

@@ -1,16 +1,21 @@
-﻿using System.Collections.Generic;
+﻿using Couriers.Speedex.Interfaces;
+using Couriers.Speedex.ResponseModels;
+
+using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
+using System.Xml;
 using System.Xml.Serialization;
 
-namespace Couriers.Speedex
+namespace Couriers.Speedex.InternalModels.ResponseModels
 {
     /// <summary>
     /// The internal response model for getting all the consignments created on the specified date range
     /// </summary>
     [XmlRoot("GetConsignmentsByDateResponse", Namespace = SpeedexXmlNamespaces.DefaultNamespace)]
     [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
-    public class GetConsignmentsByDateInternalResponseModel : ISoapReturnMessageModel, ISoapResponseModel<IEnumerable<ConsignmentDetailsResponseModel>>
+    public class GetConsignmentsByDateInternalResponseModel : ISoapReturnMessageModel, ISoapResponseModel<IEnumerable<ConsignmentDetailsResponseModel>>, IUnmappedXml
     {
         #region Public Properties
 
@@ -30,12 +35,18 @@ namespace Couriers.Speedex
         /// </summary>
         uint ISoapReturnMessageModel.Code { get => Result.Code; set { Result.Code = value; } }
 
+        /// <summary>
+        /// <inheritdoc/>
+        /// </summary>
+        [XmlAnyElement]
+        public XmlElement[]? UnmappedElements { get; set; }
+
         #endregion
 
         #region Constructors
 
         /// <summary>
-        /// Default constructor
+        /// Creates a new instance of <see cref="GetConsignmentsByDateInternalResponseModel"/>
         /// </summary>
         public GetConsignmentsByDateInternalResponseModel() : base()
         {
@@ -56,7 +67,10 @@ namespace Couriers.Speedex
         /// Creates and return the <see cref="IEnumerable{T}"/> from the current object
         /// </summary>
         /// <returns></returns>
-        public IEnumerable<ConsignmentDetailsResponseModel> ToResponseModel() => Result.Results.Select(x => x.ToResponseModel()).ToArray();
+        public IEnumerable<ConsignmentDetailsResponseModel> ToResponseModel()
+        {
+            return Result.Results.Select(x => x.ToResponseModel()).ToArray();
+        }
 
         #endregion
     }
@@ -66,9 +80,11 @@ namespace Couriers.Speedex
     /// </summary>
     [XmlRoot(Namespace = SpeedexXmlNamespaces.DefaultNamespace)]
     [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
-    public class GetConsignmentsByDateResult : ISoapResponseModel<IEnumerable<ConsignmentDetailsResponseModel>>
+    public class GetConsignmentsByDateResult : ISoapResponseModel<IEnumerable<ConsignmentDetailsResponseModel>>, IUnmappedXml
     {
         #region Public Properties
+
+#pragma warning disable CA1819 // Properties should not return arrays
 
         /// <summary>
         /// The return message
@@ -81,7 +97,7 @@ namespace Couriers.Speedex
         /// </summary>
         [XmlArray("Result")]
         [XmlArrayItem("Consignment")]
-        public ConsignmentDetailsInternalResponseModel[] Results { get; set; } = [];
+        public ConsignmentDetailsInternalResponseModel[] Results { get; set; } = Array.Empty<ConsignmentDetailsInternalResponseModel>();
 
         /// <summary>
         /// The return code
@@ -89,12 +105,20 @@ namespace Couriers.Speedex
         [XmlElement("Code")]
         public uint Code { get; set; }
 
+        /// <summary>
+        /// <inheritdoc/>
+        /// </summary>
+        [XmlAnyElement]
+        public XmlElement[]? UnmappedElements { get; set; }
+
+#pragma warning restore CA1819 // Properties should not return arrays
+
         #endregion
 
         #region Constructors
 
         /// <summary>
-        /// Default constructor
+        /// Creates a new instance of <see cref="GetConsignmentsByDateResult"/>
         /// </summary>
         public GetConsignmentsByDateResult() : base()
         {
@@ -115,7 +139,10 @@ namespace Couriers.Speedex
         /// Creates and return the <see cref="IEnumerable{T}"/> from the current object
         /// </summary>
         /// <returns></returns>
-        public IEnumerable<ConsignmentDetailsResponseModel> ToResponseModel() => Results.Select(x => x.ToResponseModel()).ToArray();
+        public IEnumerable<ConsignmentDetailsResponseModel> ToResponseModel()
+        {
+            return Results.Select(x => x.ToResponseModel()).ToArray();
+        }
 
         #endregion
     }

@@ -2,7 +2,7 @@
 using System.ComponentModel;
 using System.Xml.Serialization;
 
-namespace Couriers.Speedex
+namespace Couriers.Speedex.InternalModels.RequestModels
 {
     /// <summary>
     /// The internal request model for getting all the consignments created on the specified date range
@@ -30,7 +30,7 @@ namespace Couriers.Speedex
         #region Constructors
 
         /// <summary>
-        /// Default constructor
+        /// Creates a new instance of <see cref="GetConsignmentsByDateRangeInternalRequestModel"/>
         /// </summary>
         public GetConsignmentsByDateRangeInternalRequestModel() : base()
         {

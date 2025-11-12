@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel;
 using System.Xml.Serialization;
 
-namespace Couriers.Speedex
+namespace Couriers.Speedex.InternalModels.ResponseModels
 {
     /// <summary>
     /// The internal response model for canceling a consignment
@@ -13,7 +13,7 @@ namespace Couriers.Speedex
         #region Constructors
 
         /// <summary>
-        /// Default constructor
+        /// Creates a new instance of <see cref="CancelConsignmentByVoucherIdInternalResponseModel"/>
         /// </summary>
         public CancelConsignmentByVoucherIdInternalResponseModel() : base()
         {

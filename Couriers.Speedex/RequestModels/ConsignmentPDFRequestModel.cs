@@ -1,8 +1,11 @@
-﻿using System;
+﻿using Couriers.Speedex.Constants;
+using Couriers.Speedex.Enums;
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Couriers.Speedex
+namespace Couriers.Speedex.RequestModels
 {
     /// <summary>
     /// The request model for the consignment PDF
@@ -13,7 +16,7 @@ namespace Couriers.Speedex
 
         /// <summary>
         /// The voucher ids
-        /// NOTE: The maximum number is 20 consignments.
+        /// NOTE: The maximum number is <see cref="SpeedexConstants.MaximumNumberOfVouchers"/> consignments.
         /// </summary>
         public IEnumerable<string> VoucherIds { get; }
 
@@ -32,14 +35,15 @@ namespace Couriers.Speedex
         #region Constructors
 
         /// <summary>
-        /// Default constructor
+        /// Creates a new instance of <see cref="ConsignmentPdfRequestModel"/>
         /// </summary>
         /// <param name="voucherIds">The voucher ids</param>
         /// <param name="paperSize">The paper size</param>
         /// <param name="returnMultipleVouchers">The flag indicating whether a single merged PDF file will be returned or one PDF file per consignment will be returned</param>
         public ConsignmentPdfRequestModel(IEnumerable<string> voucherIds, PaperSize paperSize, bool returnMultipleVouchers) : base()
         {
-            ArgumentNullException.ThrowIfNull(voucherIds);
+            if (voucherIds is null)
+                throw new ArgumentNullException(nameof(voucherIds));
 
             var voucherCount = voucherIds.Count();
 
@@ -54,6 +58,17 @@ namespace Couriers.Speedex
             ReturnMultipleVouchers = returnMultipleVouchers;
 
             VoucherIds = voucherIds;
+        }
+
+        /// <summary>
+        /// Creates a new instance of <see cref="ConsignmentPdfRequestModel"/>
+        /// </summary>
+        /// <param name="voucherId">The voucher id</param>
+        /// <param name="paperSize">The paper size</param>
+        /// <param name="returnMultipleVouchers">The flag indicating whether a single merged PDF file will be returned or one PDF file per consignment will be returned</param>
+        public ConsignmentPdfRequestModel(string voucherId, PaperSize paperSize, bool returnMultipleVouchers) : this(new string[] { voucherId }, paperSize, returnMultipleVouchers)
+        {
+
         }
 
         #endregion

@@ -1,9 +1,13 @@
-﻿using System.Collections.Generic;
+﻿using Couriers.Speedex.Interfaces;
+using Couriers.Speedex.ResponseModels;
+
+using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Xml.Serialization;
 
-namespace Couriers.Speedex
+namespace Couriers.Speedex.InternalModels.ResponseModels
 {
     /// <summary>
     /// The internal request model for creating consignments
@@ -14,26 +18,30 @@ namespace Couriers.Speedex
     {
         #region Public Properties
 
+#pragma warning disable CA1819 // Properties should not return arrays
+
         /// <summary>
         /// The consignments
         /// </summary>
         [XmlArray("outListPod")]
         [XmlArrayItem("BOL")]
-        public ConsignmentInternalResponseModel[] Consignments { get; set; } = [];
+        public ConsignmentInternalResponseModel[] Consignments { get; set; } = Array.Empty<ConsignmentInternalResponseModel>();
 
         /// <summary>
         /// The consignments
         /// </summary>
         [XmlArray("statusList")]
         [XmlArrayItem("string")]
-        public string[] Statuses { get; set; } = [];
+        public string[] Statuses { get; set; } = Array.Empty<string>();
+
+#pragma warning restore CA1819 // Properties should not return arrays
 
         #endregion
 
         #region Constructors
 
         /// <summary>
-        /// Default constructor
+        /// Creates a new instance of <see cref="CreateConsignmentsInternalResponseModel"/>
         /// </summary>
         public CreateConsignmentsInternalResponseModel() : base()
         {
@@ -54,7 +62,8 @@ namespace Couriers.Speedex
         /// Creates and return the <see cref="IEnumerable{T}"/> from the current object
         /// </summary>
         /// <returns></returns>
-        public IEnumerable<ConsignmentResponseModel> ToResponseModel() => Consignments.Select(x => x.ToResponseModel()).ToArray();
+        public IEnumerable<ConsignmentResponseModel> ToResponseModel()
+            => Consignments.Select(x => x.ToResponseModel()).ToList();
 
         #endregion
     }

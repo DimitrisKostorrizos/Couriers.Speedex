@@ -1,7 +1,11 @@
-﻿using System.ComponentModel;
+﻿using Couriers.Speedex.Interfaces;
+using Couriers.Speedex.ResponseModels;
+
+using System.ComponentModel;
+using System.Xml;
 using System.Xml.Serialization;
 
-namespace Couriers.Speedex
+namespace Couriers.Speedex.InternalModels.ResponseModels
 {
     /// <summary>
     /// The internal response model for getting the last event of a consignment
@@ -23,7 +27,7 @@ namespace Couriers.Speedex
         #region Constructors
 
         /// <summary>
-        /// Default constructor
+        /// Creates a new instance of <see cref="GetLastCheckpointInternalResponseModel"/>
         /// </summary>
         public GetLastCheckpointInternalResponseModel() : base()
         {

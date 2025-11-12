@@ -1,18 +1,25 @@
-﻿using System;
+﻿using Couriers.Speedex.Constants;
+using Couriers.Speedex.Interfaces;
+using Couriers.Speedex.ResponseModels;
+
+using System;
 using System.ComponentModel;
 using System.Globalization;
+using System.Xml;
 using System.Xml.Serialization;
 
-namespace Couriers.Speedex
+namespace Couriers.Speedex.InternalModels.ResponseModels
 {
     /// <summary>
     /// The internal response model for the pickup
     /// </summary>
     [XmlRoot("Result", Namespace = SpeedexXmlNamespaces.DefaultNamespace)]
     [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
-    public class PickupInternalResponseModel : ISoapResponseModel<PickupResponseModel>
+    public class PickupInternalResponseModel : ISoapResponseModel<PickupResponseModel>, IUnmappedXml
     {
         #region Public Properties
+
+#pragma warning disable CA1819 // Properties should not return arrays
 
         /// <summary>
         /// The unique pickup id
@@ -25,7 +32,7 @@ namespace Couriers.Speedex
         /// </summary>
         [XmlArray("ConsignmentNumbers")]
         [XmlArrayItem("string")]
-        public string[] ConsignmentIds { get; set; } = [];
+        public string[] ConsignmentIds { get; set; } = Array.Empty<string>();
 
         /// <summary>
         /// The checkpoint code
@@ -99,12 +106,20 @@ namespace Couriers.Speedex
         [XmlElement("PickupTimeTo")]
         public string PickupTimeTo { get; set; } = string.Empty;
 
+        /// <summary>
+        /// <inheritdoc/>
+        /// </summary>
+        [XmlAnyElement]
+        public XmlElement[]? UnmappedElements { get; set; }
+
+#pragma warning restore CA1819 // Properties should not return arrays
+
         #endregion
 
         #region Constructors
 
         /// <summary>
-        /// Default constructor
+        /// Creates a new instance of <see cref="ReturnMessageInternalResponseModel"/>
         /// </summary>
         public PickupInternalResponseModel() : base()
         {
@@ -127,29 +142,19 @@ namespace Couriers.Speedex
         /// <returns></returns>
         public PickupResponseModel ToResponseModel()
         {
-            var model = new PickupResponseModel()
-            {
-                Address = Address,
-                CheckpointCode = CheckpointCode,
-                CheckpointGroupCode = CheckpointGroupCode,
-                City = City,
-                Comments = Comments,
-                ConsignmentIds = ConsignmentIds,
-                CountryCode = CountryCode,
-                Id = Id,
-                Name = Name,
-                PhoneNumber = PhoneNumber,
-                PickupDate = DateTime.Parse(PickupDate, CultureInfo.InvariantCulture),
-                PostCode = PostCode
-            };
+            var pickupDate = DateTime.Parse(PickupDate, SpeedexConstants.SpeedexCultureInfo);
 
-            if (DateTime.TryParse(PickupTimeTo, CultureInfo.InvariantCulture, out var result))
-                model.PickupTimeTo = result;
+            var pickupTimeFrom = default(DateTime?);
 
-            if (DateTime.TryParse(PickupTimeFrom, CultureInfo.InvariantCulture, out result))
-                model.PickupTimeFrom = result;
+            if (DateTime.TryParse(PickupTimeFrom, SpeedexConstants.SpeedexCultureInfo, DateTimeStyles.None, out var pickupTimeFromResult))
+                pickupTimeFrom = pickupTimeFromResult;
 
-            return model;
+            var pickupTimeTo = default(DateTime?);
+
+            if (DateTime.TryParse(PickupTimeTo, SpeedexConstants.SpeedexCultureInfo, DateTimeStyles.None, out var pickupTimeToResult))
+                pickupTimeTo = pickupTimeToResult;
+
+            return new(Id, ConsignmentIds, CheckpointCode, CheckpointGroupCode, Address, City, CountryCode, Comments, Name, PhoneNumber, PostCode, pickupDate, pickupTimeFrom, pickupTimeTo);
         }
 
         #endregion

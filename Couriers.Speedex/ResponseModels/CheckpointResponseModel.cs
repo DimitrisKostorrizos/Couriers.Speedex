@@ -1,11 +1,11 @@
 ﻿using System;
 
-namespace Couriers.Speedex
+namespace Couriers.Speedex.ResponseModels
 {
     /// <summary>
     /// The response model for the consignment checkpoint
     /// </summary>
-    public sealed record CheckpointResponseModel
+    public record CheckpointResponseModel
     {
         #region Public Properties
 
@@ -47,7 +47,7 @@ namespace Couriers.Speedex
         /// <summary>
         /// The recipient name
         /// </summary>
-        public string RecipientName { get; }
+        public string? RecipientName { get; }
 
         /// <summary>
         /// The code of the event
@@ -69,7 +69,7 @@ namespace Couriers.Speedex
         #region Constructors
 
         /// <summary>
-        /// Default constructor
+        /// Creates a new instance of <see cref="ConsignmentDetailsResponseModel"/>
         /// </summary>
         /// <param name="branchDepot">The name of the depot responsible for the event</param>
         /// <param name="branchId">The unique branch depot id</param>
@@ -85,11 +85,14 @@ namespace Couriers.Speedex
         public CheckpointResponseModel(string branchDepot, string branchId, DateTime checkpointDate, string? customerComments, string? firstCustomerReference,
             string? secondCustomerReference, string? thirdCustomerReference, string recipientName, string statusCode, string statusDescription, string voucherId) : base()
         {
-            ArgumentException.ThrowIfNullOrWhiteSpace(statusCode);
+            if (string.IsNullOrWhiteSpace(statusCode))
+                throw new ArgumentException($"'{nameof(statusCode)}' cannot be null or whitespace.", nameof(statusCode));
 
-            ArgumentException.ThrowIfNullOrWhiteSpace(statusDescription);
+            if (string.IsNullOrWhiteSpace(statusDescription))
+                throw new ArgumentException($"'{nameof(statusDescription)}' cannot be null or whitespace.", nameof(statusDescription));
 
-            ArgumentException.ThrowIfNullOrWhiteSpace(voucherId);
+            if (string.IsNullOrWhiteSpace(voucherId))
+                throw new ArgumentException($"'{nameof(voucherId)}' cannot be null or whitespace.", nameof(voucherId));
 
             BranchDepot = branchDepot;
 

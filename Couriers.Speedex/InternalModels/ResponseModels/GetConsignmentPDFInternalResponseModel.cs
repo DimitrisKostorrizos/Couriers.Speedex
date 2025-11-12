@@ -1,9 +1,13 @@
-﻿using System.Collections.Generic;
+﻿using Couriers.Speedex.Interfaces;
+using Couriers.Speedex.ResponseModels;
+
+using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Xml.Serialization;
 
-namespace Couriers.Speedex
+namespace Couriers.Speedex.InternalModels.ResponseModels
 {
     /// <summary>
     /// The internal response model for getting the consignment PDF
@@ -14,19 +18,23 @@ namespace Couriers.Speedex
     {
         #region Public Properties
 
+#pragma warning disable CA1819 // Properties should not return arrays
+
         /// <summary>
         /// The vouchers
         /// </summary>
         [XmlArray("GetBOLPdfResult")]
         [XmlArrayItem("Voucher")]
-        public ConsignmentPdfInternalResponseModel[] Vouchers { get; set; } = [];
+        public ConsignmentPdfInternalResponseModel[] Vouchers { get; set; } = Array.Empty<ConsignmentPdfInternalResponseModel>();
+
+#pragma warning restore CA1819 // Properties should not return arrays
 
         #endregion
 
         #region Constructors
 
         /// <summary>
-        /// Default constructor
+        /// Creates a new instance of <see cref="GetConsignmentPdfInternalResponseModel"/>
         /// </summary>
         public GetConsignmentPdfInternalResponseModel() : base()
         {
@@ -44,10 +52,11 @@ namespace Couriers.Speedex
         public override string ToString() => $"Vouchers: {Vouchers.Length}";
 
         /// <summary>
-        /// Creates and return the <see cref="IEnumerable{T}"/> from the current object
+        /// <inheritdoc/>
         /// </summary>
         /// <returns></returns>
-        public IEnumerable<ConsignmentPdfResponseModel> ToResponseModel() => Vouchers.Select(x => x.ToResponseModel()).ToArray();
+        public IEnumerable<ConsignmentPdfResponseModel> ToResponseModel()
+            => Vouchers.Select(x => x.ToResponseModel()).ToList();
 
         #endregion
     }

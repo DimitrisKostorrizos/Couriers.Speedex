@@ -1,16 +1,21 @@
-﻿using System.Collections.Generic;
+﻿using Couriers.Speedex.Interfaces;
+using Couriers.Speedex.ResponseModels;
+
+using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
+using System.Xml;
 using System.Xml.Serialization;
 
-namespace Couriers.Speedex
+namespace Couriers.Speedex.InternalModels.ResponseModels
 {
     /// <summary>
     /// The internal response model for getting all the deposited consignments created on the specified date range
     /// </summary>
     [XmlRoot("GetDepositedConsignmentsByDateResponse", Namespace = SpeedexXmlNamespaces.DefaultNamespace)]
     [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
-    public class GetDepositedConsignmentsByDateInternalResponseModel : ISoapReturnMessageModel, ISoapResponseModel<IEnumerable<DepositedConsignmentResponseModel>>
+    public class GetDepositedConsignmentsByDateInternalResponseModel : ISoapReturnMessageModel, ISoapResponseModel<IEnumerable<DepositedConsignmentResponseModel>>, IUnmappedXml
     {
         #region Public Properties
 
@@ -30,12 +35,18 @@ namespace Couriers.Speedex
         /// </summary>
         uint ISoapReturnMessageModel.Code { get => Result.Code; set { Result.Code = value; } }
 
+        /// <summary>
+        /// <inheritdoc/>
+        /// </summary>
+        [XmlAnyElement]
+        public XmlElement[]? UnmappedElements { get; set; }
+
         #endregion
 
         #region Constructors
 
         /// <summary>
-        /// Default constructor
+        /// Creates a new instance of <see cref="GetDepositedConsignmentsByDateInternalResponseModel"/>
         /// </summary>
         public GetDepositedConsignmentsByDateInternalResponseModel() : base()
         {
@@ -56,7 +67,8 @@ namespace Couriers.Speedex
         /// Creates and return the <see cref="IEnumerable{T}"/> from the current object
         /// </summary>
         /// <returns></returns>
-        public IEnumerable<DepositedConsignmentResponseModel> ToResponseModel() => Result.Results.Select(x => x.ToResponseModel()).ToArray();
+        public IEnumerable<DepositedConsignmentResponseModel> ToResponseModel()
+            => Result.Results.Select(x => x.ToResponseModel()).ToList();
 
         #endregion
     }
@@ -66,9 +78,11 @@ namespace Couriers.Speedex
     /// </summary>
     [XmlRoot(Namespace = SpeedexXmlNamespaces.DefaultNamespace)]
     [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
-    public class GetDepositedConsignmentsByDateResult : ISoapResponseModel<IEnumerable<DepositedConsignmentResponseModel>>
+    public class GetDepositedConsignmentsByDateResult : ISoapResponseModel<IEnumerable<DepositedConsignmentResponseModel>>, IUnmappedXml
     {
         #region Public Properties
+
+#pragma warning disable CA1819 // Properties should not return arrays
 
         /// <summary>
         /// The return message
@@ -81,7 +95,7 @@ namespace Couriers.Speedex
         /// </summary>
         [XmlArray("Result")]
         [XmlArrayItem("GetDepositedConsignmentsByDateResult")]
-        public DepositedConsignmentInternalResponseModel[] Results { get; set; } = [];
+        public DepositedConsignmentInternalResponseModel[] Results { get; set; } = Array.Empty<DepositedConsignmentInternalResponseModel>();
 
         /// <summary>
         /// The return code
@@ -89,12 +103,20 @@ namespace Couriers.Speedex
         [XmlElement("Code")]
         public uint Code { get; set; }
 
+        /// <summary>
+        /// <inheritdoc/>
+        /// </summary>
+        [XmlAnyElement]
+        public XmlElement[]? UnmappedElements { get; set; }
+
+#pragma warning restore CA1819 // Properties should not return arrays
+
         #endregion
 
         #region Constructors
 
         /// <summary>
-        /// Default constructor
+        /// Creates a new instance of <see cref="GetDepositedConsignmentsByDateResult"/>
         /// </summary>
         public GetDepositedConsignmentsByDateResult() : base()
         {
@@ -112,10 +134,11 @@ namespace Couriers.Speedex
         public override string ToString() => Message;
 
         /// <summary>
-        /// Creates and return the <see cref="IEnumerable{T}"/> from the current object
+        /// <inheritdoc/>
         /// </summary>
         /// <returns></returns>
-        public IEnumerable<DepositedConsignmentResponseModel> ToResponseModel() => Results.Select(x => x.ToResponseModel()).ToArray();
+        public IEnumerable<DepositedConsignmentResponseModel> ToResponseModel()
+            => Results.Select(x => x.ToResponseModel()).ToList();
 
         #endregion
     }

@@ -1,9 +1,11 @@
-﻿using System;
+﻿using Couriers.Speedex.RequestModels;
+
+using System;
 using System.ComponentModel;
 using System.Diagnostics.CodeAnalysis;
 using System.Xml.Serialization;
 
-namespace Couriers.Speedex
+namespace Couriers.Speedex.InternalModels.RequestModels
 {
     /// <summary>
     /// The internal request model for the client references
@@ -37,7 +39,7 @@ namespace Couriers.Speedex
         #region Constructors
 
         /// <summary>
-        /// Default constructor
+        /// Creates a new instance of <see cref="ClientReferencesInternalRequestModel"/>
         /// </summary>
         public ClientReferencesInternalRequestModel() : base()
         {
@@ -55,7 +57,8 @@ namespace Couriers.Speedex
         /// <returns></returns>
         public static ClientReferencesInternalRequestModel FromRequestModel([NotNull] ClientReferencesRequestModel model)
         {
-            ArgumentNullException.ThrowIfNull(model);
+            if (model is null)
+                throw new ArgumentNullException(nameof(model));
 
             return new()
             {

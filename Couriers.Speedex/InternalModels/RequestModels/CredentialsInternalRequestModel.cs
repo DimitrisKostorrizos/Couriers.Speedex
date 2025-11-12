@@ -3,7 +3,7 @@ using System.ComponentModel;
 using System.Diagnostics.CodeAnalysis;
 using System.Xml.Serialization;
 
-namespace Couriers.Speedex
+namespace Couriers.Speedex.InternalModels.RequestModels
 {
     /// <summary>
     /// The internal response model for the credentials
@@ -31,7 +31,7 @@ namespace Couriers.Speedex
         #region Constructors
 
         /// <summary>
-        /// Default constructor
+        /// Creates a new instance of <see cref="CredentialsInternalRequestModel"/>
         /// </summary>
         public CredentialsInternalRequestModel() : base()
         {
@@ -49,7 +49,8 @@ namespace Couriers.Speedex
         /// <returns></returns>
         public static CredentialsInternalRequestModel FromRequestModel([NotNull] SpeedexCredentials model)
         {
-            ArgumentNullException.ThrowIfNull(model);
+            if (model is null)
+                throw new ArgumentNullException(nameof(model));
 
             return new()
             {

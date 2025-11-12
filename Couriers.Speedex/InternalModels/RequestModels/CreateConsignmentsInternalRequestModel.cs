@@ -1,11 +1,13 @@
-﻿using System;
+﻿using Couriers.Speedex.RequestModels;
+
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Xml.Serialization;
 
-namespace Couriers.Speedex
+namespace Couriers.Speedex.InternalModels.RequestModels
 {
     /// <summary>
     /// The internal request model for creating consignments
@@ -16,6 +18,8 @@ namespace Couriers.Speedex
     {
         #region Public Properties
 
+#pragma warning disable CA1819 // Properties should not return arrays
+
         /// <summary>
         /// The consignments
         /// </summary>
@@ -23,12 +27,14 @@ namespace Couriers.Speedex
         [XmlArrayItem("BOL")]
         public ConsignmentInternalRequestModel[]? Consignments { get; set; }
 
+#pragma warning restore CA1819 // Properties should not return arrays
+
         #endregion
 
         #region Constructors
 
         /// <summary>
-        /// Default constructor
+        /// Creates a new instance of <see cref="CreateConsignmentsInternalRequestModel"/>
         /// </summary>
         public CreateConsignmentsInternalRequestModel() : base()
         {
@@ -48,11 +54,14 @@ namespace Couriers.Speedex
         /// <returns></returns>
         public static CreateConsignmentsInternalRequestModel FromRequestModel([NotNull] IEnumerable<ConsignmentRequestModel> values, [NotNull] string agreementCode, [NotNull] string customerCode)
         {
-            ArgumentNullException.ThrowIfNull(values);
+            if (values is null)
+                throw new ArgumentNullException(nameof(values));
 
-            ArgumentException.ThrowIfNullOrWhiteSpace(agreementCode);
+            if (string.IsNullOrWhiteSpace(agreementCode))
+                throw new ArgumentException($"'{nameof(agreementCode)}' cannot be null or whitespace.", nameof(agreementCode));
 
-            ArgumentException.ThrowIfNullOrWhiteSpace(customerCode);
+            if (string.IsNullOrWhiteSpace(customerCode))
+                throw new ArgumentException($"'{nameof(customerCode)}' cannot be null or whitespace.", nameof(customerCode));
 
             // Transform the values
             var internalValues = values.Select(x => ConsignmentInternalRequestModel.FromRequestModel(x, agreementCode, customerCode)).ToArray();

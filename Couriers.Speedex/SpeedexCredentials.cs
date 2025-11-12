@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Couriers.Speedex.Constants;
+
+using System;
 using System.Diagnostics.CodeAnalysis;
 
 namespace Couriers.Speedex
@@ -35,7 +37,7 @@ namespace Couriers.Speedex
         #region Constructors
 
         /// <summary>
-        /// Default constructor
+        /// Creates a new instance of <see cref="SpeedexCredentials"/>
         /// </summary>
         /// <param name="username">The username</param>
         /// <param name="password">The password</param>
@@ -43,13 +45,17 @@ namespace Couriers.Speedex
         /// <param name="customerCode">The customer code provided by Speedex</param>
         public SpeedexCredentials([NotNull] string username, [NotNull] string password, [NotNull] string agreementCode, [NotNull] string customerCode) : base()
         {
-            ArgumentException.ThrowIfNullOrWhiteSpace(username);
+            if (string.IsNullOrWhiteSpace(username))
+                throw new ArgumentException($"'{nameof(username)}' cannot be null or whitespace.", nameof(username));
 
-            ArgumentException.ThrowIfNullOrWhiteSpace(password);
+            if (string.IsNullOrWhiteSpace(password))
+                throw new ArgumentException($"'{nameof(password)}' cannot be null or whitespace.", nameof(password));
 
-            ArgumentException.ThrowIfNullOrWhiteSpace(agreementCode);
+            if (string.IsNullOrWhiteSpace(agreementCode))
+                throw new ArgumentException($"'{nameof(agreementCode)}' cannot be null or whitespace.", nameof(agreementCode));
 
-            ArgumentException.ThrowIfNullOrWhiteSpace(customerCode);
+            if (string.IsNullOrWhiteSpace(customerCode))
+                throw new ArgumentException($"'{nameof(customerCode)}' cannot be null or whitespace.", nameof(customerCode));
 
             if (agreementCode.Length > SpeedexConstants.MaximumAgreementCodeLength)
                 throw new InvalidOperationException($"The '{nameof(agreementCode)}' is not a valid agreement code. The maximum length for a agreement code field is {SpeedexConstants.MaximumAgreementCodeLength}.");

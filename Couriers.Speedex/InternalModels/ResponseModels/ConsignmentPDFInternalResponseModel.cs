@@ -1,14 +1,18 @@
-﻿using System.ComponentModel;
+﻿using Couriers.Speedex.Interfaces;
+using Couriers.Speedex.ResponseModels;
+
+using System.ComponentModel;
+using System.Xml;
 using System.Xml.Serialization;
 
-namespace Couriers.Speedex
+namespace Couriers.Speedex.InternalModels.ResponseModels
 {
     /// <summary>
     /// The internal response model for the consignment PDF
     /// </summary>
     [XmlRoot("Voucher", Namespace = SpeedexXmlNamespaces.DefaultNamespace)]
     [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
-    public class ConsignmentPdfInternalResponseModel : ISoapResponseModel<ConsignmentPdfResponseModel>
+    public class ConsignmentPdfInternalResponseModel : ISoapResponseModel<ConsignmentPdfResponseModel>, IUnmappedXml
     {
         #region Public Properties
 
@@ -24,12 +28,18 @@ namespace Couriers.Speedex
         [XmlElement("pdf")]
         public string Voucher { get; set; } = string.Empty;
 
+        /// <summary>
+        /// <inheritdoc/>
+        /// </summary>
+        [XmlAnyElement]
+        public XmlElement[]? UnmappedElements { get; set; }
+
         #endregion
 
         #region Constructors
 
         /// <summary>
-        /// Default constructor
+        /// Creates a new instance of <see cref="ConsignmentPdfInternalResponseModel"/>
         /// </summary>
         public ConsignmentPdfInternalResponseModel() : base()
         {
@@ -47,10 +57,11 @@ namespace Couriers.Speedex
         public override string ToString() => VoucherId;
 
         /// <summary>
-        /// Creates and return the <see cref="ConsignmentPdfResponseModel"/> from the current object
+        /// <inheritdoc/>
         /// </summary>
         /// <returns></returns>
-        public ConsignmentPdfResponseModel ToResponseModel() => new(VoucherId, Voucher);
+        public ConsignmentPdfResponseModel ToResponseModel()
+            => new(VoucherId, Voucher);
 
         #endregion
     }

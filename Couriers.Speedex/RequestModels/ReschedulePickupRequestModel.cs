@@ -1,6 +1,8 @@
-﻿using System;
+﻿using Couriers.Speedex.Enums;
 
-namespace Couriers.Speedex
+using System;
+
+namespace Couriers.Speedex.RequestModels
 {
     /// <summary>
     /// The request model for rescheduling a pickup
@@ -19,14 +21,14 @@ namespace Couriers.Speedex
         #region Public Properties
 
         /// <summary>
-        /// The date for the pickup
+        /// The requested date of the pickup
         /// </summary>
         public DateTime PickupDate { get; }
 
         /// <summary>
         /// The delivery time frame
         /// </summary>
-        public DeliveryTimeLimit DeliveryTime { get; }
+        public DeliveryTimeLimit DeliveryTime { get; set; }
 
         /// <summary>
         /// The comments for the pickup
@@ -45,24 +47,25 @@ namespace Couriers.Speedex
         /// <summary>
         /// The unique pickup id
         /// </summary>
-        public string? PickupId { get; set; }
+        public string PickupId { get; }
 
         #endregion
 
         #region Constructors
 
         /// <summary>
-        /// Default constructor
+        /// Creates a new instance of <see cref="ReschedulePickupRequestModel"/>
         /// </summary>
+        /// <param name="pickupId">The unique pickup id</param>
         /// <param name="pickupDate">The date for the pickup</param>
-        /// <param name="deliveryTime">The delivery time frame</param>
-        public ReschedulePickupRequestModel(DateTime pickupDate, DeliveryTimeLimit deliveryTime) : base()
+        public ReschedulePickupRequestModel(string pickupId, DateTime pickupDate) : base()
         {
-            ArgumentOutOfRangeException.ThrowIfLessThanOrEqual(pickupDate, DateTime.Now.Date);
+            if (string.IsNullOrWhiteSpace(pickupId))
+                throw new ArgumentException($"'{nameof(pickupId)}' cannot be null or whitespace.", nameof(pickupId));
+
+            PickupId = pickupId;
 
             PickupDate = pickupDate;
-
-            DeliveryTime = deliveryTime;
         }
 
         #endregion
@@ -73,7 +76,7 @@ namespace Couriers.Speedex
         /// <inheritdoc/>
         /// </summary>
         /// <returns></returns>
-        public override string ToString() => $"Pickup Date: {PickupDate}";
+        public override string ToString() => $"Pickup: {PickupId}, Pickup Date: {PickupDate}";
 
         #endregion
     }

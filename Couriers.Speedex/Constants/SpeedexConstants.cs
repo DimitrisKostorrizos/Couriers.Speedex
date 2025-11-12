@@ -1,11 +1,11 @@
-﻿using System.ComponentModel.DataAnnotations;
-using System.Diagnostics.CodeAnalysis;
+﻿using Couriers.Speedex.Services;
+
 using System.Globalization;
 
-namespace Couriers.Speedex
+namespace Couriers.Speedex.Constants
 {
     /// <summary>
-    /// The constants used across the <see cref="SpeedexClient"/>
+    /// The constants used across the <see cref="BaseSpeedexClient"/>
     /// </summary>
     public static class SpeedexConstants
     {
@@ -87,11 +87,16 @@ namespace Couriers.Speedex
         /// <summary>
         /// The date-time format that Speedex uses
         /// </summary>
-        public const string DateTimeFormat = $"{DateFormat}T{TimeFormat}";
+        public static readonly string DateTimeFormat = $"{DateFormat}T{TimeFormat}";
 
         /// <summary>
         /// The culture info that Speedex uses
         /// </summary>
         public static readonly CultureInfo SpeedexCultureInfo = CultureInfo.GetCultureInfo("el-GR");
+
+        /// <summary>
+        /// The integer value that Speedex uses to represent a true value
+        /// </summary>
+        public const int TrueValueIntegerRepresentation = 1;
     }
 }

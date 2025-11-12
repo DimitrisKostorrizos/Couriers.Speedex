@@ -1,14 +1,18 @@
-﻿using System.ComponentModel;
+﻿using Couriers.Speedex.Interfaces;
+using Couriers.Speedex.ResponseModels;
+
+using System.ComponentModel;
+using System.Xml;
 using System.Xml.Serialization;
 
-namespace Couriers.Speedex
+namespace Couriers.Speedex.InternalModels.ResponseModels
 {
     /// <summary>
     /// The internal response model for the branch depot
     /// </summary>
     [XmlRoot("Voucher", Namespace = SpeedexXmlNamespaces.DefaultNamespace)]
     [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
-    public class BranchInternalResponseModel : ISoapResponseModel<BranchResponseModel>
+    public class BranchInternalResponseModel : ISoapResponseModel<BranchResponseModel>, IUnmappedXml
     {
         #region Public Properties
 
@@ -60,12 +64,18 @@ namespace Couriers.Speedex
         [XmlElement("pointY")]
         public string Longitude { get; set; } = string.Empty;
 
+        /// <summary>
+        /// <inheritdoc/>
+        /// </summary>
+        [XmlAnyElement]
+        public XmlElement[]? UnmappedElements { get; set; }
+
         #endregion
 
         #region Constructors
 
         /// <summary>
-        /// Default constructor
+        /// Creates a new instance of <see cref="BranchInternalResponseModel"/>
         /// </summary>
         public BranchInternalResponseModel() : base()
         {
@@ -83,10 +93,11 @@ namespace Couriers.Speedex
         public override string ToString() => Id;
 
         /// <summary>
-        /// Creates and return the <see cref="BranchResponseModel"/> from the current object
+        /// <inheritdoc/>
         /// </summary>
         /// <returns></returns>
-        public BranchResponseModel ToResponseModel() => new(Address, City, Id, Name, TelephoneNumber, ZipCode, Latitude, Longitude);
+        public BranchResponseModel ToResponseModel()
+            => new(Address, City, Id, Name, TelephoneNumber, ZipCode, Latitude, Longitude);
 
         #endregion
     }

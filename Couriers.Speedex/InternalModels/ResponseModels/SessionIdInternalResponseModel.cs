@@ -1,7 +1,10 @@
-﻿using System.ComponentModel;
+﻿using Couriers.Speedex.Interfaces;
+
+using System.ComponentModel;
+using System.Xml;
 using System.Xml.Serialization;
 
-namespace Couriers.Speedex
+namespace Couriers.Speedex.InternalModels.ResponseModels
 {
     /// <summary>
     /// The internal response model for the unique session id
@@ -24,7 +27,7 @@ namespace Couriers.Speedex
         #region Constructors
 
         /// <summary>
-        /// Default constructor
+        /// Creates a new instance of <see cref="SessionIdInternalResponseModel"/>
         /// </summary>
         public SessionIdInternalResponseModel() : base()
         {

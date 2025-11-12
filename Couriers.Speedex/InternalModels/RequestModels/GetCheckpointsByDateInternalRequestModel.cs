@@ -2,7 +2,7 @@
 using System.ComponentModel;
 using System.Xml.Serialization;
 
-namespace Couriers.Speedex
+namespace Couriers.Speedex.InternalModels.RequestModels
 {
     /// <summary>
     /// The internal request model for getting the checkpoints for all the new checkpoints of the consignments, in a specific time frame 
@@ -30,7 +30,7 @@ namespace Couriers.Speedex
         #region Constructors
 
         /// <summary>
-        /// Default constructor
+        /// Creates a new instance of <see cref="GetCheckpointsByTimeFrameInternalRequestModel"/>
         /// </summary>
         public GetCheckpointsByTimeFrameInternalRequestModel() : base()
         {

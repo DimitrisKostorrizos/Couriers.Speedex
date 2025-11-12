@@ -1,10 +1,13 @@
-﻿using System;
+﻿using Couriers.Speedex.Constants;
+using Couriers.Speedex.RequestModels;
+
+using System;
 using System.ComponentModel;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Xml.Serialization;
 
-namespace Couriers.Speedex
+namespace Couriers.Speedex.InternalModels.RequestModels
 {
     /// <summary>
     /// The internal request model for the pickup
@@ -15,13 +18,17 @@ namespace Couriers.Speedex
     {
         #region Public Properties
 
+#pragma warning disable CA1819 // Properties should not return arrays
+
         /// <summary>
         /// The ids for the connected master consignments
-        /// NOTE: The maximum count is 5 master consignment numbers
+        /// NOTE: The maximum count is <see cref="SpeedexConstants.MaximumNumberOfConsignmentsForPickup"/> master consignment numbers
         /// </summary>
         [XmlArray("consignmentNumbers")]
         [XmlArrayItem("string")]
-        public string[] ConsignmentIds { get; set; } = [];
+        public string[] ConsignmentIds { get; set; } = Array.Empty<string>();
+
+#pragma warning restore CA1819 // Properties should not return arrays
 
         /// <summary>
         /// The comments
@@ -52,7 +59,7 @@ namespace Couriers.Speedex
         #region Constructors
 
         /// <summary>
-        /// Default constructor
+        /// Creates a new instance of <see cref="PickupInternalRequestModel"/>
         /// </summary>
         public PickupInternalRequestModel() : base()
         {
@@ -70,13 +77,14 @@ namespace Couriers.Speedex
         /// <returns></returns>
         public static PickupInternalRequestModel FromRequestModel([NotNull] PickupRequestModel model)
         {
-            ArgumentNullException.ThrowIfNull(model);
+            if (model is null)
+                throw new ArgumentNullException(nameof(model));
 
             var internalModel = new PickupInternalRequestModel()
             {
                 Comments = model.Comments,
                 ConsignmentIds = model.ConsignmentIds.ToArray(),
-                PickupDate = model.PickupDate.ToDateTime(TimeOnly.MinValue)
+                PickupDate = model.PickupDate
             };
 
             // Get the delivery times
@@ -85,12 +93,12 @@ namespace Couriers.Speedex
             var startingPickupTime = default(DateTime?);
 
             if (deliveryTimeWindow.StartingTime.HasValue)
-                startingPickupTime = model.PickupDate.ToDateTime(deliveryTimeWindow.StartingTime.Value);
+                startingPickupTime = model.PickupDate.Date.AddHours(deliveryTimeWindow.StartingTime.Value.Hour);
 
             var endingPickupTime = default(DateTime?);
 
             if (deliveryTimeWindow.EndingTime.HasValue)
-                endingPickupTime = model.PickupDate.ToDateTime(deliveryTimeWindow.EndingTime.Value);
+                endingPickupTime = model.PickupDate.Date.AddHours(deliveryTimeWindow.EndingTime.Value.Hour);
 
             // Set the starting delivery time
             internalModel.PickupHourFrom = startingPickupTime;

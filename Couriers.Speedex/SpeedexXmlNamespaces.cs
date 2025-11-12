@@ -1,22 +1,23 @@
-﻿using System.Xml.Serialization;
+﻿using System.Xml;
+using System.Xml.Serialization;
 
 namespace Couriers.Speedex
 {
     /// <summary>
-    /// The Xml namespaces used for the accessing the Speedex web service
+    /// The XML namespaces used for the accessing the Speedex web service
     /// </summary>
     public static class SpeedexXmlNamespaces
     {
         /// <summary>
-        /// The Xml namespaces
+        /// The XML namespaces
         /// </summary>
-        public static readonly XmlSerializerNamespaces SpeedexNamespaces = new(
-        [
+        public static readonly XmlSerializerNamespaces SpeedexNamespaces = new(new XmlQualifiedName[]
+        {
             new(DefaultPrefix, DefaultNamespace),
             new(SoapPrefix, SoapNamespace),
             new(XsiPrefix, XsiNamespace),
             new(XsdPrefix, XsdNamespace)
-        ]);
+        });
 
         #region Prefixes
 
@@ -31,12 +32,12 @@ namespace Couriers.Speedex
         public const string SoapPrefix = "soap12";
 
         /// <summary>
-        /// The prefix for the Xsi namespace
+        /// The prefix for the XSI namespace
         /// </summary>
         public const string XsiPrefix = "xsi";
 
         /// <summary>
-        /// The prefix for the Xsd namespace
+        /// The prefix for the XSD namespace
         /// </summary>
         public const string XsdPrefix = "xsd";
 

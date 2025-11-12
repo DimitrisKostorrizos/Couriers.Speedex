@@ -1,4 +1,4 @@
-﻿namespace Couriers.Speedex
+﻿namespace Couriers.Speedex.Enums
 {
     /// <summary>
     /// Provides enumeration for the available charge types of the consignment
@@ -16,6 +16,10 @@
         /// <summary>
         /// Charge the third party
         /// </summary>
-        ThirdParty
+        ThirdParty,
+        /// <summary>
+        /// Charge the receiver of the consignment
+        /// </summary>
+        Receiver
     }
 }

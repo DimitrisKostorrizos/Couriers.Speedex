@@ -1,11 +1,11 @@
 ﻿using System;
 
-namespace Couriers.Speedex
+namespace Couriers.Speedex.ResponseModels
 {
     /// <summary>
     /// The response model for the consignment PDF
     /// </summary>
-    public sealed record ConsignmentPdfResponseModel
+    public record ConsignmentPdfResponseModel
     {
         #region Public Properties
 
@@ -24,15 +24,17 @@ namespace Couriers.Speedex
         #region Constructors
 
         /// <summary>
-        /// Default constructor
+        /// Creates a new instance of <see cref="ConsignmentPdfResponseModel"/>
         /// </summary>
         /// <param name="voucherId">The unique voucher id</param>
         /// <param name="base64String">The base64 representation of the PDF voucher</param>
         public ConsignmentPdfResponseModel(string voucherId, string base64String) : base()
         {
-            ArgumentException.ThrowIfNullOrWhiteSpace(voucherId);
+            if (string.IsNullOrWhiteSpace(voucherId))
+                throw new ArgumentException($"'{nameof(voucherId)}' cannot be null or whitespace.", nameof(voucherId));
 
-            ArgumentException.ThrowIfNullOrWhiteSpace(base64String);
+            if (string.IsNullOrWhiteSpace(base64String))
+                throw new ArgumentException($"'{nameof(base64String)}' cannot be null or whitespace.", nameof(base64String));
 
             VoucherId = voucherId;
 

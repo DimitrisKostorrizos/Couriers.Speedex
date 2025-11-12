@@ -1,9 +1,11 @@
-﻿using System;
+﻿using Couriers.Speedex.RequestModels;
+
+using System;
 using System.ComponentModel;
 using System.Diagnostics.CodeAnalysis;
 using System.Xml.Serialization;
 
-namespace Couriers.Speedex
+namespace Couriers.Speedex.InternalModels.RequestModels
 {
     /// <summary>
     /// The internal request model for rescheduling a pickup
@@ -49,7 +51,7 @@ namespace Couriers.Speedex
         #region Constructors
 
         /// <summary>
-        /// Default constructor
+        /// Creates a new instance of <see cref="ReschedulePickupInternalRequestModel"/>
         /// </summary>
         public ReschedulePickupInternalRequestModel() : base()
         {
@@ -67,7 +69,8 @@ namespace Couriers.Speedex
         /// <returns></returns>
         public static ReschedulePickupInternalRequestModel FromRequestModel([NotNull] ReschedulePickupRequestModel model)
         {
-            ArgumentNullException.ThrowIfNull(model);
+            if (model is null)
+                throw new ArgumentNullException(nameof(model));
 
             // Initialize the internal model
             var internalModel = new ReschedulePickupInternalRequestModel()
@@ -82,10 +85,10 @@ namespace Couriers.Speedex
 
             var startingPickupTime = default(DateTime?);
 
+            var endingPickupTime = default(DateTime?);
+
             if (deliveryTimeWindow.StartingTime.HasValue)
                 startingPickupTime = model.PickupDate.AddTicks(deliveryTimeWindow.StartingTime.Value.Ticks);
-
-            var endingPickupTime = default(DateTime?);
 
             if (deliveryTimeWindow.EndingTime.HasValue)
                 endingPickupTime = model.PickupDate.AddTicks(deliveryTimeWindow.EndingTime.Value.Ticks);

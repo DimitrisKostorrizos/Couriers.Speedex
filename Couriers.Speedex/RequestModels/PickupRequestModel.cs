@@ -1,8 +1,11 @@
-﻿using System;
+﻿using Couriers.Speedex.Constants;
+using Couriers.Speedex.Enums;
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Couriers.Speedex
+namespace Couriers.Speedex.RequestModels
 {
     /// <summary>
     /// The request model for the pickup
@@ -29,12 +32,12 @@ namespace Couriers.Speedex
         /// <summary>
         /// The requested date of the pickup
         /// </summary>
-        public DateOnly PickupDate { get; }
+        public DateTime PickupDate { get; }
 
         /// <summary>
         /// The delivery time
         /// </summary>
-        public DeliveryTimeLimit DeliveryTime { get; }
+        public DeliveryTimeLimit DeliveryTime { get; set; }
 
         /// <summary>
         /// The comments
@@ -55,14 +58,14 @@ namespace Couriers.Speedex
         #region Constructors
 
         /// <summary>
-        /// Default constructor
+        /// Creates a new instance of <see cref="PickupRequestModel"/>
         /// </summary>
         /// <param name="consignmentIds">The ids for the connected master consignments</param>
         /// <param name="pickupDate">The date for the pickup</param>
-        /// <param name="deliveryTime">The delivery time frame</param>
-        public PickupRequestModel(IEnumerable<string> consignmentIds, DateOnly pickupDate, DeliveryTimeLimit deliveryTime) : base()
+        public PickupRequestModel(IEnumerable<string> consignmentIds, DateTime pickupDate) : base()
         {
-            ArgumentNullException.ThrowIfNull(consignmentIds);
+            if (consignmentIds is null)
+                throw new ArgumentNullException(nameof(consignmentIds));
 
             var consignmentCount = consignmentIds.Count();
 
@@ -72,24 +75,20 @@ namespace Couriers.Speedex
             if (consignmentCount > SpeedexConstants.MaximumNumberOfConsignments)
                 throw new ArgumentOutOfRangeException(nameof(consignmentIds), $"The maximum number of consignments is {SpeedexConstants.MaximumNumberOfConsignments}.");
 
-            ArgumentOutOfRangeException.ThrowIfLessThanOrEqual(pickupDate, DateOnly.FromDateTime(DateTime.Now));
-
             ConsignmentIds = consignmentIds;
 
             PickupDate = pickupDate;
-
-            DeliveryTime = deliveryTime;
         }
 
         /// <summary>
-        /// Default constructor
+        /// Creates a new instance of <see cref="PickupRequestModel"/>
         /// </summary>
         /// <param name="consignmentId">The id for the connected master consignment</param>
         /// <param name="pickupDate">The date for the pickup</param>
-        /// <param name="deliveryTime">The delivery time frame</param>
-        public PickupRequestModel(string consignmentId, DateOnly pickupDate, DeliveryTimeLimit deliveryTime) : this([consignmentId], pickupDate, deliveryTime)
+        public PickupRequestModel(string consignmentId, DateTime pickupDate) : this(new string[] { consignmentId }, pickupDate)
         {
-            ArgumentException.ThrowIfNullOrWhiteSpace(consignmentId);
+            if (string.IsNullOrWhiteSpace(consignmentId))
+                throw new ArgumentException($"'{nameof(consignmentId)}' cannot be null or whitespace.", nameof(consignmentId));
         }
 
         #endregion

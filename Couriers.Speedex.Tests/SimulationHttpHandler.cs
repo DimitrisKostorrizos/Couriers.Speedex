@@ -1,4 +1,7 @@
-﻿using System.Net;
+﻿using Couriers.Common;
+using Couriers.Common.Xml;
+
+using System.Net;
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
@@ -17,7 +20,7 @@ namespace Couriers.Speedex.Tests
         /// </summary>
         public SimulationHttpHandler()
         {
-
+            InnerHandler = new HttpClientHandler();
         }
 
         /// <summary>

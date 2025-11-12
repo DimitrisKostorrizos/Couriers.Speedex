@@ -46,7 +46,7 @@ var voucher = createVoucherResponse.Result.VoucherId;
 To add the SpeedexClient implementation to your Dependency Injection container, you can use the following extension methods:
 
 ```cs
-var credentials = new SpeedexCredentials(‚Ä¶.);
+var credentials = new SpeedexCredentials(Ö.);
 
 // For the production environment
 services.AddSpeedexClient(credentials);
@@ -63,11 +63,11 @@ If you do so, then the implementation is also added as a Keyed Service with the 
 Example:
 
 ```cs
-var credentials = new SpeedexCredentials(‚Ä¶.);
+var credentials = new SpeedexCredentials(Ö.);
 
-services.AddSpeedexClient(credentials, ‚Äúkey‚Äù);
+services.AddSpeedexClient(credentials, ìkeyî);
 
-services.AddSpeedexClient(credentials, ‚Äúkey2‚Äù);
+services.AddSpeedexClient(credentials, ìkey2î);
 
 public class SomeClass([FromKeyedServices("key")] ISpeedexClient client)
 {

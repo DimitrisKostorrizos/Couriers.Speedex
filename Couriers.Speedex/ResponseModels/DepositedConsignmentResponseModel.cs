@@ -1,11 +1,11 @@
 ﻿using System;
 
-namespace Couriers.Speedex
+namespace Couriers.Speedex.ResponseModels
 {
     /// <summary>
     /// The response model for the deposited consignment
     /// </summary>
-    public sealed record DepositedConsignmentResponseModel
+    public record DepositedConsignmentResponseModel
     {
         #region Public Properties
 
@@ -29,15 +29,18 @@ namespace Couriers.Speedex
         #region Constructors
 
         /// <summary>
-        /// Default constructor
+        /// Creates a new instance of <see cref="DepositedConsignmentResponseModel"/>
         /// </summary>
         /// <param name="id">The unique consignment id</param>
         /// <param name="amount">The deposited amount</param>
         /// <param name="dateDeposited">The date-time of that the consignment was deposited</param>
         public DepositedConsignmentResponseModel(string id, decimal amount, DateTime dateDeposited) : base()
         {
-            ArgumentException.ThrowIfNullOrWhiteSpace(id);
+            if (string.IsNullOrWhiteSpace(id))
+                throw new ArgumentException($"'{nameof(id)}' cannot be null or whitespace.", nameof(id));
 
+            if (amount < 0)
+                throw new ArgumentException($"'{nameof(amount)}' cannot be negative.", nameof(amount));
             Id = id;
 
             Amount = amount;

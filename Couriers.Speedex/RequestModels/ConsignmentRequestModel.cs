@@ -1,6 +1,9 @@
-﻿using System;
+﻿using Couriers.Speedex.Constants;
+using Couriers.Speedex.Enums;
 
-namespace Couriers.Speedex
+using System;
+
+namespace Couriers.Speedex.RequestModels
 {
     /// <summary>
     /// The request model for the consignment
@@ -209,7 +212,7 @@ namespace Couriers.Speedex
         #region Constructors
 
         /// <summary>
-        /// Default constructor
+        /// Creates a new instance of <see cref="ConsignmentRequestModel"/>
         /// </summary>
         /// <param name="customerFlag">The customer flag</param>
         /// <param name="numberOfVouchers">The number of vouchers</param>
@@ -228,21 +231,29 @@ namespace Couriers.Speedex
             double cost, string address, string recipientName, string recipientPhoneNumber, string zipCode, double weight,
             int insuranceAmount = 0, bool shouldBeDeliveredOnSaturday = false, DeliveryTimeLimit deliveryTime = DeliveryTimeLimit.NoLimit) : base()
         {
-            ArgumentOutOfRangeException.ThrowIfNegativeOrZero(numberOfVouchers);
+            if (numberOfVouchers <= 0)
+                throw new ArgumentOutOfRangeException(nameof(numberOfVouchers), $"The {nameof(numberOfVouchers)} cannot be negative or zero.");
 
-            ArgumentOutOfRangeException.ThrowIfNegative(cost);
+            if (cost < 0)
+                throw new ArgumentOutOfRangeException(nameof(cost), $"The {nameof(cost)} cannot be negative.");
 
-            ArgumentOutOfRangeException.ThrowIfNegative(insuranceAmount);
+            if (insuranceAmount < 0)
+                throw new ArgumentOutOfRangeException(nameof(insuranceAmount), $"The {nameof(insuranceAmount)} cannot be negative.");
 
-            ArgumentException.ThrowIfNullOrWhiteSpace(address);
+            if (string.IsNullOrWhiteSpace(address))
+                throw new ArgumentException($"'{nameof(address)}' cannot be null or whitespace.", nameof(address));
 
-            ArgumentException.ThrowIfNullOrWhiteSpace(recipientName);
+            if (string.IsNullOrWhiteSpace(recipientName))
+                throw new ArgumentException($"'{nameof(recipientName)}' cannot be null or whitespace.", nameof(recipientName));
 
-            ArgumentException.ThrowIfNullOrWhiteSpace(zipCode);
+            if (string.IsNullOrWhiteSpace(zipCode))
+                throw new ArgumentException($"'{nameof(zipCode)}' cannot be null or whitespace.", nameof(zipCode));
 
-            ArgumentException.ThrowIfNullOrWhiteSpace(recipientPhoneNumber);
+            if (string.IsNullOrWhiteSpace(recipientPhoneNumber))
+                throw new ArgumentException($"'{nameof(recipientPhoneNumber)}' cannot be null or whitespace.", nameof(recipientPhoneNumber));
 
-            ArgumentOutOfRangeException.ThrowIfGreaterThan(numberOfVouchers, SpeedexConstants.MaximumNumberOfVouchers);
+            if (numberOfVouchers > SpeedexConstants.MaximumNumberOfVouchers)
+                throw new ArgumentOutOfRangeException(nameof(numberOfVouchers), $"The {nameof(numberOfVouchers)} cannot be greater than {SpeedexConstants.MaximumNumberOfVouchers}.");
 
             if (cost > 0 && !paymentType.HasValue)
                 throw new InvalidOperationException($"The '{nameof(paymentType)}' is required when the '{nameof(cost)}' is greater then 0.");
@@ -258,7 +269,7 @@ namespace Couriers.Speedex
             var minimumWeight = NumberOfVouchers * SpeedexConstants.MinimumWeightPerVoucher;
 
             if (weight < minimumWeight)
-                throw new InvalidOperationException($"The '{nameof(weight)}' is not a weight. The minimum weight for a voucher is {SpeedexConstants.MinimumWeightPerVoucher} kilos.");
+                throw new InvalidOperationException($"The '{nameof(weight)}' is invalid. The minimum weight for a voucher is {SpeedexConstants.MinimumWeightPerVoucher} kilos.");
 
             if (shouldBeDeliveredOnSaturday && deliveryTime != DeliveryTimeLimit.NoLimit)
                 throw new InvalidOperationException("A Saturday delivery cannot be combined with a delivery time limit.");

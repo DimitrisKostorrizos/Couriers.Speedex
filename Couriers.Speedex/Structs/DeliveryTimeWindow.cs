@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Diagnostics.CodeAnalysis;
 
-namespace Couriers.Speedex
+namespace Couriers.Speedex.Structs
 {
     /// <summary>
     /// Represents a time window for Speedex to handle the delivery
@@ -13,12 +13,12 @@ namespace Couriers.Speedex
         /// <summary>
         /// The starting time
         /// </summary>
-        public TimeOnly? StartingTime { get; }
+        public DateTime? StartingTime { get; }
 
         /// <summary>
         /// The ending time
         /// </summary>
-        public TimeOnly? EndingTime { get; }
+        public DateTime? EndingTime { get; }
 
         /// <summary>
         /// A flag indicating whether the time window is specified
@@ -31,19 +31,11 @@ namespace Couriers.Speedex
         #region Constructors
 
         /// <summary>
-        /// Default constructor
-        /// </summary>
-        public DeliveryTimeWindow()
-        {
-
-        }
-
-        /// <summary>
         /// Creates a new instance using the specified <paramref name="startingTime"/> and <paramref name="endingTime"/>
         /// </summary>
         /// <param name="startingTime">The starting time</param>
         /// <param name="endingTime">The ending time</param>
-        public DeliveryTimeWindow(TimeOnly startingTime, TimeOnly endingTime)
+        public DeliveryTimeWindow(DateTime startingTime, DateTime endingTime)
         {
             if (endingTime < startingTime)
                 throw new InvalidOperationException($"The {nameof(startingTime)} must not be before {nameof(endingTime)}.");
@@ -83,7 +75,7 @@ namespace Couriers.Speedex
         /// <returns></returns>
         public override bool Equals([NotNullWhen(true)] object? obj)
         {
-            if(obj is null)
+            if (obj is null)
                 return false;
 
             if (obj is not DeliveryTimeWindow strongTypedObj)
@@ -121,7 +113,7 @@ namespace Couriers.Speedex
         /// <param name="left">The left operand</param>
         /// <param name="right">The right operand</param>
         /// <returns></returns>
-        public static bool operator ==(DeliveryTimeWindow left, DeliveryTimeWindow right) 
+        public static bool operator ==(DeliveryTimeWindow left, DeliveryTimeWindow right)
             => left.Equals(right);
 
         /// <summary>
@@ -130,7 +122,7 @@ namespace Couriers.Speedex
         /// <param name="left">The left operand</param>
         /// <param name="right">The right operand</param>
         /// <returns></returns>
-        public static bool operator !=(DeliveryTimeWindow left, DeliveryTimeWindow right) 
+        public static bool operator !=(DeliveryTimeWindow left, DeliveryTimeWindow right)
             => !(left == right);
 
         #endregion
