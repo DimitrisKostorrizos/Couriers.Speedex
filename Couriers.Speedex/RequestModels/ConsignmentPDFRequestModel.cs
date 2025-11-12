@@ -28,7 +28,7 @@ namespace Couriers.Speedex.RequestModels
         /// <summary>
         /// The flag indicating whether a single merged PDF file will be returned or one PDF file per consignment will be returned
         /// </summary>
-        public bool ReturnMultipleVouchers { get; }
+        public bool ReturnMultipleVouchers { get; set; }
 
         #endregion
 
@@ -39,8 +39,7 @@ namespace Couriers.Speedex.RequestModels
         /// </summary>
         /// <param name="voucherIds">The voucher ids</param>
         /// <param name="paperSize">The paper size</param>
-        /// <param name="returnMultipleVouchers">The flag indicating whether a single merged PDF file will be returned or one PDF file per consignment will be returned</param>
-        public ConsignmentPdfRequestModel(IEnumerable<string> voucherIds, PaperSize paperSize, bool returnMultipleVouchers) : base()
+        public ConsignmentPdfRequestModel(IEnumerable<string> voucherIds, PaperSize paperSize) : base()
         {
             if (voucherIds is null)
                 throw new ArgumentNullException(nameof(voucherIds));
@@ -55,8 +54,6 @@ namespace Couriers.Speedex.RequestModels
 
             PaperSize = paperSize;
 
-            ReturnMultipleVouchers = returnMultipleVouchers;
-
             VoucherIds = voucherIds;
         }
 
@@ -65,8 +62,7 @@ namespace Couriers.Speedex.RequestModels
         /// </summary>
         /// <param name="voucherId">The voucher id</param>
         /// <param name="paperSize">The paper size</param>
-        /// <param name="returnMultipleVouchers">The flag indicating whether a single merged PDF file will be returned or one PDF file per consignment will be returned</param>
-        public ConsignmentPdfRequestModel(string voucherId, PaperSize paperSize, bool returnMultipleVouchers) : this(new string[] { voucherId }, paperSize, returnMultipleVouchers)
+        public ConsignmentPdfRequestModel(string voucherId, PaperSize paperSize) : this(new string[] { voucherId }, paperSize)
         {
 
         }

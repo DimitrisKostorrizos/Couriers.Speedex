@@ -306,7 +306,10 @@ namespace Couriers.Speedex.Services
                     throw new ArgumentException($"'{nameof(voucherId)}' cannot be null or whitespace.", nameof(voucherId));
 
                 // Initialize the model
-                var value = new ConsignmentPdfRequestModel(voucherId, paperSize, returnMultipleVouchers);
+                var value = new ConsignmentPdfRequestModel(voucherId, paperSize)
+                {
+                    ReturnMultipleVouchers = returnMultipleVouchers
+                };
 
                 // Get the response
                 var response = await GetConsignmentPdfsAsync(value, cancellationToken).ConfigureAwait(false);

@@ -195,8 +195,12 @@ namespace Couriers.Speedex
         /// <exception cref="InvalidOperationException">An exception is thrown the specified parameters don't match a valid <see cref="DeliveryTimeLimit"/></exception>
         public static DeliveryTimeLimit GetDeliveryTimeLimitByTimeRange(DateTime? startingTime, DateTime? endingTime)
         {
+            DateTime? startingTimeValue = startingTime.HasValue ? DateTime.MinValue.Add(startingTime.Value.TimeOfDay) : null;
+
+            DateTime? endingTimeValue = endingTime.HasValue ? DateTime.MinValue.Add(endingTime.Value.TimeOfDay) : null;
+
             foreach (var pair in _deliveryTimeMappings)
-                if (pair.Value.StartingTime == startingTime && pair.Value.EndingTime == endingTime)
+                if (pair.Value.StartingTime == startingTimeValue && pair.Value.EndingTime == endingTimeValue)
                     return pair.Key;
 
             throw new InvalidOperationException($"No mapping exists for {nameof(startingTime)}:{startingTime} and {nameof(endingTime)}:{endingTime}.");
