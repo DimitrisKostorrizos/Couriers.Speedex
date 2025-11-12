@@ -22,11 +22,9 @@ namespace Couriers.Speedex.DependencyInjection
         /// <exception cref="ArgumentNullException">An exception is thrown if any of the arguments is <see langword="null"/></exception>
         public static IServiceCollection AddSpeedexClient([NotNull] this IServiceCollection services, [NotNull] SpeedexCredentials speedexCredentials)
         {
-            if (services is null)
-                throw new ArgumentNullException(nameof(services));
+            ArgumentNullException.ThrowIfNull(services);
 
-            if (speedexCredentials is null)
-                throw new ArgumentNullException(nameof(speedexCredentials));
+            ArgumentNullException.ThrowIfNull(speedexCredentials);
 
             services.AddHttpClient();
 
@@ -44,11 +42,9 @@ namespace Couriers.Speedex.DependencyInjection
         /// <exception cref="ArgumentNullException">An exception is thrown if any of the arguments is <see langword="null"/></exception>
         public static IServiceCollection AddDemoSpeedexClient([NotNull] this IServiceCollection services, [NotNull] SpeedexCredentials speedexCredentials)
         {
-            if (services is null)
-                throw new ArgumentNullException(nameof(services));
+            ArgumentNullException.ThrowIfNull(services);
 
-            if (speedexCredentials is null)
-                throw new ArgumentNullException(nameof(speedexCredentials));
+            ArgumentNullException.ThrowIfNull(speedexCredentials);
 
             services.AddHttpClient();
 

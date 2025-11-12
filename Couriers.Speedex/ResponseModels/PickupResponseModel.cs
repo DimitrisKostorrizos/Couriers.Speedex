@@ -108,8 +108,7 @@ namespace Couriers.Speedex.ResponseModels
             if (string.IsNullOrWhiteSpace(id))
                 throw new ArgumentException($"'{nameof(id)}' cannot be null or whitespace.", nameof(id));
 
-            if (consignmentIds is null)
-                throw new ArgumentNullException(nameof(consignmentIds));
+            ArgumentNullException.ThrowIfNull(consignmentIds);
 
             if (string.IsNullOrWhiteSpace(checkpointGroupCode))
                 throw new ArgumentException($"'{nameof(checkpointGroupCode)}' cannot be null or whitespace.", nameof(checkpointGroupCode));

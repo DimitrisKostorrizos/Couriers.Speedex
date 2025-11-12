@@ -77,8 +77,7 @@ namespace Couriers.Speedex.InternalModels.RequestModels
         /// <returns></returns>
         public static PickupInternalRequestModel FromRequestModel([NotNull] PickupRequestModel model)
         {
-            if (model is null)
-                throw new ArgumentNullException(nameof(model));
+            ArgumentNullException.ThrowIfNull(model);
 
             var internalModel = new PickupInternalRequestModel()
             {

@@ -64,8 +64,7 @@ namespace Couriers.Speedex.RequestModels
         /// <param name="pickupDate">The date for the pickup</param>
         public PickupRequestModel(IEnumerable<string> consignmentIds, DateTime pickupDate) : base()
         {
-            if (consignmentIds is null)
-                throw new ArgumentNullException(nameof(consignmentIds));
+            ArgumentNullException.ThrowIfNull(consignmentIds);
 
             var consignmentCount = consignmentIds.Count();
 

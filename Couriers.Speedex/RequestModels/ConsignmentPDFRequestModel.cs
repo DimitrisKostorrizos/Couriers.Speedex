@@ -42,8 +42,7 @@ namespace Couriers.Speedex.RequestModels
         /// <param name="returnMultipleVouchers">The flag indicating whether a single merged PDF file will be returned or one PDF file per consignment will be returned</param>
         public ConsignmentPdfRequestModel(IEnumerable<string> voucherIds, PaperSize paperSize, bool returnMultipleVouchers) : base()
         {
-            if (voucherIds is null)
-                throw new ArgumentNullException(nameof(voucherIds));
+            ArgumentNullException.ThrowIfNull(voucherIds);
 
             var voucherCount = voucherIds.Count();
 

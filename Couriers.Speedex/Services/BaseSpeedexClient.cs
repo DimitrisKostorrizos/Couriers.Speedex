@@ -94,11 +94,9 @@ namespace Couriers.Speedex.Services
         /// <param name="httpClient">The HTTP client</param>
         protected BaseSpeedexClient([NotNull] SpeedexCredentials credentials, [NotNull] HttpClient httpClient) : base()
         {
-            if (credentials is null)
-                throw new ArgumentNullException(nameof(credentials));
+            ArgumentNullException.ThrowIfNull(credentials);
 
-            if (httpClient is null)
-                throw new ArgumentNullException(nameof(httpClient));
+            ArgumentNullException.ThrowIfNull(httpClient);
 
             Credentials = credentials;
 
@@ -183,8 +181,7 @@ namespace Couriers.Speedex.Services
 
             try
             {
-                if (values is null)
-                    throw new ArgumentNullException(nameof(values));
+                ArgumentNullException.ThrowIfNull(values);
 
                 var numberOfItems = values.Count();
 
@@ -232,8 +229,7 @@ namespace Couriers.Speedex.Services
 
             try
             {
-                if (model is null)
-                    throw new ArgumentNullException(nameof(model));
+                ArgumentNullException.ThrowIfNull(model);
 
                 // Get the response
                 var response = await CreateConsignmentsAsync(new ConsignmentRequestModel[] { model }, cancellationToken).ConfigureAwait(false);
@@ -265,8 +261,7 @@ namespace Couriers.Speedex.Services
 
             try
             {
-                if (value is null)
-                    throw new ArgumentNullException(nameof(value));
+                ArgumentNullException.ThrowIfNull(value);
 
                 var requestModel = ConsignmentPdfInternalRequestModel.FromRequestModel(value);
 
@@ -450,8 +445,7 @@ namespace Couriers.Speedex.Services
 
             try
             {
-                if (model is null)
-                    throw new ArgumentNullException(nameof(model));
+                ArgumentNullException.ThrowIfNull(model);
 
                 var requestModel = ClientReferencesInternalRequestModel.FromRequestModel(model);
 
@@ -585,8 +579,7 @@ namespace Couriers.Speedex.Services
 
             try
             {
-                if (model is null)
-                    throw new ArgumentNullException(nameof(model));
+                ArgumentNullException.ThrowIfNull(model);
 
                 var requestModel = PickupInternalRequestModel.FromRequestModel(model);
 
@@ -732,8 +725,7 @@ namespace Couriers.Speedex.Services
 
             try
             {
-                if (model is null)
-                    throw new ArgumentNullException(nameof(model));
+                ArgumentNullException.ThrowIfNull(model);
 
                 var requestModel = ReschedulePickupInternalRequestModel.FromRequestModel(model);
 
