@@ -68,17 +68,17 @@ namespace Couriers.Speedex.ResponseModels
         /// <summary>
         /// The pickup date
         /// </summary>
-        public DateTime PickupDate { get; }
+        public DateOnly PickupDate { get; }
 
         /// <summary>
         /// The start of the time frame of the pickup
         /// </summary>
-        public DateTime? PickupTimeFrom { get; }
+        public TimeOnly? PickupTimeFrom { get; }
 
         /// <summary>
         /// The end of the time frame of the pickup
         /// </summary>
-        public DateTime? PickupTimeTo { get; }
+        public TimeOnly? PickupTimeTo { get; }
 
         #endregion
 
@@ -103,7 +103,7 @@ namespace Couriers.Speedex.ResponseModels
         /// <param name="pickupTimeTo">The end of the time frame of the pickup</param>
         public PickupResponseModel(string id, IEnumerable<string> consignmentIds, string? checkpointCode, string checkpointGroupCode,
             string address, string city, string countryCode, string? comments, string? name, string? phoneNumber, string postCode,
-            DateTime pickupDate, DateTime? pickupTimeFrom, DateTime? pickupTimeTo) : base()
+            DateOnly pickupDate, TimeOnly? pickupTimeFrom, TimeOnly? pickupTimeTo) : base()
         {
             if (string.IsNullOrWhiteSpace(id))
                 throw new ArgumentException($"'{nameof(id)}' cannot be null or whitespace.", nameof(id));

@@ -39,12 +39,12 @@ namespace Couriers.Speedex.ResponseModels
         /// <summary>
         /// The initial time of the delivery time-frame window
         /// </summary>
-        public DateTime? DeliveryTimeFrom { get; }
+        public TimeOnly? DeliveryTimeFrom { get; }
 
         /// <summary>
         /// The final time of the delivery time-frame window
         /// </summary>
-        public DateTime? DeliveryTimeTo { get; }
+        public TimeOnly? DeliveryTimeTo { get; }
 
         /// <summary>
         /// The checkpoint code of the consignment
@@ -137,7 +137,7 @@ namespace Couriers.Speedex.ResponseModels
         /// <param name="zipCode">The zip code for the delivery</param>
         /// <param name="deliveryTime">The delivery time limit</param>
         public ConsignmentDetailsResponseModel(double cashAmount, double checkAmount, string city, string countryCode,
-            string customerComments, DateTime? deliveryTimeFrom, DateTime? deliveryTimeTo, string checkpointCode,
+            string customerComments, TimeOnly? deliveryTimeFrom, TimeOnly? deliveryTimeTo, string checkpointCode,
             string checkpointGroupCode, bool isReturnItem, string masterConsignmentId, string pickupAddress, string pickupCity,
             string pickupCountryCode, string pickupName, string pickupPhoneNumber, string pickupPostCode, double weight, ChargeType chargeType, string agreementCode, string customerCode,
             string? firstCustomerReference, string? secondCustomerReference, string? thirdCustomerReference, string address,

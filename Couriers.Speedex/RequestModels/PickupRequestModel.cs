@@ -32,7 +32,7 @@ namespace Couriers.Speedex.RequestModels
         /// <summary>
         /// The requested date of the pickup
         /// </summary>
-        public DateTime PickupDate { get; }
+        public DateOnly PickupDate { get; }
 
         /// <summary>
         /// The delivery time
@@ -62,7 +62,7 @@ namespace Couriers.Speedex.RequestModels
         /// </summary>
         /// <param name="consignmentIds">The ids for the connected master consignments</param>
         /// <param name="pickupDate">The date for the pickup</param>
-        public PickupRequestModel(IEnumerable<string> consignmentIds, DateTime pickupDate) : base()
+        public PickupRequestModel(IEnumerable<string> consignmentIds, DateOnly pickupDate) : base()
         {
             ArgumentNullException.ThrowIfNull(consignmentIds);
 
@@ -84,7 +84,7 @@ namespace Couriers.Speedex.RequestModels
         /// </summary>
         /// <param name="consignmentId">The id for the connected master consignment</param>
         /// <param name="pickupDate">The date for the pickup</param>
-        public PickupRequestModel(string consignmentId, DateTime pickupDate) : this(new string[] { consignmentId }, pickupDate)
+        public PickupRequestModel(string consignmentId, DateOnly pickupDate) : this(new string[] { consignmentId }, pickupDate)
         {
             if (string.IsNullOrWhiteSpace(consignmentId))
                 throw new ArgumentException($"'{nameof(consignmentId)}' cannot be null or whitespace.", nameof(consignmentId));

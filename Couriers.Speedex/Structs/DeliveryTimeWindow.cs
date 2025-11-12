@@ -13,12 +13,12 @@ namespace Couriers.Speedex.Structs
         /// <summary>
         /// The starting time
         /// </summary>
-        public DateTime? StartingTime { get; }
+        public TimeOnly? StartingTime { get; }
 
         /// <summary>
         /// The ending time
         /// </summary>
-        public DateTime? EndingTime { get; }
+        public TimeOnly? EndingTime { get; }
 
         /// <summary>
         /// A flag indicating whether the time window is specified
@@ -35,7 +35,7 @@ namespace Couriers.Speedex.Structs
         /// </summary>
         /// <param name="startingTime">The starting time</param>
         /// <param name="endingTime">The ending time</param>
-        public DeliveryTimeWindow(DateTime startingTime, DateTime endingTime)
+        public DeliveryTimeWindow(TimeOnly startingTime, TimeOnly endingTime)
         {
             if (endingTime < startingTime)
                 throw new InvalidOperationException($"The {nameof(startingTime)} must not be before {nameof(endingTime)}.");

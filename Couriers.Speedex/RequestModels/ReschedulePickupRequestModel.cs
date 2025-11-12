@@ -23,7 +23,7 @@ namespace Couriers.Speedex.RequestModels
         /// <summary>
         /// The requested date of the pickup
         /// </summary>
-        public DateTime PickupDate { get; }
+        public DateOnly PickupDate { get; }
 
         /// <summary>
         /// The delivery time frame
@@ -58,7 +58,7 @@ namespace Couriers.Speedex.RequestModels
         /// </summary>
         /// <param name="pickupId">The unique pickup id</param>
         /// <param name="pickupDate">The date for the pickup</param>
-        public ReschedulePickupRequestModel(string pickupId, DateTime pickupDate) : base()
+        public ReschedulePickupRequestModel(string pickupId, DateOnly pickupDate) : base()
         {
             if (string.IsNullOrWhiteSpace(pickupId))
                 throw new ArgumentException($"'{nameof(pickupId)}' cannot be null or whitespace.", nameof(pickupId));

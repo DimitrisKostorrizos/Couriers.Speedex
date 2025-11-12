@@ -83,7 +83,7 @@ namespace Couriers.Speedex.InternalModels.RequestModels
             {
                 Comments = model.Comments,
                 ConsignmentIds = model.ConsignmentIds.ToArray(),
-                PickupDate = model.PickupDate
+                PickupDate = model.PickupDate.ToDateTime(TimeOnly.MinValue)
             };
 
             // Get the delivery times
@@ -92,12 +92,12 @@ namespace Couriers.Speedex.InternalModels.RequestModels
             var startingPickupTime = default(DateTime?);
 
             if (deliveryTimeWindow.StartingTime.HasValue)
-                startingPickupTime = model.PickupDate.Date.AddHours(deliveryTimeWindow.StartingTime.Value.Hour);
+                startingPickupTime = model.PickupDate.ToDateTime(deliveryTimeWindow.StartingTime.Value);
 
             var endingPickupTime = default(DateTime?);
 
             if (deliveryTimeWindow.EndingTime.HasValue)
-                endingPickupTime = model.PickupDate.Date.AddHours(deliveryTimeWindow.EndingTime.Value.Hour);
+                endingPickupTime = model.PickupDate.ToDateTime(deliveryTimeWindow.EndingTime.Value);
 
             // Set the starting delivery time
             internalModel.PickupHourFrom = startingPickupTime;

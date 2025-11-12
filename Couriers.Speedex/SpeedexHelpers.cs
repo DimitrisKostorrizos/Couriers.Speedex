@@ -23,9 +23,9 @@ namespace Couriers.Speedex
         private static readonly Dictionary<DeliveryTimeLimit, DeliveryTimeWindow> _deliveryTimeMappings = new()
         {
             { DeliveryTimeLimit.NoLimit, new DeliveryTimeWindow() },
-            { DeliveryTimeLimit.TenAMToOnePM, new DeliveryTimeWindow(DateTime.MinValue.AddHours(10), DateTime.MinValue.AddHours(13)) },
-            { DeliveryTimeLimit.OnePMMToFourPM, new DeliveryTimeWindow(DateTime.MinValue.AddHours(13), DateTime.MinValue.AddHours(16)) },
-            { DeliveryTimeLimit.FourPMToSevenPM, new DeliveryTimeWindow(DateTime.MinValue.AddHours(16), DateTime.MinValue.AddHours(19)) }
+            { DeliveryTimeLimit.TenAMToOnePM, new DeliveryTimeWindow(new TimeOnly(10, 0), new TimeOnly(13, 0)) },
+            { DeliveryTimeLimit.OnePMMToFourPM, new DeliveryTimeWindow(new TimeOnly(13, 0), new TimeOnly(16, 0)) },
+            { DeliveryTimeLimit.FourPMToSevenPM, new DeliveryTimeWindow(new TimeOnly(16, 0), new TimeOnly(19, 0)) }
         };
 
         #endregion
@@ -193,7 +193,7 @@ namespace Couriers.Speedex
         /// <param name="endingTime">The ending time of the delivery time</param>
         /// <returns></returns>
         /// <exception cref="InvalidOperationException">An exception is thrown the specified parameters don't match a valid <see cref="DeliveryTimeLimit"/></exception>
-        public static DeliveryTimeLimit GetDeliveryTimeLimitByTimeRange(DateTime? startingTime, DateTime? endingTime)
+        public static DeliveryTimeLimit GetDeliveryTimeLimitByTimeRange(TimeOnly? startingTime, TimeOnly? endingTime)
         {
             foreach (var pair in _deliveryTimeMappings)
                 if (pair.Value.StartingTime == startingTime && pair.Value.EndingTime == endingTime)

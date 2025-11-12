@@ -87,7 +87,7 @@ namespace Couriers.Speedex.Constants
         /// <summary>
         /// The date-time format that Speedex uses
         /// </summary>
-        public static readonly string DateTimeFormat = $"{DateFormat}T{TimeFormat}";
+        public const string DateTimeFormat = $"{DateFormat}T{TimeFormat}";
 
         /// <summary>
         /// The culture info that Speedex uses
