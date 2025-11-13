@@ -63,7 +63,7 @@ namespace Couriers.Speedex.ResponseModels
         /// <summary>
         /// The insurance amount of the consignment
         /// </summary>
-        public decimal InsuranceAmount { get; set; }
+        public decimal InsuranceAmount { get; }
 
         /// <summary>
         /// A flag indicating whether the consignment is going to be delivered on Saturday
