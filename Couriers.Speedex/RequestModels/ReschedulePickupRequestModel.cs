@@ -1,6 +1,7 @@
 ﻿using Couriers.Speedex.Enums;
 
 using System;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Couriers.Speedex.RequestModels
 {
@@ -16,6 +17,11 @@ namespace Couriers.Speedex.RequestModels
         /// </summary>
         private string? comments;
 
+        /// <summary>
+        /// The field of the <see cref="PickupId"/>
+        /// </summary>
+        private string pickupId = default!;
+
         #endregion
 
         #region Public Properties
@@ -23,7 +29,7 @@ namespace Couriers.Speedex.RequestModels
         /// <summary>
         /// The requested date of the pickup
         /// </summary>
-        public DateOnly PickupDate { get; }
+        public required DateOnly PickupDate { get; init; }
 
         /// <summary>
         /// The delivery time frame
@@ -47,7 +53,17 @@ namespace Couriers.Speedex.RequestModels
         /// <summary>
         /// The unique pickup id
         /// </summary>
-        public string PickupId { get; }
+        public required string PickupId
+        {
+            get => pickupId;
+            init
+            {
+                if (string.IsNullOrWhiteSpace(value))
+                    throw new ArgumentException($"'{nameof(PickupId)}' cannot be null or whitespace.", nameof(PickupId));
+
+                pickupId = value;
+            }
+        }
 
         #endregion
 
@@ -56,13 +72,19 @@ namespace Couriers.Speedex.RequestModels
         /// <summary>
         /// Creates a new instance of <see cref="ReschedulePickupRequestModel"/>
         /// </summary>
+        public ReschedulePickupRequestModel() : base()
+        {
+
+        }
+
+        /// <summary>
+        /// Creates a new instance of <see cref="ReschedulePickupRequestModel"/>
+        /// </summary>
         /// <param name="pickupId">The unique pickup id</param>
         /// <param name="pickupDate">The date for the pickup</param>
-        public ReschedulePickupRequestModel(string pickupId, DateOnly pickupDate) : base()
+        [SetsRequiredMembers]
+        public ReschedulePickupRequestModel(string pickupId, DateOnly pickupDate) : this()
         {
-            if (string.IsNullOrWhiteSpace(pickupId))
-                throw new ArgumentException($"'{nameof(pickupId)}' cannot be null or whitespace.", nameof(pickupId));
-
             PickupId = pickupId;
 
             PickupDate = pickupDate;

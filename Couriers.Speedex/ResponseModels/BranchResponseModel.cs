@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Couriers.Speedex.ResponseModels
 {
@@ -7,51 +8,168 @@ namespace Couriers.Speedex.ResponseModels
     /// </summary>
     public record BranchResponseModel
     {
+        #region Private Fields
+
+        /// <summary>
+        /// The field for the <see cref="Address"/>
+        /// </summary>
+        private string _address = default!;
+
+        /// <summary>
+        /// The field for the <see cref="City"/>
+        /// </summary>
+        private string _city = default!;
+
+        /// <summary>
+        /// The field for the <see cref="Id"/>
+        /// </summary>
+        private string _id = default!;
+
+        /// <summary>
+        /// The field for the <see cref="Name"/>
+        /// </summary>
+        private string _name = default!;
+
+        /// <summary>
+        /// The field for the <see cref="ZipCode"/>
+        /// </summary>
+        private string _zipCode = default!;
+
+        /// <summary>
+        /// The field for the <see cref="Latitude"/>
+        /// </summary>
+        private string _latitude = default!;
+
+        /// <summary>
+        /// The field for the <see cref="Longitude"/>
+        /// </summary>
+        private string _longitude = default!;
+
+        #endregion
+
         #region Public Properties
 
         /// <summary>
         /// The address of the depot
         /// </summary>
-        public string Address { get; }
+        public required string Address
+        {
+            get => _address;
+            init
+            {
+                if (string.IsNullOrWhiteSpace(value))
+                    throw new ArgumentException($"'{nameof(value)}' cannot be null or whitespace.", nameof(Address));
+
+                _address = value;
+            }
+        }
 
         /// <summary>
         /// The city of the depot
         /// </summary>
-        public string City { get; }
+        public required string City
+        {
+            get => _city;
+            init
+            {
+                if (string.IsNullOrWhiteSpace(value))
+                    throw new ArgumentException($"'{nameof(value)}' cannot be null or whitespace.", nameof(City));
+
+                _city = value;
+            }
+        }
 
         /// <summary>
         /// The unique id of the depot
         /// </summary>
-        public string Id { get; }
+        public required string Id
+        {
+            get => _id;
+            init
+            {
+                if (string.IsNullOrWhiteSpace(value))
+                    throw new ArgumentException($"'{nameof(value)}' cannot be null or whitespace.", nameof(Id));
+
+                _id = value;
+            }
+        }
 
         /// <summary>
         /// The name of the depot
         /// </summary>
-        public string Name { get; }
+        public required string Name
+        {
+            get => _name;
+            init
+            {
+                if (string.IsNullOrWhiteSpace(value))
+                    throw new ArgumentException($"'{nameof(value)}' cannot be null or whitespace.", nameof(Name));
+
+                _name = value;
+            }
+        }
 
         /// <summary>
         /// The telephone number of the depot
         /// </summary>
-        public string? TelephoneNumber { get; }
+        public required string? TelephoneNumber { get; init; }
 
         /// <summary>
         /// The zip code of the depot
         /// </summary>
-        public string ZipCode { get; }
+        public required string ZipCode
+        {
+            get => _zipCode;
+            init
+            {
+                if (string.IsNullOrWhiteSpace(value))
+                    throw new ArgumentException($"'{nameof(value)}' cannot be null or whitespace.", nameof(ZipCode));
+
+                _zipCode = value;
+            }
+        }
 
         /// <summary>
         /// The latitude of the depot
         /// </summary>
-        public string Latitude { get; }
+        public required string Latitude
+        {
+            get => _latitude;
+            init
+            {
+                if (string.IsNullOrWhiteSpace(value))
+                    throw new ArgumentException($"'{nameof(value)}' cannot be null or whitespace.", nameof(Latitude));
+
+                _latitude = value;
+            }
+        }
 
         /// <summary>
         /// The longitude of the depot
         /// </summary>
-        public string Longitude { get; }
+        public required string Longitude
+        {
+            get => _longitude;
+            init
+            {
+                if (string.IsNullOrWhiteSpace(value))
+                    throw new ArgumentException($"'{nameof(value)}' cannot be null or whitespace.", nameof(Longitude));
+
+                _longitude = value;
+            }
+        }
 
         #endregion
 
         #region Constructors
+
+        /// <summary>
+        /// Creates a new instance of <see cref="BranchResponseModel"/>
+        /// </summary>
+        public BranchResponseModel() : base()
+        {
+
+        }
 
         /// <summary>
         /// Creates a new instance of <see cref="BranchResponseModel"/>
@@ -64,29 +182,9 @@ namespace Couriers.Speedex.ResponseModels
         /// <param name="zipCode">The zip code of the depot</param>
         /// <param name="latitude">The latitude of the depot</param>
         /// <param name="longitude">The longitude of the depot</param>
-        public BranchResponseModel(string address, string city, string id, string name, string? telephoneNumber, string zipCode, string latitude, string longitude) : base()
+        [SetsRequiredMembers]
+        public BranchResponseModel(string address, string city, string id, string name, string? telephoneNumber, string zipCode, string latitude, string longitude) : this()
         {
-            if (string.IsNullOrWhiteSpace(address))
-                throw new ArgumentException($"'{nameof(address)}' cannot be null or whitespace.", nameof(address));
-
-            if (string.IsNullOrWhiteSpace(city))
-                throw new ArgumentException($"'{nameof(city)}' cannot be null or whitespace.", nameof(city));
-
-            if (string.IsNullOrWhiteSpace(id))
-                throw new ArgumentException($"'{nameof(id)}' cannot be null or whitespace.", nameof(id));
-
-            if (string.IsNullOrWhiteSpace(name))
-                throw new ArgumentException($"'{nameof(name)}' cannot be null or whitespace.", nameof(name));
-
-            if (string.IsNullOrWhiteSpace(zipCode))
-                throw new ArgumentException($"'{nameof(zipCode)}' cannot be null or whitespace.", nameof(zipCode));
-
-            if (string.IsNullOrWhiteSpace(latitude))
-                throw new ArgumentException($"'{nameof(latitude)}' cannot be null or whitespace.", nameof(latitude));
-
-            if (string.IsNullOrWhiteSpace(longitude))
-                throw new ArgumentException($"'{nameof(longitude)}' cannot be null or whitespace.", nameof(longitude));
-
             Address = address;
 
             City = city;

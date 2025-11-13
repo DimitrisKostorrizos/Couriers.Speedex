@@ -247,12 +247,12 @@ namespace Couriers.Speedex.InternalModels.ResponseModels
         {
             var startingDeliveryTime = default(TimeOnly?);
 
-            if (TimeOnly.TryParse(DeliveryTimeFrom, SpeedexConstants.SpeedexCultureInfo, DateTimeStyles.None, out var result))
+            if (TimeOnly.TryParse(DeliveryTimeFrom, SpeedexConstants.SpeedexCultureInfo, out var result))
                 startingDeliveryTime = result;
 
             var endingDeliveryTime = default(TimeOnly?);
 
-            if (TimeOnly.TryParse(DeliveryTimeTo, SpeedexConstants.SpeedexCultureInfo, DateTimeStyles.None, out result))
+            if (TimeOnly.TryParse(DeliveryTimeTo, SpeedexConstants.SpeedexCultureInfo, out result))
                 endingDeliveryTime = result;
 
             var deliveryTime = SpeedexHelpers.GetDeliveryTimeLimitByTimeRange(startingDeliveryTime, endingDeliveryTime);

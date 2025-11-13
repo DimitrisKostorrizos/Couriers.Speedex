@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Couriers.Speedex.ResponseModels
 {
@@ -8,77 +9,185 @@ namespace Couriers.Speedex.ResponseModels
     /// </summary>
     public record PickupResponseModel
     {
+        #region Private Fields
+
+        /// <summary>
+        /// The field for the <see cref="Id"/>
+        /// </summary>
+        private string _id = default!;
+
+        /// <summary>
+        /// The field for the <see cref="ConsignmentIds"/>
+        /// </summary>
+        private IEnumerable<string> _consignmentIds = default!;
+
+        /// <summary>
+        /// The field for the <see cref="CheckpointGroupCode"/>
+        /// </summary>
+        private string _checkpointGroupCode = default!;
+
+        /// <summary>
+        /// The field for the <see cref="Address"/>
+        /// </summary>
+        private string _address = default!;
+
+        /// <summary>
+        /// The field for the <see cref="City"/>
+        /// </summary>
+        private string _city = default!;
+
+        /// <summary>
+        /// The field for the <see cref="CountryCode"/>
+        /// </summary>
+        private string _countryCode = default!;
+
+        /// <summary>
+        /// The field for the <see cref="PostCode"/>
+        /// </summary>
+        private string _postCode = default!;
+
+        #endregion
+
         #region Public Properties
 
         /// <summary>
         /// The unique pickup id
         /// </summary>
-        public string Id { get; }
+        public required string Id
+        {
+            get => _id;
+            init
+            {
+                if (string.IsNullOrWhiteSpace(value))
+                    throw new ArgumentException($"'{nameof(Id)}' cannot be null or whitespace.", nameof(Id));
+
+                _id = value;
+            }
+        }
 
         /// <summary>
         /// The related consignment ids
         /// </summary>
-        public IEnumerable<string> ConsignmentIds { get; }
+        public required IEnumerable<string> ConsignmentIds
+        {
+            get => _consignmentIds;
+            init
+            {
+                ArgumentNullException.ThrowIfNull(value);
+
+                _consignmentIds = value;
+            }
+        }
 
         /// <summary>
         /// The checkpoint code
         /// </summary>
-        public string? CheckpointCode { get; }
+        public required string? CheckpointCode { get; init; }
 
         /// <summary>
         /// The group checkpoint code
         /// </summary>
-        public string CheckpointGroupCode { get; }
+        public required string CheckpointGroupCode
+        {
+            get => _checkpointGroupCode;
+            init
+            {
+                if (string.IsNullOrWhiteSpace(value))
+                    throw new ArgumentException($"'{nameof(CheckpointGroupCode)}' cannot be null or whitespace.", nameof(CheckpointGroupCode));
+
+                _checkpointGroupCode = value;
+            }
+        }
 
         /// <summary>
         /// The address for the pickup
         /// </summary>
-        public string Address { get; }
+        public required string Address
+        {
+            get => _address;
+            init
+            {
+                if (string.IsNullOrWhiteSpace(value))
+                    throw new ArgumentException($"'{nameof(Address)}' cannot be null or whitespace.", nameof(Address));
+
+                _address = value;
+            }
+        }
 
         /// <summary>
         /// The city for the pickup
         /// </summary>
-        public string City { get; }
+        public required string City
+        {
+            get => _city;
+            init
+            {
+                if (string.IsNullOrWhiteSpace(value))
+                    throw new ArgumentException($"'{nameof(City)}' cannot be null or whitespace.", nameof(City));
+
+                _city = value;
+            }
+        }
 
         /// <summary>
         /// The country code for the pickup
         /// </summary>
-        public string CountryCode { get; }
+        public required string CountryCode
+        {
+            get => _countryCode;
+            init
+            {
+                if (string.IsNullOrWhiteSpace(value))
+                    throw new ArgumentException($"'{nameof(CountryCode)}' cannot be null or whitespace.", nameof(CountryCode));
+
+                _countryCode = value;
+            }
+        }
 
         /// <summary>
         /// The comments of the pickup
         /// </summary>
-        public string? Comments { get; }
+        public required string? Comments { get; init; }
 
         /// <summary>
         /// The name for the pickup
         /// </summary>
-        public string? Name { get; }
+        public required string? Name { get; init; }
 
         /// <summary>
         /// The phone number for the pickup
         /// </summary>
-        public string? PhoneNumber { get; }
+        public required string? PhoneNumber { get; init; }
 
         /// <summary>
         /// The post code for the pickup
         /// </summary>
-        public string PostCode { get; }
+        public required string PostCode
+        {
+            get => _postCode;
+            init
+            {
+                if (string.IsNullOrWhiteSpace(value))
+                    throw new ArgumentException($"'{nameof(PostCode)}' cannot be null or whitespace.", nameof(PostCode));
+
+                _postCode = value;
+            }
+        }
 
         /// <summary>
         /// The pickup date
         /// </summary>
-        public DateOnly PickupDate { get; }
+        public required DateOnly PickupDate { get; init; }
 
         /// <summary>
         /// The start of the time frame of the pickup
         /// </summary>
-        public TimeOnly? PickupTimeFrom { get; }
+        public required TimeOnly? PickupTimeFrom { get; init; }
 
         /// <summary>
         /// The end of the time frame of the pickup
         /// </summary>
-        public TimeOnly? PickupTimeTo { get; }
+        public required TimeOnly? PickupTimeTo { get; init; }
 
         #endregion
 
@@ -87,44 +196,33 @@ namespace Couriers.Speedex.ResponseModels
         /// <summary>
         /// Creates a new instance of <see cref="PickupResponseModel"/>
         /// </summary>
-        /// <param name="id"></param>
-        /// <param name="consignmentIds"></param>
-        /// <param name="checkpointCode"></param>
-        /// <param name="checkpointGroupCode"></param>
-        /// <param name="address"></param>
-        /// <param name="city"></param>
-        /// <param name="countryCode"></param>
-        /// <param name="comments"></param>
-        /// <param name="name"></param>
-        /// <param name="phoneNumber"></param>
-        /// <param name="postCode"></param>
+        public PickupResponseModel() : base()
+        {
+
+        }
+
+        /// <summary>
+        /// Creates a new instance of <see cref="PickupResponseModel"/>
+        /// </summary>
+        /// <param name="id">The unique pickup id</param>
+        /// <param name="consignmentIds">The related consignment ids</param>
+        /// <param name="checkpointCode">The checkpoint code</param>
+        /// <param name="checkpointGroupCode">The group checkpoint code</param>
+        /// <param name="address">The address for the pickup</param>
+        /// <param name="city">The city for the pickup</param>
+        /// <param name="countryCode">The country code for the pickup</param>
+        /// <param name="comments">The comments of the pickup</param>
+        /// <param name="name">The name for the pickup</param>
+        /// <param name="phoneNumber">The phone number for the pickup</param>
+        /// <param name="postCode">The post code for the pickup</param>
         /// <param name="pickupDate">The pickup date</param>
         /// <param name="pickupTimeFrom">The start of the time frame of the pickup</param>
         /// <param name="pickupTimeTo">The end of the time frame of the pickup</param>
+        [SetsRequiredMembers]
         public PickupResponseModel(string id, IEnumerable<string> consignmentIds, string? checkpointCode, string checkpointGroupCode,
             string address, string city, string countryCode, string? comments, string? name, string? phoneNumber, string postCode,
-            DateOnly pickupDate, TimeOnly? pickupTimeFrom, TimeOnly? pickupTimeTo) : base()
+            DateOnly pickupDate, TimeOnly? pickupTimeFrom, TimeOnly? pickupTimeTo) : this()
         {
-            if (string.IsNullOrWhiteSpace(id))
-                throw new ArgumentException($"'{nameof(id)}' cannot be null or whitespace.", nameof(id));
-
-            ArgumentNullException.ThrowIfNull(consignmentIds);
-
-            if (string.IsNullOrWhiteSpace(checkpointGroupCode))
-                throw new ArgumentException($"'{nameof(checkpointGroupCode)}' cannot be null or whitespace.", nameof(checkpointGroupCode));
-
-            if (string.IsNullOrWhiteSpace(address))
-                throw new ArgumentException($"'{nameof(address)}' cannot be null or whitespace.", nameof(address));
-
-            if (string.IsNullOrWhiteSpace(city))
-                throw new ArgumentException($"'{nameof(city)}' cannot be null or whitespace.", nameof(city));
-
-            if (string.IsNullOrWhiteSpace(countryCode))
-                throw new ArgumentException($"'{nameof(countryCode)}' cannot be null or whitespace.", nameof(countryCode));
-
-            if (string.IsNullOrWhiteSpace(postCode))
-                throw new ArgumentException($"'{nameof(postCode)}' cannot be null or whitespace.", nameof(postCode));
-
             Id = id;
             ConsignmentIds = consignmentIds;
             CheckpointCode = checkpointCode;

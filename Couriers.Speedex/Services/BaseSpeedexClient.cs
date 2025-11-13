@@ -17,6 +17,7 @@ using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -34,6 +35,11 @@ namespace Couriers.Speedex.Services
         /// The media type header value
         /// </summary>
         public const string MediaHeader = "text/xml";
+
+        /// <summary>
+        /// The media type header
+        /// </summary>
+        private static readonly MediaTypeHeaderValue _mediaTypeHeaderValue = MediaTypeHeaderValue.Parse(MediaHeader);
 
         /// <summary>
         /// The maximum expiration time for the <see cref="_sessionId"/>
@@ -886,7 +892,7 @@ namespace Couriers.Speedex.Services
 
                 serializedRequestPayload = XmlHelpers.ToXml(model, SpeedexXmlNamespaces.SpeedexNamespaces);
 
-                using var httpRequest = new TypedStringContent<TRequest, TResponse>(serializedRequestPayload, Encoding.UTF8, MediaHeader);
+                using var httpRequest = new TypedStringContent<TRequest, TResponse>(serializedRequestPayload, _mediaTypeHeaderValue);
 
                 // Get the response
                 using var response = await _httpClient.PostAsync(APIURL, httpRequest, cancellationToken).ConfigureAwait(false);

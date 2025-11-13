@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Couriers.Speedex.ResponseModels
 {
@@ -7,28 +8,76 @@ namespace Couriers.Speedex.ResponseModels
     /// </summary>
     public record PickupCheckpointResponseModel
     {
-        #region Public Properties
+        #region Private Fields
 
+        /// <summary>
+        /// The field for the <see cref="BranchDepot"/>
+        /// </summary>
+        private string _branchDepot = default!;
+
+        /// <summary>
+        /// The field for the <see cref="PickupId"/>
+        /// </summary>
+        private string _pickupId = default!;
+
+        /// <summary>
+        /// The field for the <see cref="StatusCode"/>
+        /// </summary>
+        private string _statusCode = default!;
+
+        #endregion
+
+        #region Public Properties
 
         /// <summary>
         /// The name of the depot responsible for the event
         /// </summary>
-        public string BranchDepot { get; }
+        public required string BranchDepot
+        {
+            get => _branchDepot;
+            init
+            {
+                if (string.IsNullOrWhiteSpace(value))
+                    throw new ArgumentException($"'{nameof(BranchDepot)}' cannot be null or whitespace.", nameof(BranchDepot));
+
+                _branchDepot = value;
+            }
+        }
 
         /// <summary>
         /// The date-time of the event
         /// </summary>
-        public DateTime CheckpointDate { get; }
+        public required DateTime CheckpointDate { get; init; }
 
         /// <summary>
         /// The unique pickup id
         /// </summary>
-        public string PickupId { get; }
+        public required string PickupId
+        {
+            get => _pickupId;
+            init
+            {
+                if (string.IsNullOrWhiteSpace(value))
+                    throw new ArgumentException($"'{nameof(PickupId)}' cannot be null or whitespace.", nameof(PickupId));
+
+                _pickupId = value;
+            }
+        }
 
         /// <summary>
         /// The code of the event
         /// </summary>
-        public string StatusCode { get; }
+        public string StatusCode
+        {
+            get => _statusCode;
+            init
+            {
+                if (string.IsNullOrWhiteSpace(value))
+                    throw new ArgumentException($"'{nameof(StatusCode)}' cannot be null or whitespace.", nameof(StatusCode));
+
+                _statusCode = value;
+            }
+        }
 
         #endregion
 
@@ -37,21 +86,21 @@ namespace Couriers.Speedex.ResponseModels
         /// <summary>
         /// Creates a new instance of <see cref="PickupCheckpointResponseModel"/>
         /// </summary>
+        public PickupCheckpointResponseModel() : base()
+        {
+
+        }
+
+        /// <summary>
+        /// Creates a new instance of <see cref="PickupCheckpointResponseModel"/>
+        /// </summary>
         /// <param name="branchDepot">The name of the depot responsible for the event</param>
         /// <param name="checkpointDate">The date-time of the event</param>
         /// <param name="pickupId">The unique pickup id</param>
         /// <param name="statusCode">The code of the event</param>
-        public PickupCheckpointResponseModel(string branchDepot, DateTime checkpointDate, string pickupId, string statusCode) : base()
+        [SetsRequiredMembers]
+        public PickupCheckpointResponseModel(string branchDepot, DateTime checkpointDate, string pickupId, string statusCode) : this()
         {
-            if (string.IsNullOrWhiteSpace(branchDepot))
-                throw new ArgumentException($"'{nameof(branchDepot)}' cannot be null or whitespace.", nameof(branchDepot));
-
-            if (string.IsNullOrWhiteSpace(pickupId))
-                throw new ArgumentException($"'{nameof(pickupId)}' cannot be null or whitespace.", nameof(pickupId));
-
-            if (string.IsNullOrWhiteSpace(statusCode))
-                throw new ArgumentException($"'{nameof(statusCode)}' cannot be null or whitespace.", nameof(statusCode));
-
             BranchDepot = branchDepot;
 
             CheckpointDate = checkpointDate;

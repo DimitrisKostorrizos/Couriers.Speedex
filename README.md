@@ -104,3 +104,19 @@ public class SomeOtherClass(IEnumerable<ISpeedexClient> clients)
 | GetDepositedConsignmentsByDateRangeAsync | GetDepositedConsignmentsByDate |
 | GetPickupByIdAsync | GetPickup |
 | ReschedulePickupAsync | ReschedulePickup |
+
+## Breaking Changes 
+
+- Upgrading from <b>1.x.x</b> version to <b>2.x.x</b> or greater:
+The new CLR types DateOnly and TimeOnly where used, in place of DateTime, where appropriate.
+To convert from DateOnly and TimeOnly to DateTime and backwards, you can use the following conversions:
+
+```cs
+var dateTime = DateTime.Now;
+
+var timeOnly = TimeOnly.FromDateTime(dateTime);
+
+var dateOnly = DateOnly.FromDateTime(dateTime);
+
+dateTime = new DateTime(dateOnly, timeOnly);
+```

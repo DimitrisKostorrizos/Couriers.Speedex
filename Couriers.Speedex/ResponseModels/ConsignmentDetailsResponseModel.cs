@@ -1,6 +1,7 @@
 ﻿using Couriers.Speedex.Enums;
 
 using System;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Couriers.Speedex.ResponseModels
 {
@@ -14,91 +15,99 @@ namespace Couriers.Speedex.ResponseModels
         /// <summary>
         /// The cash amount of the consignment to be collected
         /// </summary>
-        public double CashAmount { get; }
+        public required double CashAmount { get; init; }
 
         /// <summary>
         /// The check amount of the consignment to be collected
         /// </summary>
-        public double CheckAmount { get; }
+        public required double CheckAmount { get; init; }
 
         /// <summary>
         /// The city for the delivery
         /// </summary>
-        public string City { get; }
+        public required string City { get; init; }
 
         /// <summary>
         /// The country code for the delivery
         /// </summary>
-        public string CountryCode { get; }
+        public required string CountryCode { get; init; }
 
         /// <summary>
         /// The comments of the consignment
         /// </summary>
-        public string CustomerComments { get; }
+        public required string CustomerComments { get; init; }
 
         /// <summary>
         /// The initial time of the delivery time-frame window
         /// </summary>
-        public TimeOnly? DeliveryTimeFrom { get; }
+        public required TimeOnly? DeliveryTimeFrom { get; init; }
 
         /// <summary>
         /// The final time of the delivery time-frame window
         /// </summary>
-        public TimeOnly? DeliveryTimeTo { get; }
+        public required TimeOnly? DeliveryTimeTo { get; init; }
 
         /// <summary>
         /// The checkpoint code of the consignment
         /// </summary>
-        public string CheckpointCode { get; }
+        public required string CheckpointCode { get; init; }
 
         /// <summary>
         /// The group checkpoint code of the consignment
         /// </summary>
-        public string CheckpointGroupCode { get; }
+        public required string CheckpointGroupCode { get; init; }
 
         /// <summary>
         /// Indicates whether the consignment is a return item
         /// </summary>
-        public bool IsReturnItem { get; }
+        public required bool IsReturnItem { get; init; }
 
         /// <summary>
         /// The number of the master consignment id
         /// </summary>
-        public string MasterConsignmentId { get; }
+        public required string MasterConsignmentId { get; init; }
 
         /// <summary>
         /// The address for the pickup of the consignment
         /// </summary>
-        public string PickupAddress { get; }
+        public required string PickupAddress { get; init; }
 
         /// <summary>
         /// The city for the pickup of the consignment
         /// </summary>
-        public string PickupCity { get; }
+        public required string PickupCity { get; init; }
 
         /// <summary>
         /// The country code for the pickup of the consignment
         /// </summary>
-        public string PickupCountryCode { get; }
+        public required string PickupCountryCode { get; init; }
 
         /// <summary>
         /// The name for the pickup of the consignment
         /// </summary>
-        public string PickupName { get; }
+        public required string PickupName { get; init; }
 
         /// <summary>
         /// The phone number for the pickup of the consignment
         /// </summary>
-        public string PickupPhoneNumber { get; }
+        public required string PickupPhoneNumber { get; init; }
 
         /// <summary>
         /// The post code for the pickup of the consignment
         /// </summary>
-        public string PickupPostCode { get; }
+        public required string PickupPostCode { get; init; }
 
         #endregion
 
         #region Constructors
+
+        /// <summary>
+        /// Creates a new instance of <see cref="ConsignmentDetailsResponseModel"/>
+        /// </summary>
+        public ConsignmentDetailsResponseModel() : base()
+        {
+
+        }
 
         /// <summary>
         /// Creates a new instance of <see cref="ConsignmentDetailsResponseModel"/>
@@ -136,6 +145,7 @@ namespace Couriers.Speedex.ResponseModels
         /// <param name="parcelCount">The total number of parcels of the consignment</param>
         /// <param name="zipCode">The zip code for the delivery</param>
         /// <param name="deliveryTime">The delivery time limit</param>
+        [SetsRequiredMembers]
         public ConsignmentDetailsResponseModel(double cashAmount, double checkAmount, string city, string countryCode,
             string customerComments, TimeOnly? deliveryTimeFrom, TimeOnly? deliveryTimeTo, string checkpointCode,
             string checkpointGroupCode, bool isReturnItem, string masterConsignmentId, string pickupAddress, string pickupCity,

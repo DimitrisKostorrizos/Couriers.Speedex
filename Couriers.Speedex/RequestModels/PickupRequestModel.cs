@@ -3,7 +3,9 @@ using Couriers.Speedex.Enums;
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
+using System.Runtime.CompilerServices;
 
 namespace Couriers.Speedex.RequestModels
 {
@@ -19,6 +21,11 @@ namespace Couriers.Speedex.RequestModels
         /// </summary>
         private string? comments;
 
+        /// <summary>
+        /// The field of the <see cref="ConsignmentIds"/>
+        /// </summary>
+        private IEnumerable<string> consignmentIds = default!;
+
         #endregion
 
         #region Public Properties
@@ -27,12 +34,32 @@ namespace Couriers.Speedex.RequestModels
         /// The ids for the connected master consignments
         /// NOTE: The maximum count is 5 master consignment numbers
         /// </summary>
-        public IEnumerable<string> ConsignmentIds { get; }
+        public required IEnumerable<string> ConsignmentIds
+        {
+            get => consignmentIds;
+            init
+            {
+                ArgumentNullException.ThrowIfNull(value);
+
+                var consignmentCount = value.Count();
+
+                if (consignmentCount == 0)
+                    throw new ArgumentOutOfRangeException(nameof(value), "At least consignment id has to be specified.");
+
+                if (consignmentCount > SpeedexConstants.MaximumNumberOfConsignments)
+                    throw new ArgumentOutOfRangeException(nameof(value), $"The maximum number of consignments is {SpeedexConstants.MaximumNumberOfConsignments}.");
+
+                if (value.Any(x => string.IsNullOrWhiteSpace(x)))
+                    throw new ArgumentException($"All the consignment ids cannot be null or whitespace.", nameof(value));
+
+                consignmentIds = value;
+            }
+        }
 
         /// <summary>
         /// The requested date of the pickup
         /// </summary>
-        public DateOnly PickupDate { get; }
+        public required DateOnly PickupDate { get; init; }
 
         /// <summary>
         /// The delivery time
@@ -60,20 +87,19 @@ namespace Couriers.Speedex.RequestModels
         /// <summary>
         /// Creates a new instance of <see cref="PickupRequestModel"/>
         /// </summary>
+        public PickupRequestModel() : base()
+        {
+
+        }
+
+        /// <summary>
+        /// Creates a new instance of <see cref="PickupRequestModel"/>
+        /// </summary>
         /// <param name="consignmentIds">The ids for the connected master consignments</param>
         /// <param name="pickupDate">The date for the pickup</param>
-        public PickupRequestModel(IEnumerable<string> consignmentIds, DateOnly pickupDate) : base()
+        [SetsRequiredMembers]
+        public PickupRequestModel(IEnumerable<string> consignmentIds, DateOnly pickupDate) : this()
         {
-            ArgumentNullException.ThrowIfNull(consignmentIds);
-
-            var consignmentCount = consignmentIds.Count();
-
-            if (consignmentCount == 0)
-                throw new ArgumentOutOfRangeException(nameof(consignmentIds), "At least consignment id has to be specified.");
-
-            if (consignmentCount > SpeedexConstants.MaximumNumberOfConsignments)
-                throw new ArgumentOutOfRangeException(nameof(consignmentIds), $"The maximum number of consignments is {SpeedexConstants.MaximumNumberOfConsignments}.");
-
             ConsignmentIds = consignmentIds;
 
             PickupDate = pickupDate;
@@ -84,10 +110,10 @@ namespace Couriers.Speedex.RequestModels
         /// </summary>
         /// <param name="consignmentId">The id for the connected master consignment</param>
         /// <param name="pickupDate">The date for the pickup</param>
+        [SetsRequiredMembers]
         public PickupRequestModel(string consignmentId, DateOnly pickupDate) : this(new string[] { consignmentId }, pickupDate)
         {
-            if (string.IsNullOrWhiteSpace(consignmentId))
-                throw new ArgumentException($"'{nameof(consignmentId)}' cannot be null or whitespace.", nameof(consignmentId));
+
         }
 
         #endregion
