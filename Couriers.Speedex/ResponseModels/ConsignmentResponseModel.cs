@@ -54,6 +54,29 @@ namespace Couriers.Speedex.ResponseModels
         /// <summary>
         /// Creates a new instance of <see cref="ConsignmentResponseModel"/>
         /// </summary>
+        /// <param name="customerFlag">The customer flag</param>
+        /// <param name="branchBankCode">The cost center of the customer agreement</param>
+        /// <param name="commentsFirstPart">The first part of the comments</param>
+        /// <param name="commentsSecondPart">The second part of the comments</param>
+        /// <param name="commentsThirdPart">The third part of the comments</param>
+        /// <param name="paymentType">The payment type</param>
+        /// <param name="cost">The cost</param>
+        /// <param name="weight">The weight of the consignment</param>
+        /// <param name="chargeType">The charge type of the consignment</param>
+        /// <param name="agreementCode">The agreement code provided by Speedex</param>
+        /// <param name="customerCode">The customer code provided by Speedex</param>
+        /// <param name="firstCustomerReference">The first customer reference of the consignment</param>
+        /// <param name="secondCustomerReference">The second customer reference of the consignment</param>
+        /// <param name="thirdCustomerReference">The third customer reference of the consignment</param>
+        /// <param name="address">The address for the delivery</param>
+        /// <param name="recipientName">The name of the recipient</param>
+        /// <param name="recipientPhoneNumber">The phone number of the recipient</param>
+        /// <param name="insuranceAmount">The insurance amount of the consignment</param>
+        /// <param name="shouldBeDeliveredOnSaturday">A flag indicating whether the consignment is going to be delivered on Saturday</param>
+        /// <param name="consignmentId">The number of the consignment id</param>
+        /// <param name="parcelCount">The total number of parcels of the consignment</param>
+        /// <param name="zipCode">The zip code for the delivery</param>
+        /// <param name="deliveryTime">The delivery time limit</param>
         public ConsignmentResponseModel(int customerFlag, string? branchBankCode, string? commentsFirstPart,
             string? commentsSecondPart, string? commentsThirdPart, PaymentType? paymentType, decimal cost, double weight,
             ChargeType chargeType, string agreementCode, string customerCode,
