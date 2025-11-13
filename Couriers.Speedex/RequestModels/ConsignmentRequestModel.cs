@@ -266,7 +266,7 @@ namespace Couriers.Speedex.RequestModels
 
             SpeedexHelpers.ThrowIfInvalidZipCode(zipCode);
 
-            var minimumWeight = NumberOfVouchers * SpeedexConstants.MinimumWeightPerVoucher;
+            var minimumWeight = numberOfVouchers * SpeedexConstants.MinimumWeightPerVoucher;
 
             if (weight < minimumWeight)
                 throw new InvalidOperationException($"The '{nameof(weight)}' is invalid. The minimum weight for a voucher is {SpeedexConstants.MinimumWeightPerVoucher} kilos.");
