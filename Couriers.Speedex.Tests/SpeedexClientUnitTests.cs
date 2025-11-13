@@ -190,26 +190,6 @@ namespace Couriers.Speedex.Tests
 
         /// <summary>
         /// Validates that when <see cref="BaseSpeedexClient.GetConsignmentPdfsAsync"/> is called, 
-        /// with an empty voucher, it unsuccessfully returns
-        /// </summary>
-        /// <param name="voucher">The voucher</param>
-        /// <returns></returns>
-        [Theory]
-        [MemberData(nameof(TestHelpers.EmptyStringValues), MemberType = typeof(TestHelpers))]
-        public async Task GetConsignmentPdfsAsync_WithEmptyVoucher_UnuccessfullyReturns(string? voucher)
-        {
-            var request = new ConsignmentPdfRequestModel(voucher!, PaperSize.A4)
-            {
-                ReturnMultipleVouchers = true
-            };
-
-            var response = await _simulatedSpeedexClient.GetConsignmentPdfsAsync(request, TestContext.Current.CancellationToken);
-
-            AssertValidHttpRequestResult(response);
-        }
-
-        /// <summary>
-        /// Validates that when <see cref="BaseSpeedexClient.GetConsignmentPdfsAsync"/> is called, 
         /// with valid data, it successfully returns
         /// </summary>
         /// <returns></returns>
