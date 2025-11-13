@@ -51,6 +51,9 @@ namespace Couriers.Speedex.RequestModels
             if (voucherCount > SpeedexConstants.MaximumNumberOfVouchers)
                 throw new ArgumentOutOfRangeException(nameof(voucherIds), $"The maximum number of vouchers is {SpeedexConstants.MaximumNumberOfVouchers}.");
 
+            if (voucherIds.Any(x => string.IsNullOrWhiteSpace(x)))
+                throw new ArgumentException($"All the voucher ids cannot be null or whitespace.", nameof(voucherIds));
+
             PaperSize = paperSize;
 
             VoucherIds = voucherIds;
@@ -63,7 +66,8 @@ namespace Couriers.Speedex.RequestModels
         /// <param name="paperSize">The paper size</param>
         public ConsignmentPdfRequestModel(string voucherId, PaperSize paperSize) : this(new string[] { voucherId }, paperSize)
         {
-
+            if (string.IsNullOrWhiteSpace(voucherId))
+                throw new ArgumentException($"'{nameof(voucherId)}' cannot be null or whitespace.", nameof(voucherId));
         }
 
         #endregion
