@@ -87,17 +87,17 @@ namespace Couriers.Speedex.ResponseModels
         /// <summary>
         /// Creates a new instance of <see cref="PickupResponseModel"/>
         /// </summary>
-        /// <param name="id"></param>
-        /// <param name="consignmentIds"></param>
-        /// <param name="checkpointCode"></param>
-        /// <param name="checkpointGroupCode"></param>
-        /// <param name="address"></param>
-        /// <param name="city"></param>
-        /// <param name="countryCode"></param>
-        /// <param name="comments"></param>
-        /// <param name="name"></param>
-        /// <param name="phoneNumber"></param>
-        /// <param name="postCode"></param>
+        /// <param name="id">The unique pickup id</param>
+        /// <param name="consignmentIds">The related consignment ids</param>
+        /// <param name="checkpointCode">The checkpoint code</param>
+        /// <param name="checkpointGroupCode">The group checkpoint code</param>
+        /// <param name="address">The address for the pickup</param>
+        /// <param name="city">The city for the pickup</param>
+        /// <param name="countryCode">The country code for the pickup</param>
+        /// <param name="comments">The comments of the pickup</param>
+        /// <param name="name">The name for the pickup</param>
+        /// <param name="phoneNumber">The phone number for the pickup</param>
+        /// <param name="postCode">The post code for the pickup</param>
         /// <param name="pickupDate">The pickup date</param>
         /// <param name="pickupTimeFrom">The start of the time frame of the pickup</param>
         /// <param name="pickupTimeTo">The end of the time frame of the pickup</param>
