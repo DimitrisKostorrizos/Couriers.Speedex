@@ -43,6 +43,11 @@ namespace Couriers.Speedex.ResponseModels
         /// </summary>
         private string _zipCode = default!;
 
+        /// <summary>
+        /// The field for the <see cref="InsuranceAmount"/>
+        /// </summary>
+        private decimal insuranceAmount;
+
         #endregion
 
         #region Public Properties
@@ -130,7 +135,17 @@ namespace Couriers.Speedex.ResponseModels
         /// <summary>
         /// The insurance amount of the consignment
         /// </summary>
-        public required decimal InsuranceAmount { get; set; }
+        public required decimal InsuranceAmount
+        {
+            get => insuranceAmount;
+            set
+            {
+                if (value < 0)
+                    throw new ArgumentOutOfRangeException(nameof(InsuranceAmount), $"The {nameof(InsuranceAmount)} cannot be negative.");
+
+                insuranceAmount = value;
+            }
+        }
 
         /// <summary>
         /// A flag indicating whether the consignment is going to be delivered on Saturday
