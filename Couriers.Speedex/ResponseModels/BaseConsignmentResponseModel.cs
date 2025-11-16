@@ -126,7 +126,7 @@ namespace Couriers.Speedex.ResponseModels
             string? recipientName, string? recipientPhoneNumber, decimal insuranceAmount, bool shouldBeDeliveredOnSaturday,
             string consignmentId, int parcelCount, string zipCode, DeliveryTimeLimit deliveryTime) : base()
         {
-            if (weight <= 0)
+            if (weight < 0)
                 throw new ArgumentOutOfRangeException(nameof(weight), $"The {nameof(weight)} cannot be negative or zero.");
 
             if (string.IsNullOrWhiteSpace(customerCode))
