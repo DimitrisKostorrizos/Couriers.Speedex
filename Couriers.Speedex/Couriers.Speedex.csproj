@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
-		<TargetFrameworks>net8.0</TargetFrameworks>
+		<TargetFrameworks>net9.0</TargetFrameworks>
 		<Nullable>enable</Nullable>
 		<GenerateDocumentationFile>True</GenerateDocumentationFile>
 		<Title>Speedex Courier API Client</Title>
@@ -11,7 +11,7 @@
 		<RepositoryUrl>https://github.com/DimitrisKostorrizos/Couriers.Speedex</RepositoryUrl>
 		<PackageProjectUrl>https://github.com/DimitrisKostorrizos/Couriers.Speedex</PackageProjectUrl>
 		<PackageTags>Speedex;Courier;API</PackageTags>
-		<PackageVersion>4.0.0</PackageVersion>
+		<PackageVersion>5.0.0</PackageVersion>
 		<DebugSymbols>true</DebugSymbols>
 		<EmbedAllSources>true</EmbedAllSources>
 		<DebugType>portable</DebugType>
@@ -45,10 +45,10 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Couriers.Common" Version="4.0.0" />
-		<PackageReference Include="Couriers.Common.Xml" Version="4.0.0" />
-		<PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="8.0.2" />
-		<PackageReference Include="Microsoft.Extensions.Http" Version="8.0.1" />
+		<PackageReference Include="Couriers.Common" Version="5.0.0" />
+		<PackageReference Include="Couriers.Common.Xml" Version="5.0.0" />
+		<PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="9.0.11" />
+		<PackageReference Include="Microsoft.Extensions.Http" Version="9.0.11" />
 	</ItemGroup>
 
 </Project>
