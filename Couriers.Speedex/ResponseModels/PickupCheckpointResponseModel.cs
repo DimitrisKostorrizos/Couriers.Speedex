@@ -35,7 +35,7 @@ namespace Couriers.Speedex.ResponseModels
         public required string BranchDepot
         {
             get => _branchDepot;
-            init
+            set
             {
                 if (string.IsNullOrWhiteSpace(value))
                     throw new ArgumentException($"'{nameof(BranchDepot)}' cannot be null or whitespace.", nameof(BranchDepot));
@@ -47,7 +47,7 @@ namespace Couriers.Speedex.ResponseModels
         /// <summary>
         /// The date-time of the event
         /// </summary>
-        public required DateTime CheckpointDate { get; init; }
+        public required DateTime CheckpointDate { get; set; }
 
         /// <summary>
         /// The unique pickup id
@@ -55,7 +55,7 @@ namespace Couriers.Speedex.ResponseModels
         public required string PickupId
         {
             get => _pickupId;
-            init
+            set
             {
                 if (string.IsNullOrWhiteSpace(value))
                     throw new ArgumentException($"'{nameof(PickupId)}' cannot be null or whitespace.", nameof(PickupId));
@@ -70,7 +70,7 @@ namespace Couriers.Speedex.ResponseModels
         public string StatusCode
         {
             get => _statusCode;
-            init
+            set
             {
                 if (string.IsNullOrWhiteSpace(value))
                     throw new ArgumentException($"'{nameof(StatusCode)}' cannot be null or whitespace.", nameof(StatusCode));

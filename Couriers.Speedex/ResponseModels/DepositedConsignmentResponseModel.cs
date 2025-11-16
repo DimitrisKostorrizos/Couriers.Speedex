@@ -30,7 +30,7 @@ namespace Couriers.Speedex.ResponseModels
         public required string Id
         {
             get => _id;
-            init
+            set
             {
                 if (string.IsNullOrWhiteSpace(value))
                     throw new ArgumentException($"'{nameof(Id)}' cannot be null or whitespace.", nameof(Id));
@@ -45,7 +45,7 @@ namespace Couriers.Speedex.ResponseModels
         public required decimal Amount
         {
             get => _amount;
-            init
+            set
             {
                 if (value < 0)
                     throw new ArgumentException($"'{nameof(Amount)}' cannot be negative.", nameof(Amount));
@@ -57,7 +57,7 @@ namespace Couriers.Speedex.ResponseModels
         /// <summary>
         /// The date-time of that the consignment was deposited
         /// </summary>
-        public required DateTime DateDeposited { get; init; }
+        public required DateTime DateDeposited { get; set; }
 
         #endregion
 

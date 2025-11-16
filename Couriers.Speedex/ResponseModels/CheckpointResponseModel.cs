@@ -32,42 +32,42 @@ namespace Couriers.Speedex.ResponseModels
         /// <summary>
         /// The name of the depot responsible for the event
         /// </summary>
-        public required string? BranchDepot { get; init; }
+        public required string? BranchDepot { get; set; }
 
         /// <summary>
         /// The unique branch depot id
         /// </summary>
-        public required string? BranchId { get; init; }
+        public required string? BranchId { get; set; }
 
         /// <summary>
         /// The date-time of the event
         /// </summary>
-        public required DateTime CheckpointDate { get; init; }
+        public required DateTime CheckpointDate { get; set; }
 
         /// <summary>
         /// The customer's comments of the consignment
         /// </summary>
-        public required string? CustomerComments { get; init; }
+        public required string? CustomerComments { get; set; }
 
         /// <summary>
         /// The first customer reference of the consignment
         /// </summary>
-        public required string? FirstCustomerReference { get; init; }
+        public required string? FirstCustomerReference { get; set; }
 
         /// <summary>
         /// The second customer reference of the consignment
         /// </summary>
-        public required string? SecondCustomerReference { get; init; }
+        public required string? SecondCustomerReference { get; set; }
 
         /// <summary>
         /// The third customer reference of the consignment
         /// </summary>
-        public required string? ThirdCustomerReference { get; init; }
+        public required string? ThirdCustomerReference { get; set; }
 
         /// <summary>
         /// The recipient name
         /// </summary>
-        public required string? RecipientName { get; init; }
+        public required string? RecipientName { get; set; }
 
         /// <summary>
         /// The code of the event
@@ -75,7 +75,7 @@ namespace Couriers.Speedex.ResponseModels
         public required string StatusCode
         {
             get => _statusCode;
-            init
+            set
             {
                 if (string.IsNullOrWhiteSpace(value))
                     throw new ArgumentException($"'{nameof(StatusCode)}' cannot be null or whitespace.", nameof(StatusCode));
@@ -90,7 +90,7 @@ namespace Couriers.Speedex.ResponseModels
         public required string StatusDescription
         {
             get => _statusDescription;
-            init
+            set
             {
                 if (string.IsNullOrWhiteSpace(value))
                     throw new ArgumentException($"'{nameof(StatusDescription)}' cannot be null or whitespace.", nameof(StatusDescription));
@@ -105,7 +105,7 @@ namespace Couriers.Speedex.ResponseModels
         public required string VoucherId
         {
             get => _voucherId;
-            init
+            set
             {
                 if (string.IsNullOrWhiteSpace(value))
                     throw new ArgumentException($"'{nameof(VoucherId)}' cannot be null or whitespace.", nameof(VoucherId));

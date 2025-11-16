@@ -104,7 +104,7 @@ namespace Couriers.Speedex.RequestModels
         /// The value 0 indicates that the default data from the customer agreement will be used as the sender’s data. 
         /// The value 100 indicates that the related fields will be used as the sender’s data.
         /// </summary>
-        public required int CustomerFlag { get; init; }
+        public required int CustomerFlag { get; set; }
 
         /// <summary>
         /// The cost center of the customer agreement
@@ -117,7 +117,7 @@ namespace Couriers.Speedex.RequestModels
         public string? FirstCustomerReference
         {
             get => _firstCustomerReference;
-            init
+            set
             {
                 SpeedexHelpers.ThrowIfInvalidCustomerReference(value);
 
@@ -159,7 +159,7 @@ namespace Couriers.Speedex.RequestModels
         public required int NumberOfVouchers
         {
             get => _numberOfVouchers;
-            init
+            set
             {
                 if (value <= 0)
                     throw new ArgumentOutOfRangeException(nameof(NumberOfVouchers), $"The {nameof(NumberOfVouchers)} cannot be negative or zero.");
@@ -177,7 +177,7 @@ namespace Couriers.Speedex.RequestModels
         public string? FirstCommentsPart
         {
             get => _firstCommentsPart;
-            init
+            set
             {
                 SpeedexHelpers.ThrowIfInvalidComments(value);
 
@@ -191,7 +191,7 @@ namespace Couriers.Speedex.RequestModels
         public string? SecondCommentsPart
         {
             get => _secondCommentsPart;
-            init
+            set
             {
                 SpeedexHelpers.ThrowIfInvalidComments(value);
 
@@ -205,7 +205,7 @@ namespace Couriers.Speedex.RequestModels
         public string? ThirdCommentsPart
         {
             get => _thirdCommentsPart;
-            init
+            set
             {
                 SpeedexHelpers.ThrowIfInvalidComments(value);
 
@@ -216,7 +216,7 @@ namespace Couriers.Speedex.RequestModels
         /// <summary>
         /// The charge type of the consignment
         /// </summary>
-        public required ChargeType ChargeType { get; init; }
+        public required ChargeType ChargeType { get; set; }
 
         /// <summary>
         /// The payment type
@@ -224,7 +224,7 @@ namespace Couriers.Speedex.RequestModels
         public PaymentType? PaymentType
         {
             get => _paymentType;
-            init
+            set
             {
                 if (Cost > 0 && !value.HasValue)
                     throw new InvalidOperationException($"The '{nameof(PaymentType)}' is required when the '{nameof(Cost)}' is greater then 0.");
@@ -239,7 +239,7 @@ namespace Couriers.Speedex.RequestModels
         public double Cost
         {
             get => _cost;
-            init
+            set
             {
                 if (value < 0)
                     throw new ArgumentOutOfRangeException(nameof(Cost), $"The {nameof(Cost)} cannot be negative.");
@@ -257,7 +257,7 @@ namespace Couriers.Speedex.RequestModels
         public required string Address
         {
             get => _address;
-            init
+            set
             {
                 if (string.IsNullOrWhiteSpace(value))
                     throw new ArgumentException($"'{nameof(Address)}' cannot be null or whitespace.", nameof(Address));
@@ -275,7 +275,7 @@ namespace Couriers.Speedex.RequestModels
         public required string RecipientName
         {
             get => _recipientName;
-            init
+            set
             {
                 if (string.IsNullOrWhiteSpace(value))
                     throw new ArgumentException($"'{nameof(RecipientName)}' cannot be null or whitespace.", nameof(RecipientName));
@@ -290,7 +290,7 @@ namespace Couriers.Speedex.RequestModels
         public required string RecipientPhoneNumber
         {
             get => _recipientPhoneNumber;
-            init
+            set
             {
                 if (string.IsNullOrWhiteSpace(value))
                     throw new ArgumentException($"'{nameof(RecipientPhoneNumber)}' cannot be null or whitespace.", nameof(RecipientPhoneNumber));
@@ -308,7 +308,7 @@ namespace Couriers.Speedex.RequestModels
         public required string ZipCode
         {
             get => _zipCode;
-            init
+            set
             {
                 if (string.IsNullOrWhiteSpace(value))
                     throw new ArgumentException($"'{nameof(ZipCode)}' cannot be null or whitespace.", nameof(ZipCode));
@@ -325,7 +325,7 @@ namespace Couriers.Speedex.RequestModels
         public required int InsuranceAmount
         {
             get => _insuranceAmount;
-            init
+            set
             {
                 if (value < 0)
                     throw new ArgumentOutOfRangeException(nameof(InsuranceAmount), $"The {nameof(InsuranceAmount)} cannot be negative.");
@@ -341,7 +341,7 @@ namespace Couriers.Speedex.RequestModels
         public required bool ShouldBeDeliveredOnSaturday
         {
             get => _shouldBeDeliveredOnSaturday;
-            init
+            set
             {
                 if (value && DeliveryTime != DeliveryTimeLimit.NoLimit)
                     throw new InvalidOperationException("A Saturday delivery cannot be combined with a delivery time limit.");
@@ -357,7 +357,7 @@ namespace Couriers.Speedex.RequestModels
         public required DeliveryTimeLimit DeliveryTime
         {
             get => _deliveryTime;
-            init
+            set
             {
                 if (ShouldBeDeliveredOnSaturday && value != DeliveryTimeLimit.NoLimit)
                     throw new InvalidOperationException("A Saturday delivery cannot be combined with a delivery time limit.");
@@ -374,7 +374,7 @@ namespace Couriers.Speedex.RequestModels
         public required double Weight
         {
             get => _weight;
-            init
+            set
             {
                 var minimumWeight = NumberOfVouchers * SpeedexConstants.MinimumWeightPerVoucher;
 

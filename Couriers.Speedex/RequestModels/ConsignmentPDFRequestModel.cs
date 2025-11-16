@@ -32,7 +32,7 @@ namespace Couriers.Speedex.RequestModels
         public required IEnumerable<string> VoucherIds
         {
             get => voucherIds;
-            init
+            set
             {
                 ArgumentNullException.ThrowIfNull(value);
 
@@ -54,7 +54,7 @@ namespace Couriers.Speedex.RequestModels
         /// <summary>
         /// The paper size
         /// </summary>
-        public required PaperSize PaperSize { get; init; }
+        public required PaperSize PaperSize { get; set; }
 
         /// <summary>
         /// The flag indicating whether a single merged PDF file will be returned or one PDF file per consignment will be returned

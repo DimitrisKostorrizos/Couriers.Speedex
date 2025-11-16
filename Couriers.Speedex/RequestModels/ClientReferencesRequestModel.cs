@@ -32,9 +32,10 @@
         public string? FirstClientReference
         {
             get => _firstClientReference;
-            init
+            set
             {
                 SpeedexHelpers.ThrowIfInvalidCustomerReference(value);
+
                 _firstClientReference = value;
             }
         }
@@ -45,7 +46,7 @@
         public string? SecondClientReference
         {
             get => _secondClientReference;
-            init
+            set
             {
                 SpeedexHelpers.ThrowIfInvalidCustomerReference(value);
 
@@ -59,7 +60,7 @@
         public string? ThirdClientReference
         {
             get => _thirdClientReference;
-            init
+            set
             {
                 SpeedexHelpers.ThrowIfInvalidCustomerReference(value);
 

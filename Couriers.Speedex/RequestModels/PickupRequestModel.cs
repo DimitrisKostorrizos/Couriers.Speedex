@@ -37,7 +37,7 @@ namespace Couriers.Speedex.RequestModels
         public required IEnumerable<string> ConsignmentIds
         {
             get => consignmentIds;
-            init
+            set
             {
                 ArgumentNullException.ThrowIfNull(value);
 
@@ -59,7 +59,7 @@ namespace Couriers.Speedex.RequestModels
         /// <summary>
         /// The requested date of the pickup
         /// </summary>
-        public required DateOnly PickupDate { get; init; }
+        public required DateOnly PickupDate { get; set; }
 
         /// <summary>
         /// The delivery time
@@ -72,7 +72,7 @@ namespace Couriers.Speedex.RequestModels
         public string? Comments
         {
             get => comments;
-            init
+            set
             {
                 SpeedexHelpers.ThrowIfInvalidComments(value);
 

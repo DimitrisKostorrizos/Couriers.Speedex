@@ -56,7 +56,7 @@ namespace Couriers.Speedex.ResponseModels
         public required string Id
         {
             get => _id;
-            init
+            set
             {
                 if (string.IsNullOrWhiteSpace(value))
                     throw new ArgumentException($"'{nameof(Id)}' cannot be null or whitespace.", nameof(Id));
@@ -71,7 +71,7 @@ namespace Couriers.Speedex.ResponseModels
         public required IEnumerable<string> ConsignmentIds
         {
             get => _consignmentIds;
-            init
+            set
             {
                 ArgumentNullException.ThrowIfNull(value);
 
@@ -82,7 +82,7 @@ namespace Couriers.Speedex.ResponseModels
         /// <summary>
         /// The checkpoint code
         /// </summary>
-        public required string? CheckpointCode { get; init; }
+        public required string? CheckpointCode { get; set; }
 
         /// <summary>
         /// The group checkpoint code
@@ -90,7 +90,7 @@ namespace Couriers.Speedex.ResponseModels
         public required string CheckpointGroupCode
         {
             get => _checkpointGroupCode;
-            init
+            set
             {
                 if (string.IsNullOrWhiteSpace(value))
                     throw new ArgumentException($"'{nameof(CheckpointGroupCode)}' cannot be null or whitespace.", nameof(CheckpointGroupCode));
@@ -105,7 +105,7 @@ namespace Couriers.Speedex.ResponseModels
         public required string Address
         {
             get => _address;
-            init
+            set
             {
                 if (string.IsNullOrWhiteSpace(value))
                     throw new ArgumentException($"'{nameof(Address)}' cannot be null or whitespace.", nameof(Address));
@@ -120,7 +120,7 @@ namespace Couriers.Speedex.ResponseModels
         public required string City
         {
             get => _city;
-            init
+            set
             {
                 if (string.IsNullOrWhiteSpace(value))
                     throw new ArgumentException($"'{nameof(City)}' cannot be null or whitespace.", nameof(City));
@@ -135,7 +135,7 @@ namespace Couriers.Speedex.ResponseModels
         public required string CountryCode
         {
             get => _countryCode;
-            init
+            set
             {
                 if (string.IsNullOrWhiteSpace(value))
                     throw new ArgumentException($"'{nameof(CountryCode)}' cannot be null or whitespace.", nameof(CountryCode));
@@ -147,17 +147,17 @@ namespace Couriers.Speedex.ResponseModels
         /// <summary>
         /// The comments of the pickup
         /// </summary>
-        public required string? Comments { get; init; }
+        public required string? Comments { get; set; }
 
         /// <summary>
         /// The name for the pickup
         /// </summary>
-        public required string? Name { get; init; }
+        public required string? Name { get; set; }
 
         /// <summary>
         /// The phone number for the pickup
         /// </summary>
-        public required string? PhoneNumber { get; init; }
+        public required string? PhoneNumber { get; set; }
 
         /// <summary>
         /// The post code for the pickup
@@ -165,7 +165,7 @@ namespace Couriers.Speedex.ResponseModels
         public required string PostCode
         {
             get => _postCode;
-            init
+            set
             {
                 if (string.IsNullOrWhiteSpace(value))
                     throw new ArgumentException($"'{nameof(PostCode)}' cannot be null or whitespace.", nameof(PostCode));
@@ -177,17 +177,17 @@ namespace Couriers.Speedex.ResponseModels
         /// <summary>
         /// The pickup date
         /// </summary>
-        public required DateOnly PickupDate { get; init; }
+        public required DateOnly PickupDate { get; set; }
 
         /// <summary>
         /// The start of the time frame of the pickup
         /// </summary>
-        public required TimeOnly? PickupTimeFrom { get; init; }
+        public required TimeOnly? PickupTimeFrom { get; set; }
 
         /// <summary>
         /// The end of the time frame of the pickup
         /// </summary>
-        public required TimeOnly? PickupTimeTo { get; init; }
+        public required TimeOnly? PickupTimeTo { get; set; }
 
         #endregion
 

@@ -10,43 +10,62 @@ namespace Couriers.Speedex.ResponseModels
     /// </summary>
     public record ConsignmentResponseModel : BaseConsignmentResponseModel
     {
+        #region Private Fields
+		
+        /// <summary>
+        /// The field for the <see cref="Cost"/>
+        /// </summary>
+        private decimal _cost;
+
+        #endregion
+
         #region Public Properties
 
         /// <summary>
         /// The customer flag
         /// NOTE: The value must be 0 or 100, except specified otherwise by Speedex.
         /// </summary>
-        public required int CustomerFlag { get; init; }
+        public required int CustomerFlag { get; set; }
 
         /// <summary>
         /// The cost center of the customer agreement
         /// </summary>
-        public required string? BranchBankCode { get; init; }
+        public required string? BranchBankCode { get; set; }
 
         /// <summary>
         /// The first part of the comments
         /// </summary>
-        public required string? CommentsFirstPart { get; init; }
+        public required string? CommentsFirstPart { get; set; }
 
         /// <summary>
         /// The second part of the comments
         /// </summary>
-        public required string? CommentsSecondPart { get; init; }
+        public required string? CommentsSecondPart { get; set; }
 
         /// <summary>
         /// The third part of the comments
         /// </summary>
-        public required string? CommentsThirdPart { get; init; }
+        public required string? CommentsThirdPart { get; set; }
 
         /// <summary>
         /// The payment type
         /// </summary>
-        public required PaymentType? PaymentType { get; init; }
+        public required PaymentType? PaymentType { get; set; }
 
         /// <summary>
         /// The cost
         /// </summary>
-        public required decimal Cost { get; init; }
+        public required decimal Cost
+        {
+            get => _cost;
+            set
+            {
+                if (value < 0)
+                    throw new ArgumentException($"'{nameof(Cost)}' cannot be negative.", nameof(Cost));
+
+                _cost = value;
+            }
+        }
 
         #endregion
 
@@ -89,7 +108,7 @@ namespace Couriers.Speedex.ResponseModels
         [SetsRequiredMembers]
         public ConsignmentResponseModel(int customerFlag, string? branchBankCode, string? commentsFirstPart,
             string? commentsSecondPart, string? commentsThirdPart, PaymentType? paymentType, decimal cost, double weight,
-            ChargeType chargeType, string agreementCode, string customerCode,
+            ChargeType chargeType, string? agreementCode, string customerCode,
             string? firstCustomerReference, string? secondCustomerReference, string? thirdCustomerReference, string address,
             string? recipientName, string? recipientPhoneNumber, decimal insuranceAmount, bool shouldBeDeliveredOnSaturday,
             string consignmentId, int parcelCount, string zipCode, DeliveryTimeLimit deliveryTime) : base(weight, chargeType, agreementCode, customerCode,

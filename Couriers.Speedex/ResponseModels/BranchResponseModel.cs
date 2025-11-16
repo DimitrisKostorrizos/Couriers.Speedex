@@ -55,7 +55,7 @@ namespace Couriers.Speedex.ResponseModels
         public required string Address
         {
             get => _address;
-            init
+            set
             {
                 if (string.IsNullOrWhiteSpace(value))
                     throw new ArgumentException($"'{nameof(value)}' cannot be null or whitespace.", nameof(Address));
@@ -70,7 +70,7 @@ namespace Couriers.Speedex.ResponseModels
         public required string City
         {
             get => _city;
-            init
+            set
             {
                 if (string.IsNullOrWhiteSpace(value))
                     throw new ArgumentException($"'{nameof(value)}' cannot be null or whitespace.", nameof(City));
@@ -85,7 +85,7 @@ namespace Couriers.Speedex.ResponseModels
         public required string Id
         {
             get => _id;
-            init
+            set
             {
                 if (string.IsNullOrWhiteSpace(value))
                     throw new ArgumentException($"'{nameof(value)}' cannot be null or whitespace.", nameof(Id));
@@ -100,7 +100,7 @@ namespace Couriers.Speedex.ResponseModels
         public required string Name
         {
             get => _name;
-            init
+            set
             {
                 if (string.IsNullOrWhiteSpace(value))
                     throw new ArgumentException($"'{nameof(value)}' cannot be null or whitespace.", nameof(Name));
@@ -112,7 +112,7 @@ namespace Couriers.Speedex.ResponseModels
         /// <summary>
         /// The telephone number of the depot
         /// </summary>
-        public required string? TelephoneNumber { get; init; }
+        public required string? TelephoneNumber { get; set; }
 
         /// <summary>
         /// The zip code of the depot
@@ -120,7 +120,7 @@ namespace Couriers.Speedex.ResponseModels
         public required string ZipCode
         {
             get => _zipCode;
-            init
+            set
             {
                 if (string.IsNullOrWhiteSpace(value))
                     throw new ArgumentException($"'{nameof(value)}' cannot be null or whitespace.", nameof(ZipCode));
@@ -135,7 +135,7 @@ namespace Couriers.Speedex.ResponseModels
         public required string Latitude
         {
             get => _latitude;
-            init
+            set
             {
                 if (string.IsNullOrWhiteSpace(value))
                     throw new ArgumentException($"'{nameof(value)}' cannot be null or whitespace.", nameof(Latitude));
@@ -150,7 +150,7 @@ namespace Couriers.Speedex.ResponseModels
         public required string Longitude
         {
             get => _longitude;
-            init
+            set
             {
                 if (string.IsNullOrWhiteSpace(value))
                     throw new ArgumentException($"'{nameof(value)}' cannot be null or whitespace.", nameof(Longitude));
