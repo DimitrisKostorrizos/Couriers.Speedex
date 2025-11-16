@@ -42,7 +42,7 @@ namespace Couriers.Speedex.Tests
                 VoucherId = primaryVoucherId,
                 DeliveryTime = "0",
                 Weight = 5,
-                ZipCode = "26441"
+                ZipCode = "26441",
             };
 
             var secondaryConsignment = new ConsignmentInternalResponseModel()
@@ -369,7 +369,8 @@ namespace Couriers.Speedex.Tests
                                             RecipientName = "Test",
                                             PickupPostCode = "26441",
                                             RecipientPhoneNumber = "Test",
-                                            Weight = 2
+                                            Weight = 2,
+                                            DeliveryPostCode = "26441"
                                         }
                                     ]
                                 }

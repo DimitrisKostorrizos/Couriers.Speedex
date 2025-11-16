@@ -79,16 +79,18 @@ namespace Couriers.Speedex.ResponseModels
         /// <param name="deliveryTime">The delivery time limit</param>
         public ConsignmentResponseModel(int customerFlag, string? branchBankCode, string? commentsFirstPart,
             string? commentsSecondPart, string? commentsThirdPart, PaymentType? paymentType, decimal cost, double weight,
-            ChargeType chargeType, string agreementCode, string customerCode,
+            ChargeType chargeType, string? agreementCode, string customerCode,
             string? firstCustomerReference, string? secondCustomerReference, string? thirdCustomerReference, string address,
             string? recipientName, string? recipientPhoneNumber, decimal insuranceAmount, bool shouldBeDeliveredOnSaturday,
             string consignmentId, int parcelCount, string zipCode, DeliveryTimeLimit deliveryTime) : base(weight, chargeType, agreementCode, customerCode,
             firstCustomerReference, secondCustomerReference, thirdCustomerReference, address, recipientName,
             recipientPhoneNumber, insuranceAmount, shouldBeDeliveredOnSaturday, consignmentId, parcelCount, zipCode, deliveryTime)
         {
-
             if (cost < 0)
                 throw new ArgumentException($"'{nameof(cost)}' cannot be negative.", nameof(cost));
+
+            if (weight < 0)
+                throw new ArgumentOutOfRangeException(nameof(weight), $"The {nameof(weight)} cannot be negative or zero.");
 
             CustomerFlag = customerFlag;
             BranchBankCode = branchBankCode;

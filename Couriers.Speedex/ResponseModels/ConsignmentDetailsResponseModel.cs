@@ -24,17 +24,17 @@ namespace Couriers.Speedex.ResponseModels
         /// <summary>
         /// The city for the delivery
         /// </summary>
-        public string City { get; }
+        public string? City { get; }
 
         /// <summary>
         /// The country code for the delivery
         /// </summary>
-        public string CountryCode { get; }
+        public string? CountryCode { get; }
 
         /// <summary>
         /// The comments of the consignment
         /// </summary>
-        public string CustomerComments { get; }
+        public string? CustomerComments { get; }
 
         /// <summary>
         /// The initial time of the delivery time-frame window
@@ -54,7 +54,7 @@ namespace Couriers.Speedex.ResponseModels
         /// <summary>
         /// The group checkpoint code of the consignment
         /// </summary>
-        public string CheckpointGroupCode { get; }
+        public string? CheckpointGroupCode { get; }
 
         /// <summary>
         /// Indicates whether the consignment is a return item
@@ -74,22 +74,22 @@ namespace Couriers.Speedex.ResponseModels
         /// <summary>
         /// The city for the pickup of the consignment
         /// </summary>
-        public string PickupCity { get; }
+        public string? PickupCity { get; }
 
         /// <summary>
         /// The country code for the pickup of the consignment
         /// </summary>
-        public string PickupCountryCode { get; }
+        public string? PickupCountryCode { get; }
 
         /// <summary>
         /// The name for the pickup of the consignment
         /// </summary>
-        public string PickupName { get; }
+        public string? PickupName { get; }
 
         /// <summary>
         /// The phone number for the pickup of the consignment
         /// </summary>
-        public string PickupPhoneNumber { get; }
+        public string? PickupPhoneNumber { get; }
 
         /// <summary>
         /// The post code for the pickup of the consignment
@@ -136,10 +136,10 @@ namespace Couriers.Speedex.ResponseModels
         /// <param name="parcelCount">The total number of parcels of the consignment</param>
         /// <param name="zipCode">The zip code for the delivery</param>
         /// <param name="deliveryTime">The delivery time limit</param>
-        public ConsignmentDetailsResponseModel(double cashAmount, double checkAmount, string city, string countryCode,
-            string customerComments, DateTime? deliveryTimeFrom, DateTime? deliveryTimeTo, string checkpointCode,
-            string checkpointGroupCode, bool isReturnItem, string masterConsignmentId, string pickupAddress, string pickupCity,
-            string pickupCountryCode, string pickupName, string pickupPhoneNumber, string pickupPostCode, double weight, ChargeType chargeType, string agreementCode, string customerCode,
+        public ConsignmentDetailsResponseModel(double cashAmount, double checkAmount, string? city, string? countryCode,
+            string? customerComments, DateTime? deliveryTimeFrom, DateTime? deliveryTimeTo, string checkpointCode,
+            string? checkpointGroupCode, bool isReturnItem, string masterConsignmentId, string pickupAddress, string? pickupCity,
+            string? pickupCountryCode, string? pickupName, string? pickupPhoneNumber, string pickupPostCode, double weight, ChargeType chargeType, string? agreementCode, string customerCode,
             string? firstCustomerReference, string? secondCustomerReference, string? thirdCustomerReference, string address,
             string? recipientName, string? recipientPhoneNumber, decimal insuranceAmount, bool shouldBeDeliveredOnSaturday,
             string consignmentId, int parcelCount, string zipCode, DeliveryTimeLimit deliveryTime) :
@@ -148,6 +148,24 @@ namespace Couriers.Speedex.ResponseModels
             recipientName, recipientPhoneNumber, insuranceAmount, shouldBeDeliveredOnSaturday,
             consignmentId, parcelCount, zipCode, deliveryTime)
         {
+            if (cashAmount < 0)
+                throw new ArgumentOutOfRangeException(nameof(cashAmount), $"The {nameof(cashAmount)} cannot be negative.");
+
+            if (checkAmount < 0)
+                throw new ArgumentOutOfRangeException(nameof(checkAmount), $"The {nameof(checkAmount)} cannot be negative.");
+
+            if (string.IsNullOrWhiteSpace(checkpointCode))
+                throw new ArgumentException($"'{nameof(checkpointCode)}' cannot be null or whitespace.", nameof(checkpointCode));
+
+            if (string.IsNullOrWhiteSpace(masterConsignmentId))
+                throw new ArgumentException($"'{nameof(masterConsignmentId)}' cannot be null or whitespace.", nameof(masterConsignmentId));
+
+            if (string.IsNullOrWhiteSpace(pickupAddress))
+                throw new ArgumentException($"'{nameof(pickupAddress)}' cannot be null or whitespace.", nameof(pickupAddress));
+
+            if (string.IsNullOrWhiteSpace(pickupPostCode))
+                throw new ArgumentException($"'{nameof(pickupPostCode)}' cannot be null or whitespace.", nameof(pickupPostCode));
+
             CashAmount = cashAmount;
             CheckAmount = checkAmount;
             City = city;
