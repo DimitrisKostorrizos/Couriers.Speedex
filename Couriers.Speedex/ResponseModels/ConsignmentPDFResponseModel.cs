@@ -32,8 +32,7 @@ namespace Couriers.Speedex.ResponseModels
             get => _voucherId;
             set
             {
-                if (string.IsNullOrWhiteSpace(value))
-                    throw new ArgumentException($"'{nameof(VoucherId)}' cannot be null or whitespace.", nameof(VoucherId));
+                ArgumentException.ThrowIfNullOrWhiteSpace(value);
 
                 _voucherId = value;
             }
@@ -47,8 +46,7 @@ namespace Couriers.Speedex.ResponseModels
             get => _base64String;
             set
             {
-                if (string.IsNullOrWhiteSpace(value))
-                    throw new ArgumentException($"'{nameof(Base64String)}' cannot be null or whitespace.", nameof(Base64String));
+                ArgumentException.ThrowIfNullOrWhiteSpace(value);
 
                 _base64String = value;
             }

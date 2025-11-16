@@ -12,7 +12,7 @@ namespace Couriers.Speedex.ResponseModels
     public record BaseConsignmentResponseModel
     {
         #region Private Fields
-		
+
         /// <summary>
         /// The field for the <see cref="Weight"/>
         /// </summary>
@@ -43,6 +43,11 @@ namespace Couriers.Speedex.ResponseModels
         /// </summary>
         private string _zipCode = default!;
 
+        /// <summary>
+        /// The field for the <see cref="InsuranceAmount"/>
+        /// </summary>
+        private decimal _insuranceAmount;
+
         #endregion
 
         #region Public Properties
@@ -55,8 +60,7 @@ namespace Couriers.Speedex.ResponseModels
             get => weight;
             set
             {
-                if (value < 0)
-                    throw new ArgumentOutOfRangeException(nameof(Weight), $"The {nameof(Weight)} cannot be negative.");
+                ArgumentOutOfRangeException.ThrowIfNegative(value);
 
                 weight = value;
             }
@@ -80,8 +84,7 @@ namespace Couriers.Speedex.ResponseModels
             get => _customerCode;
             set
             {
-                if (string.IsNullOrWhiteSpace(value))
-                    throw new ArgumentException($"'{nameof(CustomerCode)}' cannot be null or whitespace.", nameof(CustomerCode));
+                ArgumentException.ThrowIfNullOrWhiteSpace(value);
 
                 _customerCode = value;
             }
@@ -110,8 +113,7 @@ namespace Couriers.Speedex.ResponseModels
             get => address;
             set
             {
-                if (string.IsNullOrWhiteSpace(value))
-                    throw new ArgumentException($"'{nameof(Address)}' cannot be null or whitespace.", nameof(Address));
+                ArgumentException.ThrowIfNullOrWhiteSpace(value);
 
                 address = value;
             }
@@ -130,7 +132,16 @@ namespace Couriers.Speedex.ResponseModels
         /// <summary>
         /// The insurance amount of the consignment
         /// </summary>
-        public required decimal InsuranceAmount { get; set; }
+        public required decimal InsuranceAmount
+        {
+            get => _insuranceAmount;
+            set
+            {
+                ArgumentOutOfRangeException.ThrowIfNegative(value);
+
+                _insuranceAmount = value;
+            }
+        }
 
         /// <summary>
         /// A flag indicating whether the consignment is going to be delivered on Saturday
@@ -145,8 +156,7 @@ namespace Couriers.Speedex.ResponseModels
             get => _consignmentId;
             set
             {
-                if (string.IsNullOrWhiteSpace(value))
-                    throw new ArgumentException($"'{nameof(ConsignmentId)}' cannot be null or whitespace.", nameof(ConsignmentId));
+                ArgumentException.ThrowIfNullOrWhiteSpace(value);
 
                 _consignmentId = value;
             }
@@ -160,8 +170,7 @@ namespace Couriers.Speedex.ResponseModels
             get => parcelCount;
             set
             {
-                if (value <= 0)
-                    throw new ArgumentOutOfRangeException(nameof(ParcelCount), $"The {nameof(ParcelCount)} cannot be negative or zero.");
+                ArgumentOutOfRangeException.ThrowIfNegativeOrZero(value);
 
                 parcelCount = value;
             }
@@ -175,8 +184,7 @@ namespace Couriers.Speedex.ResponseModels
             get => _zipCode;
             set
             {
-                if (string.IsNullOrWhiteSpace(value))
-                    throw new ArgumentException($"'{nameof(ZipCode)}' cannot be null or whitespace.", nameof(ZipCode));
+                ArgumentException.ThrowIfNullOrWhiteSpace(value);
 
                 _zipCode = value;
             }

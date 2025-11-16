@@ -37,8 +37,7 @@ namespace Couriers.Speedex.ResponseModels
             get => _branchDepot;
             set
             {
-                if (string.IsNullOrWhiteSpace(value))
-                    throw new ArgumentException($"'{nameof(BranchDepot)}' cannot be null or whitespace.", nameof(BranchDepot));
+                ArgumentException.ThrowIfNullOrWhiteSpace(value);
 
                 _branchDepot = value;
             }
@@ -57,8 +56,7 @@ namespace Couriers.Speedex.ResponseModels
             get => _pickupId;
             set
             {
-                if (string.IsNullOrWhiteSpace(value))
-                    throw new ArgumentException($"'{nameof(PickupId)}' cannot be null or whitespace.", nameof(PickupId));
+                ArgumentException.ThrowIfNullOrWhiteSpace(value);
 
                 _pickupId = value;
             }
@@ -72,8 +70,7 @@ namespace Couriers.Speedex.ResponseModels
             get => _statusCode;
             set
             {
-                if (string.IsNullOrWhiteSpace(value))
-                    throw new ArgumentException($"'{nameof(StatusCode)}' cannot be null or whitespace.", nameof(StatusCode));
+                ArgumentException.ThrowIfNullOrWhiteSpace(value);
 
                 _statusCode = value;
             }

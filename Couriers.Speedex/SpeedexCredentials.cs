@@ -45,17 +45,13 @@ namespace Couriers.Speedex
         /// <param name="customerCode">The customer code provided by Speedex</param>
         public SpeedexCredentials([NotNull] string username, [NotNull] string password, [NotNull] string agreementCode, [NotNull] string customerCode) : base()
         {
-            if (string.IsNullOrWhiteSpace(username))
-                throw new ArgumentException($"'{nameof(username)}' cannot be null or whitespace.", nameof(username));
+            ArgumentException.ThrowIfNullOrWhiteSpace(username);
 
-            if (string.IsNullOrWhiteSpace(password))
-                throw new ArgumentException($"'{nameof(password)}' cannot be null or whitespace.", nameof(password));
+            ArgumentException.ThrowIfNullOrWhiteSpace(password);
 
-            if (string.IsNullOrWhiteSpace(agreementCode))
-                throw new ArgumentException($"'{nameof(agreementCode)}' cannot be null or whitespace.", nameof(agreementCode));
+            ArgumentException.ThrowIfNullOrWhiteSpace(agreementCode);
 
-            if (string.IsNullOrWhiteSpace(customerCode))
-                throw new ArgumentException($"'{nameof(customerCode)}' cannot be null or whitespace.", nameof(customerCode));
+            ArgumentException.ThrowIfNullOrWhiteSpace(customerCode);
 
             if (agreementCode.Length > SpeedexConstants.MaximumAgreementCodeLength)
                 throw new InvalidOperationException($"The '{nameof(agreementCode)}' is not a valid agreement code. The maximum length for a agreement code field is {SpeedexConstants.MaximumAgreementCodeLength}.");

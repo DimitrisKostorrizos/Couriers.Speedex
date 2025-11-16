@@ -142,8 +142,7 @@ namespace Couriers.Speedex
         /// <param name="value">The value</param>
         public static void ThrowIfInvalidZipCode(string value)
         {
-            if (string.IsNullOrWhiteSpace(value))
-                throw new ArgumentException($"'{nameof(value)}' cannot be null or whitespace.", nameof(value));
+            ArgumentException.ThrowIfNullOrWhiteSpace(value);
 
             if (value.Length > SpeedexConstants.MaximumZipCodeLength)
                 throw new InvalidOperationException($"The '{nameof(value)}' is not a valid zip code. The maximum length for a zip code field is {SpeedexConstants.MaximumZipCodeLength}.");

@@ -1,6 +1,5 @@
 ﻿using Couriers.Speedex.Interfaces;
 
-using System;
 using System.ComponentModel;
 using System.Xml;
 using System.Xml.Serialization;
@@ -28,7 +27,7 @@ namespace Couriers.Speedex.InternalModels.ResponseModels
         /// The result
         /// </summary>
         [XmlArray("Result")]
-        public TArrayResult[] Result { get; set; } = Array.Empty<TArrayResult>();
+        public TArrayResult[] Result { get; set; } = [];
 
         /// <summary>
         /// The return code

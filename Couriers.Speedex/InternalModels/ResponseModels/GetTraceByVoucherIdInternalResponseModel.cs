@@ -1,7 +1,6 @@
 ﻿using Couriers.Speedex.Interfaces;
 using Couriers.Speedex.ResponseModels;
 
-using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
@@ -25,7 +24,7 @@ namespace Couriers.Speedex.InternalModels.ResponseModels
         /// </summary>
         [XmlArray("checkpoints")]
         [XmlArrayItem("Checkpoint")]
-        public CheckpointInternalResponseModel[] Checkpoints { get; set; } = Array.Empty<CheckpointInternalResponseModel>();
+        public CheckpointInternalResponseModel[] Checkpoints { get; set; } = [];
 
 #pragma warning restore CA1819 // Properties should not return arrays
 
@@ -56,7 +55,7 @@ namespace Couriers.Speedex.InternalModels.ResponseModels
         /// </summary>
         /// <returns></returns>
         public IEnumerable<CheckpointResponseModel> ToResponseModel()
-            => Checkpoints.Select(x => x.ToResponseModel()).ToArray();
+            => [.. Checkpoints.Select(x => x.ToResponseModel())];
 
         #endregion
     }

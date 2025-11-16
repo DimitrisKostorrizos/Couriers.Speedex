@@ -5,7 +5,6 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
-using System.Runtime.CompilerServices;
 
 namespace Couriers.Speedex.RequestModels
 {
@@ -15,7 +14,7 @@ namespace Couriers.Speedex.RequestModels
     public sealed record ConsignmentPdfRequestModel
     {
         #region PrivateFields
-		
+
         /// <summary>
         /// The field for the <see cref="VoucherIds"/>
         /// </summary>

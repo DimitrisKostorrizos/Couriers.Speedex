@@ -23,7 +23,7 @@ namespace Couriers.Speedex.ResponseModels
         /// <summary>
         /// The field for the <see cref="VoucherId"/>
         /// </summary>
-        private string _voucherId = default!; 
+        private string _voucherId = default!;
 
         #endregion
 
@@ -77,8 +77,7 @@ namespace Couriers.Speedex.ResponseModels
             get => _statusCode;
             set
             {
-                if (string.IsNullOrWhiteSpace(value))
-                    throw new ArgumentException($"'{nameof(StatusCode)}' cannot be null or whitespace.", nameof(StatusCode));
+                ArgumentException.ThrowIfNullOrWhiteSpace(value);
 
                 _statusCode = value;
             }
@@ -92,8 +91,7 @@ namespace Couriers.Speedex.ResponseModels
             get => _statusDescription;
             set
             {
-                if (string.IsNullOrWhiteSpace(value))
-                    throw new ArgumentException($"'{nameof(StatusDescription)}' cannot be null or whitespace.", nameof(StatusDescription));
+                ArgumentException.ThrowIfNullOrWhiteSpace(value);
 
                 _statusDescription = value;
             }
@@ -107,8 +105,7 @@ namespace Couriers.Speedex.ResponseModels
             get => _voucherId;
             set
             {
-                if (string.IsNullOrWhiteSpace(value))
-                    throw new ArgumentException($"'{nameof(VoucherId)}' cannot be null or whitespace.", nameof(VoucherId));
+                ArgumentException.ThrowIfNullOrWhiteSpace(value);
 
                 _voucherId = value;
             }

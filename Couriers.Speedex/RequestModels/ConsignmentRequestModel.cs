@@ -161,11 +161,9 @@ namespace Couriers.Speedex.RequestModels
             get => _numberOfVouchers;
             set
             {
-                if (value <= 0)
-                    throw new ArgumentOutOfRangeException(nameof(NumberOfVouchers), $"The {nameof(NumberOfVouchers)} cannot be negative or zero.");
+                ArgumentOutOfRangeException.ThrowIfNegativeOrZero(value);
 
-                if (value > SpeedexConstants.MaximumNumberOfVouchers)
-                    throw new ArgumentOutOfRangeException(nameof(NumberOfVouchers), $"The {nameof(NumberOfVouchers)} cannot be greater than {SpeedexConstants.MaximumNumberOfVouchers}.");
+                ArgumentOutOfRangeException.ThrowIfGreaterThan(value, SpeedexConstants.MaximumNumberOfVouchers);
 
                 _numberOfVouchers = value;
             }
@@ -241,8 +239,7 @@ namespace Couriers.Speedex.RequestModels
             get => _cost;
             set
             {
-                if (value < 0)
-                    throw new ArgumentOutOfRangeException(nameof(Cost), $"The {nameof(Cost)} cannot be negative.");
+                ArgumentOutOfRangeException.ThrowIfNegative(value);
 
                 if (value > 0 && !PaymentType.HasValue)
                     throw new InvalidOperationException($"The '{nameof(PaymentType)}' is required when the '{nameof(Cost)}' is greater then 0.");
@@ -259,8 +256,7 @@ namespace Couriers.Speedex.RequestModels
             get => _address;
             set
             {
-                if (string.IsNullOrWhiteSpace(value))
-                    throw new ArgumentException($"'{nameof(Address)}' cannot be null or whitespace.", nameof(Address));
+                ArgumentException.ThrowIfNullOrWhiteSpace(value);
 
                 if (value.Length > SpeedexConstants.MaximumAddressLength)
                     throw new InvalidOperationException($"The '{nameof(Address)}' is not a valid address. The maximum length for an address field is {SpeedexConstants.MaximumAddressLength}.");
@@ -277,8 +273,7 @@ namespace Couriers.Speedex.RequestModels
             get => _recipientName;
             set
             {
-                if (string.IsNullOrWhiteSpace(value))
-                    throw new ArgumentException($"'{nameof(RecipientName)}' cannot be null or whitespace.", nameof(RecipientName));
+                ArgumentException.ThrowIfNullOrWhiteSpace(value);
 
                 _recipientName = value;
             }
@@ -292,8 +287,7 @@ namespace Couriers.Speedex.RequestModels
             get => _recipientPhoneNumber;
             set
             {
-                if (string.IsNullOrWhiteSpace(value))
-                    throw new ArgumentException($"'{nameof(RecipientPhoneNumber)}' cannot be null or whitespace.", nameof(RecipientPhoneNumber));
+                ArgumentException.ThrowIfNullOrWhiteSpace(value);
 
                 if (value.Length > SpeedexConstants.MaximumPhoneNumberLength)
                     throw new InvalidOperationException($"The '{nameof(RecipientPhoneNumber)}' is not a valid phone number. The maximum length for a phone number field is {SpeedexConstants.MaximumPhoneNumberLength}.");
@@ -310,8 +304,7 @@ namespace Couriers.Speedex.RequestModels
             get => _zipCode;
             set
             {
-                if (string.IsNullOrWhiteSpace(value))
-                    throw new ArgumentException($"'{nameof(ZipCode)}' cannot be null or whitespace.", nameof(ZipCode));
+                ArgumentException.ThrowIfNullOrWhiteSpace(value);
 
                 SpeedexHelpers.ThrowIfInvalidZipCode(value);
 
@@ -327,8 +320,7 @@ namespace Couriers.Speedex.RequestModels
             get => _insuranceAmount;
             set
             {
-                if (value < 0)
-                    throw new ArgumentOutOfRangeException(nameof(InsuranceAmount), $"The {nameof(InsuranceAmount)} cannot be negative.");
+                ArgumentOutOfRangeException.ThrowIfNegative(value);
 
                 _insuranceAmount = value;
             }

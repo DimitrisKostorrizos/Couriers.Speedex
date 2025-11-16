@@ -11,7 +11,7 @@ namespace Couriers.Speedex.ResponseModels
     public record ConsignmentResponseModel : BaseConsignmentResponseModel
     {
         #region Private Fields
-		
+
         /// <summary>
         /// The field for the <see cref="Cost"/>
         /// </summary>
@@ -60,8 +60,7 @@ namespace Couriers.Speedex.ResponseModels
             get => _cost;
             set
             {
-                if (value < 0)
-                    throw new ArgumentException($"'{nameof(Cost)}' cannot be negative.", nameof(Cost));
+                ArgumentOutOfRangeException.ThrowIfNegative(value);
 
                 _cost = value;
             }

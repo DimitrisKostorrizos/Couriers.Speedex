@@ -58,8 +58,7 @@ namespace Couriers.Speedex.ResponseModels
             get => _id;
             set
             {
-                if (string.IsNullOrWhiteSpace(value))
-                    throw new ArgumentException($"'{nameof(Id)}' cannot be null or whitespace.", nameof(Id));
+                ArgumentException.ThrowIfNullOrWhiteSpace(value);
 
                 _id = value;
             }
@@ -92,8 +91,7 @@ namespace Couriers.Speedex.ResponseModels
             get => _checkpointGroupCode;
             set
             {
-                if (string.IsNullOrWhiteSpace(value))
-                    throw new ArgumentException($"'{nameof(CheckpointGroupCode)}' cannot be null or whitespace.", nameof(CheckpointGroupCode));
+                ArgumentException.ThrowIfNullOrWhiteSpace(value);
 
                 _checkpointGroupCode = value;
             }
@@ -107,8 +105,7 @@ namespace Couriers.Speedex.ResponseModels
             get => _address;
             set
             {
-                if (string.IsNullOrWhiteSpace(value))
-                    throw new ArgumentException($"'{nameof(Address)}' cannot be null or whitespace.", nameof(Address));
+                ArgumentException.ThrowIfNullOrWhiteSpace(value);
 
                 _address = value;
             }
@@ -122,8 +119,7 @@ namespace Couriers.Speedex.ResponseModels
             get => _city;
             set
             {
-                if (string.IsNullOrWhiteSpace(value))
-                    throw new ArgumentException($"'{nameof(City)}' cannot be null or whitespace.", nameof(City));
+                ArgumentException.ThrowIfNullOrWhiteSpace(value);
 
                 _city = value;
             }
@@ -137,8 +133,7 @@ namespace Couriers.Speedex.ResponseModels
             get => _countryCode;
             set
             {
-                if (string.IsNullOrWhiteSpace(value))
-                    throw new ArgumentException($"'{nameof(CountryCode)}' cannot be null or whitespace.", nameof(CountryCode));
+                ArgumentException.ThrowIfNullOrWhiteSpace(value);
 
                 _countryCode = value;
             }
@@ -167,8 +162,7 @@ namespace Couriers.Speedex.ResponseModels
             get => _postCode;
             set
             {
-                if (string.IsNullOrWhiteSpace(value))
-                    throw new ArgumentException($"'{nameof(PostCode)}' cannot be null or whitespace.", nameof(PostCode));
+                ArgumentException.ThrowIfNullOrWhiteSpace(value);
 
                 _postCode = value;
             }

@@ -57,8 +57,7 @@ namespace Couriers.Speedex.ResponseModels
             get => _address;
             set
             {
-                if (string.IsNullOrWhiteSpace(value))
-                    throw new ArgumentException($"'{nameof(value)}' cannot be null or whitespace.", nameof(Address));
+                ArgumentException.ThrowIfNullOrWhiteSpace(value);
 
                 _address = value;
             }
@@ -72,8 +71,7 @@ namespace Couriers.Speedex.ResponseModels
             get => _city;
             set
             {
-                if (string.IsNullOrWhiteSpace(value))
-                    throw new ArgumentException($"'{nameof(value)}' cannot be null or whitespace.", nameof(City));
+                ArgumentException.ThrowIfNullOrWhiteSpace(value);
 
                 _city = value;
             }
@@ -87,8 +85,7 @@ namespace Couriers.Speedex.ResponseModels
             get => _id;
             set
             {
-                if (string.IsNullOrWhiteSpace(value))
-                    throw new ArgumentException($"'{nameof(value)}' cannot be null or whitespace.", nameof(Id));
+                ArgumentException.ThrowIfNullOrWhiteSpace(value);
 
                 _id = value;
             }
@@ -102,8 +99,7 @@ namespace Couriers.Speedex.ResponseModels
             get => _name;
             set
             {
-                if (string.IsNullOrWhiteSpace(value))
-                    throw new ArgumentException($"'{nameof(value)}' cannot be null or whitespace.", nameof(Name));
+                ArgumentException.ThrowIfNullOrWhiteSpace(value);
 
                 _name = value;
             }
@@ -122,8 +118,7 @@ namespace Couriers.Speedex.ResponseModels
             get => _zipCode;
             set
             {
-                if (string.IsNullOrWhiteSpace(value))
-                    throw new ArgumentException($"'{nameof(value)}' cannot be null or whitespace.", nameof(ZipCode));
+                ArgumentException.ThrowIfNullOrWhiteSpace(value);
 
                 _zipCode = value;
             }
@@ -137,8 +132,7 @@ namespace Couriers.Speedex.ResponseModels
             get => _latitude;
             set
             {
-                if (string.IsNullOrWhiteSpace(value))
-                    throw new ArgumentException($"'{nameof(value)}' cannot be null or whitespace.", nameof(Latitude));
+                ArgumentException.ThrowIfNullOrWhiteSpace(value);
 
                 _latitude = value;
             }
@@ -152,8 +146,7 @@ namespace Couriers.Speedex.ResponseModels
             get => _longitude;
             set
             {
-                if (string.IsNullOrWhiteSpace(value))
-                    throw new ArgumentException($"'{nameof(value)}' cannot be null or whitespace.", nameof(Longitude));
+                ArgumentException.ThrowIfNullOrWhiteSpace(value);
 
                 _longitude = value;
             }

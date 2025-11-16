@@ -18,7 +18,6 @@ using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -159,8 +158,7 @@ namespace Couriers.Speedex.Services
 
             try
             {
-                if (string.IsNullOrWhiteSpace(voucherId))
-                    throw new ArgumentException($"'{nameof(voucherId)}' cannot be null or whitespace.", nameof(voucherId));
+                ArgumentException.ThrowIfNullOrWhiteSpace(voucherId);
 
                 return await ExecuteValidatedSOAPEnvelopeRequest<CancelConsignmentByVoucherIdInternalResponseModel, CancelConsignmentByVoucherIdInternalRequestModel>(new CancelConsignmentByVoucherIdInternalRequestModel()
                 {
@@ -238,7 +236,7 @@ namespace Couriers.Speedex.Services
                 ArgumentNullException.ThrowIfNull(model);
 
                 // Get the response
-                var response = await CreateConsignmentsAsync(new ConsignmentRequestModel[] { model }, cancellationToken).ConfigureAwait(false);
+                var response = await CreateConsignmentsAsync([model], cancellationToken).ConfigureAwait(false);
 
                 // If not successful...
                 if (!response.IsSuccessful)
@@ -303,8 +301,7 @@ namespace Couriers.Speedex.Services
 
             try
             {
-                if (string.IsNullOrWhiteSpace(voucherId))
-                    throw new ArgumentException($"'{nameof(voucherId)}' cannot be null or whitespace.", nameof(voucherId));
+                ArgumentException.ThrowIfNullOrWhiteSpace(voucherId);
 
                 // Initialize the model
                 var value = new ConsignmentPdfRequestModel(voucherId, paperSize)
@@ -343,8 +340,7 @@ namespace Couriers.Speedex.Services
 
             try
             {
-                if (string.IsNullOrWhiteSpace(zipCode))
-                    throw new ArgumentException($"'{nameof(zipCode)}' cannot be null or whitespace.", nameof(zipCode));
+                ArgumentException.ThrowIfNullOrWhiteSpace(zipCode);
 
                 SpeedexHelpers.ThrowIfInvalidZipCode(zipCode);
 
@@ -384,8 +380,7 @@ namespace Couriers.Speedex.Services
 
             try
             {
-                if (string.IsNullOrWhiteSpace(voucherId))
-                    throw new ArgumentException($"'{nameof(voucherId)}' cannot be null or whitespace.", nameof(voucherId));
+                ArgumentException.ThrowIfNullOrWhiteSpace(voucherId);
 
                 // Get the response
                 var response = await ExecuteValidatedSOAPEnvelopeRequest<GetLastCheckpointInternalResponseModel, GetLastCheckpointInternalRequestModel>(new GetLastCheckpointInternalRequestModel()
@@ -419,8 +414,7 @@ namespace Couriers.Speedex.Services
 
             try
             {
-                if (string.IsNullOrWhiteSpace(pickupId))
-                    throw new ArgumentException($"'{nameof(pickupId)}' cannot be null or whitespace.", nameof(pickupId));
+                ArgumentException.ThrowIfNullOrWhiteSpace(pickupId);
 
                 // Get the response
                 var response = await ExecuteValidatedSOAPEnvelopeRequest<GetLastPickupCheckpointInternalResponseModel, GetLastPickupCheckpointInternalRequestModel>(new GetLastPickupCheckpointInternalRequestModel()
@@ -525,8 +519,7 @@ namespace Couriers.Speedex.Services
 
             try
             {
-                if (string.IsNullOrWhiteSpace(voucherId))
-                    throw new ArgumentException($"'{nameof(voucherId)}' cannot be null or whitespace.", nameof(voucherId));
+                ArgumentException.ThrowIfNullOrWhiteSpace(voucherId);
 
                 // Get the response
                 var response = await ExecuteValidatedSOAPEnvelopeRequest<GetTraceByVoucherIdInternalResponseModel, GetTraceByVoucherIdInternalRequestModel>(new GetTraceByVoucherIdInternalRequestModel()
@@ -561,8 +554,7 @@ namespace Couriers.Speedex.Services
 
             try
             {
-                if (string.IsNullOrWhiteSpace(pickupId))
-                    throw new ArgumentException($"'{nameof(pickupId)}' cannot be null or whitespace.", nameof(pickupId));
+                ArgumentException.ThrowIfNullOrWhiteSpace(pickupId);
 
                 return await ExecuteValidatedSOAPEnvelopeRequest<CancelPickupInternalResponseModel, CancelPickupByIdInternalRequestModel>(new CancelPickupByIdInternalRequestModel()
                 {
@@ -698,8 +690,7 @@ namespace Couriers.Speedex.Services
 
             try
             {
-                if (string.IsNullOrWhiteSpace(pickupId))
-                    throw new ArgumentException($"'{nameof(pickupId)}' cannot be null or whitespace.", nameof(pickupId));
+                ArgumentException.ThrowIfNullOrWhiteSpace(pickupId);
 
                 // Get the response
                 var response = await ExecuteValidatedSOAPEnvelopeRequest<GetPickupInternalResponseModel, GetPickupByIdInternalRequestModel>(new GetPickupByIdInternalRequestModel()

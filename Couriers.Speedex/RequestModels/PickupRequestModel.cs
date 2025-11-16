@@ -5,7 +5,6 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
-using System.Runtime.CompilerServices;
 
 namespace Couriers.Speedex.RequestModels
 {
@@ -111,7 +110,7 @@ namespace Couriers.Speedex.RequestModels
         /// <param name="consignmentId">The id for the connected master consignment</param>
         /// <param name="pickupDate">The date for the pickup</param>
         [SetsRequiredMembers]
-        public PickupRequestModel(string consignmentId, DateOnly pickupDate) : this(new string[] { consignmentId }, pickupDate)
+        public PickupRequestModel(string consignmentId, DateOnly pickupDate) : this([consignmentId], pickupDate)
         {
 
         }

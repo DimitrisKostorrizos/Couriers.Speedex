@@ -32,8 +32,7 @@ namespace Couriers.Speedex.ResponseModels
             get => _id;
             set
             {
-                if (string.IsNullOrWhiteSpace(value))
-                    throw new ArgumentException($"'{nameof(Id)}' cannot be null or whitespace.", nameof(Id));
+                ArgumentException.ThrowIfNullOrWhiteSpace(value);
 
                 _id = value;
             }
@@ -47,8 +46,7 @@ namespace Couriers.Speedex.ResponseModels
             get => _amount;
             set
             {
-                if (value < 0)
-                    throw new ArgumentException($"'{nameof(Amount)}' cannot be negative.", nameof(Amount));
+                ArgumentOutOfRangeException.ThrowIfNegative(value);
 
                 _amount = value;
             }
