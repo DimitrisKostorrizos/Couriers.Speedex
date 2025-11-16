@@ -55,8 +55,8 @@ namespace Couriers.Speedex.ResponseModels
             get => weight;
             set
             {
-                if (value <= 0)
-                    throw new ArgumentOutOfRangeException(nameof(Weight), $"The {nameof(Weight)} cannot be negative or zero.");
+                if (value < 0)
+                    throw new ArgumentOutOfRangeException(nameof(Weight), $"The {nameof(Weight)} cannot be negative.");
 
                 weight = value;
             }
