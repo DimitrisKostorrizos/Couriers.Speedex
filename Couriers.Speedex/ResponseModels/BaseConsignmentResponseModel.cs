@@ -1,6 +1,8 @@
 ﻿using Couriers.Speedex.Enums;
 using Couriers.Speedex.Structs;
 
+using System;
+
 namespace Couriers.Speedex.ResponseModels
 {
     /// <summary>
@@ -23,7 +25,7 @@ namespace Couriers.Speedex.ResponseModels
         /// <summary>
         /// The agreement code provided by Speedex
         /// </summary>
-        public string AgreementCode { get; }
+        public string? AgreementCode { get; }
 
         /// <summary>
         /// The customer code provided by Speedex
@@ -119,11 +121,29 @@ namespace Couriers.Speedex.ResponseModels
         /// <param name="parcelCount">The total number of parcels of the consignment</param>
         /// <param name="zipCode">The zip code for the delivery</param>
         /// <param name="deliveryTime">The delivery time limit</param>
-        public BaseConsignmentResponseModel(double weight, ChargeType chargeType, string agreementCode, string customerCode,
+        public BaseConsignmentResponseModel(double weight, ChargeType chargeType, string? agreementCode, string customerCode,
             string? firstCustomerReference, string? secondCustomerReference, string? thirdCustomerReference, string address,
             string? recipientName, string? recipientPhoneNumber, decimal insuranceAmount, bool shouldBeDeliveredOnSaturday,
             string consignmentId, int parcelCount, string zipCode, DeliveryTimeLimit deliveryTime) : base()
         {
+            if (weight <= 0)
+                throw new ArgumentOutOfRangeException(nameof(weight), $"The {nameof(weight)} cannot be negative or zero.");
+
+            if (string.IsNullOrWhiteSpace(customerCode))
+                throw new ArgumentException($"'{nameof(customerCode)}' cannot be null or whitespace.", nameof(customerCode));
+
+            if (string.IsNullOrWhiteSpace(address))
+                throw new ArgumentException($"'{nameof(address)}' cannot be null or whitespace.", nameof(address));
+
+            if (string.IsNullOrWhiteSpace(consignmentId))
+                throw new ArgumentException($"'{nameof(consignmentId)}' cannot be null or whitespace.", nameof(consignmentId));
+
+            if (parcelCount <= 0)
+                throw new ArgumentOutOfRangeException(nameof(parcelCount), $"The {nameof(parcelCount)} cannot be negative or zero.");
+
+            if (string.IsNullOrWhiteSpace(zipCode))
+                throw new ArgumentException($"'{nameof(zipCode)}' cannot be null or whitespace.", nameof(zipCode));
+
             Weight = weight;
             ChargeType = chargeType;
             AgreementCode = agreementCode;
