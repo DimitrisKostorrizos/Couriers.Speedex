@@ -89,9 +89,6 @@ namespace Couriers.Speedex.ResponseModels
             if (cost < 0)
                 throw new ArgumentException($"'{nameof(cost)}' cannot be negative.", nameof(cost));
 
-            if (weight < 0)
-                throw new ArgumentOutOfRangeException(nameof(weight), $"The {nameof(weight)} cannot be negative or zero.");
-
             CustomerFlag = customerFlag;
             BranchBankCode = branchBankCode;
             CommentsFirstPart = commentsFirstPart;
