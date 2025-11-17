@@ -120,3 +120,12 @@ var dateOnly = DateOnly.FromDateTime(dateTime);
 
 dateTime = new DateTime(dateOnly, timeOnly);
 ```
+
+## Release Notes
+
+- Version 1.0.0: Initial release.
+- Version 2.0.0: Upgrade to .Net 6. Also, the new CLR types DateOnly and TimeOnly where used, in place of DateTime, where appropriate.
+- Version 3.0.0: Upgrade to .Net 7. Along with constructors, object initialization support was added.
+- Version 4.0.0: Upgrade to .Net 8. Reduced memory impact be using the collection expressions.
+- Version 5.0.0: Upgrade to .Net 9.
+- Version 6.0.0: Upgrade to .Net 10.
