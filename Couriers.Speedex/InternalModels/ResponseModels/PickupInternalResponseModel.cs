@@ -142,16 +142,16 @@ namespace Couriers.Speedex.InternalModels.ResponseModels
         /// <returns></returns>
         public PickupResponseModel ToResponseModel()
         {
-            var pickupDate = DateTime.Parse(PickupDate, SpeedexConstants.SpeedexCultureInfo);
+            var pickupDate = DateOnly.FromDateTime(DateTime.Parse(PickupDate, SpeedexConstants.SpeedexCultureInfo));
 
-            var pickupTimeFrom = default(DateTime?);
+            var pickupTimeFrom = default(TimeOnly?);
 
-            if (DateTime.TryParse(PickupTimeFrom, SpeedexConstants.SpeedexCultureInfo, DateTimeStyles.None, out var pickupTimeFromResult))
+            if (TimeOnly.TryParse(PickupTimeFrom, SpeedexConstants.SpeedexCultureInfo, DateTimeStyles.None, out var pickupTimeFromResult))
                 pickupTimeFrom = pickupTimeFromResult;
 
-            var pickupTimeTo = default(DateTime?);
+            var pickupTimeTo = default(TimeOnly?);
 
-            if (DateTime.TryParse(PickupTimeTo, SpeedexConstants.SpeedexCultureInfo, DateTimeStyles.None, out var pickupTimeToResult))
+            if (TimeOnly.TryParse(PickupTimeTo, SpeedexConstants.SpeedexCultureInfo, DateTimeStyles.None, out var pickupTimeToResult))
                 pickupTimeTo = pickupTimeToResult;
 
             return new(Id, ConsignmentIds, CheckpointCode, CheckpointGroupCode, Address, City, CountryCode, Comments, Name, PhoneNumber, PostCode, pickupDate, pickupTimeFrom, pickupTimeTo);

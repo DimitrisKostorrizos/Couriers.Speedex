@@ -190,30 +190,16 @@ namespace Couriers.Speedex.Tests
 
         /// <summary>
         /// Validates that when <see cref="BaseSpeedexClient.GetConsignmentPdfsAsync"/> is called, 
-        /// with an empty voucher, it unsuccessfully returns
-        /// </summary>
-        /// <param name="voucher">The voucher</param>
-        /// <returns></returns>
-        [Theory]
-        [MemberData(nameof(TestHelpers.EmptyStringValues), MemberType = typeof(TestHelpers))]
-        public async Task GetConsignmentPdfsAsync_WithEmptyVoucher_UnuccessfullyReturns(string? voucher)
-        {
-            var request = new ConsignmentPdfRequestModel(voucher!, PaperSize.A4, true);
-
-            var response = await _simulatedSpeedexClient.GetConsignmentPdfsAsync(request, TestContext.Current.CancellationToken);
-
-            AssertValidHttpRequestResult(response);
-        }
-
-        /// <summary>
-        /// Validates that when <see cref="BaseSpeedexClient.GetConsignmentPdfsAsync"/> is called, 
         /// with valid data, it successfully returns
         /// </summary>
         /// <returns></returns>
         [Fact]
         public async Task GetConsignmentPdfsAsync_WithMoqedData_SuccessfullyReturns()
         {
-            var request = new ConsignmentPdfRequestModel([TestHelpers.GenerateTestVoucherNumber()], PaperSize.A4, true);
+            var request = new ConsignmentPdfRequestModel([TestHelpers.GenerateTestVoucherNumber()], PaperSize.A4)
+            {
+                ReturnMultipleVouchers = true
+            };
 
             var response = await _simulatedSpeedexClient.GetConsignmentPdfsAsync(request, TestContext.Current.CancellationToken);
 
@@ -461,7 +447,7 @@ namespace Couriers.Speedex.Tests
         [Fact]
         public async Task CreatePickupAsync_WithMoqedData_SuccessfullyReturns()
         {
-            var pickup = DateTime.Now.AddDays(3);
+            var pickup = DateOnly.FromDateTime(DateTime.Now.AddDays(3));
 
             var request = new PickupRequestModel(TestHelpers.GenerateTestVoucherNumber(), pickup);
 
@@ -587,7 +573,7 @@ namespace Couriers.Speedex.Tests
         [Fact]
         public async Task ReschedulePickupAsync_WithMoqedData_SuccessfullyReturns()
         {
-            var pickupDate = DateTime.Now.AddDays(3);
+            var pickupDate = DateOnly.FromDateTime(DateTime.Now.AddDays(3));
 
             var pickupId = TestHelpers.GenerateTestPickupId();
 

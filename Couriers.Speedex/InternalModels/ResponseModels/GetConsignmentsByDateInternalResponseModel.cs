@@ -1,7 +1,6 @@
 ﻿using Couriers.Speedex.Interfaces;
 using Couriers.Speedex.ResponseModels;
 
-using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
@@ -69,7 +68,7 @@ namespace Couriers.Speedex.InternalModels.ResponseModels
         /// <returns></returns>
         public IEnumerable<ConsignmentDetailsResponseModel> ToResponseModel()
         {
-            return Result.Results.Select(x => x.ToResponseModel()).ToArray();
+            return [.. Result.Results.Select(x => x.ToResponseModel())];
         }
 
         #endregion
@@ -97,7 +96,7 @@ namespace Couriers.Speedex.InternalModels.ResponseModels
         /// </summary>
         [XmlArray("Result")]
         [XmlArrayItem("Consignment")]
-        public ConsignmentDetailsInternalResponseModel[] Results { get; set; } = Array.Empty<ConsignmentDetailsInternalResponseModel>();
+        public ConsignmentDetailsInternalResponseModel[] Results { get; set; } = [];
 
         /// <summary>
         /// The return code
@@ -141,7 +140,7 @@ namespace Couriers.Speedex.InternalModels.ResponseModels
         /// <returns></returns>
         public IEnumerable<ConsignmentDetailsResponseModel> ToResponseModel()
         {
-            return Results.Select(x => x.ToResponseModel()).ToArray();
+            return [.. Results.Select(x => x.ToResponseModel())];
         }
 
         #endregion

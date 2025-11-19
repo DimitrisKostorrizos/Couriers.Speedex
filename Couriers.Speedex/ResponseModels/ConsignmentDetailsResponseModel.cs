@@ -1,6 +1,7 @@
 ﻿using Couriers.Speedex.Enums;
 
 using System;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Couriers.Speedex.ResponseModels
 {
@@ -9,96 +10,198 @@ namespace Couriers.Speedex.ResponseModels
     /// </summary>
     public record ConsignmentDetailsResponseModel : BaseConsignmentResponseModel
     {
+        #region Private Fields
+
+        /// <summary>
+        /// The field for the <see cref="CashAmount"/>
+        /// </summary>
+        private double _cashAmount;
+
+        /// <summary>
+        /// The field for the <see cref="CheckAmount"/>
+        /// </summary>
+        private double _checkAmount;
+
+        /// <summary>
+        /// The field for the <see cref="CheckpointCode"/>
+        /// </summary>
+        private string _checkpointCode = default!;
+
+        /// <summary>
+        /// The field for the <see cref="MasterConsignmentId"/>
+        /// </summary>
+        private string _masterConsignmentId = default!;
+
+        /// <summary>
+        /// The field for the <see cref="PickupAddress"/>
+        /// </summary>
+        private string _pickupAddress = default!;
+
+        /// <summary>
+        /// The field for the <see cref="PickupPostCode"/>
+        /// </summary>
+        private string _pickupPostCode = default!;
+
+        #endregion
+
         #region Public Properties
 
         /// <summary>
         /// The cash amount of the consignment to be collected
         /// </summary>
-        public double CashAmount { get; }
+        public required double CashAmount
+        {
+            get => _cashAmount;
+            set
+            {
+                if (value < 0)
+                    throw new ArgumentOutOfRangeException(nameof(CashAmount), $"The {nameof(CashAmount)} cannot be negative.");
+
+                _cashAmount = value;
+            }
+        }
 
         /// <summary>
         /// The check amount of the consignment to be collected
         /// </summary>
-        public double CheckAmount { get; }
+        public required double CheckAmount
+        {
+            get => _checkAmount;
+            set
+            {
+                if (value < 0)
+                    throw new ArgumentOutOfRangeException(nameof(CheckAmount), $"The {nameof(CheckAmount)} cannot be negative.");
+
+                _checkAmount = value;
+            }
+        }
 
         /// <summary>
         /// The city for the delivery
         /// </summary>
-        public string City { get; }
+        public required string? City { get; set; }
 
         /// <summary>
         /// The country code for the delivery
         /// </summary>
-        public string CountryCode { get; }
+        public required string? CountryCode { get; set; }
 
         /// <summary>
         /// The comments of the consignment
         /// </summary>
-        public string CustomerComments { get; }
+        public required string? CustomerComments { get; set; }
 
         /// <summary>
         /// The initial time of the delivery time-frame window
         /// </summary>
-        public DateTime? DeliveryTimeFrom { get; }
+        public required TimeOnly? DeliveryTimeFrom { get; set; }
 
         /// <summary>
         /// The final time of the delivery time-frame window
         /// </summary>
-        public DateTime? DeliveryTimeTo { get; }
+        public required TimeOnly? DeliveryTimeTo { get; set; }
 
         /// <summary>
         /// The checkpoint code of the consignment
         /// </summary>
-        public string CheckpointCode { get; }
+        public required string CheckpointCode
+        {
+            get => _checkpointCode;
+            set
+            {
+                if (string.IsNullOrWhiteSpace(value))
+                    throw new ArgumentException($"'{nameof(CheckpointCode)}' cannot be null or whitespace.", nameof(CheckpointCode));
+
+                _checkpointCode = value;
+            }
+        }
 
         /// <summary>
         /// The group checkpoint code of the consignment
         /// </summary>
-        public string CheckpointGroupCode { get; }
+        public required string? CheckpointGroupCode { get; set; }
 
         /// <summary>
         /// Indicates whether the consignment is a return item
         /// </summary>
-        public bool IsReturnItem { get; }
+        public required bool IsReturnItem { get; set; }
 
         /// <summary>
         /// The number of the master consignment id
         /// </summary>
-        public string MasterConsignmentId { get; }
+        public required string MasterConsignmentId
+        {
+            get => _masterConsignmentId;
+            set
+            {
+                if (string.IsNullOrWhiteSpace(value))
+                    throw new ArgumentException($"'{nameof(MasterConsignmentId)}' cannot be null or whitespace.", nameof(MasterConsignmentId));
+
+                _masterConsignmentId = value;
+            }
+        }
 
         /// <summary>
         /// The address for the pickup of the consignment
         /// </summary>
-        public string PickupAddress { get; }
+        public required string PickupAddress
+        {
+            get => _pickupAddress;
+            set
+            {
+                if (string.IsNullOrWhiteSpace(value))
+                    throw new ArgumentException($"'{nameof(PickupAddress)}' cannot be null or whitespace.", nameof(PickupAddress));
+
+                _pickupAddress = value;
+            }
+        }
 
         /// <summary>
         /// The city for the pickup of the consignment
         /// </summary>
-        public string PickupCity { get; }
+        public required string? PickupCity { get; set; }
 
         /// <summary>
         /// The country code for the pickup of the consignment
         /// </summary>
-        public string PickupCountryCode { get; }
+        public required string? PickupCountryCode { get; set; }
 
         /// <summary>
         /// The name for the pickup of the consignment
         /// </summary>
-        public string PickupName { get; }
+        public required string? PickupName { get; set; }
 
         /// <summary>
         /// The phone number for the pickup of the consignment
         /// </summary>
-        public string PickupPhoneNumber { get; }
+        public required string? PickupPhoneNumber { get; set; }
 
         /// <summary>
         /// The post code for the pickup of the consignment
         /// </summary>
-        public string PickupPostCode { get; }
+        public required string PickupPostCode
+        {
+            get => _pickupPostCode;
+            set
+            {
+                if (string.IsNullOrWhiteSpace(value))
+                    throw new ArgumentException($"'{nameof(PickupPostCode)}' cannot be null or whitespace.", nameof(PickupPostCode));
+
+                _pickupPostCode = value;
+            }
+        }
 
         #endregion
 
         #region Constructors
+
+        /// <summary>
+        /// Creates a new instance of <see cref="ConsignmentDetailsResponseModel"/>
+        /// </summary>
+        public ConsignmentDetailsResponseModel() : base()
+        {
+
+        }
 
         /// <summary>
         /// Creates a new instance of <see cref="ConsignmentDetailsResponseModel"/>
@@ -136,8 +239,9 @@ namespace Couriers.Speedex.ResponseModels
         /// <param name="parcelCount">The total number of parcels of the consignment</param>
         /// <param name="zipCode">The zip code for the delivery</param>
         /// <param name="deliveryTime">The delivery time limit</param>
+        [SetsRequiredMembers]
         public ConsignmentDetailsResponseModel(double cashAmount, double checkAmount, string city, string countryCode,
-            string customerComments, DateTime? deliveryTimeFrom, DateTime? deliveryTimeTo, string checkpointCode,
+            string customerComments, TimeOnly? deliveryTimeFrom, TimeOnly? deliveryTimeTo, string checkpointCode,
             string checkpointGroupCode, bool isReturnItem, string masterConsignmentId, string pickupAddress, string pickupCity,
             string pickupCountryCode, string pickupName, string pickupPhoneNumber, string pickupPostCode, double weight, ChargeType chargeType, string agreementCode, string customerCode,
             string? firstCustomerReference, string? secondCustomerReference, string? thirdCustomerReference, string address,

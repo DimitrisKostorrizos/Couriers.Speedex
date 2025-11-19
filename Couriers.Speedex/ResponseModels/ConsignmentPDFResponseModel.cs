@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Couriers.Speedex.ResponseModels
 {
@@ -7,17 +8,49 @@ namespace Couriers.Speedex.ResponseModels
     /// </summary>
     public record ConsignmentPdfResponseModel
     {
+        #region Private Fields
+
+        /// <summary>
+        /// The field for the <see cref="VoucherId"/>
+        /// </summary>
+        private string _voucherId = default!;
+
+        /// <summary>
+        /// The field for the <see cref="Base64String"/>
+        /// </summary>
+        private string _base64String = default!;
+
+        #endregion
+
         #region Public Properties
 
         /// <summary>
         /// The unique voucher id
         /// </summary>
-        public string VoucherId { get; }
+        public required string VoucherId
+        {
+            get => _voucherId;
+            set
+            {
+                ArgumentException.ThrowIfNullOrWhiteSpace(value);
+
+                _voucherId = value;
+            }
+        }
 
         /// <summary>
         /// The base64 representation of the PDF voucher
         /// </summary>
-        public string Base64String { get; }
+        public required string Base64String
+        {
+            get => _base64String;
+            set
+            {
+                ArgumentException.ThrowIfNullOrWhiteSpace(value);
+
+                _base64String = value;
+            }
+        }
 
         #endregion
 
@@ -26,16 +59,19 @@ namespace Couriers.Speedex.ResponseModels
         /// <summary>
         /// Creates a new instance of <see cref="ConsignmentPdfResponseModel"/>
         /// </summary>
+        public ConsignmentPdfResponseModel() : base()
+        {
+
+        }
+
+        /// <summary>
+        /// Creates a new instance of <see cref="ConsignmentPdfResponseModel"/>
+        /// </summary>
         /// <param name="voucherId">The unique voucher id</param>
         /// <param name="base64String">The base64 representation of the PDF voucher</param>
-        public ConsignmentPdfResponseModel(string voucherId, string base64String) : base()
+        [SetsRequiredMembers]
+        public ConsignmentPdfResponseModel(string voucherId, string base64String) : this()
         {
-            if (string.IsNullOrWhiteSpace(voucherId))
-                throw new ArgumentException($"'{nameof(voucherId)}' cannot be null or whitespace.", nameof(voucherId));
-
-            if (string.IsNullOrWhiteSpace(base64String))
-                throw new ArgumentException($"'{nameof(base64String)}' cannot be null or whitespace.", nameof(base64String));
-
             VoucherId = voucherId;
 
             Base64String = base64String;

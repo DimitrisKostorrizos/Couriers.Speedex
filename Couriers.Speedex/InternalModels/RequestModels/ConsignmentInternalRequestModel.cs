@@ -186,14 +186,11 @@ namespace Couriers.Speedex.InternalModels.RequestModels
         /// <returns></returns>
         public static ConsignmentInternalRequestModel FromRequestModel([NotNull] ConsignmentRequestModel model, [NotNull] string agreementCode, [NotNull] string customerCode)
         {
-            if (model is null)
-                throw new ArgumentNullException(nameof(model));
+            ArgumentNullException.ThrowIfNull(model);
 
-            if (string.IsNullOrWhiteSpace(agreementCode))
-                throw new ArgumentException($"'{nameof(agreementCode)}' cannot be null or whitespace.", nameof(agreementCode));
+            ArgumentException.ThrowIfNullOrWhiteSpace(agreementCode);
 
-            if (string.IsNullOrWhiteSpace(customerCode))
-                throw new ArgumentException($"'{nameof(customerCode)}' cannot be null or whitespace.", nameof(customerCode));
+            ArgumentException.ThrowIfNullOrWhiteSpace(customerCode);
 
             var internalModel = new ConsignmentInternalRequestModel()
             {

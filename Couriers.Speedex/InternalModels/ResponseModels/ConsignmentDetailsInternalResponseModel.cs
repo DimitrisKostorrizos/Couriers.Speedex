@@ -4,7 +4,6 @@ using Couriers.Speedex.ResponseModels;
 
 using System;
 using System.ComponentModel;
-using System.Globalization;
 using System.Xml;
 using System.Xml.Serialization;
 
@@ -245,14 +244,14 @@ namespace Couriers.Speedex.InternalModels.ResponseModels
         /// <returns></returns>
         public ConsignmentDetailsResponseModel ToResponseModel()
         {
-            var startingDeliveryTime = default(DateTime?);
+            var startingDeliveryTime = default(TimeOnly?);
 
-            if (DateTime.TryParse(DeliveryTimeFrom, SpeedexConstants.SpeedexCultureInfo, DateTimeStyles.None, out var result))
+            if (TimeOnly.TryParse(DeliveryTimeFrom, SpeedexConstants.SpeedexCultureInfo, out var result))
                 startingDeliveryTime = result;
 
-            var endingDeliveryTime = default(DateTime?);
+            var endingDeliveryTime = default(TimeOnly?);
 
-            if (DateTime.TryParse(DeliveryTimeTo, SpeedexConstants.SpeedexCultureInfo, DateTimeStyles.None, out result))
+            if (TimeOnly.TryParse(DeliveryTimeTo, SpeedexConstants.SpeedexCultureInfo, out result))
                 endingDeliveryTime = result;
 
             var deliveryTime = SpeedexHelpers.GetDeliveryTimeLimitByTimeRange(startingDeliveryTime, endingDeliveryTime);

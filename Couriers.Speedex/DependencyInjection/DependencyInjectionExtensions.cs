@@ -18,19 +18,21 @@ namespace Couriers.Speedex.DependencyInjection
         /// </summary>
         /// <param name="services">The service collection</param>
         /// <param name="speedexCredentials">The Speedex credentials</param>
+        /// <param name="serviceKey">An key used to identify the service</param>
         /// <returns></returns>
         /// <exception cref="ArgumentNullException">An exception is thrown if any of the arguments is <see langword="null"/></exception>
-        public static IServiceCollection AddSpeedexClient([NotNull] this IServiceCollection services, [NotNull] SpeedexCredentials speedexCredentials)
+        public static IServiceCollection AddSpeedexClient([NotNull] this IServiceCollection services, [NotNull] SpeedexCredentials speedexCredentials, object? serviceKey = null)
         {
-            if (services is null)
-                throw new ArgumentNullException(nameof(services));
+            ArgumentNullException.ThrowIfNull(services);
 
-            if (speedexCredentials is null)
-                throw new ArgumentNullException(nameof(speedexCredentials));
+            ArgumentNullException.ThrowIfNull(speedexCredentials);
 
             services.AddHttpClient();
 
             services.AddScoped<ISpeedexClient>(serviceProvider => new SpeedexClient(speedexCredentials, serviceProvider.GetRequiredService<IHttpClientFactory>().CreateClient()));
+
+            if(serviceKey is not null)
+                services.AddKeyedScoped<ISpeedexClient>(serviceKey, (serviceProvider, _) => new SpeedexClient(speedexCredentials, serviceProvider.GetRequiredService<IHttpClientFactory>().CreateClient()));
 
             return services;
         }
@@ -40,19 +42,21 @@ namespace Couriers.Speedex.DependencyInjection
         /// </summary>
         /// <param name="services">The service collection</param>
         /// <param name="speedexCredentials">The Speedex credentials</param>
+        /// <param name="serviceKey">An key used to identify the service</param>
         /// <returns></returns>
         /// <exception cref="ArgumentNullException">An exception is thrown if any of the arguments is <see langword="null"/></exception>
-        public static IServiceCollection AddDemoSpeedexClient([NotNull] this IServiceCollection services, [NotNull] SpeedexCredentials speedexCredentials)
+        public static IServiceCollection AddDemoSpeedexClient([NotNull] this IServiceCollection services, [NotNull] SpeedexCredentials speedexCredentials, object? serviceKey = null)
         {
-            if (services is null)
-                throw new ArgumentNullException(nameof(services));
+            ArgumentNullException.ThrowIfNull(services);
 
-            if (speedexCredentials is null)
-                throw new ArgumentNullException(nameof(speedexCredentials));
+            ArgumentNullException.ThrowIfNull(speedexCredentials);
 
             services.AddHttpClient();
 
             services.AddScoped<ISpeedexClient>(serviceProvider => new DemoSpeedexClient(speedexCredentials, serviceProvider.GetRequiredService<IHttpClientFactory>().CreateClient()));
+
+            if (serviceKey is not null)
+                services.AddKeyedScoped<ISpeedexClient>(serviceKey, (serviceProvider, _) => new DemoSpeedexClient(speedexCredentials, serviceProvider.GetRequiredService<IHttpClientFactory>().CreateClient()));
 
             return services;
         }

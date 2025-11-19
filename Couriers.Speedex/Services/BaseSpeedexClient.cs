@@ -17,7 +17,7 @@ using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Net.Http;
-using System.Text;
+using System.Net.Http.Headers;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -34,6 +34,11 @@ namespace Couriers.Speedex.Services
         /// The media type header value
         /// </summary>
         public const string MediaHeader = "text/xml";
+
+        /// <summary>
+        /// The media type header
+        /// </summary>
+        private static readonly MediaTypeHeaderValue _mediaTypeHeaderValue = MediaTypeHeaderValue.Parse(MediaHeader);
 
         /// <summary>
         /// The maximum expiration time for the <see cref="_sessionId"/>
@@ -94,11 +99,9 @@ namespace Couriers.Speedex.Services
         /// <param name="httpClient">The HTTP client</param>
         protected BaseSpeedexClient([NotNull] SpeedexCredentials credentials, [NotNull] HttpClient httpClient) : base()
         {
-            if (credentials is null)
-                throw new ArgumentNullException(nameof(credentials));
+            ArgumentNullException.ThrowIfNull(credentials);
 
-            if (httpClient is null)
-                throw new ArgumentNullException(nameof(httpClient));
+            ArgumentNullException.ThrowIfNull(httpClient);
 
             Credentials = credentials;
 
@@ -126,7 +129,7 @@ namespace Couriers.Speedex.Services
         public async Task<IHttpRequestResult<string>> CreateSessionAsync(CancellationToken cancellationToken = default)
         {
             if (cancellationToken.IsCancellationRequested)
-                return new HttpRequestResult<string>(OperationCancelledErrorMessage);
+                return new HttpRequestResult<string>(OperationCancelledErrorMessage, null, null);
 
             var requestModel = CredentialsInternalRequestModel.FromRequestModel(Credentials);
 
@@ -151,12 +154,11 @@ namespace Couriers.Speedex.Services
         public async Task<IHttpRequestResult> CancelConsignmentByVoucherIdAsync([NotNull] string voucherId, CancellationToken cancellationToken = default)
         {
             if (cancellationToken.IsCancellationRequested)
-                return new HttpRequestResult(OperationCancelledErrorMessage);
+                return new HttpRequestResult<string>(OperationCancelledErrorMessage, null, null);
 
             try
             {
-                if (string.IsNullOrWhiteSpace(voucherId))
-                    throw new ArgumentException($"'{nameof(voucherId)}' cannot be null or whitespace.", nameof(voucherId));
+                ArgumentException.ThrowIfNullOrWhiteSpace(voucherId);
 
                 return await ExecuteValidatedSOAPEnvelopeRequest<CancelConsignmentByVoucherIdInternalResponseModel, CancelConsignmentByVoucherIdInternalRequestModel>(new CancelConsignmentByVoucherIdInternalRequestModel()
                 {
@@ -179,12 +181,11 @@ namespace Couriers.Speedex.Services
         public async Task<IHttpRequestResult<IEnumerable<ConsignmentResponseModel>>> CreateConsignmentsAsync([NotNull] IEnumerable<ConsignmentRequestModel> values, CancellationToken cancellationToken = default)
         {
             if (cancellationToken.IsCancellationRequested)
-                return new HttpRequestResult<IEnumerable<ConsignmentResponseModel>>(OperationCancelledErrorMessage);
+                return new HttpRequestResult<IEnumerable<ConsignmentResponseModel>>(OperationCancelledErrorMessage, null, null);
 
             try
             {
-                if (values is null)
-                    throw new ArgumentNullException(nameof(values));
+                ArgumentNullException.ThrowIfNull(values);
 
                 var numberOfItems = values.Count();
 
@@ -228,15 +229,14 @@ namespace Couriers.Speedex.Services
         public async Task<IHttpRequestResult<ConsignmentResponseModel>> CreateConsignmentAsync([NotNull] ConsignmentRequestModel model, CancellationToken cancellationToken = default)
         {
             if (cancellationToken.IsCancellationRequested)
-                return new HttpRequestResult<ConsignmentResponseModel>(OperationCancelledErrorMessage);
+                return new HttpRequestResult<ConsignmentResponseModel>(OperationCancelledErrorMessage, null, null);
 
             try
             {
-                if (model is null)
-                    throw new ArgumentNullException(nameof(model));
+                ArgumentNullException.ThrowIfNull(model);
 
                 // Get the response
-                var response = await CreateConsignmentsAsync(new ConsignmentRequestModel[] { model }, cancellationToken).ConfigureAwait(false);
+                var response = await CreateConsignmentsAsync([model], cancellationToken).ConfigureAwait(false);
 
                 // If not successful...
                 if (!response.IsSuccessful)
@@ -261,12 +261,11 @@ namespace Couriers.Speedex.Services
         public async Task<IHttpRequestResult<IEnumerable<ConsignmentPdfResponseModel>>> GetConsignmentPdfsAsync([NotNull] ConsignmentPdfRequestModel value, CancellationToken cancellationToken = default)
         {
             if (cancellationToken.IsCancellationRequested)
-                return new HttpRequestResult<IEnumerable<ConsignmentPdfResponseModel>>(OperationCancelledErrorMessage);
+                return new HttpRequestResult<IEnumerable<ConsignmentPdfResponseModel>>(OperationCancelledErrorMessage, null, null);
 
             try
             {
-                if (value is null)
-                    throw new ArgumentNullException(nameof(value));
+                ArgumentNullException.ThrowIfNull(value);
 
                 var requestModel = ConsignmentPdfInternalRequestModel.FromRequestModel(value);
 
@@ -298,15 +297,17 @@ namespace Couriers.Speedex.Services
         public async Task<IHttpRequestResult<string>> GetConsignmentPdfAsync([NotNull] string voucherId, PaperSize paperSize, bool returnMultipleVouchers = false, CancellationToken cancellationToken = default)
         {
             if (cancellationToken.IsCancellationRequested)
-                return new HttpRequestResult<string>(OperationCancelledErrorMessage);
+                return new HttpRequestResult<string>(OperationCancelledErrorMessage, null, null);
 
             try
             {
-                if (string.IsNullOrWhiteSpace(voucherId))
-                    throw new ArgumentException($"'{nameof(voucherId)}' cannot be null or whitespace.", nameof(voucherId));
+                ArgumentException.ThrowIfNullOrWhiteSpace(voucherId);
 
                 // Initialize the model
-                var value = new ConsignmentPdfRequestModel(voucherId, paperSize, returnMultipleVouchers);
+                var value = new ConsignmentPdfRequestModel(voucherId, paperSize)
+                {
+                    ReturnMultipleVouchers = returnMultipleVouchers
+                };
 
                 // Get the response
                 var response = await GetConsignmentPdfsAsync(value, cancellationToken).ConfigureAwait(false);
@@ -335,12 +336,11 @@ namespace Couriers.Speedex.Services
         public async Task<IHttpRequestResult<IEnumerable<BranchResponseModel>>> GetBranchesAsync([NotNull] string zipCode, SupportedLanguage language = SupportedLanguage.Greek, CancellationToken cancellationToken = default)
         {
             if (cancellationToken.IsCancellationRequested)
-                return new HttpRequestResult<IEnumerable<BranchResponseModel>>(OperationCancelledErrorMessage);
+                return new HttpRequestResult<IEnumerable<BranchResponseModel>>(OperationCancelledErrorMessage, null, null);
 
             try
             {
-                if (string.IsNullOrWhiteSpace(zipCode))
-                    throw new ArgumentException($"'{nameof(zipCode)}' cannot be null or whitespace.", nameof(zipCode));
+                ArgumentException.ThrowIfNullOrWhiteSpace(zipCode);
 
                 SpeedexHelpers.ThrowIfInvalidZipCode(zipCode);
 
@@ -376,12 +376,11 @@ namespace Couriers.Speedex.Services
         public async Task<IHttpRequestResult<CheckpointResponseModel>> GetLastCheckPointAsync([NotNull] string voucherId, CancellationToken cancellationToken = default)
         {
             if (cancellationToken.IsCancellationRequested)
-                return new HttpRequestResult<CheckpointResponseModel>(OperationCancelledErrorMessage);
+                return new HttpRequestResult<CheckpointResponseModel>(OperationCancelledErrorMessage, null, null);
 
             try
             {
-                if (string.IsNullOrWhiteSpace(voucherId))
-                    throw new ArgumentException($"'{nameof(voucherId)}' cannot be null or whitespace.", nameof(voucherId));
+                ArgumentException.ThrowIfNullOrWhiteSpace(voucherId);
 
                 // Get the response
                 var response = await ExecuteValidatedSOAPEnvelopeRequest<GetLastCheckpointInternalResponseModel, GetLastCheckpointInternalRequestModel>(new GetLastCheckpointInternalRequestModel()
@@ -411,12 +410,11 @@ namespace Couriers.Speedex.Services
         public async Task<IHttpRequestResult<PickupCheckpointResponseModel>> GetLastPickupCheckPointAsync([NotNull] string pickupId, CancellationToken cancellationToken = default)
         {
             if (cancellationToken.IsCancellationRequested)
-                return new HttpRequestResult<PickupCheckpointResponseModel>(OperationCancelledErrorMessage);
+                return new HttpRequestResult<PickupCheckpointResponseModel>(OperationCancelledErrorMessage, null, null);
 
             try
             {
-                if (string.IsNullOrWhiteSpace(pickupId))
-                    throw new ArgumentException($"'{nameof(pickupId)}' cannot be null or whitespace.", nameof(pickupId));
+                ArgumentException.ThrowIfNullOrWhiteSpace(pickupId);
 
                 // Get the response
                 var response = await ExecuteValidatedSOAPEnvelopeRequest<GetLastPickupCheckpointInternalResponseModel, GetLastPickupCheckpointInternalRequestModel>(new GetLastPickupCheckpointInternalRequestModel()
@@ -446,12 +444,11 @@ namespace Couriers.Speedex.Services
         public async Task<IHttpRequestResult<IEnumerable<CheckpointResponseModel>>> GetTraceByClientReferencesAsync([NotNull] ClientReferencesRequestModel model, CancellationToken cancellationToken = default)
         {
             if (cancellationToken.IsCancellationRequested)
-                return new HttpRequestResult<IEnumerable<CheckpointResponseModel>>(OperationCancelledErrorMessage);
+                return new HttpRequestResult<IEnumerable<CheckpointResponseModel>>(OperationCancelledErrorMessage, null, null);
 
             try
             {
-                if (model is null)
-                    throw new ArgumentNullException(nameof(model));
+                ArgumentNullException.ThrowIfNull(model);
 
                 var requestModel = ClientReferencesInternalRequestModel.FromRequestModel(model);
 
@@ -481,7 +478,7 @@ namespace Couriers.Speedex.Services
         public async Task<IHttpRequestResult<IEnumerable<CheckpointResponseModel>>> GetTraceByTimeFrameAsync(DateTime dateFrom, DateTime dateTo, CancellationToken cancellationToken = default)
         {
             if (cancellationToken.IsCancellationRequested)
-                return new HttpRequestResult<IEnumerable<CheckpointResponseModel>>(OperationCancelledErrorMessage);
+                return new HttpRequestResult<IEnumerable<CheckpointResponseModel>>(OperationCancelledErrorMessage, null, null);
 
             try
             {
@@ -518,12 +515,11 @@ namespace Couriers.Speedex.Services
         public async Task<IHttpRequestResult<IEnumerable<CheckpointResponseModel>>> GetTraceByVoucherIdAsync([NotNull] string voucherId, CancellationToken cancellationToken = default)
         {
             if (cancellationToken.IsCancellationRequested)
-                return new HttpRequestResult<IEnumerable<CheckpointResponseModel>>(OperationCancelledErrorMessage);
+                return new HttpRequestResult<IEnumerable<CheckpointResponseModel>>(OperationCancelledErrorMessage, null, null);
 
             try
             {
-                if (string.IsNullOrWhiteSpace(voucherId))
-                    throw new ArgumentException($"'{nameof(voucherId)}' cannot be null or whitespace.", nameof(voucherId));
+                ArgumentException.ThrowIfNullOrWhiteSpace(voucherId);
 
                 // Get the response
                 var response = await ExecuteValidatedSOAPEnvelopeRequest<GetTraceByVoucherIdInternalResponseModel, GetTraceByVoucherIdInternalRequestModel>(new GetTraceByVoucherIdInternalRequestModel()
@@ -554,12 +550,11 @@ namespace Couriers.Speedex.Services
         public async Task<IHttpRequestResult> CancelPickupByIdAsync([NotNull] string pickupId, CancellationToken cancellationToken = default)
         {
             if (cancellationToken.IsCancellationRequested)
-                return new HttpRequestResult<IEnumerable<CheckpointResponseModel>>(OperationCancelledErrorMessage);
+                return new HttpRequestResult<IEnumerable<CheckpointResponseModel>>(OperationCancelledErrorMessage, null, null);
 
             try
             {
-                if (string.IsNullOrWhiteSpace(pickupId))
-                    throw new ArgumentException($"'{nameof(pickupId)}' cannot be null or whitespace.", nameof(pickupId));
+                ArgumentException.ThrowIfNullOrWhiteSpace(pickupId);
 
                 return await ExecuteValidatedSOAPEnvelopeRequest<CancelPickupInternalResponseModel, CancelPickupByIdInternalRequestModel>(new CancelPickupByIdInternalRequestModel()
                 {
@@ -581,12 +576,11 @@ namespace Couriers.Speedex.Services
         public async Task<IHttpRequestResult<string>> CreatePickupAsync([NotNull] PickupRequestModel model, CancellationToken cancellationToken = default)
         {
             if (cancellationToken.IsCancellationRequested)
-                return new HttpRequestResult<string>(OperationCancelledErrorMessage);
+                return new HttpRequestResult<string>(OperationCancelledErrorMessage, null, null);
 
             try
             {
-                if (model is null)
-                    throw new ArgumentNullException(nameof(model));
+                ArgumentNullException.ThrowIfNull(model);
 
                 var requestModel = PickupInternalRequestModel.FromRequestModel(model);
 
@@ -617,7 +611,7 @@ namespace Couriers.Speedex.Services
         public async Task<IHttpRequestResult<IEnumerable<ConsignmentDetailsResponseModel>>> GetConsignmentsByDateRangeAsync(DateTime dateFrom, DateTime dateTo, CancellationToken cancellationToken = default)
         {
             if (cancellationToken.IsCancellationRequested)
-                return new HttpRequestResult<IEnumerable<ConsignmentDetailsResponseModel>>(OperationCancelledErrorMessage);
+                return new HttpRequestResult<IEnumerable<ConsignmentDetailsResponseModel>>(OperationCancelledErrorMessage, null, null);
 
             try
             {
@@ -655,7 +649,7 @@ namespace Couriers.Speedex.Services
         public async Task<IHttpRequestResult<IEnumerable<DepositedConsignmentResponseModel>>> GetDepositedConsignmentsByDateRangeAsync(DateTime dateFrom, DateTime dateTo, CancellationToken cancellationToken = default)
         {
             if (cancellationToken.IsCancellationRequested)
-                return new HttpRequestResult<IEnumerable<DepositedConsignmentResponseModel>>(OperationCancelledErrorMessage);
+                return new HttpRequestResult<IEnumerable<DepositedConsignmentResponseModel>>(OperationCancelledErrorMessage, null, null);
 
             try
             {
@@ -692,12 +686,11 @@ namespace Couriers.Speedex.Services
         public async Task<IHttpRequestResult<PickupResponseModel>> GetPickupByIdAsync([NotNull] string pickupId, CancellationToken cancellationToken = default)
         {
             if (cancellationToken.IsCancellationRequested)
-                return new HttpRequestResult<PickupResponseModel>(OperationCancelledErrorMessage);
+                return new HttpRequestResult<PickupResponseModel>(OperationCancelledErrorMessage, null, null);
 
             try
             {
-                if (string.IsNullOrWhiteSpace(pickupId))
-                    throw new ArgumentException($"'{nameof(pickupId)}' cannot be null or whitespace.", nameof(pickupId));
+                ArgumentException.ThrowIfNullOrWhiteSpace(pickupId);
 
                 // Get the response
                 var response = await ExecuteValidatedSOAPEnvelopeRequest<GetPickupInternalResponseModel, GetPickupByIdInternalRequestModel>(new GetPickupByIdInternalRequestModel()
@@ -728,12 +721,11 @@ namespace Couriers.Speedex.Services
         public async Task<IHttpRequestResult> ReschedulePickupAsync([NotNull] ReschedulePickupRequestModel model, CancellationToken cancellationToken = default)
         {
             if (cancellationToken.IsCancellationRequested)
-                return new HttpRequestResult(OperationCancelledErrorMessage);
+                return new HttpRequestResult<string>(OperationCancelledErrorMessage, null, null);
 
             try
             {
-                if (model is null)
-                    throw new ArgumentNullException(nameof(model));
+                ArgumentNullException.ThrowIfNull(model);
 
                 var requestModel = ReschedulePickupInternalRequestModel.FromRequestModel(model);
 
@@ -797,7 +789,7 @@ namespace Couriers.Speedex.Services
         private async Task<IHttpRequestResult> EnsureValidSessionAsync(CancellationToken cancellationToken = default)
         {
             if (cancellationToken.IsCancellationRequested)
-                return new HttpRequestResult<IEnumerable<CheckpointResponseModel>>("Operation cancelled.");
+                return new HttpRequestResult<IEnumerable<CheckpointResponseModel>>(OperationCancelledErrorMessage, null, null);
 
             // Get the response
             var response = await CreateSessionAsync(cancellationToken).ConfigureAwait(false);
@@ -830,7 +822,7 @@ namespace Couriers.Speedex.Services
             where TRequest : SessionIdInternalRequestModel, new()
         {
             if (cancellationToken.IsCancellationRequested)
-                return new HttpRequestResult<TResponse>(OperationCancelledErrorMessage);
+                return new HttpRequestResult<TResponse>(OperationCancelledErrorMessage, null, null);
 
             // If the session id requires refresh...
             if (RequiresSessionIdRefresh())
@@ -872,7 +864,7 @@ namespace Couriers.Speedex.Services
             where TRequest : class, new()
         {
             if (cancellationToken.IsCancellationRequested)
-                return new InternalHttpRequestResult<TResponse>(OperationCancelledErrorMessage);
+                return new InternalHttpRequestResult<TResponse>(OperationCancelledErrorMessage, null, null);
 
             var serializedRequestPayload = string.Empty;
 
@@ -891,7 +883,7 @@ namespace Couriers.Speedex.Services
 
                 serializedRequestPayload = XmlHelpers.ToXml(model, SpeedexXmlNamespaces.SpeedexNamespaces);
 
-                using var httpRequest = new TypedStringContent<TRequest, TResponse>(serializedRequestPayload, Encoding.UTF8, MediaHeader);
+                using var httpRequest = new TypedStringContent<TRequest, TResponse>(serializedRequestPayload, _mediaTypeHeaderValue);
 
                 // Get the response
                 using var response = await _httpClient.PostAsync(APIURL, httpRequest, cancellationToken).ConfigureAwait(false);

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Couriers.Speedex.ResponseModels
 {
@@ -7,66 +8,120 @@ namespace Couriers.Speedex.ResponseModels
     /// </summary>
     public record CheckpointResponseModel
     {
+        #region Private Fields
+
+        /// <summary>
+        /// The field for the <see cref="StatusCode"/>
+        /// </summary>
+        private string _statusCode = default!;
+
+        /// <summary>
+        /// The field for the <see cref="StatusDescription"/>
+        /// </summary>
+        private string _statusDescription = default!;
+
+        /// <summary>
+        /// The field for the <see cref="VoucherId"/>
+        /// </summary>
+        private string _voucherId = default!;
+
+        #endregion
+
         #region Public Properties
 
         /// <summary>
         /// The name of the depot responsible for the event
         /// </summary>
-        public string? BranchDepot { get; }
+        public required string? BranchDepot { get; set; }
 
         /// <summary>
         /// The unique branch depot id
         /// </summary>
-        public string? BranchId { get; }
+        public required string? BranchId { get; set; }
 
         /// <summary>
         /// The date-time of the event
         /// </summary>
-        public DateTime CheckpointDate { get; }
+        public required DateTime CheckpointDate { get; set; }
 
         /// <summary>
         /// The customer's comments of the consignment
         /// </summary>
-        public string? CustomerComments { get; }
+        public required string? CustomerComments { get; set; }
 
         /// <summary>
         /// The first customer reference of the consignment
         /// </summary>
-        public string? FirstCustomerReference { get; }
+        public required string? FirstCustomerReference { get; set; }
 
         /// <summary>
         /// The second customer reference of the consignment
         /// </summary>
-        public string? SecondCustomerReference { get; }
+        public required string? SecondCustomerReference { get; set; }
 
         /// <summary>
         /// The third customer reference of the consignment
         /// </summary>
-        public string? ThirdCustomerReference { get; }
+        public required string? ThirdCustomerReference { get; set; }
 
         /// <summary>
         /// The recipient name
         /// </summary>
-        public string? RecipientName { get; }
+        public required string? RecipientName { get; set; }
 
         /// <summary>
         /// The code of the event
         /// </summary>
-        public string StatusCode { get; }
+        public required string StatusCode
+        {
+            get => _statusCode;
+            set
+            {
+                ArgumentException.ThrowIfNullOrWhiteSpace(value);
+
+                _statusCode = value;
+            }
+        }
 
         /// <summary>
         /// The description of the event
         /// </summary>
-        public string StatusDescription { get; }
+        public required string StatusDescription
+        {
+            get => _statusDescription;
+            set
+            {
+                ArgumentException.ThrowIfNullOrWhiteSpace(value);
+
+                _statusDescription = value;
+            }
+        }
 
         /// <summary>
         /// The unique voucher id
         /// </summary>
-        public string VoucherId { get; }
+        public required string VoucherId
+        {
+            get => _voucherId;
+            set
+            {
+                ArgumentException.ThrowIfNullOrWhiteSpace(value);
+
+                _voucherId = value;
+            }
+        }
 
         #endregion
 
         #region Constructors
+
+        /// <summary>
+        /// Creates a new instance of <see cref="CheckpointResponseModel"/>
+        /// </summary>
+        public CheckpointResponseModel() : base()
+        {
+
+        }
 
         /// <summary>
         /// Creates a new instance of <see cref="ConsignmentDetailsResponseModel"/>
@@ -82,18 +137,10 @@ namespace Couriers.Speedex.ResponseModels
         /// <param name="statusCode">The code of the event</param>
         /// <param name="statusDescription">The description of the event</param>
         /// <param name="voucherId">The unique voucher id</param>
+        [SetsRequiredMembers]
         public CheckpointResponseModel(string branchDepot, string branchId, DateTime checkpointDate, string? customerComments, string? firstCustomerReference,
-            string? secondCustomerReference, string? thirdCustomerReference, string recipientName, string statusCode, string statusDescription, string voucherId) : base()
+            string? secondCustomerReference, string? thirdCustomerReference, string recipientName, string statusCode, string statusDescription, string voucherId) : this()
         {
-            if (string.IsNullOrWhiteSpace(statusCode))
-                throw new ArgumentException($"'{nameof(statusCode)}' cannot be null or whitespace.", nameof(statusCode));
-
-            if (string.IsNullOrWhiteSpace(statusDescription))
-                throw new ArgumentException($"'{nameof(statusDescription)}' cannot be null or whitespace.", nameof(statusDescription));
-
-            if (string.IsNullOrWhiteSpace(voucherId))
-                throw new ArgumentException($"'{nameof(voucherId)}' cannot be null or whitespace.", nameof(voucherId));
-
             BranchDepot = branchDepot;
 
             BranchId = branchId;

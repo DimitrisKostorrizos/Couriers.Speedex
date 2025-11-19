@@ -2,6 +2,7 @@
 using Couriers.Speedex.Enums;
 
 using System;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Couriers.Speedex.RequestModels
 {
@@ -42,6 +43,57 @@ namespace Couriers.Speedex.RequestModels
         /// </summary>
         private string? _thirdCustomerReference;
 
+        /// <summary>
+        /// The field of the <see cref="NumberOfVouchers"/>
+        /// </summary>
+        private int _numberOfVouchers;
+
+        /// <summary>
+        /// The field of the <see cref="PaymentType"/>
+        /// </summary>
+        private PaymentType? _paymentType;
+
+        /// <summary>
+        /// The field of the <see cref="Cost"/>
+        /// </summary>
+        private double _cost;
+
+        /// <summary>
+        /// The field of the <see cref="Address"/>
+        /// </summary>
+        private string _address = default!;
+
+        /// <summary>
+        /// The field of the <see cref="RecipientName"/>
+        /// </summary>
+        private string _recipientName = default!;
+
+        /// <summary>
+        /// The field of the <see cref="RecipientPhoneNumber"/>
+        /// </summary>
+        private string _recipientPhoneNumber = default!;
+
+        /// <summary>
+        /// The field of the <see cref="ZipCode"/>
+        /// </summary>
+        private string _zipCode = default!;
+
+        /// <summary>
+        /// The field of the <see cref="InsuranceAmount"/>
+        /// </summary>
+        private int _insuranceAmount;
+
+        /// <summary>
+        /// The field of the <see cref="ShouldBeDeliveredOnSaturday"/>
+        /// </summary>
+        private bool _shouldBeDeliveredOnSaturday;
+
+        /// <summary>
+        /// The field of the <see cref="DeliveryTime"/>
+        /// </summary>
+        private DeliveryTimeLimit _deliveryTime;
+        private double _weight;
+
         #endregion
 
         #region Public Properties
@@ -52,7 +104,7 @@ namespace Couriers.Speedex.RequestModels
         /// The value 0 indicates that the default data from the customer agreement will be used as the sender’s data. 
         /// The value 100 indicates that the related fields will be used as the sender’s data.
         /// </summary>
-        public int CustomerFlag { get; }
+        public required int CustomerFlag { get; set; }
 
         /// <summary>
         /// The cost center of the customer agreement
@@ -65,7 +117,7 @@ namespace Couriers.Speedex.RequestModels
         public string? FirstCustomerReference
         {
             get => _firstCustomerReference;
-            init
+            set
             {
                 SpeedexHelpers.ThrowIfInvalidCustomerReference(value);
 
@@ -104,7 +156,18 @@ namespace Couriers.Speedex.RequestModels
         /// <summary>
         /// The number of vouchers
         /// </summary>
-        public int NumberOfVouchers { get; }
+        public required int NumberOfVouchers
+        {
+            get => _numberOfVouchers;
+            set
+            {
+                ArgumentOutOfRangeException.ThrowIfNegativeOrZero(value);
+
+                ArgumentOutOfRangeException.ThrowIfGreaterThan(value, SpeedexConstants.MaximumNumberOfVouchers);
+
+                _numberOfVouchers = value;
+            }
+        }
 
         /// <summary>
         /// The first part of the comments
@@ -112,7 +175,7 @@ namespace Couriers.Speedex.RequestModels
         public string? FirstCommentsPart
         {
             get => _firstCommentsPart;
-            init
+            set
             {
                 SpeedexHelpers.ThrowIfInvalidComments(value);
 
@@ -126,7 +189,7 @@ namespace Couriers.Speedex.RequestModels
         public string? SecondCommentsPart
         {
             get => _secondCommentsPart;
-            init
+            set
             {
                 SpeedexHelpers.ThrowIfInvalidComments(value);
 
@@ -140,7 +203,7 @@ namespace Couriers.Speedex.RequestModels
         public string? ThirdCommentsPart
         {
             get => _thirdCommentsPart;
-            init
+            set
             {
                 SpeedexHelpers.ThrowIfInvalidComments(value);
 
@@ -151,65 +214,180 @@ namespace Couriers.Speedex.RequestModels
         /// <summary>
         /// The charge type of the consignment
         /// </summary>
-        public ChargeType ChargeType { get; }
+        public required ChargeType ChargeType { get; set; }
 
         /// <summary>
         /// The payment type
         /// </summary>
-        public PaymentType? PaymentType { get; }
+        public PaymentType? PaymentType
+        {
+            get => _paymentType;
+            set
+            {
+                if (Cost > 0 && !value.HasValue)
+                    throw new InvalidOperationException($"The '{nameof(PaymentType)}' is required when the '{nameof(Cost)}' is greater then 0.");
+
+                _paymentType = value;
+            }
+        }
 
         /// <summary>
         /// The cost
         /// </summary>
-        public double Cost { get; }
+        public double Cost
+        {
+            get => _cost;
+            set
+            {
+                ArgumentOutOfRangeException.ThrowIfNegative(value);
+
+                if (value > 0 && !PaymentType.HasValue)
+                    throw new InvalidOperationException($"The '{nameof(PaymentType)}' is required when the '{nameof(Cost)}' is greater then 0.");
+
+                _cost = value;
+            }
+        }
 
         /// <summary>
         /// The address for the delivery
         /// </summary>
-        public string Address { get; }
+        public required string Address
+        {
+            get => _address;
+            set
+            {
+                ArgumentException.ThrowIfNullOrWhiteSpace(value);
+
+                if (value.Length > SpeedexConstants.MaximumAddressLength)
+                    throw new InvalidOperationException($"The '{nameof(Address)}' is not a valid address. The maximum length for an address field is {SpeedexConstants.MaximumAddressLength}.");
+
+                _address = value;
+            }
+        }
 
         /// <summary>
         /// The name of the recipient
         /// </summary>
-        public string RecipientName { get; }
+        public required string RecipientName
+        {
+            get => _recipientName;
+            set
+            {
+                ArgumentException.ThrowIfNullOrWhiteSpace(value);
+
+                _recipientName = value;
+            }
+        }
 
         /// <summary>
         /// The phone number of the recipient
         /// </summary>
-        public string RecipientPhoneNumber { get; }
+        public required string RecipientPhoneNumber
+        {
+            get => _recipientPhoneNumber;
+            set
+            {
+                ArgumentException.ThrowIfNullOrWhiteSpace(value);
+
+                if (value.Length > SpeedexConstants.MaximumPhoneNumberLength)
+                    throw new InvalidOperationException($"The '{nameof(RecipientPhoneNumber)}' is not a valid phone number. The maximum length for a phone number field is {SpeedexConstants.MaximumPhoneNumberLength}.");
+
+                _recipientPhoneNumber = value;
+            }
+        }
 
         /// <summary>
         /// The zip code for the delivery
         /// </summary>
-        public string ZipCode { get; }
+        public required string ZipCode
+        {
+            get => _zipCode;
+            set
+            {
+                ArgumentException.ThrowIfNullOrWhiteSpace(value);
+
+                SpeedexHelpers.ThrowIfInvalidZipCode(value);
+
+                _zipCode = value;
+            }
+        }
 
         /// <summary>
         /// The insurance amount of the consignment
         /// </summary>
-        public int InsuranceAmount { get; }
+        public required int InsuranceAmount
+        {
+            get => _insuranceAmount;
+            set
+            {
+                ArgumentOutOfRangeException.ThrowIfNegative(value);
+
+                _insuranceAmount = value;
+            }
+        }
 
         /// <summary>
         /// The flag indicating whether the consignment is going to be delivered on Saturday
         /// NOTE: Cannot be combined with the field <see cref="DeliveryTime"/>.
         /// </summary>
-        public bool ShouldBeDeliveredOnSaturday { get; }
+        public required bool ShouldBeDeliveredOnSaturday
+        {
+            get => _shouldBeDeliveredOnSaturday;
+            set
+            {
+                if (value && DeliveryTime != DeliveryTimeLimit.NoLimit)
+                    throw new InvalidOperationException("A Saturday delivery cannot be combined with a delivery time limit.");
+
+                _shouldBeDeliveredOnSaturday = value;
+            }
+        }
 
         /// <summary>
         /// The delivery time window
         /// NOTE: Cannot be combined with the field <see cref="ShouldBeDeliveredOnSaturday"/>.
         /// </summary>
-        public DeliveryTimeLimit DeliveryTime { get; }
+        public required DeliveryTimeLimit DeliveryTime
+        {
+            get => _deliveryTime;
+            set
+            {
+                if (ShouldBeDeliveredOnSaturday && value != DeliveryTimeLimit.NoLimit)
+                    throw new InvalidOperationException("A Saturday delivery cannot be combined with a delivery time limit.");
+
+                _deliveryTime = value;
+            }
+        }
 
         /// <summary>
         /// The weight of the consignment
         /// NOTE: The minimum value is 0.5 per item. 
         /// It is possible to change after the weighting from Speedex
         /// </summary>
-        public double Weight { get; }
+        public required double Weight
+        {
+            get => _weight;
+            set
+            {
+                var minimumWeight = NumberOfVouchers * SpeedexConstants.MinimumWeightPerVoucher;
+
+                if (value < minimumWeight)
+                    throw new InvalidOperationException($"The '{nameof(Weight)}' is invalid. The minimum weight for a voucher is {SpeedexConstants.MinimumWeightPerVoucher} kilos.");
+
+                _weight = value;
+            }
+        }
 
         #endregion
 
         #region Constructors
+
+        /// <summary>
+        /// Creates a new instance of <see cref="ConsignmentRequestModel"/>
+        /// </summary>
+        public ConsignmentRequestModel() : base()
+        {
+
+        }
 
         /// <summary>
         /// Creates a new instance of <see cref="ConsignmentRequestModel"/>
@@ -227,53 +405,11 @@ namespace Couriers.Speedex.RequestModels
         /// <param name="weight">The weight of the consignment</param>
         /// <param name="shouldBeDeliveredOnSaturday">The flag indicating whether the consignment is going to be delivered on Saturday</param>
         /// <param name="deliveryTime">The delivery time window</param>
+        [SetsRequiredMembers]
         public ConsignmentRequestModel(int customerFlag, int numberOfVouchers, ChargeType chargeType, PaymentType? paymentType,
             double cost, string address, string recipientName, string recipientPhoneNumber, string zipCode, double weight,
-            int insuranceAmount = 0, bool shouldBeDeliveredOnSaturday = false, DeliveryTimeLimit deliveryTime = DeliveryTimeLimit.NoLimit) : base()
+            int insuranceAmount = 0, bool shouldBeDeliveredOnSaturday = false, DeliveryTimeLimit deliveryTime = DeliveryTimeLimit.NoLimit) : this()
         {
-            if (numberOfVouchers <= 0)
-                throw new ArgumentOutOfRangeException(nameof(numberOfVouchers), $"The {nameof(numberOfVouchers)} cannot be negative or zero.");
-
-            if (cost < 0)
-                throw new ArgumentOutOfRangeException(nameof(cost), $"The {nameof(cost)} cannot be negative.");
-
-            if (insuranceAmount < 0)
-                throw new ArgumentOutOfRangeException(nameof(insuranceAmount), $"The {nameof(insuranceAmount)} cannot be negative.");
-
-            if (string.IsNullOrWhiteSpace(address))
-                throw new ArgumentException($"'{nameof(address)}' cannot be null or whitespace.", nameof(address));
-
-            if (string.IsNullOrWhiteSpace(recipientName))
-                throw new ArgumentException($"'{nameof(recipientName)}' cannot be null or whitespace.", nameof(recipientName));
-
-            if (string.IsNullOrWhiteSpace(zipCode))
-                throw new ArgumentException($"'{nameof(zipCode)}' cannot be null or whitespace.", nameof(zipCode));
-
-            if (string.IsNullOrWhiteSpace(recipientPhoneNumber))
-                throw new ArgumentException($"'{nameof(recipientPhoneNumber)}' cannot be null or whitespace.", nameof(recipientPhoneNumber));
-
-            if (numberOfVouchers > SpeedexConstants.MaximumNumberOfVouchers)
-                throw new ArgumentOutOfRangeException(nameof(numberOfVouchers), $"The {nameof(numberOfVouchers)} cannot be greater than {SpeedexConstants.MaximumNumberOfVouchers}.");
-
-            if (cost > 0 && !paymentType.HasValue)
-                throw new InvalidOperationException($"The '{nameof(paymentType)}' is required when the '{nameof(cost)}' is greater then 0.");
-
-            if (address.Length > SpeedexConstants.MaximumAddressLength)
-                throw new InvalidOperationException($"The '{nameof(address)}' is not a valid address. The maximum length for an address field is {SpeedexConstants.MaximumAddressLength}.");
-
-            if (recipientPhoneNumber.Length > SpeedexConstants.MaximumPhoneNumberLength)
-                throw new InvalidOperationException($"The '{nameof(recipientPhoneNumber)}' is not a valid phone number. The maximum length for a phone number field is {SpeedexConstants.MaximumPhoneNumberLength}.");
-
-            SpeedexHelpers.ThrowIfInvalidZipCode(zipCode);
-
-            var minimumWeight = NumberOfVouchers * SpeedexConstants.MinimumWeightPerVoucher;
-
-            if (weight < minimumWeight)
-                throw new InvalidOperationException($"The '{nameof(weight)}' is invalid. The minimum weight for a voucher is {SpeedexConstants.MinimumWeightPerVoucher} kilos.");
-
-            if (shouldBeDeliveredOnSaturday && deliveryTime != DeliveryTimeLimit.NoLimit)
-                throw new InvalidOperationException("A Saturday delivery cannot be combined with a delivery time limit.");
-
             CustomerFlag = customerFlag;
 
             NumberOfVouchers = numberOfVouchers;
