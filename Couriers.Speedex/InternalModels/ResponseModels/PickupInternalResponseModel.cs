@@ -4,6 +4,7 @@ using Couriers.Speedex.ResponseModels;
 
 using System;
 using System.ComponentModel;
+using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Xml;
 using System.Xml.Serialization;
@@ -19,8 +20,6 @@ namespace Couriers.Speedex.InternalModels.ResponseModels
     {
         #region Public Properties
 
-#pragma warning disable CA1819 // Properties should not return arrays
-
         /// <summary>
         /// The unique pickup id
         /// </summary>
@@ -32,7 +31,7 @@ namespace Couriers.Speedex.InternalModels.ResponseModels
         /// </summary>
         [XmlArray("ConsignmentNumbers")]
         [XmlArrayItem("string")]
-        public string[] ConsignmentIds { get; set; } = Array.Empty<string>();
+        public string[] ConsignmentIds { get; set; } = [];
 
         /// <summary>
         /// The checkpoint code
@@ -112,8 +111,6 @@ namespace Couriers.Speedex.InternalModels.ResponseModels
         [XmlAnyElement]
         public XmlElement[]? UnmappedElements { get; set; }
 
-#pragma warning restore CA1819 // Properties should not return arrays
-
         #endregion
 
         #region Constructors
@@ -134,6 +131,7 @@ namespace Couriers.Speedex.InternalModels.ResponseModels
         /// <inheritdoc/>
         /// </summary>
         /// <returns></returns>
+        [ExcludeFromCodeCoverage]
         public override string ToString() => Id;
 
         /// <summary>

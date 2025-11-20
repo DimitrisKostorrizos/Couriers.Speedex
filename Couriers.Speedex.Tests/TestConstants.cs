@@ -66,9 +66,7 @@ namespace Couriers.Speedex.Tests
 
             var pdfArray = new byte[130];
 
-#pragma warning disable CA5394 // Do not use insecure randomness
             Random.Shared.NextBytes(pdfArray);
-#pragma warning restore CA5394 // Do not use insecure randomness
 
             return new Dictionary<Type, object>()
             {
