@@ -105,7 +105,9 @@ namespace Couriers.Speedex.RequestModels
         /// <inheritdoc/>
         /// </summary>
         /// <returns></returns>
-        public override string ToString() => $"Voucher Count: {VoucherIds.Count()}";
+        [ExcludeFromCodeCoverage]
+        public override string ToString() 
+            => $"Vouchers: {VoucherIds.Count()}";
 
         #endregion
     }

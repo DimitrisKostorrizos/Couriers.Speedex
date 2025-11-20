@@ -124,7 +124,9 @@ namespace Couriers.Speedex.RequestModels
         /// <inheritdoc/>
         /// </summary>
         /// <returns></returns>
-        public override string ToString() => $"Number of Consignments: {ConsignmentIds.Count()}";
+        [ExcludeFromCodeCoverage]
+        public override string ToString() 
+            => $"Consignments: {ConsignmentIds.Count()}";
 
         #endregion
     }

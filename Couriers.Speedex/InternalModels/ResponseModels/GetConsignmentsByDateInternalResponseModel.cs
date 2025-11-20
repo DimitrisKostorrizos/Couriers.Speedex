@@ -4,6 +4,7 @@ using Couriers.Speedex.ResponseModels;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Xml;
 using System.Xml.Serialization;
@@ -61,7 +62,9 @@ namespace Couriers.Speedex.InternalModels.ResponseModels
         /// <inheritdoc/>
         /// </summary>
         /// <returns></returns>
-        public override string ToString() => Result.ToString();
+        [ExcludeFromCodeCoverage]
+        public override string ToString() 
+            => Result.ToString();
 
         /// <summary>
         /// Creates and return the <see cref="IEnumerable{T}"/> from the current object
@@ -83,8 +86,6 @@ namespace Couriers.Speedex.InternalModels.ResponseModels
     public class GetConsignmentsByDateResult : ISoapResponseModel<IEnumerable<ConsignmentDetailsResponseModel>>, IUnmappedXml
     {
         #region Public Properties
-
-#pragma warning disable CA1819 // Properties should not return arrays
 
         /// <summary>
         /// The return message
@@ -111,8 +112,6 @@ namespace Couriers.Speedex.InternalModels.ResponseModels
         [XmlAnyElement]
         public XmlElement[]? UnmappedElements { get; set; }
 
-#pragma warning restore CA1819 // Properties should not return arrays
-
         #endregion
 
         #region Constructors
@@ -133,7 +132,9 @@ namespace Couriers.Speedex.InternalModels.ResponseModels
         /// <inheritdoc/>
         /// </summary>
         /// <returns></returns>
-        public override string ToString() => Message;
+        [ExcludeFromCodeCoverage]
+        public override string ToString() 
+            => Message;
 
         /// <summary>
         /// Creates and return the <see cref="IEnumerable{T}"/> from the current object

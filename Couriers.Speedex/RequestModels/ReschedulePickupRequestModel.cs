@@ -98,7 +98,9 @@ namespace Couriers.Speedex.RequestModels
         /// <inheritdoc/>
         /// </summary>
         /// <returns></returns>
-        public override string ToString() => $"Pickup: {PickupId}, Pickup Date: {PickupDate}";
+        [ExcludeFromCodeCoverage]
+        public override string ToString() 
+            => $"Pickup: {PickupId}, Pickup Date: {PickupDate}";
 
         #endregion
     }

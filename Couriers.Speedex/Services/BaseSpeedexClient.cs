@@ -798,7 +798,7 @@ namespace Couriers.Speedex.Services
         private async Task<IHttpRequestResult> EnsureValidSessionAsync(CancellationToken cancellationToken = default)
         {
             if (cancellationToken.IsCancellationRequested)
-                return new HttpRequestResult<IEnumerable<CheckpointResponseModel>>("Operation cancelled.");
+                return new HttpRequestResult<IEnumerable<CheckpointResponseModel>>(OperationCancelledErrorMessage);
 
             // Get the response
             var response = await CreateSessionAsync(cancellationToken).ConfigureAwait(false);

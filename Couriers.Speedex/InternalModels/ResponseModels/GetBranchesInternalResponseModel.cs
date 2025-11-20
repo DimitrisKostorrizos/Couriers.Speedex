@@ -4,6 +4,7 @@ using Couriers.Speedex.ResponseModels;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Xml.Serialization;
 
@@ -18,16 +19,12 @@ namespace Couriers.Speedex.InternalModels.ResponseModels
     {
         #region Public Properties
 
-#pragma warning disable CA1819 // Properties should not return arrays
-
         /// <summary>
         /// The branch depots
         /// </summary>
         [XmlArray("Branches")]
         [XmlArrayItem("Branch")]
         public BranchInternalResponseModel[] BranchDepots { get; set; } = Array.Empty<BranchInternalResponseModel>();
-
-#pragma warning restore CA1819 // Properties should not return arrays
 
         #endregion
 
@@ -49,7 +46,9 @@ namespace Couriers.Speedex.InternalModels.ResponseModels
         /// <inheritdoc/>
         /// </summary>
         /// <returns></returns>
-        public override string ToString() => $"Branch Depots: {BranchDepots.Length}";
+        [ExcludeFromCodeCoverage]
+        public override string ToString() 
+            => $"Branch Depots: {BranchDepots.Length}";
 
         /// <summary>
         /// Creates and return the <see cref="IEnumerable{T}"/> from the current object
