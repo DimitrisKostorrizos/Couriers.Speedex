@@ -18,8 +18,6 @@ namespace Couriers.Speedex.InternalModels.RequestModels
     {
         #region Public Properties
 
-#pragma warning disable CA1819 // Properties should not return arrays
-
         /// <summary>
         /// The ids for the connected master consignments
         /// NOTE: The maximum count is <see cref="SpeedexConstants.MaximumNumberOfConsignmentsForPickup"/> master consignment numbers
@@ -27,8 +25,6 @@ namespace Couriers.Speedex.InternalModels.RequestModels
         [XmlArray("consignmentNumbers")]
         [XmlArrayItem("string")]
         public string[] ConsignmentIds { get; set; } = Array.Empty<string>();
-
-#pragma warning restore CA1819 // Properties should not return arrays
 
         /// <summary>
         /// The comments

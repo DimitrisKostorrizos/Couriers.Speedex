@@ -2,6 +2,7 @@
 using Couriers.Speedex.Enums;
 
 using System;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Couriers.Speedex.RequestModels
 {
@@ -309,7 +310,9 @@ namespace Couriers.Speedex.RequestModels
         /// <inheritdoc/>
         /// </summary>
         /// <returns></returns>
-        public override string ToString() => $"Address: {Address}, Zip Code: {ZipCode}";
+        [ExcludeFromCodeCoverage]
+        public override string ToString() 
+            => $"Address: {Address}, Zip Code: {ZipCode}";
 
         #endregion
     }

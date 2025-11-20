@@ -43,7 +43,10 @@ namespace Couriers.Speedex.Tests
         public static IEnumerable<ITheoryDataRow> Empty()
         {
             yield return new TheoryDataRow<IEnumerable<object>?>(null!);
-            yield return new TheoryDataRow<IEnumerable<object>?>([]);
+
+            var emptyArray = Array.Empty<string>();
+
+            yield return new TheoryDataRow<IEnumerable<object>?>(emptyArray);
         }
 
         #endregion
@@ -56,11 +59,7 @@ namespace Couriers.Speedex.Tests
         /// <returns></returns>
         public static string GenerateTestVoucherNumber()
         {
-#pragma warning disable CA5394 // Do not use insecure randomness
-
             var selectedDigits = Random.Shared.GetItems(_digits, 12);
-
-#pragma warning restore CA5394 // Do not use insecure randomness
 
             return string.Join(string.Empty, selectedDigits);
         }
@@ -71,11 +70,7 @@ namespace Couriers.Speedex.Tests
         /// <returns></returns>
         public static string GenerateTestPickupNumber()
         {
-#pragma warning disable CA5394 // Do not use insecure randomness
-
             var selectedDigits = Random.Shared.GetItems(_digits, 8);
-
-#pragma warning restore CA5394 // Do not use insecure randomness
 
             var digits = string.Join(string.Empty, selectedDigits);
 

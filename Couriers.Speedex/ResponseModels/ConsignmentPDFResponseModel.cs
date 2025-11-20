@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Couriers.Speedex.ResponseModels
 {
@@ -49,6 +50,7 @@ namespace Couriers.Speedex.ResponseModels
         /// <inheritdoc/>
         /// </summary>
         /// <returns></returns>
+        [ExcludeFromCodeCoverage]
         public override string ToString() => VoucherId;
 
         #endregion

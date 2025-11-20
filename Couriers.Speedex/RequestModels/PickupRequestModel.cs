@@ -3,6 +3,7 @@ using Couriers.Speedex.Enums;
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 namespace Couriers.Speedex.RequestModels
@@ -102,7 +103,9 @@ namespace Couriers.Speedex.RequestModels
         /// <inheritdoc/>
         /// </summary>
         /// <returns></returns>
-        public override string ToString() => $"Number of Consignments: {ConsignmentIds.Count()}";
+        [ExcludeFromCodeCoverage]
+        public override string ToString() 
+            => $"Consignments: {ConsignmentIds.Count()}";
 
         #endregion
     }

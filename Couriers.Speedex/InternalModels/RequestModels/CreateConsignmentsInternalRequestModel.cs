@@ -18,16 +18,12 @@ namespace Couriers.Speedex.InternalModels.RequestModels
     {
         #region Public Properties
 
-#pragma warning disable CA1819 // Properties should not return arrays
-
         /// <summary>
         /// The consignments
         /// </summary>
         [XmlArray("inListPod")]
         [XmlArrayItem("BOL")]
         public ConsignmentInternalRequestModel[]? Consignments { get; set; }
-
-#pragma warning restore CA1819 // Properties should not return arrays
 
         #endregion
 

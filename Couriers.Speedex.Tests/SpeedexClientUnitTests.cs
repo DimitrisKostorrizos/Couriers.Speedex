@@ -87,8 +87,6 @@ namespace Couriers.Speedex.Tests
 
         #region Test Methods
 
-#pragma warning disable CA1707 // Identifiers should not contain underscores
-
         /// <summary>
         /// Validates that when <see cref="BaseSpeedexClient.CreateSessionAsync"/> is called, 
         /// with valid data, it successfully returns a session id
@@ -583,8 +581,6 @@ namespace Couriers.Speedex.Tests
 
             AssertValidHttpRequestResult(response);
         }
-
-#pragma warning restore CA1707 // Identifiers should not contain underscores
 
         #endregion
 

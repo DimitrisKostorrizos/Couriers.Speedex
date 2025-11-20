@@ -18,8 +18,6 @@ namespace Couriers.Speedex.InternalModels.RequestModels
     {
         #region Public Properties
 
-#pragma warning disable CA1819 // Properties should not return arrays
-
         /// <summary>
         /// The paper size
         /// </summary>
@@ -39,8 +37,6 @@ namespace Couriers.Speedex.InternalModels.RequestModels
         [XmlArray("voucherIDs")]
         [XmlArrayItem("string")]
         public string[] VoucherIds { get; set; } = Array.Empty<string>();
-
-#pragma warning restore CA1819 // Properties should not return arrays
 
         #endregion
 
