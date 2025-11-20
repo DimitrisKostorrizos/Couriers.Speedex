@@ -31,7 +31,7 @@ namespace Couriers.Speedex.DependencyInjection
 
             services.AddScoped<ISpeedexClient>(serviceProvider => new SpeedexClient(speedexCredentials, serviceProvider.GetRequiredService<IHttpClientFactory>().CreateClient()));
 
-            if(serviceKey is not null)
+            if (serviceKey is not null)
                 services.AddKeyedScoped<ISpeedexClient>(serviceKey, (serviceProvider, _) => new SpeedexClient(speedexCredentials, serviceProvider.GetRequiredService<IHttpClientFactory>().CreateClient()));
 
             return services;

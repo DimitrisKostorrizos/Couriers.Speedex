@@ -4,6 +4,7 @@ using Couriers.Speedex.ResponseModels;
 
 using System;
 using System.ComponentModel;
+using System.Diagnostics.CodeAnalysis;
 using System.Xml;
 using System.Xml.Serialization;
 
@@ -236,6 +237,7 @@ namespace Couriers.Speedex.InternalModels.ResponseModels
         /// <inheritdoc/>
         /// </summary>
         /// <returns></returns>
+        [ExcludeFromCodeCoverage]
         public override string ToString() => MasterConsignmentId;
 
         /// <summary>
