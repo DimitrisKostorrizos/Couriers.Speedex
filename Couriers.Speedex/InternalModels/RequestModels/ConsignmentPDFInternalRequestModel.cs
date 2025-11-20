@@ -4,7 +4,6 @@ using Couriers.Speedex.RequestModels;
 using System;
 using System.ComponentModel;
 using System.Diagnostics.CodeAnalysis;
-using System.Linq;
 using System.Xml.Serialization;
 
 namespace Couriers.Speedex.InternalModels.RequestModels
@@ -17,8 +16,6 @@ namespace Couriers.Speedex.InternalModels.RequestModels
     public class ConsignmentPdfInternalRequestModel : SessionIdInternalRequestModel
     {
         #region Public Properties
-
-#pragma warning disable CA1819 // Properties should not return arrays
 
         /// <summary>
         /// The paper size
@@ -38,9 +35,7 @@ namespace Couriers.Speedex.InternalModels.RequestModels
         /// </summary>
         [XmlArray("voucherIDs")]
         [XmlArrayItem("string")]
-        public string[] VoucherIds { get; set; } = Array.Empty<string>();
-
-#pragma warning restore CA1819 // Properties should not return arrays
+        public string[] VoucherIds { get; set; } = [];
 
         #endregion
 
@@ -71,7 +66,7 @@ namespace Couriers.Speedex.InternalModels.RequestModels
             {
                 PaperSize = SpeedexHelpers.FromPaperType(model.PaperSize),
                 ReturnMultipleVouchers = model.ReturnMultipleVouchers,
-                VoucherIds = model.VoucherIds.ToArray()
+                VoucherIds = [.. model.VoucherIds]
             };
         }
 

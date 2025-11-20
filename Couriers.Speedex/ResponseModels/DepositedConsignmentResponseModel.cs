@@ -93,6 +93,7 @@ namespace Couriers.Speedex.ResponseModels
         /// <inheritdoc/>
         /// </summary>
         /// <returns></returns>
+        [ExcludeFromCodeCoverage]
         public override string ToString() => Id;
 
         #endregion

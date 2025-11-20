@@ -1,6 +1,7 @@
 ﻿using Couriers.Speedex.Interfaces;
 
 using System.ComponentModel;
+using System.Diagnostics.CodeAnalysis;
 using System.Xml;
 using System.Xml.Serialization;
 
@@ -14,8 +15,6 @@ namespace Couriers.Speedex.InternalModels.ResponseModels
     public class MessageCollectionInternalResponseModel<TArrayResult> : ISoapReturnMessageModel, IUnmappedXml
     {
         #region Public Properties
-
-#pragma warning disable CA1819 // Properties should not return arrays
 
         /// <summary>
         /// The return message
@@ -41,8 +40,6 @@ namespace Couriers.Speedex.InternalModels.ResponseModels
         [XmlAnyElement]
         public XmlElement[]? UnmappedElements { get; set; }
 
-#pragma warning restore CA1819 // Properties should not return arrays
-
         #endregion
 
         #region Constructors
@@ -63,6 +60,7 @@ namespace Couriers.Speedex.InternalModels.ResponseModels
         /// <inheritdoc/>
         /// </summary>
         /// <returns></returns>
+        [ExcludeFromCodeCoverage]
         public override string ToString() => Message;
 
         #endregion

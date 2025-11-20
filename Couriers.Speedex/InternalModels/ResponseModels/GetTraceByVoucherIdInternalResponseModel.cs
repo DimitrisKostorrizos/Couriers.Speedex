@@ -3,6 +3,7 @@ using Couriers.Speedex.ResponseModels;
 
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Xml.Serialization;
 
@@ -17,16 +18,12 @@ namespace Couriers.Speedex.InternalModels.ResponseModels
     {
         #region Public Properties
 
-#pragma warning disable CA1819 // Properties should not return arrays
-
         /// <summary>
         /// The checkpoints
         /// </summary>
         [XmlArray("checkpoints")]
         [XmlArrayItem("Checkpoint")]
         public CheckpointInternalResponseModel[] Checkpoints { get; set; } = [];
-
-#pragma warning restore CA1819 // Properties should not return arrays
 
         #endregion
 
@@ -48,7 +45,9 @@ namespace Couriers.Speedex.InternalModels.ResponseModels
         /// <inheritdoc/>
         /// </summary>
         /// <returns></returns>
-        public override string ToString() => $"Checkpoints: {Checkpoints.Length}";
+        [ExcludeFromCodeCoverage]
+        public override string ToString() 
+            => $"Checkpoints: {Checkpoints.Length}";
 
         /// <summary>
         /// Creates and return the <see cref="IEnumerable{T}"/> from the current object

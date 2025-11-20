@@ -4,7 +4,6 @@ using Couriers.Speedex.RequestModels;
 using System;
 using System.ComponentModel;
 using System.Diagnostics.CodeAnalysis;
-using System.Linq;
 using System.Xml.Serialization;
 
 namespace Couriers.Speedex.InternalModels.RequestModels
@@ -18,17 +17,13 @@ namespace Couriers.Speedex.InternalModels.RequestModels
     {
         #region Public Properties
 
-#pragma warning disable CA1819 // Properties should not return arrays
-
         /// <summary>
         /// The ids for the connected master consignments
         /// NOTE: The maximum count is <see cref="SpeedexConstants.MaximumNumberOfConsignmentsForPickup"/> master consignment numbers
         /// </summary>
         [XmlArray("consignmentNumbers")]
         [XmlArrayItem("string")]
-        public string[] ConsignmentIds { get; set; } = Array.Empty<string>();
-
-#pragma warning restore CA1819 // Properties should not return arrays
+        public string[] ConsignmentIds { get; set; } = [];
 
         /// <summary>
         /// The comments
@@ -82,7 +77,7 @@ namespace Couriers.Speedex.InternalModels.RequestModels
             var internalModel = new PickupInternalRequestModel()
             {
                 Comments = model.Comments,
-                ConsignmentIds = model.ConsignmentIds.ToArray(),
+                ConsignmentIds = [.. model.ConsignmentIds],
                 PickupDate = model.PickupDate.ToDateTime(TimeOnly.MinValue)
             };
 

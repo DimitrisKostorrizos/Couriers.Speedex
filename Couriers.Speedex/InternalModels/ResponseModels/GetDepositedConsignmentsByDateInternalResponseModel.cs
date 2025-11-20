@@ -1,9 +1,9 @@
 ﻿using Couriers.Speedex.Interfaces;
 using Couriers.Speedex.ResponseModels;
 
-using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Xml;
 using System.Xml.Serialization;
@@ -61,14 +61,16 @@ namespace Couriers.Speedex.InternalModels.ResponseModels
         /// <inheritdoc/>
         /// </summary>
         /// <returns></returns>
-        public override string ToString() => Result.ToString();
+        [ExcludeFromCodeCoverage]
+        public override string ToString() 
+            => Result.ToString();
 
         /// <summary>
         /// Creates and return the <see cref="IEnumerable{T}"/> from the current object
         /// </summary>
         /// <returns></returns>
         public IEnumerable<DepositedConsignmentResponseModel> ToResponseModel()
-            => Result.Results.Select(x => x.ToResponseModel()).ToList();
+            => [.. Result.Results.Select(x => x.ToResponseModel())];
 
         #endregion
     }
@@ -82,8 +84,6 @@ namespace Couriers.Speedex.InternalModels.ResponseModels
     {
         #region Public Properties
 
-#pragma warning disable CA1819 // Properties should not return arrays
-
         /// <summary>
         /// The return message
         /// </summary>
@@ -95,7 +95,7 @@ namespace Couriers.Speedex.InternalModels.ResponseModels
         /// </summary>
         [XmlArray("Result")]
         [XmlArrayItem("GetDepositedConsignmentsByDateResult")]
-        public DepositedConsignmentInternalResponseModel[] Results { get; set; } = Array.Empty<DepositedConsignmentInternalResponseModel>();
+        public DepositedConsignmentInternalResponseModel[] Results { get; set; } = [];
 
         /// <summary>
         /// The return code
@@ -108,8 +108,6 @@ namespace Couriers.Speedex.InternalModels.ResponseModels
         /// </summary>
         [XmlAnyElement]
         public XmlElement[]? UnmappedElements { get; set; }
-
-#pragma warning restore CA1819 // Properties should not return arrays
 
         #endregion
 
@@ -131,6 +129,7 @@ namespace Couriers.Speedex.InternalModels.ResponseModels
         /// <inheritdoc/>
         /// </summary>
         /// <returns></returns>
+        [ExcludeFromCodeCoverage]
         public override string ToString() => Message;
 
         /// <summary>
@@ -138,7 +137,7 @@ namespace Couriers.Speedex.InternalModels.ResponseModels
         /// </summary>
         /// <returns></returns>
         public IEnumerable<DepositedConsignmentResponseModel> ToResponseModel()
-            => Results.Select(x => x.ToResponseModel()).ToList();
+            => [.. Results.Select(x => x.ToResponseModel())];
 
         #endregion
     }
