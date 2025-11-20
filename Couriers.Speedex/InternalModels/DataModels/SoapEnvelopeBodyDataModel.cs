@@ -2,6 +2,7 @@
 
 using System.ComponentModel;
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using System.Xml.Linq;
 using System.Xml.Serialization;
 
@@ -53,7 +54,16 @@ namespace Couriers.Speedex.InternalModels.DataModels
         /// <inheritdoc/>
         /// </summary>
         /// <returns></returns>
-        public override string ToString() => Model.ToString() ?? string.Empty;
+        [ExcludeFromCodeCoverage]
+        public override string ToString()
+        {
+            var stringRepresentation = Model.ToString();
+
+            if(!string.IsNullOrWhiteSpace(stringRepresentation))
+                return stringRepresentation;
+
+            return typeof(TBody).ToString();
+        }
 
         #endregion
     }

@@ -2,6 +2,7 @@
 using Couriers.Speedex.ResponseModels;
 
 using System.ComponentModel;
+using System.Diagnostics.CodeAnalysis;
 using System.Xml;
 using System.Xml.Serialization;
 
@@ -42,13 +43,16 @@ namespace Couriers.Speedex.InternalModels.ResponseModels
         /// <inheritdoc/>
         /// </summary>
         /// <returns></returns>
-        public override string ToString() => LastCheckpoint.ToString();
+        [ExcludeFromCodeCoverage]
+        public override string ToString() 
+            => LastCheckpoint.ToString();
 
         /// <summary>
         /// Creates and return the <see cref="PickupCheckpointResponseModel"/> from the current object
         /// </summary>
         /// <returns></returns>
-        public PickupCheckpointResponseModel ToResponseModel() => LastCheckpoint.ToResponseModel();
+        public PickupCheckpointResponseModel ToResponseModel() 
+            => LastCheckpoint.ToResponseModel();
 
         #endregion
     }

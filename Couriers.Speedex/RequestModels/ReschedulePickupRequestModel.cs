@@ -1,6 +1,7 @@
 ﻿using Couriers.Speedex.Enums;
 
 using System;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Couriers.Speedex.RequestModels
 {
@@ -76,7 +77,9 @@ namespace Couriers.Speedex.RequestModels
         /// <inheritdoc/>
         /// </summary>
         /// <returns></returns>
-        public override string ToString() => $"Pickup: {PickupId}, Pickup Date: {PickupDate}";
+        [ExcludeFromCodeCoverage]
+        public override string ToString() 
+            => $"Pickup: {PickupId}, Pickup Date: {PickupDate}";
 
         #endregion
     }

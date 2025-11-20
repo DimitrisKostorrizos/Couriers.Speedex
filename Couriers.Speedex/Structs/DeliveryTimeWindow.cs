@@ -53,7 +53,8 @@ namespace Couriers.Speedex.Structs
         /// Returns a string that represents the current object.
         /// </summary>
         /// <returns></returns>
-        public override string? ToString()
+        [ExcludeFromCodeCoverage]
+        public override string ToString()
         {
             if (IsTimeWindowSpecified)
                 return $"{StartingTime.Value} - {EndingTime.Value}";
@@ -96,7 +97,7 @@ namespace Couriers.Speedex.Structs
 
             if (IsTimeWindowSpecified
                 && other.IsTimeWindowSpecified
-                && StartingTime.Value == other.StartingTime
+                && StartingTime.Value == other.StartingTime.Value
                 && EndingTime.Value == other.EndingTime.Value)
                 return true;
 
