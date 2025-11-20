@@ -445,7 +445,9 @@ namespace Couriers.Speedex.RequestModels
         /// <inheritdoc/>
         /// </summary>
         /// <returns></returns>
-        public override string ToString() => $"Address: {Address}, Zip Code: {ZipCode}";
+        [ExcludeFromCodeCoverage]
+        public override string ToString() 
+            => $"Address: {Address}, Zip Code: {ZipCode}";
 
         #endregion
     }

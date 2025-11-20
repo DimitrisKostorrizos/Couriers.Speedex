@@ -1,4 +1,5 @@
-﻿using System.Xml;
+﻿using System.Diagnostics.CodeAnalysis;
+using System.Xml;
 using System.Xml.Serialization;
 
 namespace Couriers.Speedex.Interfaces
@@ -19,6 +20,8 @@ namespace Couriers.Speedex.Interfaces
         /// <summary>
         /// A flag indicating whether any unmapped elements exist
         /// </summary>
+        [ExcludeFromCodeCoverage]
+        [MemberNotNullWhen(true, nameof(UnmappedElements))]
         bool HasUnmappedElements => UnmappedElements is not null && UnmappedElements.Length > 0;
 
         #endregion

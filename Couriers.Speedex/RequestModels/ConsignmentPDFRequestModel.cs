@@ -91,7 +91,7 @@ namespace Couriers.Speedex.RequestModels
         /// <param name="voucherId">The voucher id</param>
         /// <param name="paperSize">The paper size</param>
         [SetsRequiredMembers]
-        public ConsignmentPdfRequestModel(string voucherId, PaperSize paperSize) : this(new string[] { voucherId }, paperSize)
+        public ConsignmentPdfRequestModel(string voucherId, PaperSize paperSize) : this([voucherId], paperSize)
         {
 
         }
@@ -104,7 +104,9 @@ namespace Couriers.Speedex.RequestModels
         /// <inheritdoc/>
         /// </summary>
         /// <returns></returns>
-        public override string ToString() => $"Voucher Count: {VoucherIds.Count()}";
+        [ExcludeFromCodeCoverage]
+        public override string ToString() 
+            => $"Vouchers: {VoucherIds.Count()}";
 
         #endregion
     }
