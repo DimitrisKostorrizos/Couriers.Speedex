@@ -102,7 +102,7 @@ namespace Couriers.Speedex.InternalModels.ResponseModels
         /// The country for the delivery
         /// </summary>
         [XmlElement("RCV_Country")]
-        public string Country { get; } = "GR";
+        public string Country { get; set; } = SpeedexConstants.GreeceCountryCode;
 
         /// <summary>
         /// The name of the recipient

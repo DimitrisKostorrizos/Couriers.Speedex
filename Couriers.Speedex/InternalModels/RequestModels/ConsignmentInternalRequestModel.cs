@@ -1,4 +1,5 @@
-﻿using Couriers.Speedex.RequestModels;
+﻿using Couriers.Speedex.Constants;
+using Couriers.Speedex.RequestModels;
 
 using System;
 using System.ComponentModel;
@@ -101,7 +102,7 @@ namespace Couriers.Speedex.InternalModels.RequestModels
         /// The country for the delivery
         /// </summary>
         [XmlElement("RCV_Country")]
-        public string? Country { get; } = "GR";
+        public string? Country { get; set; }
 
         /// <summary>
         /// The name of the recipient
@@ -199,6 +200,7 @@ namespace Couriers.Speedex.InternalModels.RequestModels
                 BranchBankCode = model.BranchBankCode,
                 ChargeType = SpeedexHelpers.FromChargeType(model.ChargeType),
                 Cost = model.Cost,
+                Country = SpeedexConstants.GreeceCountryCode,
                 CustomerCode = customerCode,
                 CustomerFlag = model.CustomerFlag,
                 DeliveryTime = SpeedexHelpers.FromDeliveryTimeLimit(model.DeliveryTime),
