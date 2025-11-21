@@ -44,7 +44,7 @@ namespace Couriers.Speedex.Tests
 
         /// <summary>
         /// Validates that when <see cref="DeliveryTimeWindow"/> constructor is called, 
-        /// with invalid time window arguments, the expected time window is specified
+        /// with invalid time window arguments, an <see cref="Exception"/> is thrown
         /// </summary>
         /// <returns></returns>
         [Fact]

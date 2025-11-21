@@ -573,7 +573,7 @@ namespace Couriers.Speedex.Tests
         {
             var pickupDate = DateTime.Now.AddDays(3);
 
-            var pickupId = TestHelpers.GenerateTestPickupId();
+            var pickupId = TestHelpers.GenerateTestPickupNumber();
 
             var request = new ReschedulePickupRequestModel(pickupId, pickupDate);
 

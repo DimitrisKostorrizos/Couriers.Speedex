@@ -98,5 +98,10 @@ namespace Couriers.Speedex.Constants
         /// The integer value that Speedex uses to represent a true value
         /// </summary>
         public const int TrueValueIntegerRepresentation = 1;
+
+        /// <summary>
+        /// The country code for Greece
+        /// </summary>
+        public const string GreeceCountryCode = "GR";
     }
 }

@@ -80,7 +80,7 @@ namespace Couriers.Speedex.Tests
                             {
                                 ReturnCode = 1,
                                 ReturnMessage = string.Empty,
-                                SessionId = TestHelpers.GenerateTestPickupId()
+                                SessionId = TestHelpers.GenerateRandomString(30)
                             }
                         }
                     }
@@ -205,7 +205,7 @@ namespace Couriers.Speedex.Tests
                                 ReturnMessage = string.Empty,
                                 LastCheckpoint = new PickupCheckpointInternalResponseModel()
                                 {
-                                    PickupId = TestHelpers.GenerateTestPickupId(),
+                                    PickupId = TestHelpers.GenerateTestPickupNumber(),
                                     BranchDepot = "Test",
                                     CheckpointDate = DateTime.Now.AddDays(-2),
                                     StatusCode = "Test"
@@ -325,7 +325,7 @@ namespace Couriers.Speedex.Tests
                                 {
                                     Code = 1,
                                     Message = string.Empty,
-                                    Result = TestHelpers.GenerateTestPickupId()
+                                    Result = TestHelpers.GenerateTestPickupNumber()
                                 }
                             }
                         }
@@ -394,7 +394,7 @@ namespace Couriers.Speedex.Tests
                                         {
                                             Amount = 6,
                                             DateDeposited = DateTime.Now.AddDays(-4).ToString(SpeedexConstants.SpeedexCultureInfo),
-                                            Id = TestHelpers.GenerateTestPickupId()
+                                            Id = TestHelpers.GenerateTestVoucherNumber()
                                         }
                                     ]
                                 }
@@ -417,7 +417,7 @@ namespace Couriers.Speedex.Tests
                                     Result = new PickupInternalResponseModel()
                                     {
                                         Address = "Test",
-                                        Id = TestHelpers.GenerateTestPickupId(),
+                                        Id = TestHelpers.GenerateTestPickupNumber(),
                                         CheckpointCode = "Test",
                                         CheckpointGroupCode = "Test",
                                         City = "Test",
