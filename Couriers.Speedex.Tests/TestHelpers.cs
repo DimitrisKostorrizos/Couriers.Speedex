@@ -19,6 +19,17 @@ namespace Couriers.Speedex.Tests
         ];
 
         /// <summary>
+        /// The letters contained in the English alphabet
+        /// </summary>
+        private static readonly char[] _letters =
+        [
+            'a', 'b', 'c', 'd', 'e', 'f',
+            'g', 'h', 'i', 'j', 'k', 'l', 'm',
+            'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v',
+            'w', 'x', 'y', 'z'
+        ];
+
+        /// <summary>
         /// The number of days per week
         /// </summary>
         private static readonly int NumberOfDays = Enum.GetValues<DayOfWeek>().Length;
@@ -76,6 +87,7 @@ namespace Couriers.Speedex.Tests
 
             return $"PU-{digits}";
         }
+
         /// <summary>
         /// Returns the day in the next week based on the specified <paramref name="dayOfWeek"/>
         /// </summary>
@@ -98,12 +110,25 @@ namespace Couriers.Speedex.Tests
         }
 
         /// <summary>
-        /// Generates a new random pickup id
+        /// Generates a random <see cref="string"/> of length <paramref name="length"/>
         /// </summary>
+        /// <param name="length">The length of the returned string</param>
         /// <returns></returns>
-        public static string GenerateTestPickupId()
-            => Guid.NewGuid()
-                .ToString("N");
+        public static string GenerateRandomString(int length)
+        {
+            ArgumentOutOfRangeException.ThrowIfNegativeOrZero(length);
+
+            Span<char> span = stackalloc char[length];
+
+            for (int i = 0; i < length; i++)
+            {
+                var randomCharacterIndex = Random.Shared.Next(_letters.Length - 1);
+
+                span[i] = _letters[randomCharacterIndex];
+            }
+
+            return new string(span);
+        }
 
         #endregion
     }
