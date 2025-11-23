@@ -7,16 +7,16 @@ using System;
 namespace Couriers.Speedex.Tests
 {
     /// <summary>
-    /// The unit tests for the <see cref="PickupInternalRequestModel"/>
+    /// The unit tests for the <see cref="ReschedulePickupInternalRequestModel"/>
     /// </summary>
-    public sealed class PickupInternalRequestModelUnitTests
+    public sealed class ReschedulePickupInternalRequestModelUnitTests
     {
         #region Constructors
 
         /// <summary>
-        /// Creates a new instance of <see cref="PickupInternalRequestModelUnitTests"/>
+        /// Creates a new instance of <see cref="ReschedulePickupInternalRequestModelUnitTests"/>
         /// </summary>
-        public PickupInternalRequestModelUnitTests() : base()
+        public ReschedulePickupInternalRequestModelUnitTests() : base()
         {
 
         }
@@ -28,18 +28,18 @@ namespace Couriers.Speedex.Tests
         #region Test Methods
 
         /// <summary>
-        /// Validates that when <see cref="PickupInternalRequestModel.FromRequestModel(PickupRequestModel)"/> method is called, 
+        /// Validates that when <see cref="ReschedulePickupInternalRequestModel.FromRequestModel(ReschedulePickupRequestModel)"/> method is called, 
         /// with invalid arguments, an <see cref="Exception"/> is thrown
         /// </summary>
         /// <returns></returns>
         [Fact]
         public void FromRequestModel_WithInvalidArguments_ThrowsException()
         {
-            Assert.ThrowsAny<Exception>(() => PickupInternalRequestModel.FromRequestModel(null!));
+            Assert.ThrowsAny<Exception>(() => ReschedulePickupInternalRequestModel.FromRequestModel(null!));
         }
 
         /// <summary>
-        /// Validates that when <see cref="PickupInternalRequestModel.FromRequestModel(PickupRequestModel)"/> method is called, 
+        /// Validates that when <see cref="ReschedulePickupInternalRequestModel.FromRequestModel(ReschedulePickupRequestModel)"/> method is called, 
         /// with valid arguments, the expected result is returned
         /// </summary>
         /// <returns></returns>
@@ -48,15 +48,15 @@ namespace Couriers.Speedex.Tests
         {
             var pickupDate = DateOnly.FromDateTime(DateTime.Now);
 
-            var requestModel = new PickupRequestModel()
+            var requestModel = new ReschedulePickupRequestModel()
             {
+                PickupId = TestHelpers.GenerateTestPickupNumber(),
                 Comments = TestHelpers.GenerateRandomString(15),
-                ConsignmentIds = [TestHelpers.GenerateTestVoucherNumber()],
                 DeliveryTime = DeliveryTimeLimit.NoLimit,
                 PickupDate = pickupDate
             };
 
-            var result = PickupInternalRequestModel.FromRequestModel(requestModel);
+            var result = ReschedulePickupInternalRequestModel.FromRequestModel(requestModel);
 
             Assert.NotNull(result);
 
@@ -69,7 +69,7 @@ namespace Couriers.Speedex.Tests
                 DeliveryTime = DeliveryTimeLimit.TenAMToOnePM,
             };
 
-            result = PickupInternalRequestModel.FromRequestModel(updateRequestModel);
+            result = ReschedulePickupInternalRequestModel.FromRequestModel(updateRequestModel);
 
             Assert.NotNull(result);
 
