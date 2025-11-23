@@ -111,7 +111,7 @@ namespace Couriers.Speedex
 
         #endregion
 
-        #region Delivery Time Limit
+        #region Validation
 
         /// <summary>
         /// Throws a <see cref="InvalidOperationException"/> if the <paramref name="value"/>
@@ -148,6 +148,10 @@ namespace Couriers.Speedex
             if (value.Length > SpeedexConstants.MaximumZipCodeLength)
                 throw new InvalidOperationException($"The '{nameof(value)}' is not a valid zip code. The maximum length for a zip code field is {SpeedexConstants.MaximumZipCodeLength}.");
         }
+
+        #endregion
+
+        #region Delivery Time Limit
 
         /// <summary>
         /// Return the <see cref="DeliveryTimeLimit"/> that corresponds to the specified <paramref name="value"/>
@@ -269,6 +273,7 @@ namespace Couriers.Speedex
                 SupportedLanguage.English => 2,
                 _ => throw new InvalidOperationException($"The {value} is not a valid supported language.")
             };
+
         #endregion
 
         #endregion

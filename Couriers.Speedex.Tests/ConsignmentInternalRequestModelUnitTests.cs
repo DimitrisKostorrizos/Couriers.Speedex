@@ -15,7 +15,7 @@ namespace Couriers.Speedex.Tests
         #region Constructors
 
         /// <summary>
-        /// Creates a new instance of <see cref="ConsignmentInternalRequestModel"/>
+        /// Creates a new instance of <see cref="ConsignmentInternalRequestModelUnitTests"/>
         /// </summary>
         public ConsignmentInternalRequestModelUnitTests() : base()
         {
@@ -32,7 +32,7 @@ namespace Couriers.Speedex.Tests
         /// Validates that when <see cref="ConsignmentInternalRequestModel.FromRequestModel(ConsignmentRequestModel, string, string)"/> method is called, 
         /// with invalid arguments, an <see cref="Exception"/> is thrown
         /// </summary>
-        /// <returns></returns>
+        /// <param name="value">The empty <see cref="string"/> value</param>
         [Theory]
         [MemberData(nameof(TestHelpers.EmptyStringValues), MemberType = typeof(TestHelpers))]
         public void FromRequestModel_WithInvalidArguments_ThrowsException(string? value)
@@ -52,7 +52,7 @@ namespace Couriers.Speedex.Tests
 
         /// <summary>
         /// Validates that when <see cref="ConsignmentInternalRequestModel.FromRequestModel(ConsignmentRequestModel, string, string)"/> method is called, 
-        /// with valid arguments, the result is returned
+        /// with valid arguments, the expected result is returned
         /// </summary>
         /// <returns></returns>
         [Fact]
