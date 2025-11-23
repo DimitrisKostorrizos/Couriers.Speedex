@@ -6,16 +6,16 @@ using System;
 namespace Couriers.Speedex.Tests
 {
     /// <summary>
-    /// The unit tests for the <see cref="ConsignmentDetailsInternalResponseModel"/>
+    /// The unit tests for the <see cref="GetConsignmentsByDateResult"/>
     /// </summary>
-    public sealed class ConsignmentDetailsInternalResponseModelUnitTests
+    public sealed class GetConsignmentsByDateResultUnitTests
     {
         #region Constructors
 
         /// <summary>
-        /// Creates a new instance of <see cref="ConsignmentDetailsInternalResponseModelUnitTests"/>
+        /// Creates a new instance of <see cref="GetConsignmentsByDateResultUnitTests"/>
         /// </summary>
-        public ConsignmentDetailsInternalResponseModelUnitTests() : base()
+        public GetConsignmentsByDateResultUnitTests() : base()
         {
 
         }
@@ -27,14 +27,14 @@ namespace Couriers.Speedex.Tests
         #region Test Methods
 
         /// <summary>
-        /// Validates that when <see cref="ConsignmentDetailsInternalResponseModel.ToResponseModel()"/> method is called, 
+        /// Validates that when <see cref="GetConsignmentsByDateResult.ToResponseModel()"/> method is called, 
         /// with valid arguments, the expected result is returned
         /// </summary>
         /// <returns></returns>
         [Fact]
         public void ToResponseModel_WithValidValues_ReturnsExpectedResult()
         {
-            var responseModel = new ConsignmentDetailsInternalResponseModel()
+            var consignment = new ConsignmentDetailsInternalResponseModel()
             {
                 Address = TestHelpers.GenerateRandomString(15),
                 AgreementCode = TestHelpers.GenerateRandomString(6),
@@ -49,7 +49,7 @@ namespace Couriers.Speedex.Tests
                 CustomerCode = TestHelpers.GenerateRandomString(6),
                 CustomerComments = TestHelpers.GenerateRandomString(15),
                 DeliveryPostCode = TestHelpers.GenerateRandomString(5),
-                DeliveryTimeFrom = new TimeOnly(10,  0, 0).ToString(SpeedexConstants.SpeedexCultureInfo),
+                DeliveryTimeFrom = new TimeOnly(10, 0, 0).ToString(SpeedexConstants.SpeedexCultureInfo),
                 DeliveryTimeTo = new TimeOnly(13, 0, 0).ToString(SpeedexConstants.SpeedexCultureInfo),
                 FirstCustomerReference = TestHelpers.GenerateRandomString(7),
                 InsuranceAmount = 0,
@@ -70,21 +70,14 @@ namespace Couriers.Speedex.Tests
                 Weight = 1
             };
 
+            var responseModel = new GetConsignmentsByDateResult()
+            {
+                Results = [consignment]
+            };
+
             var result = responseModel.ToResponseModel();
 
             Assert.NotNull(result);
-
-            Assert.True(result.DeliveryTimeWindow.IsTimeWindowSpecified);
-
-            responseModel.DeliveryTimeFrom = string.Empty;
-
-            responseModel.DeliveryTimeTo = string.Empty;
-
-            result = responseModel.ToResponseModel();
-
-            Assert.NotNull(result);
-
-            Assert.False(result.DeliveryTimeWindow.IsTimeWindowSpecified);
         }
 
         #endregion

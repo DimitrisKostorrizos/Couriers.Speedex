@@ -90,8 +90,7 @@ namespace Couriers.Speedex.RequestModels
         /// <param name="pickupDate">The date for the pickup</param>
         public PickupRequestModel(string consignmentId, DateOnly pickupDate) : this(new string[] { consignmentId }, pickupDate)
         {
-            if (string.IsNullOrWhiteSpace(consignmentId))
-                throw new ArgumentException($"'{nameof(consignmentId)}' cannot be null or whitespace.", nameof(consignmentId));
+
         }
 
         #endregion

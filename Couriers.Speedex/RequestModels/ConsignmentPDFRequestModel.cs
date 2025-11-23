@@ -67,8 +67,7 @@ namespace Couriers.Speedex.RequestModels
         /// <param name="paperSize">The paper size</param>
         public ConsignmentPdfRequestModel(string voucherId, PaperSize paperSize) : this(new string[] { voucherId }, paperSize)
         {
-            if (string.IsNullOrWhiteSpace(voucherId))
-                throw new ArgumentException($"'{nameof(voucherId)}' cannot be null or whitespace.", nameof(voucherId));
+
         }
 
         #endregion

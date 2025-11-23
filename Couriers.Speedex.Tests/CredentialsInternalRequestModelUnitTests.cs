@@ -12,7 +12,7 @@ namespace Couriers.Speedex.Tests
         #region Constructors
 
         /// <summary>
-        /// Creates a new instance of <see cref="CredentialsInternalRequestModel"/>
+        /// Creates a new instance of <see cref="CredentialsInternalRequestModelUnitTests"/>
         /// </summary>
         public CredentialsInternalRequestModelUnitTests() : base()
         {
@@ -38,7 +38,7 @@ namespace Couriers.Speedex.Tests
 
         /// <summary>
         /// Validates that when <see cref="CredentialsInternalRequestModel.FromRequestModel(SpeedexCredentials)"/> method is called, 
-        /// with valid arguments, the result is returned
+        /// with valid arguments, the expected result is returned
         /// </summary>
         /// <returns></returns>
         [Fact]

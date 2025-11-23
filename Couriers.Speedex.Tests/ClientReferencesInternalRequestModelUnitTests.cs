@@ -14,7 +14,7 @@ namespace Couriers.Speedex.Tests
         #region Constructors
 
         /// <summary>
-        /// Creates a new instance of <see cref="ConsignmentPdfInternalRequestModel"/>
+        /// Creates a new instance of <see cref="ConsignmentPdfInternalRequestModelUnitTests"/>
         /// </summary>
         public ConsignmentPdfInternalRequestModelUnitTests() : base()
         {
@@ -40,7 +40,7 @@ namespace Couriers.Speedex.Tests
 
         /// <summary>
         /// Validates that when <see cref="ConsignmentPdfInternalRequestModel.FromRequestModel(ConsignmentPdfRequestModel)"/> method is called, 
-        /// with valid arguments, the result is returned
+        /// with valid arguments, the expected result is returned
         /// </summary>
         /// <returns></returns>
         [Fact]
