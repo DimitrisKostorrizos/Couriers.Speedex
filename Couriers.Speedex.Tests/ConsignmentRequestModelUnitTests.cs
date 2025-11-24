@@ -175,7 +175,7 @@ namespace Couriers.Speedex.Tests
                 FirstCustomerReference = customerReference,
                 SecondCustomerReference = customerReference,
                 ThirdCustomerReference = customerReference,
-                NumberOfVouchers = SpeedexConstants.MaximumNumberOfVouchers,
+                NumberOfVouchers = SpeedexConstants.MaximumNumberOfVouchers + 1,
                 FirstCommentsPart = TestHelpers.GenerateRandomString(10),
                 SecondCommentsPart = TestHelpers.GenerateRandomString(10),
                 ThirdCommentsPart = TestHelpers.GenerateRandomString(10),
