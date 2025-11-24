@@ -49,7 +49,7 @@ namespace Couriers.Speedex.InternalModels.ResponseModels
         /// </summary>
         /// <returns></returns>
         [ExcludeFromCodeCoverage]
-        public override string ToString() => 
+        public override string ToString() =>
             Result.Result ? "Successful" : "Unsuccessful";
 
         #endregion

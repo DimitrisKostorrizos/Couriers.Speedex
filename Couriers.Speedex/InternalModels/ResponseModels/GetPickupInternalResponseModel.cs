@@ -50,14 +50,14 @@ namespace Couriers.Speedex.InternalModels.ResponseModels
         /// </summary>
         /// <returns></returns>
         [ExcludeFromCodeCoverage]
-        public override string ToString() => 
+        public override string ToString() =>
             Result.Result.ToString();
 
         /// <summary>
         /// Creates and return the <see cref="PickupResponseModel"/> from the current object
         /// </summary>
         /// <returns></returns>
-        public PickupResponseModel ToResponseModel() 
+        public PickupResponseModel ToResponseModel()
             => Result.Result.ToResponseModel();
 
         #endregion

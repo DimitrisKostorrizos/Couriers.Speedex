@@ -22,8 +22,8 @@ namespace Couriers.Speedex.Interfaces
         [ExcludeFromCodeCoverage]
         string ISoapReturnMessageModel.Message
         {
-            get => Result.Message; 
-            set => Result.Message = value; 
+            get => Result.Message;
+            set => Result.Message = value;
         }
 
         /// <summary>
@@ -32,7 +32,7 @@ namespace Couriers.Speedex.Interfaces
         [ExcludeFromCodeCoverage]
         uint ISoapReturnMessageModel.Code
         {
-            get => Result.Code; 
+            get => Result.Code;
             set => Result.Code = value;
         }
 

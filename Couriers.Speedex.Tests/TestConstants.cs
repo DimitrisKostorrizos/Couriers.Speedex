@@ -465,6 +465,270 @@ namespace Couriers.Speedex.Tests
         public static IReadOnlyDictionary<Type, object> ResponseObjects => _instance.Value;
 
         /// <summary>
+        /// The response objects used for testing
+        /// </summary>
+        public static IReadOnlyDictionary<Type, object> UnauthorizedResponseObjects { get; } = new Dictionary<Type, object>()
+        {
+            {
+                typeof(SessionIdInternalResponseModel),
+                new SoapEnvelopeDataModel<SessionIdInternalResponseModel>()
+                {
+                    Body = new SoapEnvelopeBodyDataModel<SessionIdInternalResponseModel>()
+                    {
+                        Model = new SessionIdInternalResponseModel()
+                        {
+                            ReturnCode = 1,
+                            ReturnMessage = string.Empty,
+                            SessionId = TestHelpers.GenerateRandomString(30)
+                        }
+                    }
+                }
+            },
+            {
+                typeof(CancelConsignmentByVoucherIdInternalResponseModel),
+                new SoapEnvelopeDataModel<CancelConsignmentByVoucherIdInternalResponseModel>()
+                {
+                    Body = new SoapEnvelopeBodyDataModel<CancelConsignmentByVoucherIdInternalResponseModel>()
+                    {
+                        Model = new CancelConsignmentByVoucherIdInternalResponseModel()
+                        {
+                            ReturnCode = SpeedexConstants.UnauthorizedRequestCode,
+                            ReturnMessage = "Unauthorized"
+                        }
+                    }
+                }
+            },
+            {
+                typeof(CreateConsignmentsInternalResponseModel),
+                new SoapEnvelopeDataModel<CreateConsignmentsInternalResponseModel>()
+                {
+                    Body = new SoapEnvelopeBodyDataModel<CreateConsignmentsInternalResponseModel>()
+                    {
+                        Model = new CreateConsignmentsInternalResponseModel()
+                        {
+                            ReturnCode = SpeedexConstants.UnauthorizedRequestCode,
+                            ReturnMessage = "Unauthorized",
+                            Consignments = [],
+                            Statuses = []
+                        }
+                    }
+                }
+            },
+            {
+                typeof(GetConsignmentPdfInternalResponseModel),
+                new SoapEnvelopeDataModel<GetConsignmentPdfInternalResponseModel>()
+                {
+                    Body = new SoapEnvelopeBodyDataModel<GetConsignmentPdfInternalResponseModel>()
+                    {
+                        Model = new GetConsignmentPdfInternalResponseModel()
+                        {
+                            ReturnCode = SpeedexConstants.UnauthorizedRequestCode,
+                            ReturnMessage = "Unauthorized",
+                            Vouchers = []
+                        }
+                    }
+                }
+            },
+            {
+                typeof(GetBranchesInternalResponseModel),
+                new SoapEnvelopeDataModel<GetBranchesInternalResponseModel>()
+                {
+                    Body = new SoapEnvelopeBodyDataModel<GetBranchesInternalResponseModel>()
+                    {
+                        Model = new GetBranchesInternalResponseModel()
+                        {
+                            ReturnCode = SpeedexConstants.UnauthorizedRequestCode,
+                            ReturnMessage = "Unauthorized",
+                            BranchDepots = []
+                        }
+                    }
+                }
+            },
+            {
+                typeof(GetLastCheckpointInternalResponseModel),
+                new SoapEnvelopeDataModel<GetLastCheckpointInternalResponseModel>()
+                {
+                    Body = new SoapEnvelopeBodyDataModel<GetLastCheckpointInternalResponseModel>()
+                    {
+                        Model = new GetLastCheckpointInternalResponseModel()
+                        {
+                            ReturnCode =SpeedexConstants.UnauthorizedRequestCode,
+                            ReturnMessage = "Unauthorized",
+                            LastCheckPoint = new CheckpointInternalResponseModel()
+                        }
+                    }
+                }
+            },
+            {
+                typeof(GetLastPickupCheckpointInternalResponseModel),
+                new SoapEnvelopeDataModel<GetLastPickupCheckpointInternalResponseModel>()
+                {
+                    Body = new SoapEnvelopeBodyDataModel<GetLastPickupCheckpointInternalResponseModel>()
+                    {
+                        Model = new GetLastPickupCheckpointInternalResponseModel()
+                        {
+                            ReturnCode = SpeedexConstants.UnauthorizedRequestCode,
+                            ReturnMessage = "Unauthorized",
+                        }
+                    }
+                }
+            },
+            {
+                typeof(GetTraceByClientReferencesInternalResponseModel),
+                new SoapEnvelopeDataModel<GetTraceByClientReferencesInternalResponseModel>()
+                {
+                    Body = new SoapEnvelopeBodyDataModel<GetTraceByClientReferencesInternalResponseModel>()
+                    {
+                        Model = new GetTraceByClientReferencesInternalResponseModel()
+                        {
+                            ReturnCode = SpeedexConstants.UnauthorizedRequestCode,
+                            ReturnMessage = "Unauthorized",
+                            Checkpoints = []
+                        }
+                    }
+                }
+            },
+            {
+                typeof(GetTraceByTimeFrameInternalResponseModel),
+                new SoapEnvelopeDataModel<GetTraceByTimeFrameInternalResponseModel>()
+                {
+                    Body = new SoapEnvelopeBodyDataModel<GetTraceByTimeFrameInternalResponseModel>()
+                    {
+                        Model = new GetTraceByTimeFrameInternalResponseModel()
+                        {
+                            ReturnCode = SpeedexConstants.UnauthorizedRequestCode,
+                            ReturnMessage = "Unauthorized",
+                            Checkpoints = []
+                        }
+                    }
+                }
+            },
+            {
+                typeof(GetTraceByVoucherIdInternalResponseModel),
+                new SoapEnvelopeDataModel<GetTraceByVoucherIdInternalResponseModel>()
+                {
+                    Body = new SoapEnvelopeBodyDataModel<GetTraceByVoucherIdInternalResponseModel>()
+                    {
+                        Model = new GetTraceByVoucherIdInternalResponseModel()
+                        {
+                            ReturnCode = SpeedexConstants.UnauthorizedRequestCode,
+                            ReturnMessage = "Unauthorized",
+                            Checkpoints = []
+                        }
+                    }
+                }
+            },
+            {
+                typeof(CancelPickupInternalResponseModel),
+                new SoapEnvelopeDataModel<CancelPickupInternalResponseModel>()
+                {
+                    Body = new SoapEnvelopeBodyDataModel<CancelPickupInternalResponseModel>()
+                    {
+                        Model = new CancelPickupInternalResponseModel()
+                        {
+                            Result = new MessageInternalResponseModel<bool>
+                            {
+                                Code = SpeedexConstants.UnauthorizedRequestCode,
+                                Message = "Unauthorized",
+                                Result = false
+                            }
+                        }
+                    }
+                }
+            },
+            {
+                typeof(CreatePickupInternalResponseModel),
+                new SoapEnvelopeDataModel<CreatePickupInternalResponseModel>()
+                {
+                    Body = new SoapEnvelopeBodyDataModel<CreatePickupInternalResponseModel>()
+                    {
+                        Model = new CreatePickupInternalResponseModel()
+                        {
+                            Result = new MessageInternalResponseModel<string>()
+                            {
+                                Code = SpeedexConstants.UnauthorizedRequestCode,
+                                Message = "Unauthorized",
+                                Result = string.Empty
+                            }
+                        }
+                    }
+                }
+            },
+            {
+                typeof(GetConsignmentsByDateInternalResponseModel),
+                new SoapEnvelopeDataModel<GetConsignmentsByDateInternalResponseModel>()
+                {
+                    Body = new SoapEnvelopeBodyDataModel<GetConsignmentsByDateInternalResponseModel>()
+                    {
+                        Model = new GetConsignmentsByDateInternalResponseModel()
+                        {
+                            Result = new GetConsignmentsByDateResult()
+                            {
+                                Code = SpeedexConstants.UnauthorizedRequestCode,
+                                Message = "Unauthorized",
+                                Results = []
+                            }
+                        }
+                    }
+                }
+            },
+            {
+                typeof(GetDepositedConsignmentsByDateInternalResponseModel),
+                new SoapEnvelopeDataModel<GetDepositedConsignmentsByDateInternalResponseModel>()
+                {
+                    Body = new SoapEnvelopeBodyDataModel<GetDepositedConsignmentsByDateInternalResponseModel>()
+                    {
+                        Model = new GetDepositedConsignmentsByDateInternalResponseModel()
+                        {
+                            Result = new GetDepositedConsignmentsByDateResult()
+                            {
+                                Code = SpeedexConstants.UnauthorizedRequestCode,
+                                Message = "Unauthorized",
+                                Results = []
+                            }
+                        }
+                    }
+                }
+            },
+            {
+                typeof(GetPickupInternalResponseModel),
+                new SoapEnvelopeDataModel<GetPickupInternalResponseModel>()
+                {
+                    Body = new SoapEnvelopeBodyDataModel<GetPickupInternalResponseModel>()
+                    {
+                        Model = new GetPickupInternalResponseModel()
+                        {
+                            Result = new MessageInternalResponseModel<PickupInternalResponseModel>()
+                            {
+                                Code = SpeedexConstants.UnauthorizedRequestCode,
+                                Message = "Unauthorized",
+                                Result = new PickupInternalResponseModel()
+                            }
+                        }
+                    }
+                }
+            },
+            {
+                typeof(ReschedulePickupInternalResponseModel),
+                new SoapEnvelopeDataModel<ReschedulePickupInternalResponseModel>()
+                {
+                    Body = new SoapEnvelopeBodyDataModel<ReschedulePickupInternalResponseModel>()
+                    {
+                        Model = new ReschedulePickupInternalResponseModel()
+                        {
+                            Result = new MessageInternalResponseModel<bool>()
+                            {
+                                Code = SpeedexConstants.UnauthorizedRequestCode,
+                                Message = "Unauthorized",
+                                Result = false
+                            }
+                        }
+                    }
+                }
+            }
+        }.ToFrozenDictionary();
+
+        /// <summary>
         /// The test credentials
         /// </summary>
         public static readonly SpeedexCredentials SpeedexCredentials = new("demoapi", "GOOD-GO-HOME-GUYS", AgreementCode, CustomerCode);
@@ -482,7 +746,7 @@ namespace Couriers.Speedex.Tests
         /// <summary>
         /// The branch code
         /// </summary>
-        public const string BranchCode = "36100";
+        public const string BranchCode = "26441";
 
         /// <summary>
         /// The consignment used for testing
