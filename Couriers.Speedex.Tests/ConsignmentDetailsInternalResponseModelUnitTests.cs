@@ -49,7 +49,7 @@ namespace Couriers.Speedex.Tests
                 CustomerCode = TestHelpers.GenerateRandomString(6),
                 CustomerComments = TestHelpers.GenerateRandomString(15),
                 DeliveryPostCode = TestHelpers.GenerateRandomString(5),
-                DeliveryTimeFrom = new TimeOnly(10,  0, 0).ToString(SpeedexConstants.SpeedexCultureInfo),
+                DeliveryTimeFrom = new TimeOnly(10, 0, 0).ToString(SpeedexConstants.SpeedexCultureInfo),
                 DeliveryTimeTo = new TimeOnly(13, 0, 0).ToString(SpeedexConstants.SpeedexCultureInfo),
                 FirstCustomerReference = TestHelpers.GenerateRandomString(7),
                 InsuranceAmount = 0,

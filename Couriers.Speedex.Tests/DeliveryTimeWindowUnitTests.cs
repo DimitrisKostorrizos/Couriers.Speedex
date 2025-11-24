@@ -110,7 +110,7 @@ namespace Couriers.Speedex.Tests
 
             Assert.False(firstDeliveryTimeWindow != secordDeliveryTimeWindow);
 
-            Assert.True(firstDeliveryTimeWindow.Equals((object?) secordDeliveryTimeWindow));
+            Assert.True(firstDeliveryTimeWindow.Equals((object?)secordDeliveryTimeWindow));
 
             Assert.False(firstDeliveryTimeWindow.Equals(null));
 

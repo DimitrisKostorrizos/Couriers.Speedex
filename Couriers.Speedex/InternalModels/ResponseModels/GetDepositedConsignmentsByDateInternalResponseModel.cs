@@ -39,10 +39,10 @@ namespace Couriers.Speedex.InternalModels.ResponseModels
         /// The return code
         /// </summary>
         [ExcludeFromCodeCoverage]
-        uint ISoapReturnMessageModel.Code 
-        { 
-            get => Result.Code; 
-            set => Result.Code = value; 
+        uint ISoapReturnMessageModel.Code
+        {
+            get => Result.Code;
+            set => Result.Code = value;
         }
 
         /// <summary>
@@ -72,7 +72,7 @@ namespace Couriers.Speedex.InternalModels.ResponseModels
         /// </summary>
         /// <returns></returns>
         [ExcludeFromCodeCoverage]
-        public override string ToString() 
+        public override string ToString()
             => Result.ToString();
 
         /// <summary>

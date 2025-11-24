@@ -46,7 +46,7 @@ namespace Couriers.Speedex.InternalModels.ResponseModels
         /// </summary>
         /// <returns></returns>
         [ExcludeFromCodeCoverage]
-        public override string ToString() 
+        public override string ToString()
             => $"Branch Depots: {BranchDepots.Length}";
 
         /// <summary>

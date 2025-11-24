@@ -598,7 +598,7 @@ namespace Couriers.Speedex.Tests
                 ZipCode = zipCode
             });
         }
-        
+
         /// <summary>
         /// Validates that when <see cref="ConsignmentDetailsResponseModel"/> constructor is called, 
         /// with valid arguments, the expected result is returned

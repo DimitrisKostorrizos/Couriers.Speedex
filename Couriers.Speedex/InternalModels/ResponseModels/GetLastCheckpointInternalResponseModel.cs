@@ -44,14 +44,14 @@ namespace Couriers.Speedex.InternalModels.ResponseModels
         /// </summary>
         /// <returns></returns>
         [ExcludeFromCodeCoverage]
-        public override string ToString() 
+        public override string ToString()
             => LastCheckPoint.ToString();
 
         /// <summary>
         /// Creates and return the <see cref="CheckpointResponseModel"/> from the current object
         /// </summary>
         /// <returns></returns>
-        public CheckpointResponseModel ToResponseModel() 
+        public CheckpointResponseModel ToResponseModel()
             => LastCheckPoint.ToResponseModel();
 
         #endregion

@@ -201,16 +201,8 @@ namespace Couriers.Speedex.Services
 
                 // If not successful...
                 if (!response.IsSuccessful)
-                {
-                    var statusPerConsignment = response.Result
-                        .Statuses
-                        .Select((element, index) => $"Consignment {index}: {element}");
-
-                    var resultMessage = string.Join(", ", statusPerConsignment);
-
                     // Return the unsuccessful result
-                    return response.ToUnsuccessfulHttpRequestResult<IEnumerable<ConsignmentResponseModel>>(resultMessage);
-                }
+                    return response.ToUnsuccessfulHttpRequestResult<IEnumerable<ConsignmentResponseModel>>();
 
                 return HttpRequestResult.FromResult(response.Result.ToResponseModel(), response.RequestPayload, response.ResponsePayload);
             }
@@ -788,8 +780,7 @@ namespace Couriers.Speedex.Services
         /// <returns></returns>
         private async Task<IHttpRequestResult> EnsureValidSessionAsync(CancellationToken cancellationToken = default)
         {
-            if (cancellationToken.IsCancellationRequested)
-                return new HttpRequestResult<IEnumerable<CheckpointResponseModel>>(OperationCancelledErrorMessage, null, null);
+            cancellationToken.ThrowIfCancellationRequested();
 
             // Get the response
             var response = await CreateSessionAsync(cancellationToken).ConfigureAwait(false);
@@ -821,8 +812,7 @@ namespace Couriers.Speedex.Services
             where TResponse : class, ISoapReturnMessageModel, IUnmappedXml, new()
             where TRequest : SessionIdInternalRequestModel, new()
         {
-            if (cancellationToken.IsCancellationRequested)
-                return new HttpRequestResult<TResponse>(OperationCancelledErrorMessage, null, null);
+            cancellationToken.ThrowIfCancellationRequested();
 
             // If the session id requires refresh...
             if (RequiresSessionIdRefresh())
@@ -863,8 +853,7 @@ namespace Couriers.Speedex.Services
             where TResponse : class, ISoapReturnMessageModel, IUnmappedXml, new()
             where TRequest : class, new()
         {
-            if (cancellationToken.IsCancellationRequested)
-                return new InternalHttpRequestResult<TResponse>(OperationCancelledErrorMessage, null, null);
+            cancellationToken.ThrowIfCancellationRequested();
 
             var serializedRequestPayload = string.Empty;
 
@@ -895,9 +884,6 @@ namespace Couriers.Speedex.Services
 
                 var deserializedResponse = XmlHelpers.FromXml<SoapEnvelopeDataModel<TResponse>>(serializedResponsePayload);
 
-                if (deserializedResponse is null)
-                    return new InternalHttpRequestResult<TResponse>("De-serialization error", serializedRequestPayload, serializedResponsePayload);
-
                 // Get the response model
                 var responseModel = deserializedResponse.Body.Model;
 
@@ -911,9 +897,7 @@ namespace Couriers.Speedex.Services
                 }
 
 #if DEBUG
-                // If there is at least one unmapped XML element...
-                if (responseModel.HasUnmappedElements)
-                    Debugger.Break();
+                BreakIfUnmappedXmlElementsExist(responseModel);
 #endif
 
                 // Return the successful result
@@ -922,6 +906,28 @@ namespace Couriers.Speedex.Services
             catch (Exception ex)
             {
                 return new InternalHttpRequestResult<TResponse>(ex, serializedRequestPayload, serializedResponsePayload);
+            }
+        }
+
+        /// <summary>
+        /// Breaks the attached debugger if there is at least one unmapped XML element in the <paramref name="instance"/> 
+        /// </summary>
+        /// <param name="instance">The instance</param>
+        [ExcludeFromCodeCoverage]
+        private static void BreakIfUnmappedXmlElementsExist(IUnmappedXml instance)
+        {
+            ArgumentNullException.ThrowIfNull(instance);
+
+            // If there is at least one unmapped XML element...
+            if (instance.HasUnmappedElements)
+            {
+                var unmappedElements = instance.UnmappedElements
+                    .Select(x => x.Name)
+                    .ToList();
+
+                Console.WriteLine(unmappedElements);
+
+                Debugger.Break();
             }
         }
 
@@ -935,15 +941,6 @@ namespace Couriers.Speedex.Services
         /// <typeparam name="TResponse">The type of the result of the response</typeparam>
         private sealed class InternalHttpRequestResult<TResponse> : HttpRequestResult<TResponse>
         {
-            #region Constants
-
-            /// <summary>
-            /// The code that indicates whether the request is unauthorized
-            /// </summary>
-            public const uint UnauthorizedRequestCode = 1401;
-
-            #endregion
-
             #region Public Properties
 
             /// <summary>
@@ -975,16 +972,7 @@ namespace Couriers.Speedex.Services
             /// <param name="errorCode">The error code</param>
             public InternalHttpRequestResult([NotNull] string errorMessage, string? requestPayload, string? responsePayload, uint? errorCode = null) : base(errorMessage, requestPayload, responsePayload)
             {
-                IsUnauthorizedRequest = errorCode.HasValue && errorCode.Value == UnauthorizedRequestCode;
-            }
-
-            /// <summary>
-            /// <inheritdoc/>
-            /// </summary>
-            /// <param name="errorMessage">The error message</param>
-            public InternalHttpRequestResult([NotNull] string errorMessage) : this(errorMessage, null, null, 0)
-            {
-
+                IsUnauthorizedRequest = errorCode.HasValue && errorCode.Value == SpeedexConstants.UnauthorizedRequestCode;
             }
 
             /// <summary>
