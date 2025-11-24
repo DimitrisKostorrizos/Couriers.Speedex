@@ -3,7 +3,6 @@ using Couriers.Speedex.ResponseModels;
 
 using System;
 using System.Collections.Generic;
-using System.Net;
 
 namespace Couriers.Speedex.Tests
 {
@@ -61,7 +60,7 @@ namespace Couriers.Speedex.Tests
             var pickupDate = DateTime.Now;
 
             var pickupTimeFrom = DateTime.MinValue.AddHours(13);
-            
+
             var pickupTimeTo = DateTime.MinValue.AddHours(16);
 
             var postCode = TestHelpers.GenerateRandomString(5);
@@ -355,7 +354,7 @@ namespace Couriers.Speedex.Tests
 
             var postCode = TestHelpers.GenerateRandomString(5);
 
-            var result = new PickupResponseModel(pickupId, consignmentIds, checkpointCode, checkpointGroupCode, address,city, countryCode,
+            var result = new PickupResponseModel(pickupId, consignmentIds, checkpointCode, checkpointGroupCode, address, city, countryCode,
                 comments, name, phoneNumber, postCode, pickupDate, pickupTimeFrom, pickupTimeTo);
 
             Assert.NotNull(result);

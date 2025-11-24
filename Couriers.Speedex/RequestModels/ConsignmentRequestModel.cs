@@ -311,7 +311,7 @@ namespace Couriers.Speedex.RequestModels
         /// </summary>
         /// <returns></returns>
         [ExcludeFromCodeCoverage]
-        public override string ToString() 
+        public override string ToString()
             => $"Address: {Address}, Zip Code: {ZipCode}";
 
         #endregion

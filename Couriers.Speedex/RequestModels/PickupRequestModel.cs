@@ -76,7 +76,7 @@ namespace Couriers.Speedex.RequestModels
             if (consignmentCount > SpeedexConstants.MaximumNumberOfConsignments)
                 throw new ArgumentOutOfRangeException(nameof(consignmentIds), $"The maximum number of consignments is {SpeedexConstants.MaximumNumberOfConsignments}.");
 
-            if(consignmentIds.Any(x => string.IsNullOrWhiteSpace(x)))
+            if (consignmentIds.Any(x => string.IsNullOrWhiteSpace(x)))
                 throw new ArgumentException($"All the consignment ids cannot be null or whitespace.", nameof(consignmentIds));
 
             ConsignmentIds = consignmentIds;
@@ -103,7 +103,7 @@ namespace Couriers.Speedex.RequestModels
         /// </summary>
         /// <returns></returns>
         [ExcludeFromCodeCoverage]
-        public override string ToString() 
+        public override string ToString()
             => $"Consignments: {ConsignmentIds.Count()}";
 
         #endregion

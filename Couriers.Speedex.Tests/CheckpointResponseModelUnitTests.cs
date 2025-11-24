@@ -88,7 +88,7 @@ namespace Couriers.Speedex.Tests
 
             var statusDescription = TestHelpers.GenerateRandomString(20);
 
-            var result = new CheckpointResponseModel(branchDepot, branchId, checkpointDate, customerComments, customerReference, customerReference, 
+            var result = new CheckpointResponseModel(branchDepot, branchId, checkpointDate, customerComments, customerReference, customerReference,
                 customerReference, recipientName, statusCode, statusDescription, voucherId);
 
             Assert.NotNull(result);

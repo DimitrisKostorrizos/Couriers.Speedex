@@ -406,7 +406,7 @@ namespace Couriers.Speedex.Tests
                 value!, weight, chargeType, agreementCode, customerCode, customerReference, customerReference, customerReference, address, recipientName,
                 recipientPhoneNumber, insuranceAmount, shouldBeDeliveredOnSaturday, consignmentId, parcelCount, zipCode, deliveryTime));
         }
-        
+
         /// <summary>
         /// Validates that when <see cref="ConsignmentDetailsResponseModel"/> constructor is called, 
         /// with valid arguments, the expected result is returned

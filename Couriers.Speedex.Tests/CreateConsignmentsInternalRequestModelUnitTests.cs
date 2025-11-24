@@ -64,7 +64,7 @@ namespace Couriers.Speedex.Tests
 
             var requestModel = new ConsignmentRequestModel(0, 1, ChargeType.Sender, PaymentType.Cash, 9, TestHelpers.GenerateRandomString(15),
                 TestHelpers.GenerateRandomString(20), TestHelpers.GenerateRandomString(10), TestHelpers.GenerateRandomString(5), 1,
-                0 , false, DeliveryTimeLimit.NoLimit)
+                0, false, DeliveryTimeLimit.NoLimit)
             {
                 BranchBankCode = TestHelpers.GenerateRandomString(15),
                 FirstCommentsPart = TestHelpers.GenerateRandomString(7),

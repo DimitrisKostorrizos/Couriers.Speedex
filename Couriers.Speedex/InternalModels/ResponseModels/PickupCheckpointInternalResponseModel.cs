@@ -69,7 +69,7 @@ namespace Couriers.Speedex.InternalModels.ResponseModels
         /// </summary>
         /// <returns></returns>
         [ExcludeFromCodeCoverage]
-        public override string ToString() 
+        public override string ToString()
             => PickupId;
 
         /// <summary>

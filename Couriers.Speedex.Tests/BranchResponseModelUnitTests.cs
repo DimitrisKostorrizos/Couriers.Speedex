@@ -89,7 +89,7 @@ namespace Couriers.Speedex.Tests
 
             var zipCode = TestHelpers.GenerateRandomString(5);
 
-            var result = new BranchResponseModel(address, city, id, name, telephoneNumber, zipCode,  latitude, longitude);
+            var result = new BranchResponseModel(address, city, id, name, telephoneNumber, zipCode, latitude, longitude);
 
             Assert.NotNull(result);
 

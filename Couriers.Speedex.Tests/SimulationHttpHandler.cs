@@ -1,6 +1,8 @@
 ﻿using Couriers.Common;
 using Couriers.Common.Xml;
 
+using System;
+using System.Collections.Generic;
 using System.Net;
 using System.Net.Http;
 using System.Threading;
@@ -11,8 +13,17 @@ namespace Couriers.Speedex.Tests
     /// <summary>
     /// The <see cref="DelegatingHandler"/> implementation that simulates the HTTP requests 
     /// </summary>
-    internal sealed class SimulationHttpHandler : DelegatingHandler
+    internal class SimulationHttpHandler : DelegatingHandler
     {
+        #region Internal Properties
+
+        /// <summary>
+        /// The mocked response objects used across the tests
+        /// </summary>
+        internal virtual IReadOnlyDictionary<Type, object> ResponseObjects { get; } = TestConstants.ResponseObjects;
+
+        #endregion
+
         #region Constructors
 
         /// <summary>
@@ -49,7 +60,7 @@ namespace Couriers.Speedex.Tests
 
             var responseType = requestContent.ResponseType;
 
-            var responseModel = TestConstants.ResponseObjects[responseType];
+            var responseModel = ResponseObjects[responseType];
 
             var responsePayload = XmlHelpers.ToXml(responseModel, SpeedexXmlNamespaces.SpeedexNamespaces);
 
