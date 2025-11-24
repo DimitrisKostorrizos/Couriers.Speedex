@@ -4,7 +4,6 @@ using Couriers.Speedex.ResponseModels;
 
 using System;
 using System.ComponentModel;
-using System.Globalization;
 using System.Diagnostics.CodeAnalysis;
 using System.Xml;
 using System.Xml.Serialization;

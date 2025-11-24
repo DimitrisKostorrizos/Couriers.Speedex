@@ -11,7 +11,7 @@ namespace Couriers.Speedex.ResponseModels
     public record ConsignmentDetailsResponseModel : BaseConsignmentResponseModel
     {
         #region Private Fields
-		
+
         /// <summary>
         /// The field for the <see cref="CashAmount"/>
         /// </summary>

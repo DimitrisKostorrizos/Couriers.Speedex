@@ -23,7 +23,7 @@ namespace Couriers.Speedex.ResponseModels
         /// <summary>
         /// The field for the <see cref="VoucherId"/>
         /// </summary>
-        private string _voucherId = default!; 
+        private string _voucherId = default!;
 
         #endregion
 

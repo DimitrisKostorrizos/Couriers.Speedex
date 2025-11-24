@@ -44,14 +44,14 @@ namespace Couriers.Speedex.InternalModels.ResponseModels
         /// </summary>
         /// <returns></returns>
         [ExcludeFromCodeCoverage]
-        public override string ToString() 
+        public override string ToString()
             => LastCheckpoint.ToString();
 
         /// <summary>
         /// Creates and return the <see cref="PickupCheckpointResponseModel"/> from the current object
         /// </summary>
         /// <returns></returns>
-        public PickupCheckpointResponseModel ToResponseModel() 
+        public PickupCheckpointResponseModel ToResponseModel()
             => LastCheckpoint.ToResponseModel();
 
         #endregion

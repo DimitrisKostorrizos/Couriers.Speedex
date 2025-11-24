@@ -5,7 +5,6 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
-using System.Runtime.CompilerServices;
 
 namespace Couriers.Speedex.RequestModels
 {
@@ -125,7 +124,7 @@ namespace Couriers.Speedex.RequestModels
         /// </summary>
         /// <returns></returns>
         [ExcludeFromCodeCoverage]
-        public override string ToString() 
+        public override string ToString()
             => $"Consignments: {ConsignmentIds.Count()}";
 
         #endregion
