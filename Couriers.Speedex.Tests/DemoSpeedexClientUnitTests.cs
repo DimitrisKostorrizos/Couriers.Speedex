@@ -6,16 +6,16 @@ using System.Net.Http;
 namespace Couriers.Speedex.Tests
 {
     /// <summary>
-    /// The unit tests for the <see cref="SpeedexClient"/>
+    /// The unit tests for the <see cref="DemoSpeedexClient"/>
     /// </summary>
-    public sealed class SpeedexClientUnitTests
+    public sealed class DemoSpeedexClientUnitTests
     {
         #region Constructors
 
         /// <summary>
-        /// Creates a new instance of <see cref="SpeedexClientUnitTests"/>
+        /// Creates a new instance of <see cref="DemoSpeedexClientUnitTests"/>
         /// </summary>
-        public SpeedexClientUnitTests() : base()
+        public DemoSpeedexClientUnitTests() : base()
         {
 
         }
@@ -27,16 +27,16 @@ namespace Couriers.Speedex.Tests
         #region Test Methods
 
         /// <summary>
-        /// Validates that when <see cref="SpeedexClient"/> constructors are called, 
+        /// Validates that when <see cref="DemoSpeedexClient"/> constructors are called, 
         /// using valid data, the expected result is returned
         /// </summary>
         /// <returns></returns>
         [Fact]
-        public void SpeedexClient_WithValidData_ExpectedResultIsReturned()
+        public void DemoSpeedexClient_WithValidData_ExpectedResultIsReturned()
         {
-            var client = new SpeedexClient(TestConstants.SpeedexCredentials);
+            var client = new DemoSpeedexClient(TestConstants.SpeedexCredentials);
 
-            var apiUrl = new Uri("https://spdxws.gr/accesspoint.asmx");
+            var apiUrl = new Uri("https://devspdxws.gr/accesspoint.asmx");
 
             Assert.NotNull(client);
 
@@ -44,7 +44,7 @@ namespace Couriers.Speedex.Tests
 
             Assert.Equal(TestConstants.SpeedexCredentials, client.Credentials);
 
-            client = new SpeedexClient(TestConstants.SpeedexCredentials, new HttpClient());
+            client = new DemoSpeedexClient(TestConstants.SpeedexCredentials, new HttpClient());
 
             Assert.NotNull(client);
 

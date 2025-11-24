@@ -31,20 +31,20 @@ namespace Couriers.Speedex.InternalModels.ResponseModels
         /// The return message
         /// </summary>
         [ExcludeFromCodeCoverage]
-        string ISoapReturnMessageModel.Message 
-        { 
-            get => ReturnMessage; 
-            set => ReturnMessage = value; 
+        string ISoapReturnMessageModel.Message
+        {
+            get => ReturnMessage;
+            set => ReturnMessage = value;
         }
 
         /// <summary>
         /// The return code
         /// </summary>
         [ExcludeFromCodeCoverage]
-        uint ISoapReturnMessageModel.Code 
-        { 
-            get => ReturnCode; 
-            set => ReturnCode = value; 
+        uint ISoapReturnMessageModel.Code
+        {
+            get => ReturnCode;
+            set => ReturnCode = value;
         }
 
         /// <summary>

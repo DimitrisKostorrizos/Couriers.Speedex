@@ -202,7 +202,7 @@ namespace Couriers.Speedex.Tests
         public void ConsignmentRequestModel_WithInvalidComments_ThrowsException()
         {
             var customerReference = TestHelpers.GenerateRandomString(10);
-                        
+
             Assert.ThrowsAny<Exception>(() => new ConsignmentRequestModel()
             {
                 CustomerFlag = 0,
@@ -275,7 +275,7 @@ namespace Couriers.Speedex.Tests
                 Weight = 2
             });
         }
-        
+
         /// <summary>
         /// Validates that when <see cref="ConsignmentRequestModel"/> constructor is called, 
         /// with invalid payment details, an <see cref="Exception"/> is thrown
