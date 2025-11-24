@@ -332,7 +332,7 @@ namespace Couriers.Speedex.Tests
 
             var zipCode = TestHelpers.GenerateRandomString(5);
 
-            var result = new BaseConsignmentResponseModel(weight, chargeType, agreementCode, customerCode, customerReference, customerReference,  customerReference,
+            var result = new BaseConsignmentResponseModel(weight, chargeType, agreementCode, customerCode, customerReference, customerReference, customerReference,
                 address, recipientName, recipientPhoneNumber, insuranceAmount, shouldBeDeliveredOnSaturday, consignmentId, parcelCount, zipCode, deliveryTime);
 
             Assert.NotNull(result);

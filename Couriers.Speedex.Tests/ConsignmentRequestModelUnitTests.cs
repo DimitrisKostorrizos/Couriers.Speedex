@@ -130,7 +130,7 @@ namespace Couriers.Speedex.Tests
         public void ConsignmentRequestModel_WithInvalidComments_ThrowsException()
         {
             var customerReference = TestHelpers.GenerateRandomString(10);
-                        
+
             Assert.ThrowsAny<Exception>(() => new ConsignmentRequestModel(0, 1, ChargeType.Recipient, PaymentType.Cash, 5, TestHelpers.GenerateRandomString(10),
                 TestHelpers.GenerateRandomString(10), TestHelpers.GenerateRandomString(10), TestHelpers.GenerateRandomString(5), 2, 0, false, DeliveryTimeLimit.NoLimit)
             {
@@ -167,7 +167,7 @@ namespace Couriers.Speedex.Tests
                 ThirdCommentsPart = TestHelpers.GenerateRandomString(SpeedexConstants.MaximumCommentLength + 1)
             });
         }
-        
+
         /// <summary>
         /// Validates that when <see cref="ConsignmentRequestModel"/> constructor is called, 
         /// with invalid payment details, an <see cref="Exception"/> is thrown

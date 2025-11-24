@@ -59,7 +59,7 @@ namespace Couriers.Speedex.InternalModels.DataModels
         {
             var stringRepresentation = Model.ToString();
 
-            if(!string.IsNullOrWhiteSpace(stringRepresentation))
+            if (!string.IsNullOrWhiteSpace(stringRepresentation))
                 return stringRepresentation;
 
             return typeof(TBody).ToString();

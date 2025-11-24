@@ -1,13 +1,8 @@
 using Couriers.Speedex.Constants;
 using Couriers.Speedex.Enums;
-using Couriers.Speedex.InternalModels.RequestModels;
-using Couriers.Speedex.Structs;
-
-using Newtonsoft.Json.Linq;
 
 using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.Linq;
 
 namespace Couriers.Speedex.Tests
@@ -53,7 +48,7 @@ namespace Couriers.Speedex.Tests
         [Fact]
         public void ToChargeTypeUnit_WithValidArguments_ReturnsExpectedResul()
         {
-            var supportedChargeTypes = new Dictionary<uint, ChargeType>() 
+            var supportedChargeTypes = new Dictionary<uint, ChargeType>()
             {
                 { 1, ChargeType.Sender },
                 { 2, ChargeType.Recipient },
