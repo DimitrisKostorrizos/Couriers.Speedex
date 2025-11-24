@@ -124,7 +124,7 @@ namespace Couriers.Speedex.RequestModels
         /// </summary>
         /// <returns></returns>
         [ExcludeFromCodeCoverage]
-        public override string ToString() 
+        public override string ToString()
             => $"Consignments: {ConsignmentIds.Count()}";
 
         #endregion

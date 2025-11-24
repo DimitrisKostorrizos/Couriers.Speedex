@@ -78,7 +78,7 @@ namespace Couriers.Speedex.Tests
                 FirstCustomerReference = customerReference,
                 SecondCustomerReference = customerReference,
                 ThirdCustomerReference = customerReference,
-                InsuranceAmount= insuranceAmount,
+                InsuranceAmount = insuranceAmount,
                 ParcelCount = parcelCount,
                 PaymentType = PaymentType.Cash,
                 RecipientName = recipientName,

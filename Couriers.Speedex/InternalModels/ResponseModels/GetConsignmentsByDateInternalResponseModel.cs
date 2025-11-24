@@ -29,10 +29,10 @@ namespace Couriers.Speedex.InternalModels.ResponseModels
         /// The return message
         /// </summary>
         [ExcludeFromCodeCoverage]
-        string ISoapReturnMessageModel.Message 
-        { 
-            get => Result.Message; 
-            set { Result.Message = value; } 
+        string ISoapReturnMessageModel.Message
+        {
+            get => Result.Message;
+            set { Result.Message = value; }
         }
 
         /// <summary>
@@ -41,7 +41,7 @@ namespace Couriers.Speedex.InternalModels.ResponseModels
         [ExcludeFromCodeCoverage]
         uint ISoapReturnMessageModel.Code
         {
-            get => Result.Code; 
+            get => Result.Code;
             set => Result.Code = value;
         }
 
@@ -72,14 +72,14 @@ namespace Couriers.Speedex.InternalModels.ResponseModels
         /// </summary>
         /// <returns></returns>
         [ExcludeFromCodeCoverage]
-        public override string ToString() 
+        public override string ToString()
             => Result.ToString();
 
         /// <summary>
         /// Creates and return the <see cref="IEnumerable{T}"/> from the current object
         /// </summary>
         /// <returns></returns>
-        public IEnumerable<ConsignmentDetailsResponseModel> ToResponseModel() 
+        public IEnumerable<ConsignmentDetailsResponseModel> ToResponseModel()
             => [.. Result.Results.Select(x => x.ToResponseModel())];
 
         #endregion
@@ -140,14 +140,14 @@ namespace Couriers.Speedex.InternalModels.ResponseModels
         /// </summary>
         /// <returns></returns>
         [ExcludeFromCodeCoverage]
-        public override string ToString() 
+        public override string ToString()
             => Message;
 
         /// <summary>
         /// Creates and return the <see cref="IEnumerable{T}"/> from the current object
         /// </summary>
         /// <returns></returns>
-        public IEnumerable<ConsignmentDetailsResponseModel> ToResponseModel() 
+        public IEnumerable<ConsignmentDetailsResponseModel> ToResponseModel()
             => [.. Results.Select(x => x.ToResponseModel())];
 
         #endregion

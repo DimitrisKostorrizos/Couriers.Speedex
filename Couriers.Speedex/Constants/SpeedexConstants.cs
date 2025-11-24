@@ -103,5 +103,10 @@ namespace Couriers.Speedex.Constants
         /// The country code for Greece
         /// </summary>
         public const string GreeceCountryCode = "GR";
+
+        /// <summary>
+        /// The code that indicates whether the request is unauthorized
+        /// </summary>
+        public const uint UnauthorizedRequestCode = 1401;
     }
 }
