@@ -121,6 +121,7 @@ namespace Couriers.Speedex.Services
         /// </summary>
         /// <param name="cancellationToken">The cancellation token</param>
         /// <returns></returns>
+        [RequiresUnreferencedCode("Members from deserialized types may be trimmed if not referenced directly")]
         public async Task<IHttpRequestResult<string>> CreateSessionAsync(CancellationToken cancellationToken = default)
         {
             if (cancellationToken.IsCancellationRequested)
@@ -146,6 +147,7 @@ namespace Couriers.Speedex.Services
         /// <param name="voucherId">The unique voucher id</param>
         /// <param name="cancellationToken">The cancellation token</param>
         /// <returns></returns>
+        [RequiresUnreferencedCode("Members from deserialized types may be trimmed if not referenced directly")]
         public async Task<IHttpRequestResult> CancelConsignmentByVoucherIdAsync([NotNull] string voucherId, CancellationToken cancellationToken = default)
         {
             if (cancellationToken.IsCancellationRequested)
@@ -174,6 +176,7 @@ namespace Couriers.Speedex.Services
         /// <param name="values">The consignments</param>
         /// <param name="cancellationToken">The cancellation token</param>
         /// <returns></returns>
+        [RequiresUnreferencedCode("Members from deserialized types may be trimmed if not referenced directly")]
         public async Task<IHttpRequestResult<IEnumerable<ConsignmentResponseModel>>> CreateConsignmentsAsync([NotNull] IEnumerable<ConsignmentRequestModel> values, CancellationToken cancellationToken = default)
         {
             if (cancellationToken.IsCancellationRequested)
@@ -214,6 +217,7 @@ namespace Couriers.Speedex.Services
         /// <param name="model">The consignment</param>
         /// <param name="cancellationToken">The cancellation token</param>
         /// <returns></returns>
+        [RequiresUnreferencedCode("Members from deserialized types may be trimmed if not referenced directly")]
         public async Task<IHttpRequestResult<ConsignmentResponseModel>> CreateConsignmentAsync([NotNull] ConsignmentRequestModel model, CancellationToken cancellationToken = default)
         {
             if (cancellationToken.IsCancellationRequested)
@@ -246,6 +250,7 @@ namespace Couriers.Speedex.Services
         /// <param name="value">The consignments</param>
         /// <param name="cancellationToken">The cancellation token</param>
         /// <returns></returns>
+        [RequiresUnreferencedCode("Members from deserialized types may be trimmed if not referenced directly")]
         public async Task<IHttpRequestResult<IEnumerable<ConsignmentPdfResponseModel>>> GetConsignmentPdfsAsync([NotNull] ConsignmentPdfRequestModel value, CancellationToken cancellationToken = default)
         {
             if (cancellationToken.IsCancellationRequested)
@@ -282,6 +287,7 @@ namespace Couriers.Speedex.Services
         /// <param name="returnMultipleVouchers">The flag indicating whether a single merged PDF file will be returned or one PDF file per consignment will be returned</param>
         /// <param name="cancellationToken">The cancellation token</param>
         /// <returns></returns>
+        [RequiresUnreferencedCode("Members from deserialized types may be trimmed if not referenced directly")]
         public async Task<IHttpRequestResult<string>> GetConsignmentPdfAsync([NotNull] string voucherId, PaperSize paperSize, bool returnMultipleVouchers = false, CancellationToken cancellationToken = default)
         {
             if (cancellationToken.IsCancellationRequested)
@@ -322,6 +328,7 @@ namespace Couriers.Speedex.Services
         /// <param name="language">The language that the results will be translated to</param>
         /// <param name="cancellationToken">The cancellation token</param>
         /// <returns></returns>
+        [RequiresUnreferencedCode("Members from deserialized types may be trimmed if not referenced directly")]
         public async Task<IHttpRequestResult<IEnumerable<BranchResponseModel>>> GetBranchesAsync([NotNull] string zipCode, SupportedLanguage language = SupportedLanguage.Greek, CancellationToken cancellationToken = default)
         {
             if (cancellationToken.IsCancellationRequested)
@@ -363,6 +370,7 @@ namespace Couriers.Speedex.Services
         /// <param name="voucherId">The unique voucher id</param>
         /// <param name="cancellationToken">The cancellation token</param>
         /// <returns></returns>
+        [RequiresUnreferencedCode("Members from deserialized types may be trimmed if not referenced directly")]
         public async Task<IHttpRequestResult<CheckpointResponseModel>> GetLastCheckPointAsync([NotNull] string voucherId, CancellationToken cancellationToken = default)
         {
             if (cancellationToken.IsCancellationRequested)
@@ -398,6 +406,7 @@ namespace Couriers.Speedex.Services
         /// <param name="pickupId">The unique pickup id</param>
         /// <param name="cancellationToken">The cancellation token</param>
         /// <returns></returns>
+        [RequiresUnreferencedCode("Members from deserialized types may be trimmed if not referenced directly")]
         public async Task<IHttpRequestResult<PickupCheckpointResponseModel>> GetLastPickupCheckPointAsync([NotNull] string pickupId, CancellationToken cancellationToken = default)
         {
             if (cancellationToken.IsCancellationRequested)
@@ -433,6 +442,7 @@ namespace Couriers.Speedex.Services
         /// <param name="model">The client references</param>
         /// <param name="cancellationToken">The cancellation token</param>
         /// <returns></returns>
+        [RequiresUnreferencedCode("Members from deserialized types may be trimmed if not referenced directly")]
         public async Task<IHttpRequestResult<IEnumerable<CheckpointResponseModel>>> GetTraceByClientReferencesAsync([NotNull] ClientReferencesRequestModel model, CancellationToken cancellationToken = default)
         {
             if (cancellationToken.IsCancellationRequested)
@@ -467,6 +477,7 @@ namespace Couriers.Speedex.Services
         /// <param name="dateTo">The end of the time frame</param>
         /// <param name="cancellationToken">The cancellation token</param>
         /// <returns></returns>
+        [RequiresUnreferencedCode("Members from deserialized types may be trimmed if not referenced directly")]
         public async Task<IHttpRequestResult<IEnumerable<CheckpointResponseModel>>> GetTraceByTimeFrameAsync(DateTime dateFrom, DateTime dateTo, CancellationToken cancellationToken = default)
         {
             if (cancellationToken.IsCancellationRequested)
@@ -504,6 +515,7 @@ namespace Couriers.Speedex.Services
         /// <param name="voucherId">The unique voucher id</param>
         /// <param name="cancellationToken">The cancellation token</param>
         /// <returns></returns>
+        [RequiresUnreferencedCode("Members from deserialized types may be trimmed if not referenced directly")]
         public async Task<IHttpRequestResult<IEnumerable<CheckpointResponseModel>>> GetTraceByVoucherIdAsync([NotNull] string voucherId, CancellationToken cancellationToken = default)
         {
             if (cancellationToken.IsCancellationRequested)
@@ -540,6 +552,7 @@ namespace Couriers.Speedex.Services
         /// <param name="pickupId">The unique pickup id</param>
         /// <param name="cancellationToken">The cancellation token</param>
         /// <returns></returns>
+        [RequiresUnreferencedCode("Members from deserialized types may be trimmed if not referenced directly")]
         public async Task<IHttpRequestResult> CancelPickupByIdAsync([NotNull] string pickupId, CancellationToken cancellationToken = default)
         {
             if (cancellationToken.IsCancellationRequested)
@@ -567,6 +580,7 @@ namespace Couriers.Speedex.Services
         /// <param name="model">The pickup details</param>
         /// <param name="cancellationToken">The cancellation token</param>
         /// <returns></returns>
+        [RequiresUnreferencedCode("Members from deserialized types may be trimmed if not referenced directly")]
         public async Task<IHttpRequestResult<string>> CreatePickupAsync([NotNull] PickupRequestModel model, CancellationToken cancellationToken = default)
         {
             if (cancellationToken.IsCancellationRequested)
@@ -602,6 +616,7 @@ namespace Couriers.Speedex.Services
         /// <param name="dateTo">The end of the time frame</param>
         /// <param name="cancellationToken">The cancellation token</param>
         /// <returns></returns>
+        [RequiresUnreferencedCode("Members from deserialized types may be trimmed if not referenced directly")]
         public async Task<IHttpRequestResult<IEnumerable<ConsignmentDetailsResponseModel>>> GetConsignmentsByDateRangeAsync(DateTime dateFrom, DateTime dateTo, CancellationToken cancellationToken = default)
         {
             if (cancellationToken.IsCancellationRequested)
@@ -640,6 +655,7 @@ namespace Couriers.Speedex.Services
         /// <param name="dateTo">The end of the time frame</param>
         /// <param name="cancellationToken">The cancellation token</param>
         /// <returns></returns>
+        [RequiresUnreferencedCode("Members from deserialized types may be trimmed if not referenced directly")]
         public async Task<IHttpRequestResult<IEnumerable<DepositedConsignmentResponseModel>>> GetDepositedConsignmentsByDateRangeAsync(DateTime dateFrom, DateTime dateTo, CancellationToken cancellationToken = default)
         {
             if (cancellationToken.IsCancellationRequested)
@@ -677,6 +693,7 @@ namespace Couriers.Speedex.Services
         /// <param name="pickupId">The unique pickup id</param>
         /// <param name="cancellationToken">The cancellation token</param>
         /// <returns></returns>
+        [RequiresUnreferencedCode("Members from deserialized types may be trimmed if not referenced directly")]
         public async Task<IHttpRequestResult<PickupResponseModel>> GetPickupByIdAsync([NotNull] string pickupId, CancellationToken cancellationToken = default)
         {
             if (cancellationToken.IsCancellationRequested)
@@ -713,6 +730,7 @@ namespace Couriers.Speedex.Services
         /// <param name="model">The details for the pickup reschedule</param>
         /// <param name="cancellationToken">The cancellation token</param>
         /// <returns></returns>
+        [RequiresUnreferencedCode("Members from deserialized types may be trimmed if not referenced directly")]
         public async Task<IHttpRequestResult> ReschedulePickupAsync([NotNull] ReschedulePickupRequestModel model, CancellationToken cancellationToken = default)
         {
             if (cancellationToken.IsCancellationRequested)
@@ -781,6 +799,7 @@ namespace Couriers.Speedex.Services
         /// </summary>
         /// <param name="cancellationToken">The cancellation token</param>
         /// <returns></returns>
+        [RequiresUnreferencedCode("Members from deserialized types may be trimmed if not referenced directly")]
         private async Task<IHttpRequestResult> EnsureValidSessionAsync(CancellationToken cancellationToken = default)
         {
             cancellationToken.ThrowIfCancellationRequested();
@@ -811,6 +830,7 @@ namespace Couriers.Speedex.Services
         /// <param name="requestModel">The request model</param>
         /// <param name="cancellationToken">The cancellation token</param>
         /// <returns></returns>
+        [RequiresUnreferencedCode("Members from deserialized types may be trimmed if not referenced directly")]
         private async Task<IHttpRequestResult<TResponse>> ExecuteValidatedSOAPEnvelopeRequest<TResponse, TRequest>(TRequest requestModel, CancellationToken cancellationToken = default)
             where TResponse : class, ISoapReturnMessageModel, IUnmappedXml, new()
             where TRequest : SessionIdInternalRequestModel, new()
@@ -852,6 +872,7 @@ namespace Couriers.Speedex.Services
         /// <param name="requestModel">The request model</param>
         /// <param name="cancellationToken">The cancellation token</param>
         /// <returns></returns>
+        [RequiresUnreferencedCode("Members from deserialized types may be trimmed if not referenced directly")]
         private async Task<InternalHttpRequestResult<TResponse>> ExecuteSoapEnvelopeRequest<TResponse, TRequest>(TRequest requestModel, CancellationToken cancellationToken = default)
             where TResponse : class, ISoapReturnMessageModel, IUnmappedXml, new()
             where TRequest : class, new()
