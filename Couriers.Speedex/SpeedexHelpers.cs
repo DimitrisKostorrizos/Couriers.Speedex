@@ -281,6 +281,8 @@ namespace Couriers.Speedex
         /// <typeparam name="T">The type of the object</typeparam>
         /// <param name="obj">The object</param>
         /// <returns></returns>
+        [RequiresDynamicCode("XML serializer relies on dynamic code generation which is not available with Ahead of Time compilation")]
+        [RequiresUnreferencedCode("Members from deserialized types may be trimmed if not referenced directly")]
         internal static XElement SerializeToSpeedexXElement<T>([NotNull] this T obj)
             => XmlHelpers.SerializeToXElement(obj, SpeedexXmlNamespaces.DefaultPrefix, SpeedexXmlNamespaces.DefaultNamespace);
 
